@@ -1,0 +1,61 @@
+using System;
+using System.Collections.Generic;
+/// <summary>
+/// Event Bus implementation using delegates.
+/// </summary>
+public static class EventBus
+{
+    private static readonly Dictionary<Type, Delegate> subscribers = new Dictionary<Type, Delegate>();
+    private static readonly object padlock = new object();
+
+    /// <summary>
+    /// Subscribes to an event.
+    /// </summary>
+    /// <typeparam name="T">The type of the event.</typeparam>
+    /// <param name="action">The action to perform when the event is published.</param>
+    public static void Subscribe<T>(Action<T> action)
+    {
+        lock (padlock)
+        {
+            Type t = typeof(T);
+            if (!subscribers.ContainsKey(t))
+                subscribers[t] = null;
+
+            subscribers[t] = Delegate.Combine(subscribers[t], action);
+        }
+    }
+
+    /// <summary>
+    /// Unsubscribes from an event.
+    /// </summary>
+    /// <typeparam name="T">The type of the event.</typeparam>
+    /// <param name="action">The action to unsubscribe.</param> 
+    public static void Unsubscribe<T>(Action<T> action)
+    {
+        lock (padlock)
+        {
+            Type t = typeof(T);
+            if (subscribers.ContainsKey(t))
+            {
+                subscribers[t] = Delegate.Remove(subscribers[t], action);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Publishes an event to all subscribers.
+    /// </summary>
+    /// <typeparam name="T">The type of the event.</typeparam>
+    /// <param name="eventData">The event data to publish.</param>
+    public static void Publish<T>(T eventData)
+    {
+        lock (padlock)
+        {
+            Type t = typeof(T);
+            if (subscribers.ContainsKey(t))
+            {
+                (subscribers[t] as Action<T>)?.Invoke(eventData);
+            }
+        }
+    }
+}
