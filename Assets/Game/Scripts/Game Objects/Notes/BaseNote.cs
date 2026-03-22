@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Base note class for all notes
+/// </summary>
 public class BaseNote : INote
 {
     protected NoteType noteType;
