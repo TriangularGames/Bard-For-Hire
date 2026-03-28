@@ -7,28 +7,33 @@ using UnityEngine;
 /// </summary>
 public class MusicSheet : MonoBehaviour
 {
-    private List<INote> Notes;
+    private List<BaseNote> Notes;
     private void Awake()
     {
-        Notes = new List<INote>();
+        Notes = new List<BaseNote>();
     }
     private void Start()
     {
         ClearNotes();
     }
-    private void AddNote(INote note)
+
+    public void AddNote(BaseNote note)
     {
         Notes.Add(note);
     }
-    private void RemoveNote(INote note)
+
+    public void RemoveNote(BaseNote note)
     {
-        Notes.Remove(note);
+        if (Notes.Contains(note))
+        {
+            Notes.Remove(note);
+        }
     }
     private void ClearNotes()
     {
         Notes.Clear();
     }
-    private void CalculateNoteScore()
+    public void CalculateNoteScore()
     {
         ScoreManager.Instance.CalculateScore(Notes);
     }

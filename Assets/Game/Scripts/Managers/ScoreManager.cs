@@ -12,22 +12,20 @@ public class ScoreManager : Singleton<ScoreManager>
     {
         score = 0f;
     }
-    public void CalculateScore(List<INote> notes)
+    public void CalculateScore(List<BaseNote> notes)
     {
-        foreach (INote note in notes)
+        score = 0;
+        foreach (BaseNote note in notes)
         {
-            if (note.NoteType == NoteType.Quarter)
+            if (note.Mult)
             {
-                // Quarter note scoring logic
+                score *= note.Score;
             }
-            else if (note.NoteType == NoteType.Half)
+            else
             {
-                // Half note scoring logic
+                score += note.Score;
             }
-            else if (note.NoteType == NoteType.Whole)
-            {
-                // Whole note scoring logic
-            }
+            Debug.Log("Total Score: " + score);
         }
     }
 }
