@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,24 +7,37 @@ using UnityEngine;
 public class ScoreManager : Singleton<ScoreManager>
 {
     private float score;
+
+    public DiceRoller roller;
+
     private void Start()
     {
         score = 0f;
     }
+
+    /// <summary>
+    /// Calculates the final score for a round using Note List
+    /// </summary>
+    /// <param name="notes">List of Notes to be scored</param>
     public void CalculateScore(List<BaseNote> notes)
     {
+        int rollValue = roller.RollDie();
         score = 0;
         foreach (BaseNote note in notes)
         {
-            if (note.Mult)
+            if (note.Playable <= rollValue)
             {
-                score *= note.Score;
-            }
-            else
-            {
-                score += note.Score;
-            }
-            Debug.Log("Total Score: " + score);
+                Debug.Log("Note was played!");
+                if (note.Mult)
+                {
+                    score *= note.Score;
+                }
+                else
+                {
+                    score += note.Score;
+                }
+            }  
         }
+        Debug.Log("Total Score: " + score);
     }
 }
