@@ -3,11 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Music sheet class that adds notes to music sheets and calculates score
+/// Music sheet class to hold Note information for Scoring
 /// </summary>
 public class MusicSheet : MonoBehaviour
 {
+    /// <summary>
+    /// List of all Notes within the Music sheet
+    /// </summary>
     private List<BaseNote> Notes;
+
+    [SerializeField] private GameObject Slots;
+
     private void Awake()
     {
         Notes = new List<BaseNote>();
@@ -17,11 +23,19 @@ public class MusicSheet : MonoBehaviour
         ClearNotes();
     }
 
+    /// <summary>
+    /// Add Note into this Music Sheet's Note List
+    /// </summary>
+    /// <param name="note">Note to be added</param>
     public void AddNote(BaseNote note)
     {
         Notes.Add(note);
     }
 
+    /// <summary>
+    /// Remove Note from this Music Sheet's Note List
+    /// </summary>
+    /// <param name="note">Note to be removed</param>
     public void RemoveNote(BaseNote note)
     {
         if (Notes.Contains(note))
@@ -29,12 +43,35 @@ public class MusicSheet : MonoBehaviour
             Notes.Remove(note);
         }
     }
+
     private void ClearNotes()
     {
         Notes.Clear();
     }
+
+    /// <summary>
+    /// Goes through all Slots in order to verify Note scoring
+    /// executes in the proper order
+    /// </summary>
+    private void VerifyOrder()
+    {
+        ClearNotes();
+        foreach (Transform slot in Slots.transform)
+        {
+            if (slot.GetComponentInChildren<BaseNote>() != null)
+            {
+                AddNote(slot.GetComponentInChildren<BaseNote>());
+                Debug.Log("Note Obtained: " + slot.GetComponentInChildren<BaseNote>().Score);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Sends Note List to ScoreManager for final score total
+    /// </summary>
     public void CalculateNoteScore()
     {
+        VerifyOrder();
         ScoreManager.Instance.CalculateScore(Notes);
     }
 }
