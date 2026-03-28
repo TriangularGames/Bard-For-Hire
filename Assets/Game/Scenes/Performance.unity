@@ -732,6 +732,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Note
       objectReference: {fileID: 0}
+    - target: {fileID: 9066678974085615369, guid: ba1d4a41e0c8ae14aa823dd0dfd4f555, type: 3}
+      propertyPath: score
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066678974085615369, guid: ba1d4a41e0c8ae14aa823dd0dfd4f555, type: 3}
+      propertyPath: playable
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1397,6 +1405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1a2b745c3ae83b45b40a24bf922a807, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MusicSheet
+  Slots: {fileID: 405200190}
 --- !u!1 &1344256442
 GameObject:
   m_ObjectHideFlags: 0
@@ -1439,6 +1448,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41baf498d5a1d424da92162be8dbc0b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
+  roller: {fileID: 1344256443}
 --- !u!4 &1344256445
 Transform:
   m_ObjectHideFlags: 0
@@ -2308,6 +2318,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9066678974085615369, guid: ba1d4a41e0c8ae14aa823dd0dfd4f555, type: 3}
       propertyPath: score
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066678974085615369, guid: ba1d4a41e0c8ae14aa823dd0dfd4f555, type: 3}
+      propertyPath: playable
       value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
