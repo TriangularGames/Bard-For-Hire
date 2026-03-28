@@ -18,13 +18,14 @@ public class NoteSlot : MonoBehaviour, IDropHandler
         {
             // If there is already a Note in this slot, swap them
 
-            // Obtains the information for the object dropped into the slot and object in this slow
+            // Obtains the information for the object dropped into the slot and object in this slot
             GameObject dropped = eventData.pointerDrag;
             DraggableItem draggable = dropped.GetComponent<DraggableItem>();
+
             GameObject current = transform.GetChild(0).gameObject;
             DraggableItem currentDraggable = current.GetComponent<DraggableItem>();
 
-            // Changes the parent of the object to the current slot
+            // Swaps current object in slot with the one being held
             currentDraggable.transform.SetParent(draggable.parentAfterDrag);
             draggable.parentAfterDrag = transform;
         }
