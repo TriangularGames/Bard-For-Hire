@@ -7,5 +7,7 @@ public interface INote
 
     int Score { get; set; }
 
-    public bool Mult { get; }
+    bool Mult { get; }
+
+    public int Playable { get; set; }
 }
