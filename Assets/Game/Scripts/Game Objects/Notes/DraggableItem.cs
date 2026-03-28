@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public Image image;
-    public Canvas canvas;
     [HideInInspector] public Transform parentAfterDrag;
 
     MusicSheet musicSheet;
@@ -14,14 +13,14 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     private void Awake()
     {
         musicSheet = transform.GetComponentInParent<MusicSheet>();
-        Debug.Log("Music sheet found: " + musicSheet != null);
+        Debug.Assert(musicSheet != null, "Music Sheet was not found.");
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         // Picks up item from Sheet to drag
         parentAfterDrag = transform.parent;
-        transform.SetParent(canvas.transform);
+        transform.SetParent(transform.root);
         transform.SetAsLastSibling();
         image.raycastTarget = false;
 
@@ -31,7 +30,6 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     public void OnDrag(PointerEventData eventData)
     {
-        Debug.Log("Dragging");
         transform.position = Mouse.current.position.ReadValue();
     }
 
