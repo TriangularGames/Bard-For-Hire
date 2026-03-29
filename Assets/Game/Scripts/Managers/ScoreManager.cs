@@ -19,9 +19,11 @@ public class ScoreManager : Singleton<ScoreManager>
     /// Calculates the final score for a round using Note List
     /// </summary>
     /// <param name="notes">List of Notes to be scored</param>
-    public void CalculateScore(List<BaseNote> notes)
+    public async void CalculateScore(List<BaseNote> notes)
     {
-        int rollValue = roller.RollDie();
+        // Include in here some effect thats displayed as each note is determined
+        // to be scored or not
+        int rollValue = await roller.RollDie();
         score = 0;
         foreach (BaseNote note in notes)
         {

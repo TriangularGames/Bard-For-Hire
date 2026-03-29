@@ -1,12 +1,21 @@
+using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
 public class DiceRoller : MonoBehaviour
 {
-    public int RollDie()
+    [SerializeField] TMP_Text display;
+
+    /// <summary>
+    /// Rolls a Twenty-Sided Die
+    /// </summary>
+    /// <returns>Die roll value</returns>
+    public async Task<int> RollDie()
     {
-        Debug.Log("Rolling die...");
+        display.text = "Rolling die...";
+        await Task.Delay(500);
         int oneD20 = Random.Range(1, 21);
-        Debug.Log("You rolled: " + oneD20);
+        display.text = "You rolled: " + oneD20;
         return oneD20;
     }
 }
