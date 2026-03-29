@@ -3,6 +3,19 @@ using UnityEngine.EventSystems;
 
 public class NoteSlot : MonoBehaviour, IDropHandler
 {
+    public INote StoredNote { get; private set; }
+    public bool IsEmpty => StoredNote == null;
+
+    public void SetNote(INote note)
+    {
+        StoredNote = note;
+    }
+
+    public void ClearNote()
+    {
+        StoredNote = null;
+    }
+
     public void OnDrop(PointerEventData eventData)
     {
         if (transform.childCount == 0)
