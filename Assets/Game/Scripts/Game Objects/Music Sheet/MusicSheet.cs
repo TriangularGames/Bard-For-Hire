@@ -44,9 +44,29 @@ public class MusicSheet : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Clears Notes on Sheet and returns them to Note Pool
+    /// </summary>
     private void ClearNotes()
     {
         Notes.Clear();
+    }
+
+    /// <summary>
+    /// Clears Notes on Sheet after scoring is completed
+    /// </summary>
+    private void DeleteNotes()
+    {
+        // This should eventually be edited to allow for effects and such when they're removed
+        Notes.Clear();
+        foreach (Transform slot in Slots.transform)
+        {
+            if (slot.GetComponentInChildren<BaseNote>() != null)
+            {
+                RemoveNote(slot.GetComponentInChildren<BaseNote>());
+                Destroy(slot.gameObject);
+            }
+        }
     }
 
     /// <summary>
@@ -73,5 +93,6 @@ public class MusicSheet : MonoBehaviour
     {
         VerifyOrder();
         ScoreManager.Instance.CalculateScore(Notes);
+        DeleteNotes();
     }
 }
