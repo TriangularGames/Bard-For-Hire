@@ -4,8 +4,8 @@ using UnityEngine;
 public class NoteInventory : MonoBehaviour
 {
     [SerializeField] private int maxSlots = 10;
-    [SerializeField] private GameObject slotPrefab;
-    [SerializeField] private Transform slotParent;
+    [SerializeField] private GameObject noteUIPrefab;
+    [SerializeField] private Transform inventoryPanel;
 
     private List<INote> notes;
 
@@ -14,17 +14,10 @@ public class NoteInventory : MonoBehaviour
         notes = new List<INote>();   
     }
 
-    private void Start()
-    {
-        for (int i = 0; i < maxSlots; i++)
-        {
-            Instantiate(slotPrefab, slotParent);
-        }
-    }
-
     public void AddNote(INote note)
     {
         notes.Add(note);
+        Instantiate(noteUIPrefab, inventoryPanel);
     }
 
     public void RemoveNote(INote note)
