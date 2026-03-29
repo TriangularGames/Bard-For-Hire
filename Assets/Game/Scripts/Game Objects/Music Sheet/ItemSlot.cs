@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class NoteSlot : MonoBehaviour, IDropHandler
+public class ItemSlot : MonoBehaviour, IDropHandler
 {
     public INote StoredNote { get; private set; }
     public bool IsEmpty => StoredNote == null;
