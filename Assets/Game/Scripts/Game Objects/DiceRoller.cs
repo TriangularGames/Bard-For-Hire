@@ -10,10 +10,9 @@ public class DiceRoller : MonoBehaviour
     /// Rolls a Twenty-Sided Die
     /// </summary>
     /// <returns>Die roll value</returns>
-    public async Task<int> RollDie()
+    public int RollDie()
     {
         display.text = "Rolling die...";
-        await Task.Delay(500);
         int oneD20 = Random.Range(1, 21);
         display.text = "You rolled: " + oneD20;
         return oneD20;

@@ -64,7 +64,7 @@ public class MusicSheet : MonoBehaviour
             if (slot.GetComponentInChildren<BaseNote>() != null)
             {
                 RemoveNote(slot.GetComponentInChildren<BaseNote>());
-                Destroy(slot.gameObject);
+                Destroy(slot.GetChild(0).gameObject);
             }
         }
     }

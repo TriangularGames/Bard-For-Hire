@@ -737,6 +737,10 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 9066678974085615369, guid: ba1d4a41e0c8ae14aa823dd0dfd4f555, type: 3}
+      propertyPath: noteType
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066678974085615369, guid: ba1d4a41e0c8ae14aa823dd0dfd4f555, type: 3}
       propertyPath: playable
       value: 5
       objectReference: {fileID: 0}
@@ -1587,6 +1591,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41baf498d5a1d424da92162be8dbc0b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
+  scoreToBeat: {fileID: 925699319}
   roller: {fileID: 1344256443}
 --- !u!4 &1344256445
 Transform:
@@ -2457,6 +2462,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9066678974085615369, guid: ba1d4a41e0c8ae14aa823dd0dfd4f555, type: 3}
       propertyPath: score
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066678974085615369, guid: ba1d4a41e0c8ae14aa823dd0dfd4f555, type: 3}
+      propertyPath: noteType
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9066678974085615369, guid: ba1d4a41e0c8ae14aa823dd0dfd4f555, type: 3}

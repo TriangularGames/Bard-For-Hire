@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -6,6 +8,7 @@ using UnityEngine;
 /// </summary>
 public class ScoreManager : Singleton<ScoreManager>
 {
+    [SerializeField] TMP_Text scoreToBeat;
     private float score;
 
     public DiceRoller roller;
@@ -19,11 +22,11 @@ public class ScoreManager : Singleton<ScoreManager>
     /// Calculates the final score for a round using Note List
     /// </summary>
     /// <param name="notes">List of Notes to be scored</param>
-    public async void CalculateScore(List<BaseNote> notes)
+    public void CalculateScore(List<BaseNote> notes)
     {
         // Include in here some effect thats displayed as each note is determined
         // to be scored or not
-        int rollValue = await roller.RollDie();
+        int rollValue = roller.RollDie();
         score = 0;
         foreach (BaseNote note in notes)
         {
@@ -41,5 +44,22 @@ public class ScoreManager : Singleton<ScoreManager>
             }  
         }
         Debug.Log("Total Score: " + score);
+        FinalizeScore(score);
+    }
+
+    private void FinalizeScore(float playedScore)
+    {
+        float sTB = float.Parse(scoreToBeat.text);
+        sTB -= playedScore;
+
+        if (sTB < 0f)
+        {
+            Debug.Log("Performance Completed!");
+            scoreToBeat.text = "0";
+        }
+        else
+        {
+            scoreToBeat.text = sTB.ToString();
+        }
     }
 }
