@@ -5,6 +5,8 @@ public interface INote
 {
     NoteType NoteType { get; }
 
+    bool Rest { get; }
+
     int Score { get; set; }
 
     bool Mult { get; }

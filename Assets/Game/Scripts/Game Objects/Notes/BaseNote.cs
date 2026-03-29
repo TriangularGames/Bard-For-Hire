@@ -12,6 +12,12 @@ public class BaseNote : MonoBehaviour, INote
     public NoteType NoteType => noteType;
 
     /// <summary>
+    /// If this Note is a Rest of the NoteType
+    /// </summary>
+    [SerializeField] protected bool rest;
+    public bool Rest => rest;
+
+    /// <summary>
     /// This Note's Score
     /// </summary>
     [SerializeField] protected int score;
@@ -29,11 +35,13 @@ public class BaseNote : MonoBehaviour, INote
     [SerializeField] protected int playable;
     public int Playable { get => playable; set => SetPlayable(value); }
 
-/// <summary>
-/// Set the Score Value
-/// </summary>
-/// <param name="val">Value to Change to</param>
-public void SetScore(int val)
+    
+
+    /// <summary>
+    /// Set the Score Value
+    /// </summary>
+    /// <param name="val">Value to Change to</param>
+    public void SetScore(int val)
     {
         score = val;
     }
