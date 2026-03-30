@@ -7,21 +7,56 @@ public class NoteInventory : MonoBehaviour
     [SerializeField] private GameObject noteUIPrefab;
     [SerializeField] private Transform inventoryPanel;
 
-    private List<INote> notes;
+    private List<BaseNote> notes;
 
     private void Awake()
     {
-        notes = new List<INote>();   
+        notes = new List<BaseNote>();
     }
 
-    public void AddNote(INote note)
+    private void Start()
     {
+        for (int i = 0; i < maxSlots; i++)
+        {
+            GameObject obj = Instantiate(noteUIPrefab, inventoryPanel);
+            Debug.Log("Instantiated: " + obj.name);
+        }
+    }
+
+    // Adding notes to the note pool
+    public void AddNote(BaseNote note)
+    {
+        if (note == null)
+        {
+            Debug.LogWarning("Tried to add a null note.");
+            return;
+        }
+
+        if (notes.Count >= maxSlots)
+        {
+            Debug.Log("Inventory is full.");
+            return;
+        }
+
+        if (notes.Contains(note))
+        {
+            Debug.Log("This note is already in the inventory.");
+            return;
+        }
+
         notes.Add(note);
-        Instantiate(noteUIPrefab, inventoryPanel);
+
+        GameObject newUI = Instantiate(noteUIPrefab, inventoryPanel);
     }
 
-    public void RemoveNote(INote note)
+    // Used when discarding notes in the note pool
+    public void RemoveNote(BaseNote note)
     {
-        notes.Remove(note);
+        if (note == null) return;
+
+        if (notes.Remove(note))
+        {
+            Debug.Log($"Removed {note.name} from inventory.");
+        }
     }
 }
