@@ -57,6 +57,7 @@ public class MusicSheet : MonoBehaviour
     {
         if (Notes.Contains(note))
         {
+            Debug.Log("Removed from MusicSheet.");
             Notes.Remove(note);
         }
     }
