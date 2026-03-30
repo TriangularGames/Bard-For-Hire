@@ -4,14 +4,14 @@ using UnityEngine;
 public class NoteInventory : MonoBehaviour
 {
     [SerializeField] private int maxSlots = 10;
-    [SerializeField] private GameObject noteUIPrefab;
+    [SerializeField] private GameObject notePrefab;
     [SerializeField] private Transform inventoryPanel;
 
-    private List<BaseNote> Notes;
+    private List<BaseNote> NotePool;
 
     private void Awake()
     {
-        Notes = new List<BaseNote>();
+        NotePool = new List<BaseNote>();
     }
 
     /// <summary>
@@ -19,12 +19,14 @@ public class NoteInventory : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        if (notePrefab == null || inventoryPanel == null) return;
+
         for (int i = 0; i < maxSlots; i++)
         {
-            GameObject obj = Instantiate(noteUIPrefab, inventoryPanel);
+            GameObject obj = Instantiate(notePrefab, inventoryPanel);
             
             BaseNote note = obj.GetComponent<BaseNote>();
-            Notes.Add(note);
+            NotePool.Add(note);
         }
     }
 
@@ -34,24 +36,26 @@ public class NoteInventory : MonoBehaviour
     /// <param name="note"></param>
     public void AddNote(BaseNote note)
     {
-        GameObject obj = Instantiate(noteUIPrefab, inventoryPanel);
+        if (notePrefab == null || inventoryPanel == null) return;
+
+        GameObject obj = Instantiate(notePrefab, inventoryPanel);
 
         if (note == null)
         {
             Debug.LogWarning("Tried to add a null note.");
             return;
         }
-        if (Notes.Count >= maxSlots)
+        if (NotePool.Count >= maxSlots)
         {
             Debug.Log("Inventory is full.");
             return;
         }
-        if (Notes.Contains(note))
+        if (NotePool.Contains(note))
         {
             Debug.Log("This note is already in the inventory.");
             return;
         }
-        Notes.Add(note);
+        NotePool.Add(note);
     }
 
    /// <summary>
@@ -62,9 +66,22 @@ public class NoteInventory : MonoBehaviour
     {
         if (note == null) return;
 
-        if (Notes.Remove(note))
+        if (NotePool.Remove(note))
         {
             Debug.Log($"Removed {note.name} from inventory.");
         }
+    }
+
+    /// <summary>
+    /// Clear all notes from note pool
+    /// </summary>
+    public void ClearNotes()
+    {
+        foreach (var note in NotePool)
+        {
+            Destroy(note.gameObject);
+        }
+
+        NotePool.Clear();
     }
 }
