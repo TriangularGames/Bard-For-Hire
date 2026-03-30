@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NoteInventory : MonoBehaviour
+public class NotePool : MonoBehaviour
 {
     [SerializeField] private int maxSlots = 6;
     [SerializeField] private GameObject noteSlotPrefab;
@@ -10,11 +10,11 @@ public class NoteInventory : MonoBehaviour
     // This is just for testing
     [SerializeField] public GameObject notePrefab;
 
-    private List<NoteData> NotePool;
+    private List<NoteData> notePool;
 
     private void Awake()
     {
-        NotePool = new List<NoteData>();
+        notePool = new List<NoteData>();
     }
 
     /// <summary>
@@ -52,17 +52,17 @@ public class NoteInventory : MonoBehaviour
             Debug.LogWarning("Tried to add a null note.");
             return;
         }
-        if (NotePool.Count >= maxSlots)
+        if (notePool.Count >= maxSlots)
         {
             Debug.Log("Inventory is full.");
             return;
         }
-        if (NotePool.Contains(note))
+        if (notePool.Contains(note))
         {
             Debug.Log("This note is already in the inventory.");
             return;
         }
-        NotePool.Add(note);
+        notePool.Add(note);
     }
 
    /// <summary>
@@ -73,10 +73,10 @@ public class NoteInventory : MonoBehaviour
     {
         if (note == null) return;
 
-        if (NotePool.Contains(note))
+        if (notePool.Contains(note))
         {
             Debug.Log("Removed from NotePool.");
-            NotePool.Remove(note);
+            notePool.Remove(note);
         }
     }
 

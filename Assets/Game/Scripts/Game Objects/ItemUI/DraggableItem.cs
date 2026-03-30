@@ -26,9 +26,9 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             parentAfterDrag.parent.transform.parent.GetComponent<MusicSheet>().RemoveNote(GetComponent<NoteController>().noteData);
         }
 
-        if (parentAfterDrag.parent.transform.parent.GetComponent<NoteInventory>())
+        if (parentAfterDrag.parent.transform.parent.GetComponent<NotePool>())
         {
-            parentAfterDrag.parent.transform.parent.GetComponent<NoteInventory>().RemoveNote(GetComponent<NoteController>().noteData);
+            parentAfterDrag.parent.transform.parent.GetComponent<NotePool>().RemoveNote(GetComponent<NoteController>().noteData);
         }
     }
 
@@ -48,9 +48,9 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             parentAfterDrag.parent.transform.parent.GetComponent<MusicSheet>().AddNote(GetComponent<NoteController>().noteData);
         }
 
-        if (parentAfterDrag.parent.transform.parent.GetComponent<NoteInventory>())
+        if (parentAfterDrag.parent.transform.parent.GetComponent<NotePool>())
         {
-            parentAfterDrag.parent.transform.parent.GetComponent<NoteInventory>().AddNote(GetComponent<NoteController>().noteData);
+            parentAfterDrag.parent.transform.parent.GetComponent<NotePool>().AddNote(GetComponent<NoteController>().noteData);
         }
     }
 }
