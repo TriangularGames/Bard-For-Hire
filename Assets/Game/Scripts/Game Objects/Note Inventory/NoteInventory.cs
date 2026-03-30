@@ -3,15 +3,19 @@ using UnityEngine;
 
 public class NoteInventory : MonoBehaviour
 {
-    [SerializeField] private int maxSlots = 10;
-    [SerializeField] private GameObject notePrefab;
+    [SerializeField] private int maxSlots = 6;
+    [SerializeField] private GameObject noteSlotPrefab;
     [SerializeField] private Transform inventoryPanel;
 
-    private List<BaseNote> NotePool;
+    // This is just for testing
+    [SerializeField] public List<NoteData> notesToSpawn;
+    [SerializeField] public GameObject notePrefab;
+
+    private List<NoteData> NotePool;
 
     private void Awake()
     {
-        NotePool = new List<BaseNote>();
+        NotePool = new List<NoteData>();
     }
 
     /// <summary>
@@ -19,14 +23,18 @@ public class NoteInventory : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        if (notePrefab == null || inventoryPanel == null) return;
+        if (noteSlotPrefab == null || inventoryPanel == null) return;
 
         for (int i = 0; i < maxSlots; i++)
         {
-            GameObject obj = Instantiate(notePrefab, inventoryPanel);
-            
-            BaseNote note = obj.GetComponent<BaseNote>();
-            NotePool.Add(note);
+            GameObject obj = Instantiate(noteSlotPrefab, inventoryPanel);
+
+            GameObject note = Instantiate(notePrefab, obj.transform);
+
+            int noteToCreate = Random.Range(0, notesToSpawn.Count);
+            note.GetComponent<NoteController>().noteData = notesToSpawn[noteToCreate];
+
+            note.GetComponent<NoteController>().SetSprite();
         }
     }
 
@@ -34,11 +42,11 @@ public class NoteInventory : MonoBehaviour
     /// Adding new notes to note pool
     /// </summary>
     /// <param name="note"></param>
-    public void AddNote(BaseNote note)
+    public void AddNote(NoteData note)
     {
-        if (notePrefab == null || inventoryPanel == null) return;
+        if (noteSlotPrefab == null || inventoryPanel == null) return;
 
-        GameObject obj = Instantiate(notePrefab, inventoryPanel);
+        GameObject obj = Instantiate(noteSlotPrefab, inventoryPanel);
 
         if (note == null)
         {
@@ -62,7 +70,7 @@ public class NoteInventory : MonoBehaviour
    /// Removing notes from note pool when player discards
    /// </summary>
    /// <param name="note"></param>
-    public void RemoveNote(BaseNote note)
+    public void RemoveNote(NoteData note)
     {
         if (note == null) return;
 
@@ -77,11 +85,6 @@ public class NoteInventory : MonoBehaviour
     /// </summary>
     public void ClearNotes()
     {
-        foreach (var note in NotePool)
-        {
-            Destroy(note.gameObject);
-        }
-
-        NotePool.Clear();
+        //TODO: redo this
     }
 }

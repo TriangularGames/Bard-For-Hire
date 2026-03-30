@@ -3,10 +3,10 @@ using UnityEngine.EventSystems;
 
 public class ItemSlot : MonoBehaviour, IDropHandler
 {
-    public INote StoredNote { get; private set; }
+    public NoteData StoredNote { get; private set; }
     public bool IsEmpty => StoredNote == null;
 
-    public void SetNote(INote note)
+    public void SetNote(NoteData note)
     {
         StoredNote = note;
     }

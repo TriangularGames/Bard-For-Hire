@@ -7,13 +7,10 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 {
     public Image image;
     [HideInInspector] public Transform parentAfterDrag;
-
-    MusicSheet musicSheet;
     
     private void Awake()
     {
-        musicSheet = transform.GetComponentInParent<MusicSheet>();
-        Debug.Assert(musicSheet != null, "Music Sheet was not found.");
+        parentAfterDrag = gameObject.transform.parent.transform;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -24,8 +21,15 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         transform.SetAsLastSibling();
         image.raycastTarget = false;
 
-        // Removes from Music Sheet List
-        musicSheet.RemoveNote(GetComponent<BaseNote>());
+        if (parentAfterDrag.parent.transform.parent.GetComponent<MusicSheet>())
+        {
+            parentAfterDrag.parent.transform.parent.GetComponent<MusicSheet>().RemoveNote(GetComponent<NoteController>().noteData);
+        }
+
+        if (parentAfterDrag.parent.transform.parent.GetComponent<NoteInventory>())
+        {
+            parentAfterDrag.parent.transform.parent.GetComponent<NoteInventory>().RemoveNote(GetComponent<NoteController>().noteData);
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -39,7 +43,14 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         transform.SetParent(parentAfterDrag);
         image.raycastTarget = true;
 
-        // Adds Note to Music Sheet List
-        musicSheet.AddNote(GetComponent<BaseNote>());
+        if (parentAfterDrag.parent.transform.parent.GetComponent<MusicSheet>())
+        {
+            parentAfterDrag.parent.transform.parent.GetComponent<MusicSheet>().AddNote(GetComponent<NoteController>().noteData);
+        }
+
+        if (parentAfterDrag.parent.transform.parent.GetComponent<NoteInventory>())
+        {
+            parentAfterDrag.parent.transform.parent.GetComponent<NoteInventory>().AddNote(GetComponent<NoteController>().noteData);
+        }
     }
 }
