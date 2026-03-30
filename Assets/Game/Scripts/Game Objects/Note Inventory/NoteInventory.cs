@@ -35,6 +35,8 @@ public class NoteInventory : MonoBehaviour
             note.GetComponent<NoteController>().noteData = notesToSpawn[noteToCreate];
 
             note.GetComponent<NoteController>().SetSprite();
+
+            AddNote(note.GetComponent<NoteController>().noteData);
         }
     }
 
@@ -45,8 +47,6 @@ public class NoteInventory : MonoBehaviour
     public void AddNote(NoteData note)
     {
         if (noteSlotPrefab == null || inventoryPanel == null) return;
-
-        GameObject obj = Instantiate(noteSlotPrefab, inventoryPanel);
 
         if (note == null)
         {
@@ -74,9 +74,10 @@ public class NoteInventory : MonoBehaviour
     {
         if (note == null) return;
 
-        if (NotePool.Remove(note))
+        if (NotePool.Contains(note))
         {
-            Debug.Log($"Removed {note.name} from inventory.");
+            Debug.Log("Removed from NotePool.");
+            NotePool.Remove(note);
         }
     }
 
