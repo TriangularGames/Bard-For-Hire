@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
@@ -47,11 +46,18 @@ public class ScoreManager : Singleton<ScoreManager>
         FinalizeScore(score);
     }
 
+    /// <summary>
+    /// Finalize the Score calculation for display.
+    /// </summary>
+    /// <param name="playedScore">Final score obtained</param>
     private void FinalizeScore(float playedScore)
     {
         float sTB = float.Parse(scoreToBeat.text);
         sTB -= playedScore;
 
+        // If scoreToBeat is 0, the Player wins
+        // Else move on to the next round
+        // TODO: add check for if there are no rounds left
         if (sTB < 0f)
         {
             Debug.Log("Performance Completed!");
