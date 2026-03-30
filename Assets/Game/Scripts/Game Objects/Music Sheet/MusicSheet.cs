@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,14 +9,32 @@ public class MusicSheet : MonoBehaviour
     /// <summary>
     /// List of all Notes within the Music sheet
     /// </summary>
-    private List<BaseNote> Notes;
+    private List<NoteData> Notes;
 
+    /// <summary>
+    /// Maximum Slots for Notes on the MusicSheet
+    /// </summary>
+    [SerializeField] private int maxSlots = 4;
+
+    [SerializeField] private GameObject noteSlotPrefab;
+
+    /// <summary>
+    /// Layout group for the Slots
+    /// </summary>
     [SerializeField] private GameObject Slots;
 
     private void Awake()
     {
-        Notes = new List<BaseNote>();
+        Notes = new List<NoteData>();
+
+        if (noteSlotPrefab == null) return;
+
+        for (int i = 0; i < maxSlots; i++)
+        {
+            GameObject obj = Instantiate(noteSlotPrefab, Slots.transform);
+        }
     }
+
     private void Start()
     {
         ClearNotes();
@@ -27,7 +44,7 @@ public class MusicSheet : MonoBehaviour
     /// Add Note into this Music Sheet's Note List
     /// </summary>
     /// <param name="note">Note to be added</param>
-    public void AddNote(BaseNote note)
+    public void AddNote(NoteData note)
     {
         Notes.Add(note);
     }
@@ -36,7 +53,7 @@ public class MusicSheet : MonoBehaviour
     /// Remove Note from this Music Sheet's Note List
     /// </summary>
     /// <param name="note">Note to be removed</param>
-    public void RemoveNote(BaseNote note)
+    public void RemoveNote(NoteData note)
     {
         if (Notes.Contains(note))
         {
@@ -61,9 +78,9 @@ public class MusicSheet : MonoBehaviour
         Notes.Clear();
         foreach (Transform slot in Slots.transform)
         {
-            if (slot.GetComponentInChildren<BaseNote>() != null)
+            if (slot.GetComponentInChildren<NoteController>() != null)
             {
-                RemoveNote(slot.GetComponentInChildren<BaseNote>());
+                RemoveNote(slot.GetComponentInChildren<NoteController>().noteData);
                 Destroy(slot.GetChild(0).gameObject);
             }
         }
@@ -78,10 +95,10 @@ public class MusicSheet : MonoBehaviour
         ClearNotes();
         foreach (Transform slot in Slots.transform)
         {
-            if (slot.GetComponentInChildren<BaseNote>() != null)
+            if (slot.GetComponentInChildren<NoteController>() != null)
             {
-                AddNote(slot.GetComponentInChildren<BaseNote>());
-                Debug.Log("Note Obtained: " + slot.GetComponentInChildren<BaseNote>().Score);
+                AddNote(slot.GetComponentInChildren<NoteController>().noteData);
+                Debug.Log("Note Obtained: " + slot.GetComponentInChildren<NoteController>().noteData.Score);
             }
         }
     }
