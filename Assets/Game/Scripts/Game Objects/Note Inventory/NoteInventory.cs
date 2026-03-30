@@ -66,7 +66,7 @@ public class NoteInventory : MonoBehaviour
     }
 
    /// <summary>
-   /// Removing notes from note pool when player discards
+   /// Removing notes from NotePool
    /// </summary>
    /// <param name="note"></param>
     public void RemoveNote(NoteData note)
@@ -78,6 +78,26 @@ public class NoteInventory : MonoBehaviour
             Debug.Log("Removed from NotePool.");
             NotePool.Remove(note);
         }
+    }
+
+    /// <summary>
+    /// When discarding notes, destroy them.
+    /// </summary>
+    /// <param name="note">Note to be destroyed</param>
+    public void DeleteNote(NoteData note)
+    {
+        // This func also lets the Inventory Manager know that whatever note is removed
+        // is not available to be used.
+        // Perhaps Inventory Manager has a list of all Notes player has, all playable notes, and all notes already used/discarded? - Nat
+        GrabNewNotes();
+    }
+
+    /// <summary>
+    /// When round is over, or Notes are discarded- get new notes to take their place
+    /// </summary>
+    public void GrabNewNotes()
+    {
+
     }
 
     /// <summary>
