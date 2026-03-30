@@ -289,6 +289,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 133154865}
   m_CullTransparentMesh: 1
+--- !u!1 &229741069
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 229741071}
+  - component: {fileID: 229741070}
+  m_Layer: 0
+  m_Name: _ResourceManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &229741070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229741069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d094ebee80fb07844be8ac29804c1ff9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceManager
+  NoteData: []
+  AudienceMemberData: []
+--- !u!4 &229741071
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229741069}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 396.92233, y: 243.04996, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &285653995
 GameObject:
   m_ObjectHideFlags: 0
@@ -1304,10 +1350,6 @@ MonoBehaviour:
   maxSlots: 6
   noteSlotPrefab: {fileID: 2484180083775032184, guid: e3049f045c265c646ad8d933c9229ab4, type: 3}
   inventoryPanel: {fileID: 2015985734}
-  notesToSpawn:
-  - {fileID: 11400000, guid: 867c2f2b90985ea4386571c47e4fe35b, type: 2}
-  - {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
-  - {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
   notePrefab: {fileID: 9005676489685703692, guid: ba1d4a41e0c8ae14aa823dd0dfd4f555, type: 3}
 --- !u!1 &1199703520
 GameObject:
@@ -1732,7 +1774,7 @@ GameObject:
   - component: {fileID: 1658900633}
   - component: {fileID: 1658900632}
   m_Layer: 0
-  m_Name: AudienceManager
+  m_Name: _AudienceManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1751,8 +1793,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudienceMemberManager
   memberTypes:
-  - {fileID: 11400000, guid: 623e509f290c79e4a80463f4a850f4ab, type: 2}
-  - {fileID: 11400000, guid: 4690c2a7ee2b9bc4abd593d53bdc16a5, type: 2}
+  - Peasant
+  - Aristocrat
   numberOfAudienceMembers: 4
   audienceMembers: []
   totalScore: 0
@@ -2112,3 +2154,4 @@ SceneRoots:
   - {fileID: 1344256445}
   - {fileID: 1082438382}
   - {fileID: 560692325}
+  - {fileID: 229741071}
