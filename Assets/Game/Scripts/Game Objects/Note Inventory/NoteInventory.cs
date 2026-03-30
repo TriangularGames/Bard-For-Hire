@@ -8,7 +8,6 @@ public class NoteInventory : MonoBehaviour
     [SerializeField] private Transform inventoryPanel;
 
     // This is just for testing
-    [SerializeField] public List<NoteData> notesToSpawn;
     [SerializeField] public GameObject notePrefab;
 
     private List<NoteData> NotePool;
@@ -31,8 +30,8 @@ public class NoteInventory : MonoBehaviour
 
             GameObject note = Instantiate(notePrefab, obj.transform);
 
-            int noteToCreate = Random.Range(0, notesToSpawn.Count);
-            note.GetComponent<NoteController>().noteData = notesToSpawn[noteToCreate];
+            int noteToCreate = Random.Range(0, ResourceManager.Instance.NoteData.Length);
+            note.GetComponent<NoteController>().noteData = ResourceManager.Instance.NoteData[noteToCreate];
 
             note.GetComponent<NoteController>().SetSprite();
 

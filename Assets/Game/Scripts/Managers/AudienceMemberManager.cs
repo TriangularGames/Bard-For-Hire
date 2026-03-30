@@ -1,5 +1,5 @@
-using NUnit.Framework;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using TMPro;
 using UnityEngine;
 
@@ -9,7 +9,7 @@ public class AudienceMemberManager : MonoBehaviour
     /// <summary>
     /// Audience Member types available for this Performance
     /// </summary>
-    [SerializeField] List<AudienceMemberData> memberTypes;
+    [SerializeField] List<string> memberTypes;
 
     /// <summary>
     /// Number of Members in the Audience
@@ -36,7 +36,14 @@ public class AudienceMemberManager : MonoBehaviour
     {
         for (int i = 0; i < numberOfAudienceMembers; i++)
         {
-            audienceMembers.Add(memberTypes[Random.Range(0, memberTypes.Count)]);
+            int memberType = Random.Range(0, memberTypes.Count);
+            for (int a = 0; a < ResourceManager.Instance.AudienceMemberData.Length; a++)
+            {
+                if (ResourceManager.Instance.AudienceMemberData[a].name == memberTypes[memberType])
+                {
+                    audienceMembers.Add(ResourceManager.Instance.AudienceMemberData[a]);
+                }
+            }
         }
 
         for (int j = 0; j < numberOfAudienceMembers; j++)
