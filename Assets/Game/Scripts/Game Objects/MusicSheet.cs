@@ -23,6 +23,19 @@ public class MusicSheet : MonoBehaviour
     /// </summary>
     [SerializeField] private GameObject Slots;
 
+    public List<GameObject> GetNotes()
+    {
+        return Notes;
+    }
+
+    public void EmptySlots()
+    {
+        foreach (ItemSlot slot in Slots.transform.GetComponentsInChildren<ItemSlot>())
+        {
+            slot.ClearNote();
+        }
+    }
+
     private void Awake()
     {
         Notes = new List<GameObject>();

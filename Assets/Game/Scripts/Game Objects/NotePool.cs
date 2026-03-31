@@ -101,12 +101,4 @@ public class NotePool : MonoBehaviour
             notePool.Remove(note);
         }
     }
-
-    /// <summary>
-    /// Clear all notes from the Note Pool
-    /// </summary>
-    public void ClearNotes()
-    {
-        //TODO: redo this
-    }
 }
