@@ -12,11 +12,14 @@ EditorBuildSettings:
     path: Assets/Game/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Game/Scenes/Inventory/Inventory.unity
-    guid: afdded48d156d7f47b2ad9ce90c50020
+    path: Assets/Game/Scenes/Managers/_PlayerInventoryManager.unity
+    guid: d23351061ab2a154b942d6dda85625ec
   - enabled: 1
     path: Assets/Game/Scenes/Managers/_ResourceManager.unity
     guid: b4674fa1480c545499c0bea5b8046b96
+  - enabled: 1
+    path: Assets/Game/Scenes/Inventory/Inventory.unity
+    guid: afdded48d156d7f47b2ad9ce90c50020
   - enabled: 1
     path: Assets/Game/Scenes/Performance.unity
     guid: 85c8a8693fe6bc147b647ba3f766f6ab
