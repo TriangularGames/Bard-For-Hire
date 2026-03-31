@@ -7,21 +7,25 @@ using UnityEngine;
 public class MusicSheet : MonoBehaviour
 {
     /// <summary>
-    /// List of all Notes within the Music sheet
+    /// Layout group for the Slots
     /// </summary>
-    private List<GameObject> Notes;
+    private Transform Slots;
+
+    /// <summary>
+    /// Prefab for creating the Slots for Notes
+    /// </summary>
+    private GameObject noteSlotPrefab;
 
     /// <summary>
     /// Maximum Slots for Notes on the MusicSheet
     /// </summary>
     [SerializeField] private int maxSlots = 4;
 
-    [SerializeField] private GameObject noteSlotPrefab;
-
     /// <summary>
-    /// Layout group for the Slots
+    /// List of all Notes within the Music sheet
     /// </summary>
-    [SerializeField] private GameObject Slots;
+    private List<GameObject> Notes;
+
 
     public List<GameObject> GetNotes()
     {
@@ -38,9 +42,10 @@ public class MusicSheet : MonoBehaviour
 
     private void Awake()
     {
-        Notes = new List<GameObject>();
+        Debug.Assert(noteSlotPrefab = AssetManager.Instance.GetPrefab("NoteSlot"), "MusicSheet requires NoteSlotPrefab");
+        Debug.Assert(Slots = transform.GetChild(0), "MusicSheet requires Layout for Grid");
 
-        if (noteSlotPrefab == null) return;
+        Notes = new List<GameObject>();
 
         for (int i = 0; i < maxSlots; i++)
         {

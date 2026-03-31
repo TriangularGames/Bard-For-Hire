@@ -4,12 +4,12 @@ using UnityEngine.UI;
 
 public class NotePool : MonoBehaviour
 {
-    [SerializeField] private int maxSlots = 6;
-    [SerializeField] private GameObject noteSlotPrefab;
-    [SerializeField] public Transform inventoryPanel;
+    private GameObject noteSlotPrefab;
+    private GameObject notePrefab;
+    [HideInInspector] public Transform inventoryPanel;
 
-    // This is just for testing
-    [SerializeField] public GameObject notePrefab;
+    [SerializeField] private int maxSlots = 6;
+    
 
     private List<GameObject> notePool;
 
@@ -28,7 +28,9 @@ public class NotePool : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        if (noteSlotPrefab == null || inventoryPanel == null) return;
+        Debug.Assert(noteSlotPrefab = AssetManager.Instance.GetPrefab("NoteSlot"), "NotePool requires NoteSlotPrefab");
+        Debug.Assert(notePrefab = AssetManager.Instance.GetPrefab("Note"), "NotePool requires NotePrefab");
+        Debug.Assert(inventoryPanel = transform.GetChild(0), "NotePool requires Layout for Grid");
 
         for (int i = 0; i < maxSlots; i++)
         {

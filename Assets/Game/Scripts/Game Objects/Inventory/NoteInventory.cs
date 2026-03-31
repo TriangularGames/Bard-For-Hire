@@ -3,11 +3,14 @@ using UnityEngine;
 
 public class NoteInventory : MonoBehaviour
 {
-    [SerializeField] private int inventorySpace = 10;
-    [SerializeField] public Transform inventoryPanel;
+    private Transform inventoryPanel;
 
-    [SerializeField] public GameObject noteSlotPrefab;
-    [SerializeField] public GameObject notePrefab;
+    private GameObject noteSlotPrefab;
+    private GameObject notePrefab;
+
+
+    [SerializeField] private int inventorySpace = 10;
+    
 
     private List<GameObject> noteInventory;
 
@@ -26,7 +29,9 @@ public class NoteInventory : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        if (inventoryPanel == null) return;
+        Debug.Assert(noteSlotPrefab = AssetManager.Instance.GetPrefab("NoteSlot"), "NoteInventory requires NoteSlotPrefab");
+        Debug.Assert(notePrefab = AssetManager.Instance.GetPrefab("Note"), "NoteInventory requires NotePrefab");
+        Debug.Assert(inventoryPanel = transform.GetChild(0), "NoteInventory requires Layout for Grid");
 
         for (int i = 0; i < inventorySpace; i++)
         {

@@ -29,7 +29,7 @@ public class ScoreManager : Singleton<ScoreManager>
         score = 0;
         foreach(GameObject note in notes)
         {
-            NoteData noteData = note.GetComponent<NoteData>();
+            NoteData noteData = note.GetComponent<NoteController>().noteData;
             if (noteData.Playable <= rollValue)
             {
                 Debug.Log($"{note.name} was played!");
