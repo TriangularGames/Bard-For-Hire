@@ -3,18 +3,18 @@ using UnityEngine;
 
 public class PlayerInventoryManager : Singleton<PlayerInventoryManager>
 {
-    private List<GameObject> inventoryNotes;
+    private List<NoteData> inventoryNotes;
 
     public override void Awake()
     {
-        inventoryNotes = new List<GameObject>();
+        inventoryNotes = new List<NoteData>();
     }
 
     /// <summary>
     /// Retrieve inventory notes
     /// </summary>
     /// <returns></returns>
-    public List<GameObject> GetInventoryNotes()
+    public List<NoteData> GetInventoryNotes()
     {
         return inventoryNotes;
     }
@@ -22,7 +22,7 @@ public class PlayerInventoryManager : Singleton<PlayerInventoryManager>
     /// <summary>
     /// Store notes from note inventory
     /// </summary>
-    public void SetInventoryNotes(List<GameObject> _inventoryNotes)
+    public void SetInventoryNotes(List<NoteData> _inventoryNotes)
     {
         inventoryNotes = _inventoryNotes;
     }

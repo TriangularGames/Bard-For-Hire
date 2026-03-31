@@ -30,15 +30,19 @@ public class NotePool : MonoBehaviour
     {
         if (noteSlotPrefab == null || inventoryPanel == null) return;
 
+        Debug.Log("Notes in note pool!: " + PlayerInventoryManager.Instance.GetInventoryNotes().Count);
+
         for (int i = 0; i < maxSlots; i++)
         {
             GameObject obj = Instantiate(noteSlotPrefab, inventoryPanel);
 
             GameObject note = Instantiate(notePrefab, obj.transform);
-            note.name = note.name + i.ToString();
+            note.name = PlayerInventoryManager.Instance.GetInventoryNotes()[i].name;
+            //note.name = note.name + i.ToString();
 
-            int noteToCreate = Random.Range(0, ResourceManager.Instance.NoteData.Length);
-            note.GetComponent<NoteController>().noteData = ResourceManager.Instance.NoteData[noteToCreate];
+            //int noteToCreate = Random.Range(0, ResourceManager.Instance.NoteData.Length);
+            //note.GetComponent<NoteController>().noteData = ResourceManager.Instance.NoteData[noteToCreate];
+            note.GetComponent<NoteController>().noteData = PlayerInventoryManager.Instance.GetInventoryNotes()[i];
 
             note.GetComponent<NoteController>().SetSprite();
 

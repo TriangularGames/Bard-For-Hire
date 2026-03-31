@@ -9,16 +9,16 @@ public class NoteInventory : MonoBehaviour
     // This is just for testing
     [SerializeField] public GameObject notePrefab;
 
-    private List<GameObject> noteInventory;
+    private List<NoteData> noteInventory;
 
-    public List<GameObject> GetNoteInventory()
+    public List<NoteData> GetNoteInventory()
     {
         return noteInventory;
     }
 
     private void Awake()
     {
-        noteInventory = new List<GameObject>();
+        noteInventory = new List<NoteData>();
     }
 
     /// <summary>
@@ -34,14 +34,18 @@ public class NoteInventory : MonoBehaviour
             note.name = note.name + i.ToString();
 
             int noteToCreate = Random.Range(0, ResourceManager.Instance.NoteData.Length);
-            note.GetComponent<NoteController>().noteData = ResourceManager.Instance.NoteData[noteToCreate];
+            NoteData data = Instantiate(ResourceManager.Instance.NoteData[noteToCreate]);
 
+            note.GetComponent<NoteController>().noteData = data;
             note.GetComponent<NoteController>().SetSprite();
 
             AddNote(note);
         }
 
         PlayerInventoryManager.Instance.SetInventoryNotes(noteInventory);
+
+        Debug.Log("Note Inventory initialized with " + noteInventory.Count + " notes.");
+        Debug.Log("Note 1 is type: " + noteInventory[0].NoteType);
     }
 
     /// <summary>
@@ -62,11 +66,11 @@ public class NoteInventory : MonoBehaviour
             Debug.Log("Inventory is full.");
             return;
         }
-        if (noteInventory.Contains(note))
+        if (noteInventory.Contains(note.GetComponent<NoteController>().noteData))
         {
             Debug.Log("This note is already in the inventory.");
             return;
         }
-        noteInventory.Add(note);
+        noteInventory.Add(note.GetComponent<NoteController>().noteData);
     }
 }

@@ -18,8 +18,8 @@ EditorBuildSettings:
     path: Assets/Game/Scenes/Managers/_ResourceManager.unity
     guid: b4674fa1480c545499c0bea5b8046b96
   - enabled: 1
-    path: Assets/Game/Scenes/Managers/_NoteManager.unity
-    guid: 8774062510526014cb7f00e823b1fd1b
+    path: Assets/Game/Scenes/Performance.unity
+    guid: 85c8a8693fe6bc147b647ba3f766f6ab
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
