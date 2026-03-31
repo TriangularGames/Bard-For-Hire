@@ -1,20 +1,26 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NotePool : MonoBehaviour
 {
     [SerializeField] private int maxSlots = 6;
     [SerializeField] private GameObject noteSlotPrefab;
-    [SerializeField] private Transform inventoryPanel;
+    [SerializeField] public Transform inventoryPanel;
 
     // This is just for testing
     [SerializeField] public GameObject notePrefab;
 
-    private List<NoteData> notePool;
+    private List<GameObject> notePool;
+
+    public List<GameObject> GetNotePool()
+    {
+        return notePool;
+    }
 
     private void Awake()
     {
-        notePool = new List<NoteData>();
+        notePool = new List<GameObject>();
     }
 
     /// <summary>
@@ -29,21 +35,38 @@ public class NotePool : MonoBehaviour
             GameObject obj = Instantiate(noteSlotPrefab, inventoryPanel);
 
             GameObject note = Instantiate(notePrefab, obj.transform);
+            note.name = note.name + i.ToString();
 
             int noteToCreate = Random.Range(0, ResourceManager.Instance.NoteData.Length);
             note.GetComponent<NoteController>().noteData = ResourceManager.Instance.NoteData[noteToCreate];
 
             note.GetComponent<NoteController>().SetSprite();
 
-            AddNote(note.GetComponent<NoteController>().noteData);
+            AddNote(note);
         }
+    }
+
+    /// <summary>
+    /// This is a temporary function for testing purposes
+    /// </summary>
+    public void InstantiateNote(Transform parent)
+    {
+        GameObject note = Instantiate(notePrefab, parent);
+
+        int noteToCreate = Random.Range(0, ResourceManager.Instance.NoteData.Length);
+        NoteData data = ResourceManager.Instance.NoteData[noteToCreate];
+        note.GetComponent<NoteController>().noteData = Instantiate(data);
+
+        note.GetComponent<NoteController>().SetSprite();
+
+        AddNote(note);
     }
 
     /// <summary>
     /// Adding new notes to note pool
     /// </summary>
-    /// <param name="note"></param>
-    public void AddNote(NoteData note)
+    /// <param name="note">Note data to add</param>
+    public void AddNote(GameObject note)
     {
         if (noteSlotPrefab == null || inventoryPanel == null) return;
 
@@ -69,39 +92,18 @@ public class NotePool : MonoBehaviour
    /// Removing notes from NotePool
    /// </summary>
    /// <param name="note"></param>
-    public void RemoveNote(NoteData note)
+    public void RemoveNote(GameObject note)
     {
         if (note == null) return;
 
         if (notePool.Contains(note))
         {
-            Debug.Log("Removed from NotePool.");
             notePool.Remove(note);
         }
     }
 
     /// <summary>
-    /// When discarding notes, destroy them.
-    /// </summary>
-    /// <param name="note">Note to be destroyed</param>
-    public void DeleteNote(NoteData note)
-    {
-        // This func also lets the Inventory Manager know that whatever note is removed
-        // is not available to be used.
-        // Perhaps Inventory Manager has a list of all Notes player has, all playable notes, and all notes already used/discarded? - Nat
-        GrabNewNotes();
-    }
-
-    /// <summary>
-    /// When round is over, or Notes are discarded- get new notes to take their place
-    /// </summary>
-    public void GrabNewNotes()
-    {
-
-    }
-
-    /// <summary>
-    /// Clear all notes from note pool
+    /// Clear all notes from the Note Pool
     /// </summary>
     public void ClearNotes()
     {
