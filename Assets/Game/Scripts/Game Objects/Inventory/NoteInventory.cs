@@ -43,9 +43,6 @@ public class NoteInventory : MonoBehaviour
         }
 
         PlayerInventoryManager.Instance.SetInventoryNotes(noteInventory);
-
-        Debug.Log("Note Inventory initialized with " + noteInventory.Count + " notes.");
-        Debug.Log("Note 1 is type: " + noteInventory[0].NoteType);
     }
 
     /// <summary>

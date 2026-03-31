@@ -30,8 +30,6 @@ public class NotePool : MonoBehaviour
     {
         if (noteSlotPrefab == null || inventoryPanel == null) return;
 
-        Debug.Log("Notes in note pool!: " + PlayerInventoryManager.Instance.GetInventoryNotes().Count);
-
         for (int i = 0; i < maxSlots; i++)
         {
             GameObject obj = Instantiate(noteSlotPrefab, inventoryPanel);
