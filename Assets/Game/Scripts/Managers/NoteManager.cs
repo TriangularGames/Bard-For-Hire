@@ -13,6 +13,7 @@ public class NoteManager : Singleton<NoteManager>
     {
         notesToDelete = new List<GameObject>();
     }
+
     /// <summary>
     /// When discarding notes, destroy them.
     /// </summary>
@@ -52,6 +53,26 @@ public class NoteManager : Singleton<NoteManager>
             if (notePool.inventoryPanel.GetChild(i).GetComponent<ItemSlot>().StoredNote == null)
             {
                 notePool.InstantiateNote(notePool.inventoryPanel.GetChild(i).transform);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Remove Notes from Music Sheet and return them to the Note Pool
+    /// </summary>
+    public void ClearNotes()
+    {
+        foreach (GameObject note in musicSheet.GetNotes())
+        {
+            for (int i = 0; i < notePool.inventoryPanel.childCount; i++)
+            {
+                if (notePool.inventoryPanel.GetChild(i).GetComponent<ItemSlot>().StoredNote == null)
+                {
+                    note.transform.parent.GetComponent<ItemSlot>().ClearNote();
+                    note.GetComponent<DraggableItem>().parentAfterDrag = notePool.inventoryPanel.GetChild(i).transform;
+                    note.transform.SetParent(notePool.inventoryPanel.GetChild(i));
+                    notePool.inventoryPanel.GetChild(i).GetComponent<ItemSlot>().SetNote(note);
+                }
             }
         }
     }
