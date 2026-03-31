@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class PlayerInventoryManager : Singleton<PlayerInventoryManager>
 {
-    private List<GameObject> inventoryNotes;
+    public List<GameObject> inventory;
 
-    public override void Awake()
+    public void Start()
     {
-        inventoryNotes = new List<GameObject>();
+        inventory = new List<GameObject>();
     }
 
     /// <summary>
@@ -16,7 +16,7 @@ public class PlayerInventoryManager : Singleton<PlayerInventoryManager>
     /// <returns></returns>
     public List<GameObject> GetInventoryNotes()
     {
-        return inventoryNotes;
+        return inventory;
     }
 
     /// <summary>
@@ -24,6 +24,10 @@ public class PlayerInventoryManager : Singleton<PlayerInventoryManager>
     /// </summary>
     public void SetInventoryNotes(List<GameObject> _inventoryNotes)
     {
-        inventoryNotes = _inventoryNotes;
+        foreach (GameObject item in _inventoryNotes)
+        {
+            GameObject obj = Instantiate(item, transform);
+            inventory.Add(obj);
+        }
     }
 }
