@@ -520,7 +520,8 @@ MonoBehaviour:
   progressBar: {fileID: 1567733911}
   progressText: {fileID: 937952065}
   minimumDisplayTime: 0.6
-  managerScenesToLoad: []
+  managerScenesToLoad:
+  - {fileID: 102900000, guid: b4674fa1480c545499c0bea5b8046b96, type: 3}
   firstGameplayScene: {fileID: 102900000, guid: 99c9720ab356a0642a771bea13969a05, type: 3}
 --- !u!4 &910452830
 Transform:
