@@ -522,6 +522,7 @@ MonoBehaviour:
   minimumDisplayTime: 0.6
   managerScenesToLoad:
   - {fileID: 102900000, guid: b4674fa1480c545499c0bea5b8046b96, type: 3}
+  - {fileID: 102900000, guid: fbfb6557ef0078e4585774dd42e989f8, type: 3}
   - {fileID: 102900000, guid: d23351061ab2a154b942d6dda85625ec, type: 3}
   firstGameplayScene: {fileID: 102900000, guid: afdded48d156d7f47b2ad9ce90c50020, type: 3}
 --- !u!4 &910452830
