@@ -12,8 +12,12 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     
     private void Awake()
     {
-        parentAfterDrag = gameObject.transform.parent.transform;
-        parentAfterDrag.gameObject.GetComponent<ItemSlot>().SetNote(gameObject);
+        // Check if item is in a slot
+        if (gameObject.transform.parent.transform != null)
+        {
+            parentAfterDrag = gameObject.transform.parent.transform;
+            parentAfterDrag.gameObject.GetComponent<ItemSlot>().SetNote(gameObject);
+        }
     }
 
     #region Dragging Item
