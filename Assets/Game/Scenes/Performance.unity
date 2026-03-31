@@ -2231,8 +2231,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1186631605}
-        m_TargetAssemblyTypeName: NoteInventory, Assembly-CSharp
+      - m_Target: {fileID: 1016375505}
+        m_TargetAssemblyTypeName: NoteManager, Assembly-CSharp
         m_MethodName: ClearNotes
         m_Mode: 1
         m_Arguments:
