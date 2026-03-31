@@ -6,19 +6,19 @@ public class NoteInventory : MonoBehaviour
     [SerializeField] private int inventorySpace = 10;
     [SerializeField] public Transform inventoryPanel;
 
-    // This is just for testing
+    [SerializeField] public GameObject noteSlotPrefab;
     [SerializeField] public GameObject notePrefab;
 
-    private List<NoteData> noteInventory;
+    private List<GameObject> noteInventory;
 
-    public List<NoteData> GetNoteInventory()
+    public List<GameObject> GetNoteInventory()
     {
         return noteInventory;
     }
 
     private void Awake()
     {
-        noteInventory = new List<NoteData>();
+        noteInventory = new List<GameObject>();
     }
 
     /// <summary>
@@ -30,7 +30,8 @@ public class NoteInventory : MonoBehaviour
 
         for (int i = 0; i < inventorySpace; i++)
         {
-            GameObject note = Instantiate(notePrefab, inventoryPanel);
+            GameObject noteSlot = Instantiate(noteSlotPrefab, inventoryPanel);
+            GameObject note = Instantiate(notePrefab, noteSlot.transform);
             note.name = note.name + i.ToString();
 
             int noteToCreate = Random.Range(0, ResourceManager.Instance.NoteData.Length);
@@ -63,11 +64,11 @@ public class NoteInventory : MonoBehaviour
             Debug.Log("Inventory is full.");
             return;
         }
-        if (noteInventory.Contains(note.GetComponent<NoteController>().noteData))
+        if (noteInventory.Contains(note))
         {
             Debug.Log("This note is already in the inventory.");
             return;
         }
-        noteInventory.Add(note.GetComponent<NoteController>().noteData);
+        noteInventory.Add(note);
     }
 }

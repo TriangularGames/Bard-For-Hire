@@ -34,13 +34,19 @@ public class NotePool : MonoBehaviour
         {
             GameObject obj = Instantiate(noteSlotPrefab, inventoryPanel);
 
-            GameObject note = Instantiate(notePrefab, obj.transform);
-            note.name = PlayerInventoryManager.Instance.GetInventoryNotes()[i].name;
+            /// Gets a random Note from the inventory
+            /// This is where we need to specifically reference a list of notes that have not been used
+            /// So perhaps when we get into the performance scene, during setup the inventory creates a list of all notes useable
+            /// that will then be removed as the rounds go on
+            int noteToGrab = Random.Range(0, PlayerInventoryManager.Instance.GetInventoryNotes().Count);
+
+            GameObject note = Instantiate(PlayerInventoryManager.Instance.GetInventoryNotes()[noteToGrab], obj.transform);
+            //note.name = PlayerInventoryManager.Instance.GetInventoryNotes()[i].name;
             //note.name = note.name + i.ToString();
 
             //int noteToCreate = Random.Range(0, ResourceManager.Instance.NoteData.Length);
             //note.GetComponent<NoteController>().noteData = ResourceManager.Instance.NoteData[noteToCreate];
-            note.GetComponent<NoteController>().noteData = PlayerInventoryManager.Instance.GetInventoryNotes()[i];
+            //note.GetComponent<NoteController>().noteData = PlayerInventoryManager.Instance.GetInventoryNotes()[i];
 
             note.GetComponent<NoteController>().SetSprite();
 
