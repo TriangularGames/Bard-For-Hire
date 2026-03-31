@@ -9,7 +9,7 @@ public class MusicSheet : MonoBehaviour
     /// <summary>
     /// List of all Notes within the Music sheet
     /// </summary>
-    private List<NoteData> Notes;
+    private List<GameObject> Notes;
 
     /// <summary>
     /// Maximum Slots for Notes on the MusicSheet
@@ -25,7 +25,7 @@ public class MusicSheet : MonoBehaviour
 
     private void Awake()
     {
-        Notes = new List<NoteData>();
+        Notes = new List<GameObject>();
 
         if (noteSlotPrefab == null) return;
 
@@ -44,7 +44,7 @@ public class MusicSheet : MonoBehaviour
     /// Add Note into this Music Sheet's Note List
     /// </summary>
     /// <param name="note">Note to be added</param>
-    public void AddNote(NoteData note)
+    public void AddNote(GameObject note)
     {
         Notes.Add(note);
     }
@@ -53,11 +53,10 @@ public class MusicSheet : MonoBehaviour
     /// Remove Note from this Music Sheet's Note List
     /// </summary>
     /// <param name="note">Note to be removed</param>
-    public void RemoveNote(NoteData note)
+    public void RemoveNote(GameObject note)
     {
         if (Notes.Contains(note))
         {
-            Debug.Log("Removed from MusicSheet.");
             Notes.Remove(note);
         }
     }
@@ -81,7 +80,7 @@ public class MusicSheet : MonoBehaviour
         {
             if (slot.GetComponentInChildren<NoteController>() != null)
             {
-                RemoveNote(slot.GetComponentInChildren<NoteController>().noteData);
+                RemoveNote(slot.GetChild(0).gameObject);
                 Destroy(slot.GetChild(0).gameObject);
             }
         }
@@ -98,8 +97,7 @@ public class MusicSheet : MonoBehaviour
         {
             if (slot.GetComponentInChildren<NoteController>() != null)
             {
-                AddNote(slot.GetComponentInChildren<NoteController>().noteData);
-                Debug.Log("Note Obtained: " + slot.GetComponentInChildren<NoteController>().noteData.Score);
+                AddNote(slot.GetChild(0).gameObject);
             }
         }
     }
