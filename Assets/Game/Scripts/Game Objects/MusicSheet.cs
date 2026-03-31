@@ -49,7 +49,8 @@ public class MusicSheet : MonoBehaviour
 
         for (int i = 0; i < maxSlots; i++)
         {
-            GameObject obj = Instantiate(noteSlotPrefab, Slots.transform);
+            /// Could change this to use the AssetManager Spawning
+            Instantiate(noteSlotPrefab, Slots.transform);
         }
     }
 

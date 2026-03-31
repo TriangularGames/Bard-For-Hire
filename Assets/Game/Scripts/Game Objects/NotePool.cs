@@ -4,8 +4,11 @@ using UnityEngine.UI;
 
 public class NotePool : MonoBehaviour
 {
+    // Prefabs for Spawning
     private GameObject noteSlotPrefab;
     private GameObject notePrefab;
+
+    // Inventory Panel
     [HideInInspector] public Transform inventoryPanel;
 
     [SerializeField] private int maxSlots = 6;
@@ -34,6 +37,7 @@ public class NotePool : MonoBehaviour
 
         for (int i = 0; i < maxSlots; i++)
         {
+            /// Could change this to use the AssetManager Spawning
             GameObject obj = Instantiate(noteSlotPrefab, inventoryPanel);
 
             /// Gets a random Note from the inventory
@@ -42,13 +46,8 @@ public class NotePool : MonoBehaviour
             /// that will then be removed as the rounds go on
             int noteToGrab = Random.Range(0, PlayerInventoryManager.Instance.GetInventoryNotes().Count);
 
+            /// Could change this to use the AssetManager Spawning
             GameObject note = Instantiate(PlayerInventoryManager.Instance.GetInventoryNotes()[noteToGrab], obj.transform);
-            //note.name = PlayerInventoryManager.Instance.GetInventoryNotes()[i].name;
-            //note.name = note.name + i.ToString();
-
-            //int noteToCreate = Random.Range(0, ResourceManager.Instance.NoteData.Length);
-            //note.GetComponent<NoteController>().noteData = ResourceManager.Instance.NoteData[noteToCreate];
-            //note.GetComponent<NoteController>().noteData = PlayerInventoryManager.Instance.GetInventoryNotes()[i];
 
             note.GetComponent<NoteController>().SetSprite();
 
@@ -57,7 +56,8 @@ public class NotePool : MonoBehaviour
     }
 
     /// <summary>
-    /// This is a temporary function for testing purposes
+    /// This is a temporary function for testing purposes.
+    /// Unsure if we will need this permanently or not
     /// </summary>
     public void InstantiateNote(Transform parent)
     {

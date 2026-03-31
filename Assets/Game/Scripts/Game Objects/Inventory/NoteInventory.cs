@@ -3,8 +3,10 @@ using UnityEngine;
 
 public class NoteInventory : MonoBehaviour
 {
+    // Inventory Panel
     private Transform inventoryPanel;
 
+    // Prefabs for Spawning
     private GameObject noteSlotPrefab;
     private GameObject notePrefab;
 
@@ -35,6 +37,7 @@ public class NoteInventory : MonoBehaviour
 
         for (int i = 0; i < inventorySpace; i++)
         {
+            /// Could change these entirely to use the spawn functions from AssetManager
             GameObject noteSlot = Instantiate(noteSlotPrefab, inventoryPanel);
             GameObject note = Instantiate(notePrefab, noteSlot.transform);
             note.name = note.name + i.ToString();
