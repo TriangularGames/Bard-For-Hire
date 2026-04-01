@@ -26,6 +26,8 @@ public class NotePool : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        PlayerInventoryManager.Instance.ResetPool();
+
         Debug.Assert(inventoryPanel = transform.GetChild(0), "NotePool requires Layout for Grid");
 
         for (int i = 0; i < maxSlots; i++)
@@ -55,17 +57,14 @@ public class NotePool : MonoBehaviour
     /// This is a temporary function for testing purposes.
     /// Unsure if we will need this permanently or not
     /// </summary>
-    public void InstantiateNote(Transform parent)
+    public void InstantiateNote(NoteData note, Transform parent)
     {
-        GameObject note = AssetManager.Instance.Spawn("NoteSlot", parent);
+        GameObject noteSpawned = AssetManager.Instance.Spawn("Note", parent);
+        noteSpawned.GetComponent<NoteController>().noteData = note;
 
-        int noteToCreate = Random.Range(0, ResourceManager.Instance.NoteData.Length);
-        NoteData data = ResourceManager.Instance.NoteData[noteToCreate];
-        note.GetComponent<NoteController>().noteData = Instantiate(data);
+        noteSpawned.GetComponent<NoteController>().Setup();
 
-        note.GetComponent<NoteController>().Setup();
-
-        AddNote(data);
+        AddNote(noteSpawned.GetComponent<NoteController>().noteData);
     }
 
     /// <summary>
