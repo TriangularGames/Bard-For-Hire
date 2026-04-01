@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -33,7 +34,7 @@ public class NoteManager : Singleton<NoteManager>
                     musicSheet.RemoveNote(notesToDelete[i].GetComponent<NoteController>().noteData);
                 }
                 notesToDelete[i].transform.parent.GetComponent<ItemSlot>().ClearNote();
-                PlayerInventoryManager.Instance.UsedNote(notesToDelete[i].GetComponent<NoteController>().noteData);
+                EventBus.Publish<NoteRemovedEvent>(new NoteRemovedEvent(notesToDelete[i].GetComponent<NoteController>().noteData));
 
                 GameObject remove = notesToDelete[i];
                 notesToDelete.Remove(remove);

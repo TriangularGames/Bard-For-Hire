@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class PlayerInventoryManager : Singleton<PlayerInventoryManager>
 {
@@ -9,6 +10,30 @@ public class PlayerInventoryManager : Singleton<PlayerInventoryManager>
     // and what Notes aren't
     public List<NoteData> notesUsed;
     public List<NoteData> notesNotUsed;
+
+    private void OnEnable()
+    {
+        EventBus.Subscribe<NoteRemovedEvent>(OnNoteRemovedEvent);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe<NoteRemovedEvent>(OnNoteRemovedEvent);
+    }
+
+    private void OnNoteRemovedEvent(NoteRemovedEvent e)
+    {
+        Debug.Log("Event Receieved!");
+        if (notesNotUsed.Contains(e._note))
+        {
+            notesUsed.Add(e._note);
+            notesNotUsed.Remove(e._note);
+        }
+        else
+        {
+            Debug.LogWarning("Note used is not in available inventory.");
+        }
+    }
 
     public void Start()
     {
@@ -43,20 +68,6 @@ public class PlayerInventoryManager : Singleton<PlayerInventoryManager>
         {
             notesNotUsed.Add(item);
         }
-    }
-
-    public void UsedNote(NoteData item)
-    {
-        if (notesNotUsed.Contains(item))
-        {
-            notesUsed.Add(item);
-            notesNotUsed.Remove(item);
-        }
-        else
-        {
-            Debug.LogWarning("Note used is not in available inventory.");
-        }
-        
     }
 
     public NoteData GetRandomNote()

@@ -40,7 +40,7 @@ public class ScoreManager : Singleton<ScoreManager>
                 {
                     score += note.Score;
                 }
-                PlayerInventoryManager.Instance.UsedNote(note);
+                EventBus.Publish<NoteRemovedEvent>(new NoteRemovedEvent(note));
             }
         }
         Debug.Log("Total Score: " + score);

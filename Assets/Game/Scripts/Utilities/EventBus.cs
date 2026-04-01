@@ -58,4 +58,15 @@ public static class EventBus
             }
         }
     }
+    
+}
+
+public struct NoteRemovedEvent
+{
+    public NoteData _note;
+
+    public NoteRemovedEvent(NoteData note)
+    {
+        _note = note;
+    }
 }
