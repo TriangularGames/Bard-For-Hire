@@ -32,8 +32,7 @@ public class NoteInventory : MonoBehaviour
         for (int i = 0; i < inventorySpace; i++)
         {
             /// Spawn NoteSlot and Note from AssetManager
-            GameObject noteSlot = AssetManager.Instance.Spawn("NoteSlot", inventoryPanel);
-            GameObject note = AssetManager.Instance.Spawn("Note", noteSlot.transform);
+            GameObject note = AssetManager.Instance.Spawn("Note", inventoryPanel);
             note.name = note.name + i.ToString();
 
             int noteToCreate = Random.Range(0, ResourceManager.Instance.NoteData.Length);
