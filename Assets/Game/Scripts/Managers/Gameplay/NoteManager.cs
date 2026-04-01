@@ -21,16 +21,16 @@ public class NoteManager : Singleton<NoteManager>
     {
         for (int i = 0; i < notesToDelete.Count; i++)
         {
-            if (notePool.GetNotePool().Contains(notesToDelete[i]))
+            if (notePool.GetNotePool().Contains(notesToDelete[i].GetComponent<NoteController>().noteData))
             {
                 notesToDelete[i].transform.parent.GetComponent<RawImage>().color = Color.white;
                 if (notesToDelete[i].GetComponent<DraggableItem>().inNotePool)
                 {
-                    notePool.RemoveNote(notesToDelete[i]);
+                    notePool.RemoveNote(notesToDelete[i].GetComponent<NoteController>().noteData);
                 }
                 else
                 {
-                    musicSheet.RemoveNote(notesToDelete[i]);
+                    musicSheet.RemoveNote(notesToDelete[i].GetComponent<NoteController>().noteData);
                 }
                 notesToDelete[i].transform.parent.GetComponent<ItemSlot>().ClearNote();
 

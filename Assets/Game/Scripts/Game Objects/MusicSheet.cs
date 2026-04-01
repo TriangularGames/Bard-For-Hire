@@ -12,11 +12,6 @@ public class MusicSheet : MonoBehaviour
     private Transform Slots;
 
     /// <summary>
-    /// Prefab for creating the Slots for Notes
-    /// </summary>
-    private GameObject noteSlotPrefab;
-
-    /// <summary>
     /// Maximum Slots for Notes on the MusicSheet
     /// </summary>
     [SerializeField] private int maxSlots = 4;
@@ -24,12 +19,16 @@ public class MusicSheet : MonoBehaviour
     /// <summary>
     /// List of all Notes within the Music sheet
     /// </summary>
-    private List<GameObject> Notes;
-
+    private List<NoteData> Notes;
 
     public List<GameObject> GetNotes()
     {
-        return Notes;
+        List<GameObject> list = new List<GameObject>();
+        for (int i = 0; i < Slots.transform.childCount; i++)
+        {
+            list.Add(Slots.transform.GetChild(i).gameObject);
+        }
+        return list;
     }
 
     public void EmptySlots()
@@ -42,15 +41,14 @@ public class MusicSheet : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Assert(noteSlotPrefab = AssetManager.Instance.GetPrefab("NoteSlot"), "MusicSheet requires NoteSlotPrefab");
         Debug.Assert(Slots = transform.GetChild(0), "MusicSheet requires Layout for Grid");
 
-        Notes = new List<GameObject>();
+        Notes = new List<NoteData>();
 
         for (int i = 0; i < maxSlots; i++)
         {
-            /// Could change this to use the AssetManager Spawning
-            Instantiate(noteSlotPrefab, Slots.transform);
+            /// Spawn Slots using AssetManager
+            AssetManager.Instance.Spawn("NoteSlot", Slots.transform);
         }
     }
 
@@ -63,7 +61,7 @@ public class MusicSheet : MonoBehaviour
     /// Add Note into this Music Sheet's Note List
     /// </summary>
     /// <param name="note">Note to be added</param>
-    public void AddNote(GameObject note)
+    public void AddNote(NoteData note)
     {
         Notes.Add(note);
     }
@@ -72,7 +70,7 @@ public class MusicSheet : MonoBehaviour
     /// Remove Note from this Music Sheet's Note List
     /// </summary>
     /// <param name="note">Note to be removed</param>
-    public void RemoveNote(GameObject note)
+    public void RemoveNote(NoteData note)
     {
         if (Notes.Contains(note))
         {
@@ -99,7 +97,7 @@ public class MusicSheet : MonoBehaviour
         {
             if (slot.GetComponentInChildren<NoteController>() != null)
             {
-                RemoveNote(slot.GetChild(0).gameObject);
+                RemoveNote(slot.GetChild(0).GetComponent<NoteController>().noteData);
                 Destroy(slot.GetChild(0).gameObject);
             }
         }
@@ -116,7 +114,7 @@ public class MusicSheet : MonoBehaviour
         {
             if (slot.GetComponentInChildren<NoteController>() != null)
             {
-                AddNote(slot.GetChild(0).gameObject);
+                AddNote(slot.GetChild(0).GetComponent<NoteController>().noteData);
             }
         }
     }

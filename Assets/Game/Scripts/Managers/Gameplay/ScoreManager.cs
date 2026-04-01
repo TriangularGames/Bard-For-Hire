@@ -21,25 +21,24 @@ public class ScoreManager : Singleton<ScoreManager>
     /// Calculates the final score for a round using Note List
     /// </summary>
     /// <param name="notes">List of Notes to be scored</param>
-    public void CalculateScore(List<GameObject> notes)
+    public void CalculateScore(List<NoteData> notes)
     {
         // Include in here some effect thats displayed as each note is determined
         // to be scored or not
         int rollValue = roller.RollDie();
         score = 0;
-        foreach(GameObject note in notes)
+        foreach(NoteData note in notes)
         {
-            NoteData noteData = note.GetComponent<NoteController>().noteData;
-            if (noteData.Playable <= rollValue)
+            if (note.Playable <= rollValue)
             {
                 Debug.Log($"{note.name} was played!");
-                if (noteData.Mult)
+                if (note.Mult)
                 {
-                    score *= noteData.Score;
+                    score *= note.Score;
                 }
                 else
                 {
-                    score += noteData.Score;
+                    score += note.Score;
                 }
             }
         }

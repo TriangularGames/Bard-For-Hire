@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class NotePool : MonoBehaviour
 {
@@ -14,16 +13,16 @@ public class NotePool : MonoBehaviour
     [SerializeField] private int maxSlots = 6;
     
 
-    private List<GameObject> notePool;
+    private List<NoteData> notePool;
 
-    public List<GameObject> GetNotePool()
+    public List<NoteData> GetNotePool()
     {
         return notePool;
     }
 
     private void Awake()
     {
-        notePool = new List<GameObject>();
+        notePool = new List<NoteData>();
     }
 
     /// <summary>
@@ -37,8 +36,8 @@ public class NotePool : MonoBehaviour
 
         for (int i = 0; i < maxSlots; i++)
         {
-            /// Could change this to use the AssetManager Spawning
-            GameObject obj = Instantiate(noteSlotPrefab, inventoryPanel);
+            /// Spawn Slot using AssetManager
+            GameObject obj = AssetManager.Instance.Spawn("NoteSlot", inventoryPanel);
 
             /// Gets a random Note from the inventory
             /// This is where we need to specifically reference a list of notes that have not been used
@@ -46,12 +45,13 @@ public class NotePool : MonoBehaviour
             /// that will then be removed as the rounds go on
             int noteToGrab = Random.Range(0, PlayerInventoryManager.Instance.GetInventoryNotes().Count);
 
-            /// Could change this to use the AssetManager Spawning
-            GameObject note = Instantiate(PlayerInventoryManager.Instance.GetInventoryNotes()[noteToGrab], obj.transform);
+            /// Spawn Note using AssetManager
+            GameObject note = AssetManager.Instance.Spawn("Note", obj.transform);
+            note.GetComponent<NoteController>().noteData = PlayerInventoryManager.Instance.GetInventoryNotes()[noteToGrab];
 
             note.GetComponent<NoteController>().SetSprite();
 
-            AddNote(note);
+            AddNote(note.GetComponent<NoteController>().noteData);
         }
     }
 
@@ -69,14 +69,14 @@ public class NotePool : MonoBehaviour
 
         note.GetComponent<NoteController>().SetSprite();
 
-        AddNote(note);
+        AddNote(data);
     }
 
     /// <summary>
     /// Adding new notes to note pool
     /// </summary>
     /// <param name="note">Note data to add</param>
-    public void AddNote(GameObject note)
+    public void AddNote(NoteData note)
     {
         if (noteSlotPrefab == null || inventoryPanel == null) return;
 
@@ -90,11 +90,6 @@ public class NotePool : MonoBehaviour
             Debug.Log("Inventory is full.");
             return;
         }
-        if (notePool.Contains(note))
-        {
-            Debug.Log("This note is already in the inventory.");
-            return;
-        }
         notePool.Add(note);
     }
 
@@ -102,7 +97,7 @@ public class NotePool : MonoBehaviour
    /// Removing notes from NotePool
    /// </summary>
    /// <param name="note"></param>
-    public void RemoveNote(GameObject note)
+    public void RemoveNote(NoteData note)
     {
         if (note == null) return;
 
