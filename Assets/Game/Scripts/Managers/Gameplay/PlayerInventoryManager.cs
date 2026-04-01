@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class PlayerInventoryManager : Singleton<PlayerInventoryManager>
 {
@@ -21,9 +20,12 @@ public class PlayerInventoryManager : Singleton<PlayerInventoryManager>
         EventBus.Unsubscribe<NoteRemovedEvent>(OnNoteRemovedEvent);
     }
 
+    /// <summary>
+    /// When a Note is Discarded/Scored, remove it from the NotUsed list
+    /// </summary>
+    /// <param name="e">Event Data with Note to remove</param>
     private void OnNoteRemovedEvent(NoteRemovedEvent e)
     {
-        Debug.Log("Event Receieved!");
         if (notesNotUsed.Contains(e._note))
         {
             notesUsed.Add(e._note);
