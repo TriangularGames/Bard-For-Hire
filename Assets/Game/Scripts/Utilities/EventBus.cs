@@ -61,6 +61,9 @@ public static class EventBus
     
 }
 
+/// <summary>
+/// Event for when a Note is being Discarded/Scored
+/// </summary>
 public struct NoteRemovedEvent
 {
     public NoteData _note;
@@ -70,3 +73,18 @@ public struct NoteRemovedEvent
         _note = note;
     }
 }
+
+/// <summary>
+/// Event for when Performance Starts
+/// </summary>
+public struct PerformanceStartEvent { }
+
+/// <summary>
+/// Event for when Round Starts
+/// </summary>
+public struct RoundStartEvent { }
+
+/// <summary>
+/// Event for when Round Ends
+/// </summary>
+public struct RoundEndEvent { }
