@@ -21,7 +21,7 @@ public class NoteManager : Singleton<NoteManager>
     {
         for (int i = 0; i < notesToDelete.Count; i++)
         {
-            if (notePool.GetNotePool().Contains(notesToDelete[i].GetComponent<NoteController>().noteData))
+            if (notePool.GetNotePool().Contains(notesToDelete[i].GetComponent<NoteController>().noteData) || musicSheet.GetNoteList().Contains(notesToDelete[i].GetComponent<NoteController>().noteData))
             {
                 notesToDelete[i].transform.parent.GetComponent<RawImage>().color = Color.white;
                 if (notesToDelete[i].GetComponent<DraggableItem>().inNotePool)
@@ -33,6 +33,7 @@ public class NoteManager : Singleton<NoteManager>
                     musicSheet.RemoveNote(notesToDelete[i].GetComponent<NoteController>().noteData);
                 }
                 notesToDelete[i].transform.parent.GetComponent<ItemSlot>().ClearNote();
+                PlayerInventoryManager.Instance.UsedNote(notesToDelete[i].GetComponent<NoteController>().noteData);
 
                 GameObject remove = notesToDelete[i];
                 notesToDelete.Remove(remove);
@@ -47,12 +48,11 @@ public class NoteManager : Singleton<NoteManager>
     /// </summary>
     public void GrabNewNotes()
     {
-        // THIS IS TEMPORARY
         for (int i = 0; i < notePool.inventoryPanel.childCount; i++)
         {
             if (notePool.inventoryPanel.GetChild(i).GetComponent<ItemSlot>().StoredNote == null)
             {
-                notePool.InstantiateNote(notePool.inventoryPanel.GetChild(i).transform);
+                notePool.InstantiateNote(PlayerInventoryManager.Instance.GetRandomNote(), notePool.inventoryPanel.GetChild(i).transform);
             }
         }
     }
