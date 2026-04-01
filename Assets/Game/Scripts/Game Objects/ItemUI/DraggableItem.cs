@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -30,17 +31,22 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         transform.SetParent(transform.root);
         transform.SetAsLastSibling();
         image.raycastTarget = false;
+        transform.GetChild(0).GetComponent<TMP_Text>().raycastTarget = false;
+        transform.GetChild(1).GetComponent<TMP_Text>().raycastTarget = false;
 
         parentAfterDrag.GetComponent<ItemSlot>().ClearNote();
 
         if (parentAfterDrag.parent.transform.parent.GetComponent<MusicSheet>())
         {
             parentAfterDrag.parent.transform.parent.GetComponent<MusicSheet>().RemoveNote(GetComponent<NoteController>().noteData);
+            parentAfterDrag.GetComponent<ItemSlot>().ClearNote();
         }
 
         if (parentAfterDrag.parent.transform.parent.GetComponent<NotePool>())
         {
             parentAfterDrag.parent.transform.parent.GetComponent<NotePool>().RemoveNote(GetComponent<NoteController>().noteData);
+            parentAfterDrag.GetComponent<ItemSlot>().ClearNote();
+
         }
     }
 
@@ -60,11 +66,13 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         if (parentAfterDrag.parent.transform.parent.GetComponent<MusicSheet>())
         {
             parentAfterDrag.parent.transform.parent.GetComponent<MusicSheet>().AddNote(GetComponent<NoteController>().noteData);
+            parentAfterDrag.GetComponent<ItemSlot>().SetNote(gameObject);
         }
 
         if (parentAfterDrag.parent.transform.parent.GetComponent<NotePool>())
         {
             parentAfterDrag.parent.transform.parent.GetComponent<NotePool>().AddNote(GetComponent<NoteController>().noteData);
+            parentAfterDrag.GetComponent<ItemSlot>().SetNote(gameObject);
         }
     }
     #endregion
