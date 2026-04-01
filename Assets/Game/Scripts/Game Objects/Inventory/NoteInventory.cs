@@ -40,7 +40,7 @@ public class NoteInventory : MonoBehaviour
             NoteData data = Instantiate(ResourceManager.Instance.NoteData[noteToCreate]);
 
             note.GetComponent<NoteController>().noteData = data;
-            note.GetComponent<NoteController>().SetSprite();
+            note.GetComponent<NoteController>().Setup();
 
             AddNote(data);
         }

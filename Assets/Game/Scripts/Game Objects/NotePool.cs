@@ -47,9 +47,10 @@ public class NotePool : MonoBehaviour
 
             /// Spawn Note using AssetManager
             GameObject note = AssetManager.Instance.Spawn("Note", obj.transform);
-            note.GetComponent<NoteController>().noteData = PlayerInventoryManager.Instance.GetInventoryNotes()[noteToGrab];
+            NoteController noteController = note.GetComponent<NoteController>();
+            noteController.noteData = PlayerInventoryManager.Instance.GetInventoryNotes()[noteToGrab];
 
-            note.GetComponent<NoteController>().SetSprite();
+            noteController.Setup();
 
             AddNote(note.GetComponent<NoteController>().noteData);
         }
@@ -67,7 +68,7 @@ public class NotePool : MonoBehaviour
         NoteData data = ResourceManager.Instance.NoteData[noteToCreate];
         note.GetComponent<NoteController>().noteData = Instantiate(data);
 
-        note.GetComponent<NoteController>().SetSprite();
+        note.GetComponent<NoteController>().Setup();
 
         AddNote(data);
     }
