@@ -26,7 +26,10 @@ public class MusicSheet : MonoBehaviour
         List<GameObject> list = new List<GameObject>();
         for (int i = 0; i < Slots.transform.childCount; i++)
         {
-            list.Add(Slots.transform.GetChild(i).gameObject);
+            if (Slots.transform.GetChild(i).transform.childCount != 0)
+            {
+                list.Add(Slots.transform.GetChild(i).transform.GetChild(0).gameObject);
+            }
         }
         return list;
     }
@@ -48,7 +51,8 @@ public class MusicSheet : MonoBehaviour
         for (int i = 0; i < maxSlots; i++)
         {
             /// Spawn Slots using AssetManager
-            AssetManager.Instance.Spawn("NoteSlot", Slots.transform);
+            GameObject slot = AssetManager.Instance.Spawn("NoteSlot", Slots.transform);
+            slot.name = "MusicSheetSlot" + i;
         }
     }
 

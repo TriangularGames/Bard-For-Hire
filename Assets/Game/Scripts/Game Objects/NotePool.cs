@@ -38,6 +38,7 @@ public class NotePool : MonoBehaviour
         {
             /// Spawn Slot using AssetManager
             GameObject obj = AssetManager.Instance.Spawn("NoteSlot", inventoryPanel);
+            obj.name = "NotePoolSlot" + i;
 
             /// Gets a random Note from the inventory
             /// This is where we need to specifically reference a list of notes that have not been used
