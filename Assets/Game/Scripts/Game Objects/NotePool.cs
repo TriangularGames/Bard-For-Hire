@@ -54,6 +54,21 @@ public class NotePool : MonoBehaviour
     }
 
     /// <summary>
+    /// Initialize the Slots for the Note Pool
+    /// </summary>
+    public void SetupSlots()
+    {
+        Debug.Assert(inventoryPanel = transform.GetChild(0), "NotePool requires Layout for Grid");
+
+        for (int i = 0; i < maxSlots; i++)
+        {
+            /// Spawn Slot using AssetManager
+            GameObject obj = AssetManager.Instance.Spawn("NoteSlot", inventoryPanel);
+            obj.name = "NotePoolSlot" + i;
+        }
+        }
+
+    /// <summary>
     /// This is a temporary function for testing purposes.
     /// Unsure if we will need this permanently or not
     /// </summary>
