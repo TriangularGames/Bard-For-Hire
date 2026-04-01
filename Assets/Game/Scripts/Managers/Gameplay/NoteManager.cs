@@ -68,7 +68,7 @@ public class NoteManager : Singleton<NoteManager>
             {
                 if (notePool.inventoryPanel.GetChild(i).GetComponent<ItemSlot>().StoredNote == null)
                 {
-                    note.transform.parent.GetComponent<ItemSlot>().ClearNote();
+                    note.GetComponent<DraggableItem>().parentAfterDrag.GetComponent<ItemSlot>().ClearNote();
                     note.GetComponent<DraggableItem>().parentAfterDrag = notePool.inventoryPanel.GetChild(i).transform;
                     note.transform.SetParent(notePool.inventoryPanel.GetChild(i));
                     notePool.inventoryPanel.GetChild(i).GetComponent<ItemSlot>().SetNote(note);
