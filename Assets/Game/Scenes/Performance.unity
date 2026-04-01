@@ -289,52 +289,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 133154865}
   m_CullTransparentMesh: 1
---- !u!1 &229741069
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 229741071}
-  - component: {fileID: 229741070}
-  m_Layer: 0
-  m_Name: _ResourceManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &229741070
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 229741069}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d094ebee80fb07844be8ac29804c1ff9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ResourceManager
-  NoteData: []
-  AudienceMemberData: []
---- !u!4 &229741071
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 229741069}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &285653995
 GameObject:
   m_ObjectHideFlags: 0
@@ -1532,10 +1486,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8edd150111e4b944bb3c349a0254d2ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoteInventory
-  maxSlots: 6
-  noteSlotPrefab: {fileID: 2484180083775032184, guid: e3049f045c265c646ad8d933c9229ab4, type: 3}
   inventoryPanel: {fileID: 2015985734}
-  notePrefab: {fileID: 9005676489685703692, guid: ba1d4a41e0c8ae14aa823dd0dfd4f555, type: 3}
+  maxSlots: 6
 --- !u!1 &1199703520
 GameObject:
   m_ObjectHideFlags: 0
@@ -1765,8 +1717,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MusicSheet
   maxSlots: 4
-  noteSlotPrefab: {fileID: 2484180083775032184, guid: e3049f045c265c646ad8d933c9229ab4, type: 3}
-  Slots: {fileID: 405200190}
 --- !u!1 &1344256442
 GameObject:
   m_ObjectHideFlags: 0
@@ -2347,7 +2297,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 1718929712}
   - {fileID: 285653997}
-  - {fileID: 229741071}
   - {fileID: 1658900633}
   - {fileID: 1016375506}
   - {fileID: 1344256445}
