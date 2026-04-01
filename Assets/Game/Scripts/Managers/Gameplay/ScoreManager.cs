@@ -40,6 +40,7 @@ public class ScoreManager : Singleton<ScoreManager>
                 {
                     score += note.Score;
                 }
+                PlayerInventoryManager.Instance.UsedNote(note);
             }
         }
         Debug.Log("Total Score: " + score);
@@ -68,5 +69,7 @@ public class ScoreManager : Singleton<ScoreManager>
             Debug.Log("Next round!");
             scoreToBeat.text = sTB.ToString();
         }
+
+        NoteManager.Instance.GrabNewNotes();
     }
 }
