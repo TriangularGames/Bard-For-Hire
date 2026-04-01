@@ -80,6 +80,11 @@ public struct NoteRemovedEvent
 public struct PerformanceStartEvent { }
 
 /// <summary>
+/// Event for when Performance Ends- Specifically after the Win screen is shown
+/// </summary>
+public struct PerformanceEndEvent { }
+
+/// <summary>
 /// Event for when Round Starts
 /// </summary>
 public struct RoundStartEvent { }
