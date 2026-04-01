@@ -21,6 +21,10 @@ public class MusicSheet : MonoBehaviour
     /// </summary>
     private List<NoteData> Notes;
 
+    /// <summary>
+    /// Get Notes as List of GameObjects
+    /// </summary>
+    /// <returns>List of GameObjects</returns>
     public List<GameObject> GetNotes()
     {
         List<GameObject> list = new List<GameObject>();
@@ -32,6 +36,15 @@ public class MusicSheet : MonoBehaviour
             }
         }
         return list;
+    }
+
+    /// <summary>
+    /// Get Notes as List of Notedata
+    /// </summary>
+    /// <returns>List of Notedata</returns>
+    public List<NoteData> GetNoteList()
+    {
+        return Notes;
     }
 
     public void EmptySlots()
