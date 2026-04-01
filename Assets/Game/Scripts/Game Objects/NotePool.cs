@@ -3,10 +3,6 @@ using UnityEngine;
 
 public class NotePool : MonoBehaviour
 {
-    // Prefabs for Spawning
-    private GameObject noteSlotPrefab;
-    private GameObject notePrefab;
-
     // Inventory Panel
     [HideInInspector] public Transform inventoryPanel;
 
@@ -30,8 +26,6 @@ public class NotePool : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        Debug.Assert(noteSlotPrefab = AssetManager.Instance.GetPrefab("NoteSlot"), "NotePool requires NoteSlotPrefab");
-        Debug.Assert(notePrefab = AssetManager.Instance.GetPrefab("Note"), "NotePool requires NotePrefab");
         Debug.Assert(inventoryPanel = transform.GetChild(0), "NotePool requires Layout for Grid");
 
         for (int i = 0; i < maxSlots; i++)
@@ -63,7 +57,7 @@ public class NotePool : MonoBehaviour
     /// </summary>
     public void InstantiateNote(Transform parent)
     {
-        GameObject note = Instantiate(notePrefab, parent);
+        GameObject note = AssetManager.Instance.Spawn("NoteSlot", parent);
 
         int noteToCreate = Random.Range(0, ResourceManager.Instance.NoteData.Length);
         NoteData data = ResourceManager.Instance.NoteData[noteToCreate];
@@ -80,7 +74,7 @@ public class NotePool : MonoBehaviour
     /// <param name="note">Note data to add</param>
     public void AddNote(NoteData note)
     {
-        if (noteSlotPrefab == null || inventoryPanel == null) return;
+        if (inventoryPanel == null) return;
 
         if (note == null)
         {
