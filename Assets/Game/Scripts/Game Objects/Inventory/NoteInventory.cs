@@ -44,7 +44,7 @@ public class NoteInventory : MonoBehaviour
             AddNote(data);
         }
 
-        PlayerInventoryManager.Instance.SetInventoryNotes(noteInventory);
+        PlayerManager.Instance.SetInventoryNotes(noteInventory);
     }
 
     /// <summary>

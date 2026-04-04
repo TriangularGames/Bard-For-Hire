@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInventoryManager : Singleton<PlayerInventoryManager>
+public class PlayerManager : Singleton<PlayerManager>
 {
     public List<NoteData> inventory;
 

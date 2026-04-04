@@ -53,7 +53,7 @@ public class NoteManager : Singleton<NoteManager>
         {
             if (notePool.inventoryPanel.GetChild(i).GetComponent<ItemSlot>().StoredNote == null)
             {
-                notePool.InstantiateNote(PlayerInventoryManager.Instance.GetRandomNote(), notePool.inventoryPanel.GetChild(i).transform);
+                notePool.InstantiateNote(PlayerManager.Instance.GetRandomNote(), notePool.inventoryPanel.GetChild(i).transform);
             }
         }
     }

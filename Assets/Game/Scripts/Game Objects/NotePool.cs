@@ -26,7 +26,7 @@ public class NotePool : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        PlayerInventoryManager.Instance.ResetPool();
+        PlayerManager.Instance.ResetPool();
 
         Debug.Assert(inventoryPanel = transform.GetChild(0), "NotePool requires Layout for Grid");
 
@@ -40,12 +40,12 @@ public class NotePool : MonoBehaviour
             /// This is where we need to specifically reference a list of notes that have not been used
             /// So perhaps when we get into the performance scene, during setup the inventory creates a list of all notes useable
             /// that will then be removed as the rounds go on
-            int noteToGrab = Random.Range(0, PlayerInventoryManager.Instance.GetInventoryNotes().Count);
+            int noteToGrab = Random.Range(0, PlayerManager.Instance.GetInventoryNotes().Count);
 
             /// Spawn Note using AssetManager
             GameObject note = AssetManager.Instance.Spawn("Note", obj.transform);
             NoteController noteController = note.GetComponent<NoteController>();
-            noteController.noteData = PlayerInventoryManager.Instance.GetInventoryNotes()[noteToGrab];
+            noteController.noteData = PlayerManager.Instance.GetInventoryNotes()[noteToGrab];
 
             noteController.Setup();
 
