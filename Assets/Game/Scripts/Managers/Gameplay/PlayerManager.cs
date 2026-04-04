@@ -12,8 +12,6 @@ public class PlayerManager : Singleton<PlayerManager>
 
     // Current selected Bard
     public BaseBard selectedBard;
-    // List of all Bard prefabs to insantiate based on selected Bard
-    public List<GameObject> bardPrefabs;
 
     private void OnEnable()
     {

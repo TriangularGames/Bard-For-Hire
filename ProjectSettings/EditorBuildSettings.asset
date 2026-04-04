@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: Assets/Game/Scenes/Managers/_AssetManager.unity
     guid: fbfb6557ef0078e4585774dd42e989f8
   - enabled: 1
-    path: Assets/Game/Scenes/Managers/_PlayerInventoryManager.unity
+    path: Assets/Game/Scenes/Managers/_PlayerManager.unity
     guid: d23351061ab2a154b942d6dda85625ec
   - enabled: 1
     path: Assets/Game/Scenes/Inventory/Inventory.unity

@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 63757540}
   - component: {fileID: 63757541}
   m_Layer: 0
-  m_Name: _PlayerInventoryManager
+  m_Name: _PlayerManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -163,6 +163,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c3af83aaca0cf04b8a777bb2fef3fad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInventoryManager
+  noteInventory: []
+  notesUsed: []
+  notesNotUsed: []
+  selectedBard: {fileID: 0}
+  bardPrefabs:
+  - {fileID: 1601266897277129068, guid: e32bbfb23c88d81498082d9aa73b58a2, type: 3}
+  - {fileID: 5958042121327089311, guid: 9c31a2fcfd4f6cd4b88769ad3c193123, type: 3}
+  - {fileID: 5278602747629839895, guid: c76103914fb133049bc95dbc73e8ae0d, type: 3}
+  - {fileID: 2164476026676520460, guid: cc31a4a1c1e0280469200f3d3efe167f, type: 3}
+  - {fileID: 6044090728467627952, guid: e22cc3c232fa056489cc88e229b08898, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
