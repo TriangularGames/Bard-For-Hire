@@ -2,6 +2,6 @@ using UnityEngine;
 
 public class BaseBard : MonoBehaviour
 {
-    protected string bardName;
-    protected InstrumentType instrumentType;
+    [SerializeField] protected string bardName;
+    [SerializeField] protected InstrumentType instrumentType;
 }

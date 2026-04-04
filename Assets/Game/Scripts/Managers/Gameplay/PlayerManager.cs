@@ -10,7 +10,10 @@ public class PlayerManager : Singleton<PlayerManager>
     public List<NoteData> notesUsed;
     public List<NoteData> notesNotUsed;
 
+    // Current selected Bard
     public BaseBard selectedBard;
+    // List of all Bard prefabs to insantiate based on selected Bard
+    public List<GameObject> bardPrefabs;
 
     private void OnEnable()
     {
