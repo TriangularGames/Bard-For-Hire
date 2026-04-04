@@ -3,12 +3,14 @@ using UnityEngine;
 
 public class PlayerManager : Singleton<PlayerManager>
 {
-    public List<NoteData> inventory;
+    public List<NoteData> noteInventory;
 
     // For Gameplay, what Notes are still available to be grabbed from Inventory
     // and what Notes aren't
     public List<NoteData> notesUsed;
     public List<NoteData> notesNotUsed;
+
+    public BaseBard selectedBard;
 
     private void OnEnable()
     {
@@ -39,7 +41,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void Start()
     {
-        inventory = new List<NoteData>();
+        noteInventory = new List<NoteData>();
     }
 
     /// <summary>
@@ -48,7 +50,7 @@ public class PlayerManager : Singleton<PlayerManager>
     /// <returns></returns>
     public List<NoteData> GetInventoryNotes()
     {
-        return inventory;
+        return noteInventory;
     }
 
     /// <summary>
@@ -58,7 +60,7 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         foreach (NoteData item in _inventoryNotes)
         {
-            inventory.Add(item);
+            noteInventory.Add(item);
         }
     }
 
@@ -66,7 +68,7 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         notesUsed.Clear();
         notesNotUsed.Clear();
-        foreach (NoteData item in inventory)
+        foreach (NoteData item in noteInventory)
         {
             notesNotUsed.Add(item);
         }
