@@ -39,9 +39,11 @@ public class PlayerManager : Singleton<PlayerManager>
         }
     }
 
-    public void Start()
+    public override void Awake()
     {
         noteInventory = new List<NoteData>();
+
+        selectedBard = new LuteBard(); // Start with lute bard
     }
 
     /// <summary>
