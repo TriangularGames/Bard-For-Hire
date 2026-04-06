@@ -77,6 +77,10 @@ public class NoteManager : Singleton<NoteManager>
                     notesDiscarded--;
                 }
             }
+            else
+            {
+                return;
+            }
         }
     }
 

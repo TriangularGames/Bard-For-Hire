@@ -24,8 +24,9 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     #region Dragging Item
     public void OnBeginDrag(PointerEventData eventData)
     {
-        isSelected = false;
-        parentAfterDrag.GetComponent<RawImage>().color = Color.white;
+        // Deselect Note
+        DeselectNote();
+        
         // Picks up item from Sheet to drag
         parentAfterDrag = transform.parent;
         transform.SetParent(transform.root);
@@ -46,7 +47,6 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         {
             parentAfterDrag.parent.transform.parent.GetComponent<NotePool>().RemoveNote(GetComponent<NoteController>().noteData);
             parentAfterDrag.GetComponent<ItemSlot>().ClearNote();
-
         }
     }
 
@@ -103,12 +103,17 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         }
         else
         {
-            parentAfterDrag.GetComponent<RawImage>().color = Color.white;
-            isSelected = false;
-            if (NoteManager.Instance.notesToDelete.Contains(gameObject))
-            {
-                NoteManager.Instance.notesToDelete.Remove(gameObject);
-            }
+            DeselectNote();
+        }
+    }
+
+    private void DeselectNote()
+    {
+        parentAfterDrag.GetComponent<RawImage>().color = Color.white;
+        isSelected = false;
+        if (NoteManager.Instance.notesToDelete.Contains(gameObject))
+        {
+            NoteManager.Instance.notesToDelete.Remove(gameObject);
         }
     }
 
