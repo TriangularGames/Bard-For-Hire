@@ -5,13 +5,21 @@ public class PlayerManager : Singleton<PlayerManager>
 {
     public List<NoteData> noteInventory;
 
-    // For Gameplay, what Notes are still available to be grabbed from Inventory
-    // and what Notes aren't
+    // For Gameplay, what Notes are still available to be grabbed from Inventory,
+    // what Notes are active, and what Notes aren't
     public List<NoteData> notesUsed;
+    public List<NoteData> notesHeld;
     public List<NoteData> notesNotUsed;
 
     // Current selected Bard
     public BaseBard selectedBard;
+
+    private void Start()
+    {
+        notesUsed = new List<NoteData>();
+        notesHeld = new List<NoteData>();
+        notesNotUsed = new List<NoteData>();
+    }
 
     private void OnEnable()
     {
@@ -29,10 +37,10 @@ public class PlayerManager : Singleton<PlayerManager>
     /// <param name="e">Event Data with Note to remove</param>
     private void OnNoteRemovedEvent(NoteRemovedEvent e)
     {
-        if (notesNotUsed.Contains(e._note))
+        if (notesHeld.Contains(e._note))
         {
             notesUsed.Add(e._note);
-            notesNotUsed.Remove(e._note);
+            notesHeld.Remove(e._note);
         }
         else
         {
@@ -44,7 +52,7 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         noteInventory = new List<NoteData>();
 
-        selectedBard = new LuteBard(); // Start with lute bard
+        //selectedBard = new LuteBard(); // Start with lute bard
     }
 
     /// <summary>
@@ -70,6 +78,7 @@ public class PlayerManager : Singleton<PlayerManager>
     public void ResetPool()
     {
         notesUsed.Clear();
+        notesHeld.Clear();
         notesNotUsed.Clear();
         foreach (NoteData item in noteInventory)
         {
@@ -77,8 +86,15 @@ public class PlayerManager : Singleton<PlayerManager>
         }
     }
 
+    /// <summary>
+    /// Get a Random Note from the Unused Notes
+    /// </summary>
+    /// <returns>NoteData of Note from Available Inventory</returns>
     public NoteData GetRandomNote()
     {
-        return notesNotUsed[Random.Range(0, notesUsed.Count)];
+        NoteData note = notesNotUsed[Random.Range(0, notesNotUsed.Count)];
+        notesNotUsed.Remove(note);
+        notesHeld.Add(note);
+        return note;
     }
 }
