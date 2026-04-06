@@ -37,12 +37,14 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         parentAfterDrag.GetComponent<ItemSlot>().ClearNote();
 
+        // If Note is in MusicSheet, Remove the Note from it and Clear the Slot
         if (parentAfterDrag.parent.transform.parent.GetComponent<MusicSheet>())
         {
             parentAfterDrag.parent.transform.parent.GetComponent<MusicSheet>().RemoveNote(GetComponent<NoteController>().noteData);
             parentAfterDrag.GetComponent<ItemSlot>().ClearNote();
         }
 
+        // If Note is in NotePool, Remove the Note from it and Clear the Slot
         if (parentAfterDrag.parent.transform.parent.GetComponent<NotePool>())
         {
             parentAfterDrag.parent.transform.parent.GetComponent<NotePool>().RemoveNote(GetComponent<NoteController>().noteData);
@@ -63,12 +65,14 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
         parentAfterDrag.GetComponent<ItemSlot>().SetNote(gameObject);
 
+        // If NoteSlot is now in the MusicSheet, Add it to the NotePool and Parent it to the Slot
         if (parentAfterDrag.parent.transform.parent.GetComponent<MusicSheet>())
         {
             parentAfterDrag.parent.transform.parent.GetComponent<MusicSheet>().AddNote(GetComponent<NoteController>().noteData);
             parentAfterDrag.GetComponent<ItemSlot>().SetNote(gameObject);
         }
 
+        // If NoteSlot is now in the NotePool, Add it to the NotePool and Parent it to the Slot
         if (parentAfterDrag.parent.transform.parent.GetComponent<NotePool>())
         {
             parentAfterDrag.parent.transform.parent.GetComponent<NotePool>().AddNote(GetComponent<NoteController>().noteData);
@@ -107,6 +111,9 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         }
     }
 
+    /// <summary>
+    /// Deselect current Note
+    /// </summary>
     private void DeselectNote()
     {
         parentAfterDrag.GetComponent<RawImage>().color = Color.white;
