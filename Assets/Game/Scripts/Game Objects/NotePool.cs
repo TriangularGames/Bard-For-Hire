@@ -7,10 +7,20 @@ public class NotePool : MonoBehaviour
     [HideInInspector] public Transform inventoryPanel;
 
     [SerializeField] private int maxSlots = 6;
+
+    /// <summary>
+    /// Get Max Slots in NotePool
+    /// </summary>
+    /// <returns>Integer number of Max Slots</returns>
+    public int GetMaxSlots() { return maxSlots; }
     
 
     private List<NoteData> notePool;
 
+    /// <summary>
+    /// Get All Notes in NotePool
+    /// </summary>
+    /// <returns>List of NoteData</returns>
     public List<NoteData> GetNotePool()
     {
         return notePool;
@@ -30,26 +40,13 @@ public class NotePool : MonoBehaviour
 
         Debug.Assert(inventoryPanel = transform.GetChild(0), "NotePool requires Layout for Grid");
 
+        // Setup Slots
+        SetupSlots();
+
         for (int i = 0; i < maxSlots; i++)
         {
-            /// Spawn Slot using AssetManager
-            GameObject obj = AssetManager.Instance.Spawn("NoteSlot", inventoryPanel);
-            obj.name = "NotePoolSlot" + i;
-
-            /// Gets a random Note from the inventory
-            /// This is where we need to specifically reference a list of notes that have not been used
-            /// So perhaps when we get into the performance scene, during setup the inventory creates a list of all notes useable
-            /// that will then be removed as the rounds go on
-            int noteToGrab = Random.Range(0, PlayerManager.Instance.GetInventoryNotes().Count);
-
-            /// Spawn Note using AssetManager
-            GameObject note = AssetManager.Instance.Spawn("Note", obj.transform);
-            NoteController noteController = note.GetComponent<NoteController>();
-            noteController.noteData = PlayerManager.Instance.GetInventoryNotes()[noteToGrab];
-
-            noteController.Setup();
-
-            AddNote(note.GetComponent<NoteController>().noteData);
+            // Instantiate Note
+            InstantiateNote(PlayerManager.Instance.GetRandomNote(), inventoryPanel.GetChild(i).transform);
         }
     }
 
@@ -58,15 +55,13 @@ public class NotePool : MonoBehaviour
     /// </summary>
     public void SetupSlots()
     {
-        Debug.Assert(inventoryPanel = transform.GetChild(0), "NotePool requires Layout for Grid");
-
         for (int i = 0; i < maxSlots; i++)
         {
             /// Spawn Slot using AssetManager
             GameObject obj = AssetManager.Instance.Spawn("NoteSlot", inventoryPanel);
             obj.name = "NotePoolSlot" + i;
         }
-        }
+    }
 
     /// <summary>
     /// This is a temporary function for testing purposes.
