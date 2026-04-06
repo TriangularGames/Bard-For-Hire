@@ -10,6 +10,8 @@ public class NoteManager : Singleton<NoteManager>
     public NotePool notePool;
     public MusicSheet musicSheet;
 
+    private int notesDiscarded = 0;
+
     private void Start()
     {
         notesToDelete = new List<GameObject>();
@@ -20,28 +22,44 @@ public class NoteManager : Singleton<NoteManager>
     /// </summary>
     public void DiscardNote()
     {
-        for (int i = 0; i < notesToDelete.Count; i++)
+        notesDiscarded = 0;
+        if (PlayerManager.Instance.notesNotUsed.Count != 0)
         {
-            if (notePool.GetNotePool().Contains(notesToDelete[i].GetComponent<NoteController>().noteData) || musicSheet.GetNoteList().Contains(notesToDelete[i].GetComponent<NoteController>().noteData))
+            for (int i = 0; i < notesToDelete.Count; i++)
             {
-                notesToDelete[i].transform.parent.GetComponent<RawImage>().color = Color.white;
-                if (notesToDelete[i].GetComponent<DraggableItem>().inNotePool)
+                // Checks if the Notes to Delete is in the NotePool or the MusicSheet
+                if (notePool.GetNotePool().Contains(notesToDelete[i].GetComponent<NoteController>().noteData) || musicSheet.GetNoteList().Contains(notesToDelete[i].GetComponent<NoteController>().noteData))
                 {
-                    notePool.RemoveNote(notesToDelete[i].GetComponent<NoteController>().noteData);
-                }
-                else
-                {
-                    musicSheet.RemoveNote(notesToDelete[i].GetComponent<NoteController>().noteData);
-                }
-                notesToDelete[i].transform.parent.GetComponent<ItemSlot>().ClearNote();
-                EventBus.Publish<NoteRemovedEvent>(new NoteRemovedEvent(notesToDelete[i].GetComponent<NoteController>().noteData));
+                    // Deselect the Slot
+                    notesToDelete[i].transform.parent.GetComponent<RawImage>().color = Color.white;
 
-                GameObject remove = notesToDelete[i];
-                notesToDelete.Remove(remove);
-                Destroy(remove);
-            } 
+                    // Remove the Note from it's respective slot
+                    if (notesToDelete[i].GetComponent<DraggableItem>().inNotePool)
+                    {
+                        notePool.RemoveNote(notesToDelete[i].GetComponent<NoteController>().noteData);
+                    }
+                    else
+                    {
+                        musicSheet.RemoveNote(notesToDelete[i].GetComponent<NoteController>().noteData);
+                    }
+
+                    // Clear the Note from the slot
+                    notesToDelete[i].transform.parent.GetComponent<ItemSlot>().ClearNote();
+                    // Notify that a Note has been removed
+                    EventBus.Publish<NoteRemovedEvent>(new NoteRemovedEvent(notesToDelete[i].GetComponent<NoteController>().noteData));
+
+                    GameObject remove = notesToDelete[i];
+                    notesToDelete.Remove(remove);
+                    Destroy(remove);
+                    notesDiscarded++;
+                }
+            }
+            GrabNewNotes();
         }
-        GrabNewNotes();
+        else
+        {
+            Debug.Log("Note Inventory is Empty! Cannot Discard.");
+        }
     }
 
     /// <summary>
@@ -51,9 +69,13 @@ public class NoteManager : Singleton<NoteManager>
     {
         for (int i = 0; i < notePool.inventoryPanel.childCount; i++)
         {
-            if (notePool.inventoryPanel.GetChild(i).GetComponent<ItemSlot>().StoredNote == null)
+            if (notesDiscarded != 0)
             {
-                notePool.InstantiateNote(PlayerManager.Instance.GetRandomNote(), notePool.inventoryPanel.GetChild(i).transform);
+                if (notePool.inventoryPanel.GetChild(i).GetComponent<ItemSlot>().StoredNote == null)
+                {
+                    notePool.InstantiateNote(PlayerManager.Instance.GetRandomNote(), notePool.inventoryPanel.GetChild(i).transform);
+                    notesDiscarded--;
+                }
             }
         }
     }
