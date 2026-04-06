@@ -112,7 +112,7 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         }
     }
 
-    // Unhighliights the item when mouse is moved off
+    // Unhighlights the item when mouse is moved off
     public void OnPointerExit(PointerEventData eventData)
     {
         image.color = Color.white;
