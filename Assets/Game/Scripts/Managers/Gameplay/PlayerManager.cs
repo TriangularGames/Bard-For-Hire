@@ -50,7 +50,10 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public override void Awake()
     {
-        noteInventory = new List<NoteData>();
+        if (noteInventory == null)
+        {
+            noteInventory = new List<NoteData>();
+        }
 
         //selectedBard = new LuteBard(); // Start with lute bard
     }
