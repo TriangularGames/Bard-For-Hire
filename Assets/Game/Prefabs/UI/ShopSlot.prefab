@@ -149,7 +149,7 @@ GameObject:
   - component: {fileID: 5706315667996678673}
   - component: {fileID: 5338967664335739165}
   m_Layer: 5
-  m_Name: SlotValue
+  m_Name: SlotValueLbl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -284,8 +284,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5303669368823867667}
   - component: {fileID: 5527798718506238678}
-  - component: {fileID: 303352785100954916}
-  - component: {fileID: 5486254835993106132}
+  - component: {fileID: 6520023520909991839}
   m_Layer: 5
   m_Name: ShopSlot
   m_TagString: Untagged
@@ -322,7 +321,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5267923249947898969}
   m_CullTransparentMesh: 1
---- !u!114 &303352785100954916
+--- !u!114 &6520023520909991839
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -331,9 +330,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5267923249947898969}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RawImage
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
@@ -342,27 +341,16 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 0}
-  m_UVRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
---- !u!114 &5486254835993106132
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5267923249947898969}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92b14c74525971f40a6f3dac4dcf6b49, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShopSlot
-  value: {fileID: 5338967664335739165}
-  buy: {fileID: 3240057351450499370}
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &8377063985492403012
 GameObject:
   m_ObjectHideFlags: 0
@@ -376,7 +364,7 @@ GameObject:
   - component: {fileID: 8853953035728577114}
   - component: {fileID: 3240057351450499370}
   m_Layer: 5
-  m_Name: SlotBuy
+  m_Name: SlotBuyBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
