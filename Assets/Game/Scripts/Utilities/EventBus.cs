@@ -62,7 +62,7 @@ public static class EventBus
 }
 
 /// <summary>
-/// Event for when a Note/Upgrade is Purchased
+/// Event for when a Purchase is made
 /// </summary>
 public struct PurchaseEvent
 {
@@ -71,6 +71,32 @@ public struct PurchaseEvent
     public PurchaseEvent(int amount)
     {
         _amount = amount;
+    }
+}
+
+/// <summary>
+/// Event for when a Note is purchased
+/// </summary>
+public struct NoteBoughtEvent
+{
+    public NoteData data;
+
+    public NoteBoughtEvent(NoteData _data)
+    {
+        data = _data;
+    }
+}
+
+/// <summary>
+/// Event for when an Upgrade is purchased
+/// </summary>
+public struct UpgradeBoughtEvent
+{
+    public UpgradeData data;
+
+    public UpgradeBoughtEvent(UpgradeData _data)
+    {
+        data = _data;
     }
 }
 
