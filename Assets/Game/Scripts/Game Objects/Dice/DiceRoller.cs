@@ -11,9 +11,9 @@ public class DiceRoller : MonoBehaviour
     [SerializeField] private Transform spawnPoint;
 
     [Header("Roll Forces")]
-    [SerializeField] private Vector2 lateralForceRange = new Vector2(3.5f, 6.0f);
-    [SerializeField] private Vector2 upwardForceRange = new Vector2(1.0f, 2.2f);
-    [SerializeField] private Vector2 torqueRange = new Vector2(8f, 20f);
+    [SerializeField] private Vector2 lateralForceRange = new Vector2(1.0f, 1.2f);
+    [SerializeField] private Vector2 upwardForceRange = new Vector2(1.0f, 1.2f);
+    [SerializeField] private Vector2 torqueRange = new Vector2(0.01f, 0.02f);
 
     [Header("Timing")]
     [SerializeField] private float maxRollDuration = 5f;
