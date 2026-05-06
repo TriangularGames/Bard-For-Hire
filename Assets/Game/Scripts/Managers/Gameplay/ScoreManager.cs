@@ -11,6 +11,7 @@ public class ScoreManager : Singleton<ScoreManager>
     private float score;
 
     public DiceRoller roller;
+    private List<NoteData> pendingNotes;
 
     private void Start()
     {
@@ -25,9 +26,19 @@ public class ScoreManager : Singleton<ScoreManager>
     {
         // Include in here some effect thats displayed as each note is determined
         // to be scored or not
-        int rollValue = roller.RollDie();
+        pendingNotes = notes;
+        roller.RollDie(this, OnRollComplete);
+
+    }
+
+    /// <summary>
+    /// Called when the roll is complete, and the score is calculated
+    /// </summary>
+    /// <param name="rollValue">The value of the roll</param>
+    private void OnRollComplete(int rollValue)
+    {
         score = 0;
-        foreach(NoteData note in notes)
+        foreach (NoteData note in pendingNotes)
         {
             if (note.Playable <= rollValue)
             {
