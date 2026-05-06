@@ -16,4 +16,7 @@ public class NoteData : ScriptableObject
 
     [Header("Visual Data")]
     [SerializeField] public Sprite icon;
+
+    [Header("Purchase Cost")]
+    [SerializeField] public int cost;
 }
