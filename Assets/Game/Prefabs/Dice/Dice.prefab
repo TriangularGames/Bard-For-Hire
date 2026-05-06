@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4f3f7112e905684e9666df2c7914c42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DieFace
-  value: 1
+  value: 15
 --- !u!1 &1541230306710305764
 GameObject:
   m_ObjectHideFlags: 0
@@ -89,7 +89,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4f3f7112e905684e9666df2c7914c42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DieFace
-  value: 1
+  value: 17
 --- !u!1 &1679979625343642649
 GameObject:
   m_ObjectHideFlags: 0
@@ -134,7 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4f3f7112e905684e9666df2c7914c42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DieFace
-  value: 1
+  value: 20
 --- !u!1 &1747051106113615874
 GameObject:
   m_ObjectHideFlags: 0
@@ -613,7 +613,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 818.7564, y: 406.08167, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4026692751503793271}
@@ -711,7 +711,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4f3f7112e905684e9666df2c7914c42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DieFace
-  value: 1
+  value: 18
 --- !u!1 &6324302219593780416
 GameObject:
   m_ObjectHideFlags: 0
@@ -852,7 +852,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4f3f7112e905684e9666df2c7914c42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DieFace
-  value: 1
+  value: 16
 --- !u!1 &7981282413756746568
 GameObject:
   m_ObjectHideFlags: 0
@@ -879,7 +879,7 @@ Transform:
   m_GameObject: {fileID: 7981282413756746568}
   serializedVersion: 2
   m_LocalRotation: {x: -0.799811, y: -0.14781599, z: -0.2321198, w: 0.5334541}
-  m_LocalPosition: {x: 0.00452, y: -0.00263, z: -0.00565}
+  m_LocalPosition: {x: 0.0053, y: -0.0032, z: -0.0069}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -897,7 +897,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4f3f7112e905684e9666df2c7914c42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DieFace
-  value: 1
+  value: 19
 --- !u!1 &8144253778970599849
 GameObject:
   m_ObjectHideFlags: 0
