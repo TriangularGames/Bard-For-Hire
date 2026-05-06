@@ -2,21 +2,22 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShopSlot : MonoBehaviour
+public abstract class ShopSlot : MonoBehaviour
 {
-    // Data for what note/upgrade is in it
-    [SerializeField] TMP_Text value;
-    [SerializeField] Button buy;
+    [SerializeField] public TMP_Text value;
+    [SerializeField] public Button buy;
 
-    public void SetupSlotInfo()
+    private void Update()
     {
-        value.text = "";
-        // setup visual display as well
+        if (value != null || value.text != "")
+        {
+            if (PlayerManager.Instance.GetCoinAmount() < int.Parse(value.text))
+            {
+                buy.interactable = false;
+            }
+        }
     }
+    public abstract void SetupSlotInfo();
 
-    public void Purchase()
-    {
-        // if item is a note, add to inventory
-        // if item is an upgrade, add to upgrade list (?)
-    }
+    public abstract void Purchase();
 }
