@@ -9,7 +9,7 @@ public class ShopManager : MonoBehaviour
     [SerializeField] Button rerollBtn;
 
     // TODO: setup rerollCost
-    public int rerollCost;
+    public int rerollCost = 5;
 
     private void Awake()
     {
@@ -27,6 +27,8 @@ public class ShopManager : MonoBehaviour
     public void SetupShop()
     {
         // This will generate the 5 notes and 3 upgrades available for purchase
+
+        // TODO: figure out how it gets the data to input. Presumably it'll use the resource manager for that?
 
         // Setup the Note slots
         for (int i = 0; i < NoteLayout.transform.childCount; i++)
@@ -51,5 +53,15 @@ public class ShopManager : MonoBehaviour
         EventBus.Publish(new PurchaseEvent(rerollCost));
 
         //Generate different notes and upgrades
+    }
+
+    public void NextRound()
+    {
+        // Switch to Performance scene
+    }
+
+    public void ViewInventory()
+    {
+        // Show a pop-up view of the inventory
     }
 }
