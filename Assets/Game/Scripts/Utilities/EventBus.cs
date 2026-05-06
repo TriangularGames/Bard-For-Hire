@@ -62,6 +62,19 @@ public static class EventBus
 }
 
 /// <summary>
+/// Event for when a Note/Upgrade is Purchased
+/// </summary>
+public struct PurchaseEvent
+{
+    public int _amount;
+
+    public PurchaseEvent(int amount)
+    {
+        _amount = amount;
+    }
+}
+
+/// <summary>
 /// Event for when a Note is being Discarded/Scored
 /// </summary>
 public struct NoteRemovedEvent
