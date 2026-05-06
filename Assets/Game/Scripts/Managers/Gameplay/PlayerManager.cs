@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerManager : Singleton<PlayerManager>
 {
     public List<NoteData> noteInventory;
+    public int Coins;
 
     // For Gameplay, what Notes are still available to be grabbed from Inventory,
     // what Notes are active, and what Notes aren't
@@ -24,11 +25,13 @@ public class PlayerManager : Singleton<PlayerManager>
     private void OnEnable()
     {
         EventBus.Subscribe<NoteRemovedEvent>(OnNoteRemovedEvent);
+        EventBus.Subscribe<PurchaseEvent>(OnPurchaseEvent);
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<NoteRemovedEvent>(OnNoteRemovedEvent);
+        EventBus.Unsubscribe<PurchaseEvent>(OnPurchaseEvent);
     }
 
     /// <summary>
@@ -48,6 +51,11 @@ public class PlayerManager : Singleton<PlayerManager>
         }
     }
 
+    private void OnPurchaseEvent (PurchaseEvent e)
+    {
+        Coins -= e._amount;
+    }
+
     public override void Awake()
     {
         if (noteInventory == null)
@@ -65,6 +73,15 @@ public class PlayerManager : Singleton<PlayerManager>
     public List<NoteData> GetInventoryNotes()
     {
         return noteInventory;
+    }
+
+    /// <summary>
+    /// Retrieve the amount of money Player has
+    /// </summary>
+    /// <returns></returns>
+    public int GetCoinAmount()
+    {
+        return Coins;
     }
 
     /// <summary>
