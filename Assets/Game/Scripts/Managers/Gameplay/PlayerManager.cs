@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlayerManager : Singleton<PlayerManager>
 {
     public List<NoteData> noteInventory;
-    public int Coins;
+    public List<UpgradeData> upgradeInventory;
 
     // For Gameplay, what Notes are still available to be grabbed from Inventory,
     // what Notes are active, and what Notes aren't
@@ -15,6 +15,8 @@ public class PlayerManager : Singleton<PlayerManager>
     // Current selected Bard
     public BaseBard selectedBard;
 
+    public int Coins;
+
     private void Start()
     {
         notesUsed = new List<NoteData>();
@@ -24,21 +26,25 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private void OnEnable()
     {
-        EventBus.Subscribe<NoteRemovedEvent>(OnNoteRemovedEvent);
-        EventBus.Subscribe<PurchaseEvent>(OnPurchaseEvent);
+        EventBus.Subscribe<NoteRemovedEvent>(OnNoteRemoved);
+        EventBus.Subscribe<PurchaseEvent>(OnPurchase);
+        EventBus.Subscribe<NoteBoughtEvent>(OnNoteBought);
+        EventBus.Subscribe<UpgradeBoughtEvent>(OnUpgradeBought);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<NoteRemovedEvent>(OnNoteRemovedEvent);
-        EventBus.Unsubscribe<PurchaseEvent>(OnPurchaseEvent);
+        EventBus.Unsubscribe<NoteRemovedEvent>(OnNoteRemoved);
+        EventBus.Unsubscribe<PurchaseEvent>(OnPurchase);
+        EventBus.Unsubscribe<NoteBoughtEvent>(OnNoteBought);
+        EventBus.Unsubscribe<UpgradeBoughtEvent>(OnUpgradeBought);
     }
 
     /// <summary>
     /// When a Note is Discarded/Scored, remove it from the NotUsed list
     /// </summary>
     /// <param name="e">Event Data with Note to remove</param>
-    private void OnNoteRemovedEvent(NoteRemovedEvent e)
+    private void OnNoteRemoved(NoteRemovedEvent e)
     {
         if (notesHeld.Contains(e._note))
         {
@@ -51,9 +57,31 @@ public class PlayerManager : Singleton<PlayerManager>
         }
     }
 
-    private void OnPurchaseEvent (PurchaseEvent e)
+    /// <summary>
+    /// When making a purchase from the shop, subtract cost
+    /// </summary>
+    /// <param name="e">Data of cost to subtract</param>
+    private void OnPurchase(PurchaseEvent e)
     {
         Coins -= e._amount;
+    }
+
+    /// <summary>
+    /// When a Note is purchased from the shop, add it's data to the inventory
+    /// </summary>
+    /// <param name="e">Data of Note to add</param>
+    private void OnNoteBought(NoteBoughtEvent e)
+    {
+        noteInventory.Add(e.data);
+    }
+
+    /// <summary>
+    /// When an Upgrade is purchased from the shop, add it's data to the inventory
+    /// </summary>
+    /// <param name="e">Data of Upgrade to add</param>
+    private void OnUpgradeBought(UpgradeBoughtEvent e)
+    {
+        upgradeInventory.Add(e.data);
     }
 
     public override void Awake()
