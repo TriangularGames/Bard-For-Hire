@@ -55,15 +55,15 @@ public class DiceRoller : MonoBehaviour
 
         // add random lateral force to make rolling look random
         Vector3 lateralDir = UnityEngine.Random.insideUnitSphere;
-        lateralDir.y = 0f;
+        lateralDir.z = 0f;
         lateralDir = lateralDir.normalized;
 
         float lateral = UnityEngine.Random.Range(lateralForceRange.x, lateralForceRange.y);
         float upward = UnityEngine.Random.Range(upwardForceRange.x, upwardForceRange.y);
 
         // add optional impulse
-        // Vector3 impulse = lateralDir * lateral + Vector3.up * upward;
-        // rb.AddForce(impulse, ForceMode.Impulse);
+        Vector3 impulse = lateralDir * lateral + Vector3.up * upward;
+        rb.AddForce(impulse, ForceMode.Impulse);
 
         // add random rolling torque to spin the dice at random speeds
         Vector3 torque = new Vector3(

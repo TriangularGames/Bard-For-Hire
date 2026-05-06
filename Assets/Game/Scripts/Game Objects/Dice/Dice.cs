@@ -12,7 +12,7 @@ public class Dice : MonoBehaviour
     [Header("Gravity")]
     [Tooltip("If enabled, sets Physics.gravity at runtime.")]
     [SerializeField] private bool overrideGlobalGravity = false;
-    [SerializeField] private Vector3 customGravity = new Vector3(0f, 0f, 9.81f);
+    [SerializeField] private Vector3 customGravity = new Vector3(0f, 0f, 2f);
 
     [Header("Auto Face Generation (Editor)")]
     [SerializeField] private Transform meshRoot;
