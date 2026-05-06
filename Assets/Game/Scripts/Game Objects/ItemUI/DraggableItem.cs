@@ -14,10 +14,10 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     private void Awake()
     {
         // Check if item is in a slot
-        if (gameObject.transform.parent.gameObject.GetComponent<ItemSlot>() != null)
+        if (gameObject.transform.parent.gameObject.GetComponent<NoteSlot>() != null)
         {
             parentAfterDrag = gameObject.transform.parent.transform;
-            parentAfterDrag.gameObject.GetComponent<ItemSlot>().SetNote(gameObject);
+            parentAfterDrag.gameObject.GetComponent<NoteSlot>().SetNote(gameObject);
         }
     }
 
@@ -35,20 +35,20 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         transform.GetChild(0).GetComponent<TMP_Text>().raycastTarget = false;
         transform.GetChild(1).GetComponent<TMP_Text>().raycastTarget = false;
 
-        parentAfterDrag.GetComponent<ItemSlot>().ClearNote();
+        parentAfterDrag.GetComponent<NoteSlot>().ClearNote();
 
         // If Note is in MusicSheet, Remove the Note from it and Clear the Slot
         if (parentAfterDrag.parent.transform.parent.GetComponent<MusicSheet>())
         {
             parentAfterDrag.parent.transform.parent.GetComponent<MusicSheet>().RemoveNote(GetComponent<NoteController>().noteData);
-            parentAfterDrag.GetComponent<ItemSlot>().ClearNote();
+            parentAfterDrag.GetComponent<NoteSlot>().ClearNote();
         }
 
         // If Note is in NotePool, Remove the Note from it and Clear the Slot
         if (parentAfterDrag.parent.transform.parent.GetComponent<NotePool>())
         {
             parentAfterDrag.parent.transform.parent.GetComponent<NotePool>().RemoveNote(GetComponent<NoteController>().noteData);
-            parentAfterDrag.GetComponent<ItemSlot>().ClearNote();
+            parentAfterDrag.GetComponent<NoteSlot>().ClearNote();
         }
     }
 
@@ -63,20 +63,20 @@ public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         transform.SetParent(parentAfterDrag);
         image.raycastTarget = true;
 
-        parentAfterDrag.GetComponent<ItemSlot>().SetNote(gameObject);
+        parentAfterDrag.GetComponent<NoteSlot>().SetNote(gameObject);
 
         // If NoteSlot is now in the MusicSheet, Add it to the NotePool and Parent it to the Slot
         if (parentAfterDrag.parent.transform.parent.GetComponent<MusicSheet>())
         {
             parentAfterDrag.parent.transform.parent.GetComponent<MusicSheet>().AddNote(GetComponent<NoteController>().noteData);
-            parentAfterDrag.GetComponent<ItemSlot>().SetNote(gameObject);
+            parentAfterDrag.GetComponent<NoteSlot>().SetNote(gameObject);
         }
 
         // If NoteSlot is now in the NotePool, Add it to the NotePool and Parent it to the Slot
         if (parentAfterDrag.parent.transform.parent.GetComponent<NotePool>())
         {
             parentAfterDrag.parent.transform.parent.GetComponent<NotePool>().AddNote(GetComponent<NoteController>().noteData);
-            parentAfterDrag.GetComponent<ItemSlot>().SetNote(gameObject);
+            parentAfterDrag.GetComponent<NoteSlot>().SetNote(gameObject);
         }
     }
     #endregion

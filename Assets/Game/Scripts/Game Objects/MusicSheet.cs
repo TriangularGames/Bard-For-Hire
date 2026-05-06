@@ -49,7 +49,7 @@ public class MusicSheet : MonoBehaviour
 
     public void EmptySlots()
     {
-        foreach (ItemSlot slot in Slots.transform.GetComponentsInChildren<ItemSlot>())
+        foreach (NoteSlot slot in Slots.transform.GetComponentsInChildren<NoteSlot>())
         {
             slot.ClearNote();
         }

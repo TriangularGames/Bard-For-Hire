@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -44,7 +43,7 @@ public class NoteManager : Singleton<NoteManager>
                     }
 
                     // Clear the Note from the slot
-                    notesToDelete[i].transform.parent.GetComponent<ItemSlot>().ClearNote();
+                    notesToDelete[i].transform.parent.GetComponent<NoteSlot>().ClearNote();
                     // Notify that a Note has been removed
                     EventBus.Publish<NoteRemovedEvent>(new NoteRemovedEvent(notesToDelete[i].GetComponent<NoteController>().noteData));
 
@@ -71,7 +70,7 @@ public class NoteManager : Singleton<NoteManager>
         {
             if (notesDiscarded != 0)
             {
-                if (notePool.inventoryPanel.GetChild(i).GetComponent<ItemSlot>().StoredNote == null)
+                if (notePool.inventoryPanel.GetChild(i).GetComponent<NoteSlot>().StoredNote == null)
                 {
                     notePool.InstantiateNote(PlayerManager.Instance.GetRandomNote(), notePool.inventoryPanel.GetChild(i).transform);
                     notesDiscarded--;
@@ -93,12 +92,12 @@ public class NoteManager : Singleton<NoteManager>
         {
             for (int i = 0; i < notePool.inventoryPanel.childCount; i++)
             {
-                if (notePool.inventoryPanel.GetChild(i).GetComponent<ItemSlot>().StoredNote == null)
+                if (notePool.inventoryPanel.GetChild(i).GetComponent<NoteSlot>().StoredNote == null)
                 {
-                    note.GetComponent<DraggableItem>().parentAfterDrag.GetComponent<ItemSlot>().ClearNote();
+                    note.GetComponent<DraggableItem>().parentAfterDrag.GetComponent<NoteSlot>().ClearNote();
                     note.GetComponent<DraggableItem>().parentAfterDrag = notePool.inventoryPanel.GetChild(i).transform;
                     note.transform.SetParent(notePool.inventoryPanel.GetChild(i));
-                    notePool.inventoryPanel.GetChild(i).GetComponent<ItemSlot>().SetNote(note);
+                    notePool.inventoryPanel.GetChild(i).GetComponent<NoteSlot>().SetNote(note);
                 }
             }
         }
