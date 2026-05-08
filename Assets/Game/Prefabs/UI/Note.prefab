@@ -148,8 +148,8 @@ GameObject:
   - component: {fileID: 7047863187680575947}
   - component: {fileID: 8622836177064081620}
   - component: {fileID: 2579994677903763542}
-  - component: {fileID: 6803474640771040034}
   - component: {fileID: 973112624450877254}
+  - component: {fileID: 5579982606040957341}
   m_Layer: 5
   m_Name: Note
   m_TagString: Note
@@ -216,22 +216,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6803474640771040034
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9005676489685703692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2c5f925382fe9446811d56ff14233af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DraggableItem
-  image: {fileID: 2579994677903763542}
-  parentAfterDrag: {fileID: 0}
-  isSelected: 0
-  inNotePool: 0
 --- !u!114 &973112624450877254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -247,6 +231,18 @@ MonoBehaviour:
   noteData: {fileID: 0}
   scoreTxt: {fileID: 6911767550555668763}
   playableText: {fileID: 2758709336684097847}
+--- !u!114 &5579982606040957341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9005676489685703692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32c85e67536befa4abf065b299a5f6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Drag
 --- !u!1 &9061976934390310253
 GameObject:
   m_ObjectHideFlags: 0
