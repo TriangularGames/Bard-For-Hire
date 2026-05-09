@@ -525,7 +525,7 @@ MonoBehaviour:
   - {fileID: 102900000, guid: fbfb6557ef0078e4585774dd42e989f8, type: 3}
   - {fileID: 102900000, guid: d23351061ab2a154b942d6dda85625ec, type: 3}
   - {fileID: 102900000, guid: 993a59e6c4333034d81af0547b3e1e83, type: 3}
-  firstGameplayScene: {fileID: 102900000, guid: 3d3edcdf3c9086745bdba03d2e175e7c, type: 3}
+  firstGameplayScene: {fileID: 102900000, guid: ab5a65bb9d8b28a49969124a77b8bafa, type: 3}
 --- !u!4 &910452830
 Transform:
   m_ObjectHideFlags: 0
