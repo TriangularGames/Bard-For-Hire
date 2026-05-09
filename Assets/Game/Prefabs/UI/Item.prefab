@@ -151,7 +151,7 @@ GameObject:
   - component: {fileID: 973112624450877254}
   - component: {fileID: 5579982606040957341}
   m_Layer: 5
-  m_Name: Note
+  m_Name: Item
   m_TagString: Note
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

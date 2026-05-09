@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum NoteType
+public enum ItemType
 {
     Sixteenth,
     Eighth,

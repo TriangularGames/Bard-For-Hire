@@ -3,57 +3,57 @@ using UnityEngine;
 
 public class PlayerManager : Singleton<PlayerManager>
 {
-    public List<NoteData> noteInventory;
+    public List<ItemData> itemInventory;
     public List<UpgradeData> upgradeInventory;
 
     // For Gameplay, what Notes are still available to be grabbed from Inventory,
     // what Notes are active, and what Notes aren't
-    public List<NoteData> notesUsed;
-    public List<NoteData> notesHeld;
-    public List<NoteData> notesNotUsed;
+    public List<ItemData> itemsUsed;
+    public List<ItemData> itemsHeld;
+    public List<ItemData> itemsNotUsed;
 
-    // Current selected Bard
-    public BaseBard selectedBard;
+    // Current selected Character
+    public BaseBard selectedCharacter;
 
     public int Coins;
 
     private void Start()
     {
-        notesUsed = new List<NoteData>();
-        notesHeld = new List<NoteData>();
-        notesNotUsed = new List<NoteData>();
+        itemsUsed = new List<ItemData>();
+        itemsHeld = new List<ItemData>();
+        itemsNotUsed = new List<ItemData>();
     }
 
     private void OnEnable()
     {
-        EventBus.Subscribe<NoteRemovedEvent>(OnNoteRemoved);
+        EventBus.Subscribe<ItemRemovedEvent>(OnItemRemoved);
         EventBus.Subscribe<PurchaseEvent>(OnPurchase);
-        EventBus.Subscribe<NoteBoughtEvent>(OnNoteBought);
+        EventBus.Subscribe<ItemBoughtEvent>(OnItemBought);
         EventBus.Subscribe<UpgradeBoughtEvent>(OnUpgradeBought);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<NoteRemovedEvent>(OnNoteRemoved);
+        EventBus.Unsubscribe<ItemRemovedEvent>(OnItemRemoved);
         EventBus.Unsubscribe<PurchaseEvent>(OnPurchase);
-        EventBus.Unsubscribe<NoteBoughtEvent>(OnNoteBought);
+        EventBus.Unsubscribe<ItemBoughtEvent>(OnItemBought);
         EventBus.Unsubscribe<UpgradeBoughtEvent>(OnUpgradeBought);
     }
 
     /// <summary>
-    /// When a Note is Discarded/Scored, remove it from the NotUsed list
+    /// When an Item is Discarded/Scored, remove it from the NotUsed list
     /// </summary>
-    /// <param name="e">Event Data with Note to remove</param>
-    private void OnNoteRemoved(NoteRemovedEvent e)
+    /// <param name="e">Event Data with Item to remove</param>
+    private void OnItemRemoved(ItemRemovedEvent e)
     {
-        if (notesHeld.Contains(e._note))
+        if (itemsHeld.Contains(e.item))
         {
-            notesUsed.Add(e._note);
-            notesHeld.Remove(e._note);
+            itemsUsed.Add(e.item);
+            itemsHeld.Remove(e.item);
         }
         else
         {
-            Debug.LogWarning("Note used is not in available inventory.");
+            Debug.LogWarning("Item used is not in available inventory.");
         }
     }
 
@@ -67,12 +67,12 @@ public class PlayerManager : Singleton<PlayerManager>
     }
 
     /// <summary>
-    /// When a Note is purchased from the shop, add it's data to the inventory
+    /// When an Item is purchased from the shop, add it's data to the inventory
     /// </summary>
-    /// <param name="e">Data of Note to add</param>
-    private void OnNoteBought(NoteBoughtEvent e)
+    /// <param name="e">Data of Item to add</param>
+    private void OnItemBought(ItemBoughtEvent e)
     {
-        noteInventory.Add(e.data);
+        itemInventory.Add(e.data);
     }
 
     /// <summary>
@@ -86,21 +86,21 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public override void Awake()
     {
-        if (noteInventory == null)
+        if (itemInventory == null)
         {
-            noteInventory = new List<NoteData>();
+            itemInventory = new List<ItemData>();
         }
 
         //selectedBard = new LuteBard(); // Start with lute bard
     }
 
     /// <summary>
-    /// Retrieve inventory notes
+    /// Retrieve inventory
     /// </summary>
     /// <returns></returns>
-    public List<NoteData> GetInventoryNotes()
+    public List<ItemData> GetInventoryItems()
     {
-        return noteInventory;
+        return itemInventory;
     }
 
     /// <summary>
@@ -113,36 +113,36 @@ public class PlayerManager : Singleton<PlayerManager>
     }
 
     /// <summary>
-    /// Store notes from note inventory
+    /// Store items from inventory
     /// </summary>
-    public void SetInventoryNotes(List<NoteData> _inventoryNotes)
+    public void SetInventoryNotes(List<ItemData> _inventoryNotes)
     {
-        foreach (NoteData item in _inventoryNotes)
+        foreach (ItemData item in _inventoryNotes)
         {
-            noteInventory.Add(item);
+            itemInventory.Add(item);
         }
     }
 
     public void ResetPool()
     {
-        notesUsed.Clear();
-        notesHeld.Clear();
-        notesNotUsed.Clear();
-        foreach (NoteData item in noteInventory)
+        itemsUsed.Clear();
+        itemsHeld.Clear();
+        itemsNotUsed.Clear();
+        foreach (ItemData item in itemInventory)
         {
-            notesNotUsed.Add(item);
+            itemsNotUsed.Add(item);
         }
     }
 
     /// <summary>
-    /// Get a Random Note from the Unused Notes
+    /// Get a Random Item from the Unused Items
     /// </summary>
-    /// <returns>NoteData of Note from Available Inventory</returns>
-    public NoteData GetRandomNote()
+    /// <returns>ItemData of Item from Available Inventory</returns>
+    public ItemData GetRandomItem()
     {
-        NoteData note = notesNotUsed[Random.Range(0, notesNotUsed.Count)];
-        notesNotUsed.Remove(note);
-        notesHeld.Add(note);
-        return note;
+        ItemData item = itemsNotUsed[Random.Range(0, itemsNotUsed.Count)];
+        itemsNotUsed.Remove(item);
+        itemsHeld.Add(item);
+        return item;
     }
 }

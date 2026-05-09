@@ -1,10 +1,10 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Note", menuName = "Scriptable Objects/Note")]
-public class NoteData : ScriptableObject
+[CreateAssetMenu(fileName = "Item", menuName = "Scriptable Objects/Item")]
+public class ItemData : ScriptableObject
 {
-    [Header("Note Type")]
-    [SerializeField] public NoteType NoteType;
+    [Header("Item Type")]
+    [SerializeField] public ItemType ItemType;
     [SerializeField] public bool Rest;
 
     [Header("Scoring Value")]

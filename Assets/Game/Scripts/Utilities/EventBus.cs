@@ -75,13 +75,13 @@ public struct PurchaseEvent
 }
 
 /// <summary>
-/// Event for when a Note is purchased
+/// Event for when an Item is purchased
 /// </summary>
-public struct NoteBoughtEvent
+public struct ItemBoughtEvent
 {
-    public NoteData data;
+    public ItemData data;
 
-    public NoteBoughtEvent(NoteData _data)
+    public ItemBoughtEvent(ItemData _data)
     {
         data = _data;
     }
@@ -101,15 +101,15 @@ public struct UpgradeBoughtEvent
 }
 
 /// <summary>
-/// Event for when a Note is being Discarded/Scored
+/// Event for when an Item is being Discarded/Scored
 /// </summary>
-public struct NoteRemovedEvent
+public struct ItemRemovedEvent
 {
-    public NoteData _note;
+    public ItemData item;
 
-    public NoteRemovedEvent(NoteData note)
+    public ItemRemovedEvent(ItemData _item)
     {
-        _note = note;
+        item = _item;
     }
 }
 

@@ -2,9 +2,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NoteController : MonoBehaviour
+public class ItemController : MonoBehaviour
 {
-    [SerializeField] public NoteData noteData;
+    [SerializeField] public ItemData itemData;
 
     [SerializeField] private TMP_Text scoreTxt;
     [SerializeField] private TMP_Text playableText;
@@ -18,24 +18,24 @@ public class NoteController : MonoBehaviour
 
     private void SetSprite()
     {
-        GetComponent<Image>().sprite = noteData.icon;
+        GetComponent<Image>().sprite = itemData.icon;
     }
 
     private void SetScoreTxt()
     {
-        if (noteData.Mult)
+        if (itemData.Mult)
         {
-            scoreTxt.text = "x" + noteData.Score.ToString();
+            scoreTxt.text = "x" + itemData.Score.ToString();
         }
         else
         {
-            scoreTxt.text = "+" + noteData.Score.ToString();
+            scoreTxt.text = "+" + itemData.Score.ToString();
         }
         
     }
 
     private void SetPlayableTxt()
     {
-        playableText.text = "(" + noteData.Playable.ToString() + ")";
+        playableText.text = "(" + itemData.Playable.ToString() + ")";
     }
 }

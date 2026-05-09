@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// A score manager that calculates the score based on the notes added to the music sheet
+/// ScoreManager calculates the score based on the Items added to AttackHand
 /// </summary>
 public class ScoreManager : Singleton<ScoreManager>
 {
@@ -11,7 +11,7 @@ public class ScoreManager : Singleton<ScoreManager>
     private float score;
 
     public DiceRoller roller;
-    private List<NoteData> pendingNotes;
+    private List<ItemData> pendingItems;
 
     private void Start()
     {
@@ -19,14 +19,14 @@ public class ScoreManager : Singleton<ScoreManager>
     }
 
     /// <summary>
-    /// Calculates the final score for a round using Note List
+    /// Calculates the final score for a round using ItemData List
     /// </summary>
-    /// <param name="notes">List of Notes to be scored</param>
-    public void CalculateScore(List<NoteData> notes)
+    /// <param name="items">List of Items to be scored</param>
+    public void CalculateScore(List<ItemData> items)
     {
         // Include in here some effect thats displayed as each note is determined
         // to be scored or not
-        pendingNotes = notes;
+        pendingItems = items;
         roller.RollDie(this, OnRollComplete);
 
     }
@@ -38,20 +38,20 @@ public class ScoreManager : Singleton<ScoreManager>
     private void OnRollComplete(int rollValue)
     {
         score = 0;
-        foreach (NoteData note in pendingNotes)
+        foreach (ItemData item in pendingItems)
         {
-            if (note.Playable <= rollValue)
+            if (item.Playable <= rollValue)
             {
-                Debug.Log($"{note.name} was played!");
-                if (note.Mult)
+                Debug.Log($"{item.name} was played!");
+                if (item.Mult)
                 {
-                    score *= note.Score;
+                    score *= item.Score;
                 }
                 else
                 {
-                    score += note.Score;
+                    score += item.Score;
                 }
-                EventBus.Publish<NoteRemovedEvent>(new NoteRemovedEvent(note));
+                EventBus.Publish<ItemRemovedEvent>(new ItemRemovedEvent(item));
             }
         }
         Debug.Log("Total Score: " + score);
@@ -81,6 +81,6 @@ public class ScoreManager : Singleton<ScoreManager>
             scoreToBeat.text = sTB.ToString();
         }
 
-        NoteManager.Instance.GrabNewNotes();
+        ItemManager.Instance.GrabNewItems();
     }
 }
