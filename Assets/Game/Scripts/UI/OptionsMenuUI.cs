@@ -194,9 +194,4 @@ public class OptionsMenuUI : MonoBehaviour
         qualityDropdown.value = QualitySettings.GetQualityLevel();
         qualityDropdown.RefreshShownValue();
     }
-
-    public void Back()
-    {
-        MenuManager.Instance.ResumePreviousState();
-    }
 }
