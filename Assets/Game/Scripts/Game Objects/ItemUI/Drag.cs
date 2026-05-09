@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -10,6 +11,8 @@ public class Drag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
 
     private Vector2 _offset;
 
+    public Vector2 originalPos;
+
     public bool inItemPool = false;
 
     private void Awake()
@@ -18,8 +21,14 @@ public class Drag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
         objectTransform = GetComponent<RectTransform>();
     }
 
+    public void ResetPosition()
+    {
+        objectTransform.anchoredPosition = originalPos;
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
+        originalPos = objectTransform.anchoredPosition;
         Debug.Log("Dragging");
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvasTransform, Mouse.current.position.ReadValue(), Camera.main, out var localPos);

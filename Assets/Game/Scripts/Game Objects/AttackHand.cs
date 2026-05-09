@@ -42,6 +42,18 @@ public class AttackHand : MonoBehaviour
     private void Awake()
     {
         Debug.Assert(items = GetComponent<ItemSlot>(), "AttackHand requires ItemSlot");
+
+        items.limit = maxSlots;
+    }
+
+    private void OnEnable()
+    {
+        EventBus.Subscribe<ItemRemovedEvent>(DeleteItems);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe<ItemRemovedEvent>(DeleteItems);
     }
 
     private void Start()
@@ -71,6 +83,15 @@ public class AttackHand : MonoBehaviour
     }
 
     /// <summary>
+    /// Removes all Items from the AttackHand using a List
+    /// </summary>
+    /// <param name="list">List of Items to remove</param>
+    public void RemoveAll(List<GameObject> list)
+    {
+        items.storedObjects.RemoveAll(item => list.Contains(item));
+    }
+
+    /// <summary>
     /// Clears Items in AttackHand returns them to ItemPool
     /// </summary>
     private void ClearItems()
@@ -81,9 +102,13 @@ public class AttackHand : MonoBehaviour
     /// <summary>
     /// Clears Items in AttackHand after scoring is completed
     /// </summary>
-    private void DeleteItems()
+    private void DeleteItems(ItemRemovedEvent e)
     {
         // This should eventually be edited to allow for effects and such when they're removed
+        foreach (GameObject item in items.storedObjects)
+        {
+            Destroy(item);
+        }
         items.storedObjects.Clear();
     }
 
@@ -116,6 +141,6 @@ public class AttackHand : MonoBehaviour
             itemData.Add(itemObj.GetComponent<ItemController>().itemData);
         }
         ScoreManager.Instance.CalculateScore(itemData);
-        DeleteItems();
+        //DeleteItems();
     }
 }

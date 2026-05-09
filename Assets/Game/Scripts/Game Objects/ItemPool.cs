@@ -14,22 +14,14 @@ public class ItemPool : MonoBehaviour
     /// </summary>
     /// <returns>Integer number of Max Slots</returns>
     public int GetMaxSlots() { return maxSlots; }
-    
-
-    private List<ItemData> itemPool;
 
     /// <summary>
     /// Get All Notes in ItemPool
     /// </summary>
     /// <returns>List of ItemData</returns>
-    public List<ItemData> GetItemPool()
+    public List<GameObject> GetItemPool()
     {
-        return itemPool;
-    }
-
-    private void Awake()
-    {
-        itemPool = new List<ItemData>();
+        return inventoryPanel.GetComponent<ItemSlot>().storedObjects;
     }
 
     /// <summary>
@@ -47,6 +39,7 @@ public class ItemPool : MonoBehaviour
         for (int i = 0; i < maxSlots; i++)
         {
             // Instantiate Item
+            Debug.Log("Added item " + i);
             InstantiateItem(PlayerManager.Instance.GetRandomItem(), inventoryPanel.transform);
         }
     }
@@ -56,12 +49,7 @@ public class ItemPool : MonoBehaviour
     /// </summary>
     public void SetupSlots()
     {
-        for (int i = 0; i < maxSlots; i++)
-        {
-            /// Spawn Slot using AssetManager
-            //GameObject obj = AssetManager.Instance.Spawn("ItemSlot", inventoryPanel);
-            //obj.name = "ItemPoolSlot" + i;
-        }
+        inventoryPanel.GetComponent<ItemSlot>().limit = maxSlots;
     }
 
     /// <summary>
@@ -75,15 +63,15 @@ public class ItemPool : MonoBehaviour
 
         itemSpawned.GetComponent<ItemController>().Setup();
 
-        inventoryPanel.GetComponent<ItemSlot>().storedObjects.Add(itemSpawned);
-        AddItem(itemSpawned.GetComponent<ItemController>().itemData);
+        AddItem(itemSpawned);
+        itemSpawned.GetComponent<Drag>().inItemPool = true;
     }
 
     /// <summary>
     /// Adding new items to ItemPool
     /// </summary>
-    /// <param name="item">ItemData to add</param>
-    public void AddItem(ItemData item)
+    /// <param name="item">Item GameObject to add</param>
+    public void AddItem(GameObject item)
     {
         if (inventoryPanel == null) return;
 
@@ -92,25 +80,30 @@ public class ItemPool : MonoBehaviour
             Debug.LogWarning("Tried to add a null item.");
             return;
         }
-        if (itemPool.Count >= maxSlots)
+        if (inventoryPanel.GetComponent<ItemSlot>().storedObjects.Count >= maxSlots)
         {
             Debug.Log("Inventory is full.");
             return;
         }
-        itemPool.Add(item);
+        inventoryPanel.GetComponent<ItemSlot>().storedObjects.Add(item);
+    }
+
+    public void AddAll(List<GameObject> list)
+    {
+        inventoryPanel.GetComponent<ItemSlot>().storedObjects.AddRange(list);
     }
 
    /// <summary>
    /// Removing Items from ItemPool
    /// </summary>
-   /// <param name="item">ItemData to remove</param>
-    public void RemoveItem(ItemData item)
+   /// <param name="item">Item GameObject to remove</param>
+    public void RemoveItem(GameObject item)
     {
         if (item == null) return;
 
-        if (itemPool.Contains(item))
+        if (inventoryPanel.GetComponent<ItemSlot>().storedObjects.Contains(item))
         {
-            itemPool.Remove(item);
+            inventoryPanel.GetComponent<ItemSlot>().storedObjects.Remove(item);
         }
     }
 }

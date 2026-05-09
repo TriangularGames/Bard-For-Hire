@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class ItemManager : Singleton<ItemManager>
 {
@@ -15,6 +15,8 @@ public class ItemManager : Singleton<ItemManager>
     private void Start()
     {
         ItemsToDelete = new List<GameObject>();
+        Debug.Assert(itemPool = GameObject.FindWithTag("ItemPool").GetComponent<ItemPool>(), "ItemManager requires ItemPool");
+        Debug.Assert(attackHand = GameObject.FindWithTag("AttackHand").GetComponent<AttackHand>(), "ItemManager requires AttackHand");
     }
 
     /// <summary>
@@ -28,7 +30,7 @@ public class ItemManager : Singleton<ItemManager>
             for (int i = 0; i < ItemsToDelete.Count; i++)
             {
                 // Checks if the Notes to Delete is in the NotePool or the MusicSheet
-                if (itemPool.GetItemPool().Contains(ItemsToDelete[i].GetComponent<ItemController>().itemData) || attackHand.GetItemList().Contains(ItemsToDelete[i].GetComponent<ItemController>().itemData))
+                if (itemPool.GetItemPool().Contains(ItemsToDelete[i]) || attackHand.GetItemList().Contains(ItemsToDelete[i].GetComponent<ItemController>().itemData))
                 {
                     // Deselect the Slot
                     ItemsToDelete[i].transform.parent.GetComponent<RawImage>().color = Color.white;
@@ -36,7 +38,7 @@ public class ItemManager : Singleton<ItemManager>
                     // Remove the Note from it's respective slot
                     if (ItemsToDelete[i].GetComponent<Drag>().inItemPool)
                     {
-                        itemPool.RemoveItem(ItemsToDelete[i].GetComponent<ItemController>().itemData);
+                        itemPool.RemoveItem(ItemsToDelete[i]);
                     }
                     else
                     {
@@ -67,17 +69,10 @@ public class ItemManager : Singleton<ItemManager>
     /// </summary>
     public void GrabNewItems()
     {
-        for (int i = 0; i < itemPool.inventoryPanel.childCount; i++)
+        Debug.Log("Getting new items!");
+        if (itemPool.GetItemPool().Count != itemPool.GetMaxSlots())
         {
-            if (itemsDiscarded != 0)
-            {
-                itemPool.InstantiateItem(PlayerManager.Instance.GetRandomItem(), itemPool.inventoryPanel.transform);
-                itemsDiscarded--;
-            }
-            else
-            {
-                return;
-            }
+            itemPool.InstantiateItem(PlayerManager.Instance.GetRandomItem(), itemPool.inventoryPanel.transform);
         }
     }
 
@@ -86,20 +81,14 @@ public class ItemManager : Singleton<ItemManager>
     /// </summary>
     public void ClearNotes()
     {
+        List<GameObject> toRemove = new List<GameObject>();
         foreach (GameObject item in attackHand.GetItems())
         {
-            for (int i = 0; i < itemPool.inventoryPanel.childCount; i++)
-            {
-                if (itemPool.inventoryPanel.GetChild(i).GetComponent<ItemSlot>().storedObjects.Count == 0)
-                {
-                    //item.GetComponent<DraggableItem>().parentAfterDrag.GetComponent<ItemSlot>().ClearItems();
-                    //item.GetComponent<DraggableItem>().parentAfterDrag = itemPool.inventoryPanel.GetChild(i).transform;
-                    item.transform.SetParent(itemPool.inventoryPanel.GetChild(i));
-                    
-                    
-                    //itemPool.inventoryPanel.GetChild(i).GetComponent<ItemSlot>().AddItem(item);
-                }
-            }
+            item.GetComponent<Drag>().inItemPool = true;
+            item.transform.SetParent(itemPool.transform.GetChild(0));
+            toRemove.Add(item);
         }
+        attackHand.RemoveAll(toRemove);
+        itemPool.AddAll(toRemove);
     }
 }
