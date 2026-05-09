@@ -49,17 +49,17 @@ public class Inventory : MonoBehaviour
     /// </summary>
     public void SetupInventory()
     {
-        for (int i = 0; i < PlayerManager.Instance.noteInventory.Count; i++)
+        for (int i = 0; i < PlayerManager.Instance.itemInventory.Count; i++)
         {
             /// Spawn NoteSlot and Note from AssetManager
-            GameObject note = AssetManager.Instance.Spawn("Note", inventoryLayout);
-            note.name = note.name + i.ToString();
+            GameObject item = AssetManager.Instance.Spawn("Item", inventoryLayout);
+            item.name = item.name + i.ToString();
 
-            note.GetComponent<DraggableItem>().enabled = false;
-            NoteData data = Instantiate(PlayerManager.Instance.noteInventory[i]);
+            item.GetComponent<Drag>().enabled = false;
+            ItemData data = Instantiate(PlayerManager.Instance.itemInventory[i]);
 
-            note.GetComponent<NoteController>().noteData = data;
-            note.GetComponent<NoteController>().Setup();
+            item.GetComponent<ItemController>().itemData = data;
+            item.GetComponent<ItemController>().Setup();
         }
     }
 

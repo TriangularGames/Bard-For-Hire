@@ -10,6 +10,8 @@ public class Drag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
 
     private Vector2 _offset;
 
+    public bool inItemPool = false;
+
     private void Awake()
     {
         canvasTransform = GameObject.FindWithTag("Canvas").GetComponent<RectTransform>();
@@ -22,6 +24,7 @@ public class Drag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvasTransform, Mouse.current.position.ReadValue(), Camera.main, out var localPos);
         _offset = objectTransform.anchoredPosition - localPos;
+        transform.parent.GetComponent<ItemSlot>().RemoveObject(gameObject);
     }
 
     public void OnDrag(PointerEventData eventData)

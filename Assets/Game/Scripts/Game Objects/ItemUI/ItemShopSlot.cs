@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NoteShopSlot : ShopSlot
+public class ItemShopSlot : ShopSlot
 {
-    // Data of the note that is in the slot
-    NoteData data;
+    // Data of the Item that is in the slot
+    ItemData data;
 
     public override void SetupSlotInfo()
     {

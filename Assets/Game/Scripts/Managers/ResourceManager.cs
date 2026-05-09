@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class ResourceManager : Singleton<ResourceManager>
 {
-    public NoteData[] NoteData;
+    public ItemData[] ItemData;
     public UpgradeData[] UpgradeData;
-    public AudienceMemberData[] AudienceMemberData;
+    public EnemyData[] EnemyData;
 
     private void Start()
     {
-        NoteData = Resources.LoadAll<NoteData>("ScriptableObjects/Notes");
+        ItemData = Resources.LoadAll<ItemData>("ScriptableObjects/Items");
         UpgradeData = Resources.LoadAll<UpgradeData>("ScriptableObjects/Upgrades");
-        AudienceMemberData = Resources.LoadAll<AudienceMemberData>("ScriptableObjects/Audience");
+        EnemyData = Resources.LoadAll<EnemyData>("ScriptableObjects/Enemies");
     }
 }

@@ -3,24 +3,24 @@ using System.Linq.Expressions;
 using TMPro;
 using UnityEngine;
 
-public class AudienceMemberManager : MonoBehaviour
+public class EnemyManager : MonoBehaviour
 {
-    [Header("Audience Data")]
+    [Header("Enemy Data")]
     /// <summary>
-    /// Audience Member types available for this Performance
+    /// Enemy types available for this Performance
     /// </summary>
     [SerializeField] List<string> memberTypes;
 
     /// <summary>
-    /// Number of Members in the Audience
+    /// Number of Enemies for the encounter
     /// </summary>
-    [SerializeField] int numberOfAudienceMembers;
+    [SerializeField] int numberOfEnemies;
 
-    [Header("Audience")]
+    [Header("Enemies")]
     /// <summary>
-    /// Members in the current active Audience
+    /// Current active Enemies
     /// </summary>
-    [SerializeField] List<AudienceMemberData> audienceMembers;
+    [SerializeField] List<EnemyData> enemies;
 
     /// <summary>
     /// Total Score value for this Audience
@@ -34,22 +34,22 @@ public class AudienceMemberManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        for (int i = 0; i < numberOfAudienceMembers; i++)
+        for (int i = 0; i < numberOfEnemies; i++)
         {
             int memberType = Random.Range(0, memberTypes.Count);
-            for (int a = 0; a < ResourceManager.Instance.AudienceMemberData.Length; a++)
+            for (int a = 0; a < ResourceManager.Instance.EnemyData.Length; a++)
             {
-                if (ResourceManager.Instance.AudienceMemberData[a].name == memberTypes[memberType])
+                if (ResourceManager.Instance.EnemyData[a].name == memberTypes[memberType])
                 {
-                    audienceMembers.Add(ResourceManager.Instance.AudienceMemberData[a]);
+                    enemies.Add(ResourceManager.Instance.EnemyData[a]);
                 }
             }
         }
 
-        for (int j = 0; j < numberOfAudienceMembers; j++)
+        for (int j = 0; j < numberOfEnemies; j++)
         {
-            Debug.Log("Audience Member: " + audienceMembers[j].name);
-            totalScore += audienceMembers[j].baseStat;
+            Debug.Log("Enemy: " + enemies[j].name);
+            totalScore += enemies[j].baseStat;
         }
 
         Debug.Log("Total Score: " + totalScore);

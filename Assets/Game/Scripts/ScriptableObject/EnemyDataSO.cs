@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(fileName = "AudienceMemberData", menuName = "Scriptable Objects/AudienceMemberData")]
-public class AudienceMemberData : ScriptableObject
+[CreateAssetMenu(fileName = "EnemyData", menuName = "Scriptable Objects/EnemyData")]
+public class EnemyData : ScriptableObject
 {
     [Header("Stats")]
     [SerializeField] public int baseStat;
