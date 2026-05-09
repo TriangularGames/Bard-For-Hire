@@ -29,6 +29,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Game/Scenes/Test/ShopTest.unity
     guid: 3d3edcdf3c9086745bdba03d2e175e7c
+  - enabled: 1
+    path: Assets/Game/Scenes/Managers/_OptionsManager.unity
+    guid: 0bd9689f12913444f8112b3e9a79483c
+  - enabled: 1
+    path: Assets/Game/Scenes/Managers/_MenuManager.unity
+    guid: 993a59e6c4333034d81af0547b3e1e83
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
