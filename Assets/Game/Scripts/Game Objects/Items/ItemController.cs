@@ -18,7 +18,7 @@ public class ItemController : MonoBehaviour
 
     private void SetSprite()
     {
-        GetComponent<Image>().sprite = itemData.icon;
+        transform.GetChild(1).GetComponent<Image>().sprite = itemData.icon;
     }
 
     private void SetScoreTxt()

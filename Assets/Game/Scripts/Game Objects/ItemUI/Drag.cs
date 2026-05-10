@@ -6,19 +6,19 @@ using UnityEngine.InputSystem;
 
 public class Drag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
-    [SerializeField] private RectTransform canvasTransform;
-    [SerializeField] private RectTransform objectTransform;
+    private RectTransform canvasTransform;
+    private RectTransform objectTransform;
 
     private Vector2 _offset;
 
-    public Vector2 originalPos;
+    [HideInInspector] public Vector2 originalPos;
 
-    public bool inItemPool = false;
+    [HideInInspector] public bool inItemPool = false;
 
     private void Awake()
     {
-        canvasTransform = GameObject.FindWithTag("Canvas").GetComponent<RectTransform>();
-        objectTransform = GetComponent<RectTransform>();
+        Debug.Assert(canvasTransform = GameObject.FindWithTag("Canvas").GetComponent<RectTransform>(), "Scene must contain tagged Canvas");
+        Debug.Assert(objectTransform = GetComponent<RectTransform>(), "GameObject must have RectTransform");
     }
 
     public void ResetPosition()
@@ -34,6 +34,7 @@ public class Drag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
             canvasTransform, Mouse.current.position.ReadValue(), Camera.main, out var localPos);
         _offset = objectTransform.anchoredPosition - localPos;
         transform.parent.GetComponent<ItemSlot>().RemoveObject(gameObject);
+        EventBus.Publish<DragEvent>(new DragEvent(true, gameObject));
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -47,5 +48,20 @@ public class Drag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
     public void OnEndDrag(PointerEventData eventData)
     {
         Debug.Log("Dropping");
+    }
+}
+
+/// <summary>
+/// Event for when Object is being Dragged
+/// </summary>
+public struct DragEvent
+{
+    public bool drag;
+    public GameObject item;
+
+    public DragEvent(bool _drag, GameObject _item)
+    {
+        drag = _drag;
+        item = _item;
     }
 }

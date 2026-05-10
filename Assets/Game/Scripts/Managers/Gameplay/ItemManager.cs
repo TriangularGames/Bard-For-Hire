@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 public class ItemManager : Singleton<ItemManager>
 {
@@ -22,20 +20,17 @@ public class ItemManager : Singleton<ItemManager>
     /// <summary>
     /// When discarding Items, destroy them.
     /// </summary>
-    public void DiscardNote()
+    public void DiscardItem()
     {
         itemsDiscarded = 0;
         if (PlayerManager.Instance.itemsNotUsed.Count != 0)
         {
             for (int i = 0; i < ItemsToDelete.Count; i++)
             {
-                // Checks if the Notes to Delete is in the NotePool or the MusicSheet
+                // Checks if the Items to Delete is in the ItemPool or the AttackHand
                 if (itemPool.GetItemPool().Contains(ItemsToDelete[i]) || attackHand.GetItemList().Contains(ItemsToDelete[i].GetComponent<ItemController>().itemData))
                 {
-                    // Deselect the Slot
-                    ItemsToDelete[i].transform.parent.GetComponent<RawImage>().color = Color.white;
-
-                    // Remove the Note from it's respective slot
+                    // Remove the Item from it's respective slot
                     if (ItemsToDelete[i].GetComponent<Drag>().inItemPool)
                     {
                         itemPool.RemoveItem(ItemsToDelete[i]);
@@ -45,8 +40,6 @@ public class ItemManager : Singleton<ItemManager>
                         attackHand.RemoveItem(ItemsToDelete[i]);
                     }
 
-                    // Clear the Note from the slot
-                    //notesToDelete[i].transform.parent.GetComponent<NoteSlot>().ClearNote();
                     // Notify that an Item has been removed
                     EventBus.Publish<ItemRemovedEvent>(new ItemRemovedEvent(ItemsToDelete[i].GetComponent<ItemController>().itemData));
 
@@ -79,7 +72,7 @@ public class ItemManager : Singleton<ItemManager>
     /// <summary>
     /// Remove Items from AttackHand and return them to the ItemPool
     /// </summary>
-    public void ClearNotes()
+    public void ClearItems()
     {
         List<GameObject> toRemove = new List<GameObject>();
         foreach (GameObject item in attackHand.GetItems())
