@@ -86,6 +86,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public override void Awake()
     {
+        base.Awake();
         if (itemInventory == null)
         {
             itemInventory = new List<ItemData>();
