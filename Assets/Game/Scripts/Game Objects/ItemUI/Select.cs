@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -51,9 +50,13 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
         }
     }
 
+    /// <summary>
+    /// If item is being dragged, remove it from being selected
+    /// </summary>
+    /// <param name="e">Data containing what item is being dragged</param>
     private void DeselectItem(DragEvent e)
     {
-        if (e.drag && gameObject == e.item)
+        if (gameObject == e.item)
         {
             selection.color = new Color(selection.color.r, selection.color.g, selection.color.b, 0f);
             isSelected = false;

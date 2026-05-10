@@ -56,12 +56,10 @@ public class Drag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
 /// </summary>
 public struct DragEvent
 {
-    public bool drag;
     public GameObject item;
 
-    public DragEvent(bool _drag, GameObject _item)
+    public DragEvent(GameObject _item)
     {
-        drag = _drag;
         item = _item;
     }
 }
