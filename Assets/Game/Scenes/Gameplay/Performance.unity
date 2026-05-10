@@ -529,7 +529,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!108 &285653996
 Light:
   m_ObjectHideFlags: 0
@@ -1425,7 +1425,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &560692323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1932,8 +1932,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoteManager
   ItemsToDelete: []
-  itemPool: {fileID: 0}
-  attackHand: {fileID: 0}
+  itemPool: {fileID: 47286583}
+  attackHand: {fileID: 300862385}
 --- !u!4 &1016375506
 Transform:
   m_ObjectHideFlags: 0
@@ -2304,9 +2304,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8e0b8ebad04892448fbecbb881cea7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DiceRoller
-  display: {fileID: 0}
+  display: {fileID: 1679836801}
   diePrefab: {fileID: 5006750835629230564, guid: 191de0a53e2638a42ac4ee51ac38515b, type: 3}
-  spawnPoint: {fileID: 0}
+  spawnPoint: {fileID: 791932454}
   lateralForceRange: {x: 1, y: 1.2}
   upwardForceRange: {x: 1, y: 1.2}
   torqueRange: {x: 0.01, y: 0.02}
@@ -2324,7 +2324,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41baf498d5a1d424da92162be8dbc0b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
-  scoreToBeat: {fileID: 0}
+  scoreToBeat: {fileID: 407607367}
   roller: {fileID: 1344256443}
 --- !u!4 &1344256445
 Transform:

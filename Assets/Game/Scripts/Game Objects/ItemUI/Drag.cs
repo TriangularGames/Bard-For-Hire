@@ -34,7 +34,7 @@ public class Drag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
             canvasTransform, Mouse.current.position.ReadValue(), Camera.main, out var localPos);
         _offset = objectTransform.anchoredPosition - localPos;
         transform.parent.GetComponent<ItemSlot>().RemoveObject(gameObject);
-        EventBus.Publish<DragEvent>(new DragEvent(true, gameObject));
+        EventBus.Publish<DragEvent>(new DragEvent(gameObject));
     }
 
     public void OnDrag(PointerEventData eventData)

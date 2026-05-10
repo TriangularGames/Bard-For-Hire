@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class ScoreManager : Singleton<ScoreManager>
 {
-    [SerializeField] TMP_Text scoreToBeat;
+    [SerializeField] private TMP_Text scoreToBeat;
     private float score;
 
     public DiceRoller roller;

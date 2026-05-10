@@ -39,7 +39,6 @@ public class ItemPool : MonoBehaviour
         for (int i = 0; i < maxSlots; i++)
         {
             // Instantiate Item
-            Debug.Log("Added item " + i);
             InstantiateItem(PlayerManager.Instance.GetRandomItem(), inventoryPanel.transform);
         }
     }
