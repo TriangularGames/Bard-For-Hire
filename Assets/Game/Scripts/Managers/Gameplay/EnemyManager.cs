@@ -49,7 +49,7 @@ public class EnemyManager : MonoBehaviour
         for (int j = 0; j < numberOfEnemies; j++)
         {
             Debug.Log("Enemy: " + enemies[j].name);
-            totalScore += enemies[j].baseStat;
+            totalScore += enemies[j].health;
         }
 
         Debug.Log("Total Score: " + totalScore);
