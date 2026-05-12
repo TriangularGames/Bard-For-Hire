@@ -1,9 +1,13 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ItemManager : Singleton<ItemManager>
 {
+    public Button discardBtn;
     public List<GameObject> ItemsToDelete;
+    public int numofDiscards = 3;
 
     public ItemPool itemPool;
     public AttackHand attackHand;
@@ -13,8 +17,22 @@ public class ItemManager : Singleton<ItemManager>
     private void Start()
     {
         ItemsToDelete = new List<GameObject>();
+        numofDiscards = 3;
+        discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discards x" + numofDiscards.ToString();
         Debug.Assert(itemPool = GameObject.FindWithTag("ItemPool").GetComponent<ItemPool>(), "ItemManager requires ItemPool");
         Debug.Assert(attackHand = GameObject.FindWithTag("AttackHand").GetComponent<AttackHand>(), "ItemManager requires AttackHand");
+    }
+
+    private void Update()
+    {
+        if (numofDiscards != 0)
+        {
+            discardBtn.interactable = true;
+        }
+        else
+        {
+            discardBtn.interactable = false;
+        }
     }
 
     /// <summary>
@@ -23,37 +41,45 @@ public class ItemManager : Singleton<ItemManager>
     public void DiscardItem()
     {
         itemsDiscarded = 0;
-        if (PlayerManager.Instance.itemsNotUsed.Count != 0)
+        if (numofDiscards != 0)
         {
-            for (int i = 0; i < ItemsToDelete.Count; i++)
+            if (ItemsToDelete.Count > 0)
             {
-                // Checks if the Items to Delete is in the ItemPool or the AttackHand
-                if (itemPool.GetItems().Contains(ItemsToDelete[i]) || attackHand.GetItems().Contains(ItemsToDelete[i]))
+                if (PlayerManager.Instance.itemsNotUsed.Count != 0)
                 {
-                    // Remove the Item from it's respective slot
-                    if (ItemsToDelete[i].GetComponent<Drag>().inItemPool)
+                    for (int i = 0; i < ItemsToDelete.Count; i++)
                     {
-                        itemPool.RemoveItem(ItemsToDelete[i]);
-                    }
-                    else
-                    {
-                        attackHand.RemoveItem(ItemsToDelete[i]);
-                    }
+                        // Checks if the Items to Delete is in the ItemPool or the AttackHand
+                        if (itemPool.GetItems().Contains(ItemsToDelete[i]) || attackHand.GetItems().Contains(ItemsToDelete[i]))
+                        {
+                            // Remove the Item from it's respective slot
+                            if (ItemsToDelete[i].GetComponent<Drag>().inItemPool)
+                            {
+                                itemPool.RemoveItem(ItemsToDelete[i]);
+                            }
+                            else
+                            {
+                                attackHand.RemoveItem(ItemsToDelete[i]);
+                            }
 
-                    // Notify that an Item has been removed
-                    EventBus.Publish<ItemRemovedEvent>(new ItemRemovedEvent(ItemsToDelete[i].GetComponent<ItemController>().itemData));
+                            // Notify that an Item has been removed
+                            EventBus.Publish<ItemRemovedEvent>(new ItemRemovedEvent(ItemsToDelete[i].GetComponent<ItemController>().itemData));
 
-                    GameObject remove = ItemsToDelete[i];
-                    ItemsToDelete.Remove(remove);
-                    Destroy(remove);
-                    itemsDiscarded++;
+                            GameObject remove = ItemsToDelete[i];
+                            ItemsToDelete.Remove(remove);
+                            Destroy(remove);
+                            itemsDiscarded++;
+                        }
+                    }
+                    GrabNewItems();
+                    numofDiscards--;
+                    discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discards x" + numofDiscards.ToString();
+                }
+                else
+                {
+                    Debug.Log("Item Inventory is Empty! Cannot Discard.");
                 }
             }
-            GrabNewItems();
-        }
-        else
-        {
-            Debug.Log("Item Inventory is Empty! Cannot Discard.");
         }
     }
 
