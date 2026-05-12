@@ -28,7 +28,7 @@ public class ItemManager : Singleton<ItemManager>
             for (int i = 0; i < ItemsToDelete.Count; i++)
             {
                 // Checks if the Items to Delete is in the ItemPool or the AttackHand
-                if (itemPool.GetItemPool().Contains(ItemsToDelete[i]) || attackHand.GetItemList().Contains(ItemsToDelete[i].GetComponent<ItemController>().itemData))
+                if (itemPool.GetItems().Contains(ItemsToDelete[i]) || attackHand.GetItems().Contains(ItemsToDelete[i]))
                 {
                     // Remove the Item from it's respective slot
                     if (ItemsToDelete[i].GetComponent<Drag>().inItemPool)
@@ -63,9 +63,9 @@ public class ItemManager : Singleton<ItemManager>
     public void GrabNewItems()
     {
         Debug.Log("Getting new items!");
-        if (itemPool.GetItemPool().Count != itemPool.GetMaxSlots())
+        if (itemPool.GetItems().Count != itemPool.GetMaxSlots())
         {
-            itemPool.InstantiateItem(PlayerManager.Instance.GetRandomItem(), itemPool.inventoryPanel.transform);
+            itemPool.InstantiateItem(PlayerManager.Instance.GetRandomItem(), itemPool.transform);
         }
     }
 

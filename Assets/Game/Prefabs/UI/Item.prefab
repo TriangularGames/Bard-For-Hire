@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2947913272160739258}
   - component: {fileID: 6911767550555668763}
   m_Layer: 2
-  m_Name: txtScore
+  m_Name: txtDamage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -351,7 +351,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoteController
   itemData: {fileID: 0}
-  scoreTxt: {fileID: 6911767550555668763}
+  damageTxt: {fileID: 6911767550555668763}
   playableText: {fileID: 2758709336684097847}
 --- !u!114 &5579982606040957341
 MonoBehaviour:
