@@ -1,11 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// AttackHand class to hold Item information for Scoring
 /// </summary>
 public class AttackHand : BaseItemContainer
 {
+    public Button attackBtn;
+
     private void OnEnable()
     {
         EventBus.Subscribe<ItemRemovedEvent>(DeleteItems);
@@ -19,6 +22,18 @@ public class AttackHand : BaseItemContainer
     private void Start()
     {
         ClearItems();
+    }
+
+    private void Update()
+    {
+        if (GetItems().Count == 0)
+        {
+            attackBtn.interactable = false;
+        }
+        else
+        {
+            attackBtn.interactable = true;
+        }
     }
 
     /// <summary>

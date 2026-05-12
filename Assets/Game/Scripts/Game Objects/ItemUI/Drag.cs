@@ -29,7 +29,6 @@ public class Drag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
     public void OnBeginDrag(PointerEventData eventData)
     {
         originalPos = objectTransform.anchoredPosition;
-        Debug.Log("Dragging");
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             canvasTransform, Mouse.current.position.ReadValue(), Camera.main, out var localPos);
         _offset = objectTransform.anchoredPosition - localPos;
@@ -47,7 +46,7 @@ public class Drag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log("Dropping");
+        ResetPosition();
     }
 }
 
