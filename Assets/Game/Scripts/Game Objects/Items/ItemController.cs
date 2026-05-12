@@ -6,13 +6,13 @@ public class ItemController : MonoBehaviour
 {
     [SerializeField] public ItemData itemData;
 
-    [SerializeField] private TMP_Text scoreTxt;
+    [SerializeField] private TMP_Text damageTxt;
     [SerializeField] private TMP_Text playableText;
 
     public void Setup()
     {
         SetSprite();
-        SetScoreTxt();
+        SetDamageTxt();
         SetPlayableTxt();
     }
 
@@ -21,15 +21,15 @@ public class ItemController : MonoBehaviour
         transform.GetChild(1).GetComponent<Image>().sprite = itemData.icon;
     }
 
-    private void SetScoreTxt()
+    private void SetDamageTxt()
     {
         if (itemData.Mult)
         {
-            scoreTxt.text = "x" + itemData.Score.ToString();
+            damageTxt.text = "x" + itemData.Damage.ToString();
         }
         else
         {
-            scoreTxt.text = "+" + itemData.Score.ToString();
+            damageTxt.text = "+" + itemData.Damage.ToString();
         }
         
     }

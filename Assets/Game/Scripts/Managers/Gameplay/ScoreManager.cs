@@ -45,11 +45,11 @@ public class ScoreManager : Singleton<ScoreManager>
                 Debug.Log($"{item.name} was played!");
                 if (item.Mult)
                 {
-                    score *= item.Score;
+                    score *= item.Damage;
                 }
                 else
                 {
-                    score += item.Score;
+                    score += item.Damage;
                 }
                 EventBus.Publish<ItemRemovedEvent>(new ItemRemovedEvent(item));
             }
