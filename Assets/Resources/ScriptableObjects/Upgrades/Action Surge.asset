@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dac3702ff3d5d8c4583fb2a130044aea, type: 3}
   m_Name: Action Surge
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
+  UpgradeName: Action Surge
+  UpgradeDescription: Gain 1 more action per turn
+  cost: 25
   UpgradeType: 0
+  Rarity: 2
   icon: {fileID: 0}
-  cost: 0
