@@ -104,7 +104,7 @@ public class ItemManager : Singleton<ItemManager>
         foreach (GameObject item in attackHand.GetItems())
         {
             item.GetComponent<Drag>().inItemPool = true;
-            item.transform.SetParent(itemPool.transform.GetChild(0));
+            item.transform.SetParent(itemPool.transform);
             toRemove.Add(item);
         }
         attackHand.RemoveAll(toRemove);

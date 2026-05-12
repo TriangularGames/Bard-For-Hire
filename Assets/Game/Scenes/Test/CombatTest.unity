@@ -851,7 +851,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -100, y: 0}
+  m_AnchoredPosition: {x: -155, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &407369666
@@ -1971,7 +1971,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 100, y: 0}
+  m_AnchoredPosition: {x: 155, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1005074377
@@ -2085,7 +2085,7 @@ GameObject:
   - component: {fileID: 1016375506}
   - component: {fileID: 1016375505}
   m_Layer: 0
-  m_Name: _NoteManager
+  m_Name: _ItemManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2412,6 +2412,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemSlot
   storedObjects: []
   limit: 0
+  SwapThreshold: 0.03
 --- !u!114 &1186631607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3015,9 +3016,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudienceMemberManager
   memberTypes:
-  - Peasant
-  - Aristocrat
-  numberOfEnemies: 2
+  - Kobold
+  numberOfEnemies: 3
   enemies: []
   totalScore: 0
   scoreToBeat: {fileID: 925699319}
@@ -3365,6 +3365,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NoteSlot
   storedObjects: []
   limit: 0
+  SwapThreshold: 0.03
 --- !u!114 &1895173754
 MonoBehaviour:
   m_ObjectHideFlags: 0

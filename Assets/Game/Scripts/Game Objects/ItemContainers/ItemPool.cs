@@ -28,6 +28,7 @@ public class ItemPool : BaseItemContainer
         itemSpawned.GetComponent<ItemController>().itemData = item;
 
         itemSpawned.GetComponent<ItemController>().Setup();
+        itemSpawned.name = "Item " + item.GetEntityId();
 
         AddItem(itemSpawned);
         itemSpawned.GetComponent<Drag>().inItemPool = true;
