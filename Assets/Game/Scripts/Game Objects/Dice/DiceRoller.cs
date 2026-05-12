@@ -9,6 +9,7 @@ public class DiceRoller : MonoBehaviour
     [SerializeField] private TMP_Text display;
     [SerializeField] private Dice diePrefab;
     [SerializeField] private Transform spawnPoint;
+    [SerializeField] private Transform displayPoint;
 
     [Header("Roll Forces")]
     [SerializeField] private Vector2 lateralForceRange = new Vector2(1.0f, 1.2f);
@@ -18,8 +19,23 @@ public class DiceRoller : MonoBehaviour
     [Header("Timing")]
     [SerializeField] private float maxRollDuration = 5f;
     [SerializeField] private float postSettleDelay = 0.15f;
+    [SerializeField] private float diceLerp = 1f;
+    [SerializeField] private float diceShowTimer = 3f;
 
     private bool isRolling;
+    private float elapsedTime;
+    private bool hasRolled;
+    private bool shouldRemoveDice = false;
+    private Dice diceRef;
+
+    private void Update()
+    {
+        if (hasRolled && diceRef)
+        {
+            elapsedTime += Time.deltaTime;
+            diceRef.transform.position = Vector3.Lerp(diceRef.transform.position, displayPoint.position, elapsedTime / diceLerp); // reset position for next roll
+        }
+    }
 
     /// <summary>
     /// Starts coroutine to roll the die and get the result, prevents multiple rolls at once
@@ -89,11 +105,22 @@ public class DiceRoller : MonoBehaviour
         // get top face value and display it
         int value = die.GetTopFaceValue();
         display.text = $"You rolled: {value}";
+        hasRolled = true;
+        diceRef = die;
+        //die.GetComponent<Rigidbody>().isKinematic = true; // stop physics interactions
         onResult?.Invoke(value);
+        StartCoroutine(HideDice(diceShowTimer));
 
         // Optional: keep die for visuals, or cleanup:
         // Destroy(die.gameObject, 2f);
 
         isRolling = false;
+    }
+
+    private IEnumerator HideDice(float timer)
+    {
+        yield return new WaitForSeconds(timer);
+        Destroy(diceRef.gameObject);
+        elapsedTime = 0f;
     }
 }
