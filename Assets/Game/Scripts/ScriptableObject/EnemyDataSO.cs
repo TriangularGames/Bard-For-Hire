@@ -9,7 +9,7 @@ public class EnemyData : ScriptableObject
     [SerializeField] public int coinReward;
 
     [Header("Enemy Info")]
-    [SerializeField] Image icon;
+    [SerializeField] public Sprite icon;
     [SerializeField] string Description;
 
     [Header("Additional Bonus")]
