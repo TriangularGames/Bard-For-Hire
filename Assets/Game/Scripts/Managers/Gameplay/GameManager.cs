@@ -21,6 +21,8 @@ public class GameManager : Singleton<GameManager>
         currentState.EnterState(this);
 
         if (addToHistory) stateHistory.Push(currentState); // Add state to history only if not resuming previous state
+
+        Debug.Log("Switched to state: " + currentState.GetType().Name);
     }
 
     public void Update()

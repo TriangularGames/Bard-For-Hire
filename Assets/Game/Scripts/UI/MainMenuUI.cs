@@ -6,8 +6,8 @@ public class MainMenuUI : MonoBehaviour
     public void Play()
     {
         // TODO: change this to prompt player for the tutorial, or just go to the Starter Shop screen
-        SceneLoader.Instance.LoadScene("Performance", LoadSceneMode.Single);
-        //GameManager.Instance.SwitchState(new NewGameState());
+        //SceneLoader.Instance.LoadScene("Performance", LoadSceneMode.Single);
+        GameManager.Instance.SwitchState(new CombatState());
     }
 
     public void Options()
