@@ -10,6 +10,11 @@ public class ScoreManager : Singleton<ScoreManager>
     [SerializeField] private TMP_Text scoreToBeat;
     private float score;
 
+    // TODO: add CurrentRound Count to GameManager
+    [SerializeField] private TMP_Text roundText;
+    public int curRound = 1;
+    private int MaxRounds = 3;
+
     public DiceRoller roller;
     private List<ItemData> pendingItems;
 
@@ -24,8 +29,6 @@ public class ScoreManager : Singleton<ScoreManager>
     /// <param name="items">List of Items to be scored</param>
     public void CalculateScore(List<ItemData> items)
     {
-        // Include in here some effect thats displayed as each note is determined
-        // to be scored or not
         pendingItems = items;
         roller.RollDie(this, OnRollComplete);
 
@@ -38,6 +41,9 @@ public class ScoreManager : Singleton<ScoreManager>
     private void OnRollComplete(int rollValue)
     {
         score = 0;
+
+        // Include in here some effect thats displayed as each note is determined
+        // to be scored or not
         foreach (ItemData item in pendingItems)
         {
             if (item.Playable <= rollValue)
@@ -66,21 +72,33 @@ public class ScoreManager : Singleton<ScoreManager>
     {
         float sTB = float.Parse(scoreToBeat.text);
         sTB -= playedScore;
+        scoreToBeat.text = sTB.ToString();
 
-        // If scoreToBeat is 0, the Player wins
-        // Else move on to the next round
-        // TODO: add check for if there are no rounds left
-        if (sTB < 0f)
+        // Check if we have hit the MaxRounds
+        if (curRound == MaxRounds)
         {
-            Debug.Log("Performance Completed!");
-            scoreToBeat.text = "0";
+            // If we have, determine if the player has won
+            if (sTB <= 0)
+            {
+                Debug.Log("Combat Completed!");
+            }
+            else
+            {
+                Debug.Log("Combat Failed!");
+            }
+
+            // TODO: add completed screen panel of some kind
         }
         else
         {
-            Debug.Log("Next round!");
-            scoreToBeat.text = sTB.ToString();
+            // If we have not hit MaxRounds, go to the next round
+            // QUESTION: Should "next round" setup be handled by the GameManager?
+            Debug.Log("Round " + curRound.ToString() + " Completed!");
+            curRound++;
+            roundText.text = "Round " + curRound;
+            ItemManager.Instance.GrabNewItems();
         }
 
-        ItemManager.Instance.GrabNewItems();
+            
     }
 }
