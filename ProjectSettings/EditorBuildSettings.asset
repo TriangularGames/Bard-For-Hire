@@ -27,7 +27,7 @@ EditorBuildSettings:
     path: Assets/Game/Scenes/UI/MainMenu.unity
     guid: ab5a65bb9d8b28a49969124a77b8bafa
   - enabled: 1
-    path: Assets/Game/Scenes/Gameplay/Performance.unity
+    path: Assets/Game/Scenes/Gameplay/Combat.unity
     guid: 85c8a8693fe6bc147b647ba3f766f6ab
   - enabled: 1
     path: Assets/Game/Scenes/Gameplay/Inventory.unity
