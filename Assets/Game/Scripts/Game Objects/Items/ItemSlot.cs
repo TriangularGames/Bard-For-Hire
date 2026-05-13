@@ -1,3 +1,4 @@
+using NUnit.Framework.Interfaces;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,6 +11,9 @@ public class ItemSlot : MonoBehaviour, IDropHandler
 
     [Tooltip("The distance the held object must be from an object within the slot to be Swapped")]
     public float SwapThreshold = 0.03f;
+
+    [Tooltip("The distance the held object must be from the slot to be added to")]
+    public float DropThreshold = 0.2f;
 
     public void RemoveObject(GameObject obj)
     {
@@ -30,16 +34,36 @@ public class ItemSlot : MonoBehaviour, IDropHandler
         return false;
     }
 
-    private void Swap(GameObject _dropped)
+    private Transform OverSlot(GameObject _dropped)
+    {
+        float disPool = Vector3.Distance(_dropped.transform.position, ItemManager.Instance.itemPool.transform.position);
+        float disHand = Vector3.Distance(_dropped.transform.position, ItemManager.Instance.attackHand.transform.position);
+
+        if (disPool <= DropThreshold)
+        {
+            return ItemManager.Instance.itemPool.transform;
+        }
+        else if (disHand <= DropThreshold)
+        {
+            return ItemManager.Instance.attackHand.transform;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    private void Swap(GameObject _dropped, Transform _slot)
     {
         GameObject swap = null;
 
         // Check if this slot is
-        if (transform.name == "AttackHand")
+        if (_slot.name == "AttackHand")
         {
             // Check what item in list object is over
-            foreach (GameObject item in storedObjects)
+            foreach (GameObject item in _slot.GetComponent<ItemSlot>().storedObjects)
             {
+                // TODO: SwapThreshold is at times a bit finicky, I think this'll need to be readjusted eventually
                 float dis = Vector3.Distance(item.transform.position, _dropped.transform.position);
                 Debug.Log("Dist between item and dropped: " + dis.ToString());
                 if (dis < SwapThreshold)
@@ -90,7 +114,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler
                 swap.transform.SetParent(_dropped.transform.parent);
                 swap.transform.SetSiblingIndex(droppedIndex);
 
-                _dropped.transform.SetParent(transform);
+                _dropped.transform.SetParent(_slot);
                 _dropped.transform.SetSiblingIndex(swapIndex);
 
             }
@@ -99,18 +123,18 @@ public class ItemSlot : MonoBehaviour, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log("Dropped on " + transform.name);
-
         // Obtains the information for the object dropped into the slot
         GameObject dropped = eventData.pointerDrag;
 
+        Transform slot = OverSlot(dropped);
+
         // If the ItemSlot has available space
-        if (storedObjects.Count < limit)
+        if (slot.GetComponent<ItemSlot>().storedObjects.Count < limit)
         {
-            if (isDropOverItem(dropped)) { Swap(dropped); return; }
+            if (isDropOverItem(dropped)) { Swap(dropped, slot); return; }
             
             // Check what this slot is
-            if (transform.name == "ItemPool")
+            if (slot.name == "ItemPool")
             {
                 // If already in the ItemPool, reset its position
                 if (dropped.GetComponent<Drag>().inItemPool)
@@ -136,15 +160,15 @@ public class ItemSlot : MonoBehaviour, IDropHandler
             }
 
             // Add dropped object to this ItemSlot
-            storedObjects.Add(dropped);
-            dropped.transform.SetParent(transform);
+            slot.GetComponent<ItemSlot>().storedObjects.Add(dropped);
+            dropped.transform.SetParent(slot);
         }
         else
         {
             if (isDropOverItem(dropped))
             {
                 // If the storedObjects list is full, attempt to swap
-                Swap(dropped);
+                Swap(dropped, slot);
             }
             else
             {
