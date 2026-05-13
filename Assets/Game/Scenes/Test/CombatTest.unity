@@ -966,7 +966,7 @@ GameObject:
   - component: {fileID: 422085962}
   - component: {fileID: 422085961}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: txtRound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1011,7 +1011,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Day X
+  m_text: Round 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1038,8 +1038,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1615,8 +1615,8 @@ Transform:
   m_GameObject: {fileID: 840369424}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.57573, y: 1.0422, z: -8.4342}
-  m_LocalScale: {x: 0.12625001, y: 0.12625001, z: 0.12625001}
+  m_LocalPosition: {x: -1.0324, y: 1.0461, z: -8.4281}
+  m_LocalScale: {x: 0.21265239, y: 0.21265239, z: 0.21265239}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 179786717}
@@ -2217,13 +2217,13 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1141452191}
   - {fileID: 407369665}
   - {fileID: 1005074376}
   - {fileID: 133154866}
   - {fileID: 17175613}
-  - {fileID: 1141452191}
-  - {fileID: 1186631602}
   - {fileID: 1895173752}
+  - {fileID: 1186631602}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2243,7 +2243,7 @@ GameObject:
   - component: {fileID: 1141452193}
   - component: {fileID: 1141452192}
   m_Layer: 5
-  m_Name: LvlDisplay
+  m_Name: RoundDisplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2413,6 +2413,7 @@ MonoBehaviour:
   storedObjects: []
   limit: 0
   SwapThreshold: 0.03
+  DropThreshold: 0.2
 --- !u!114 &1186631607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2627,6 +2628,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
   scoreToBeat: {fileID: 925699319}
+  curRound: 1
   roller: {fileID: 1344256443}
 --- !u!4 &1344256445
 Transform:
@@ -3362,10 +3364,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dfde9038585dd6e49982459d3f76548a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NoteSlot
+  m_EditorClassIdentifier: Assembly-CSharp::ItemSlot
   storedObjects: []
   limit: 0
   SwapThreshold: 0.03
+  DropThreshold: 0.2
 --- !u!114 &1895173754
 MonoBehaviour:
   m_ObjectHideFlags: 0
