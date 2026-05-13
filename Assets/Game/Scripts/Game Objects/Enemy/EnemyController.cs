@@ -48,6 +48,7 @@ public class EnemyController : MonoBehaviour
             SetDamageTxt();
             if (health <= 0)
             {
+                Debug.Log("Enemy killed.");
                 Destroy(gameObject);
             }
         }
