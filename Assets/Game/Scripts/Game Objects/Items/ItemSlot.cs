@@ -1,3 +1,4 @@
+using NUnit.Framework.Interfaces;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -60,7 +61,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler
         if (_slot.name == "AttackHand")
         {
             // Check what item in list object is over
-            foreach (GameObject item in storedObjects)
+            foreach (GameObject item in _slot.GetComponent<ItemSlot>().storedObjects)
             {
                 // TODO: SwapThreshold is at times a bit finicky, I think this'll need to be readjusted eventually
                 float dis = Vector3.Distance(item.transform.position, _dropped.transform.position);
@@ -126,10 +127,9 @@ public class ItemSlot : MonoBehaviour, IDropHandler
         GameObject dropped = eventData.pointerDrag;
 
         Transform slot = OverSlot(dropped);
-        Debug.Log("Dropped on " + OverSlot(dropped).name);
 
         // If the ItemSlot has available space
-        if (storedObjects.Count < limit)
+        if (slot.GetComponent<ItemSlot>().storedObjects.Count < limit)
         {
             if (isDropOverItem(dropped)) { Swap(dropped, slot); return; }
             
@@ -148,7 +148,6 @@ public class ItemSlot : MonoBehaviour, IDropHandler
             }
             else
             {
-                Debug.Log("I'm being added to the AttackHand!");
                 // If already in the AttackHand, reset its position
                 if (!dropped.GetComponent<Drag>().inItemPool)
                 {
@@ -161,7 +160,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler
             }
 
             // Add dropped object to this ItemSlot
-            storedObjects.Add(dropped);
+            slot.GetComponent<ItemSlot>().storedObjects.Add(dropped);
             dropped.transform.SetParent(slot);
         }
         else
