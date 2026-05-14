@@ -58,10 +58,12 @@ public class ShopManager : MonoBehaviour
     public void NextRound()
     {
         // Switch to Performance scene
+        GameManager.Instance.SwitchState(new CombatState());
     }
 
     public void ViewInventory()
     {
         // Show a pop-up view of the inventory
+        MenuManager.Instance.SwitchState(new InventoryMenuState());
     }
 }

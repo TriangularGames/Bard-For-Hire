@@ -7,7 +7,7 @@ public class ShopState : IGameState
 {
     public void EnterState(GameManager gm)
     {
-        SceneLoader.Instance.LoadScene("ShopTest", UnityEngine.SceneManagement.LoadSceneMode.Single);
+        SceneLoader.Instance.LoadScene("Shop", UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
 
     public void ExitState(GameManager gm)
