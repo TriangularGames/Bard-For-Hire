@@ -27,17 +27,11 @@ EditorBuildSettings:
     path: Assets/Game/Scenes/UI/MainMenu.unity
     guid: ab5a65bb9d8b28a49969124a77b8bafa
   - enabled: 1
-    path: Assets/Game/Scenes/Gameplay/Performance.unity
+    path: Assets/Game/Scenes/Gameplay/Combat.unity
     guid: 85c8a8693fe6bc147b647ba3f766f6ab
   - enabled: 1
-    path: Assets/Game/Scenes/Gameplay/Inventory.unity
-    guid: afdded48d156d7f47b2ad9ce90c50020
-  - enabled: 1
-    path: Assets/Game/Scenes/Test/ShopTest.unity
-    guid: 3d3edcdf3c9086745bdba03d2e175e7c
-  - enabled: 1
-    path: Assets/Game/Scenes/Test/CombatTest.unity
-    guid: 7c3fad014b7c81a42935ba32767be2a5
+    path: Assets/Game/Scenes/Gameplay/Shop.unity
+    guid: 5ed6c7d2a94a07e4f8f28d7bf615672f
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class EnemyManager : MonoBehaviour
+public class EnemyManager : Singleton<EnemyManager>
 {
     [Header("Enemy Data")]
     /// <summary>
@@ -20,10 +21,15 @@ public class EnemyManager : MonoBehaviour
     /// <summary>
     /// Current active Enemies
     /// </summary>
-    [SerializeField] List<EnemyData> enemies;
+    [SerializeField] List<GameObject> enemies;
 
     /// <summary>
-    /// Total Score value for this Audience
+    /// Spawnpoints for the enemies
+    /// </summary>
+    [SerializeField] public List<Transform> spawnPoints;
+
+    /// <summary>
+    /// Total Score value for these Enemies
     /// </summary>
     [SerializeField] int totalScore;
 
@@ -34,6 +40,14 @@ public class EnemyManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        SpawnEnemies();
+
+        Debug.Log("Total Score: " + totalScore);
+        scoreToBeat.text = totalScore.ToString();
+    }
+
+    private void SpawnEnemies()
+    {
         for (int i = 0; i < numberOfEnemies; i++)
         {
             int memberType = Random.Range(0, memberTypes.Count);
@@ -41,19 +55,18 @@ public class EnemyManager : MonoBehaviour
             {
                 if (ResourceManager.Instance.EnemyData[a].name == memberTypes[memberType])
                 {
-                    enemies.Add(ResourceManager.Instance.EnemyData[a]);
+                    GameObject enemySpawned = AssetManager.Instance.Spawn("Enemy", spawnPoints[i]);
+                    EnemyData data = ResourceManager.Instance.EnemyData[a];
+                    enemySpawned.GetComponent<EnemyController>().enemyData = data;
+
+                    enemySpawned.GetComponent<EnemyController>().Setup();
+                    enemySpawned.name = data.name + " " + enemySpawned.GetEntityId();
+
+                    totalScore += data.health;
+                    enemies.Add(enemySpawned);
                 }
             }
         }
-
-        for (int j = 0; j < numberOfEnemies; j++)
-        {
-            Debug.Log("Enemy: " + enemies[j].name);
-            totalScore += enemies[j].health;
-        }
-
-        Debug.Log("Total Score: " + totalScore);
-        scoreToBeat.text = totalScore.ToString();
     }
 
     /// <summary>

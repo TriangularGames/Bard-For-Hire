@@ -58,8 +58,25 @@ public class ScoreManager : Singleton<ScoreManager>
                 {
                     score += item.Damage;
                 }
-                EventBus.Publish<ItemRemovedEvent>(new ItemRemovedEvent(item));
+
+                foreach (Transform enemyLocation in EnemyManager.Instance.spawnPoints)
+                {
+                    // Check if the location has an enemy in it
+                    if (enemyLocation.transform.childCount > 0)
+                    {
+                        // Get the enemy at this location
+                        GameObject enemy = enemyLocation.transform.GetChild(0).gameObject;
+
+                        if (enemy.GetComponent<EnemyController>().GetHealth() > 0)
+                        {
+                            EventBus.Publish<DamageTakenEvent>(
+                                    new DamageTakenEvent(enemyLocation.transform.GetChild(0).gameObject.GetEntityId(), item.Damage));
+                            break;
+                        }
+                    }
+                }
             }
+            EventBus.Publish<ItemRemovedEvent>(new ItemRemovedEvent(item));
         }
         Debug.Log("Total Score: " + score);
         FinalizeScore(score);
