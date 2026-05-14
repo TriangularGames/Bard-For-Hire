@@ -85,7 +85,7 @@ public class AttackHand : BaseItemContainer
         {
             itemData.Add(itemObj.GetComponent<ItemController>().itemData);
         }
-        ScoreManager.Instance.CalculateScore(itemData);
+        GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().CalculateScore(itemData);
         //DeleteItems();
     }
 }

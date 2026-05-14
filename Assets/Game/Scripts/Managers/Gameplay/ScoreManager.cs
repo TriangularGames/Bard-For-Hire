@@ -6,10 +6,10 @@ using UnityEngine;
 /// <summary>
 /// ScoreManager calculates the score based on the Items added to AttackHand
 /// </summary>
-public class ScoreManager : Singleton<ScoreManager>
+public class ScoreManager : MonoBehaviour
 {
-    [SerializeField] private TMP_Text scoreToBeat;
-    private float score;
+    [SerializeField] TMP_Text combatCompleteText;
+    public float score;
 
     // TODO: add CurrentRound Count to GameManager
     [SerializeField] private TMP_Text roundText;
@@ -22,6 +22,7 @@ public class ScoreManager : Singleton<ScoreManager>
     private void Start()
     {
         score = 0f;
+        combatCompleteText.text = "";
     }
 
     /// <summary>
@@ -41,8 +42,7 @@ public class ScoreManager : Singleton<ScoreManager>
     /// <param name="rollValue">The value of the roll</param>
     private void OnRollComplete(int rollValue)
     {
-        score = 0;
-
+        float curScore = 0f;
         // Include in here some effect thats displayed as each note is determined
         // to be scored or not
         foreach (ItemData item in pendingItems)
@@ -52,14 +52,14 @@ public class ScoreManager : Singleton<ScoreManager>
                 Debug.Log($"{item.name} was played!");
                 if (item.Mult)
                 {
-                    score *= item.Damage;
+                    curScore *= item.Damage;
                 }
                 else
                 {
-                    score += item.Damage;
+                    curScore += item.Damage;
                 }
 
-                foreach (Transform enemyLocation in EnemyManager.Instance.spawnPoints)
+                foreach (Transform enemyLocation in GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().spawnPoints)
                 {
                     // Check if the location has an enemy in it
                     if (enemyLocation.transform.childCount > 0)
@@ -78,7 +78,8 @@ public class ScoreManager : Singleton<ScoreManager>
             }
             EventBus.Publish<ItemRemovedEvent>(new ItemRemovedEvent(item));
         }
-        Debug.Log("Total Score: " + score);
+        Debug.Log("Total Score Obtained: " + curScore);
+        score -= curScore;
         FinalizeScore(score);
     }
 
@@ -88,25 +89,25 @@ public class ScoreManager : Singleton<ScoreManager>
     /// <param name="playedScore">Final score obtained</param>
     private void FinalizeScore(float playedScore)
     {
-        float sTB = float.Parse(scoreToBeat.text);
-        sTB -= playedScore;
-        scoreToBeat.text = sTB.ToString();
-
         // Check if we have hit the MaxRounds
         if (curRound == MaxRounds)
         {
             // If we have, determine if the player has won
-            if (sTB <= 0)
+            if (playedScore <= 0 && GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive())
             {
+                combatCompleteText.text = "Winner!";
                 Debug.Log("Combat Completed!");
+                StartCoroutine(SwitchToShop());
             }
             else
             {
+                combatCompleteText.text = "Loser.";
                 Debug.Log("Combat Failed!");
+                StartCoroutine(SwitchToMainMenu());
             }
 
             // TODO: add completed screen panel of some kind
-            StartCoroutine(SwitchToShop());
+            
         }
         else
         {
@@ -115,7 +116,7 @@ public class ScoreManager : Singleton<ScoreManager>
             Debug.Log("Round " + curRound.ToString() + " Completed!");
             curRound++;
             roundText.text = "Round " + curRound;
-            ItemManager.Instance.GrabNewItems();
+            GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().GrabNewItems();
         }
 
             
@@ -129,5 +130,15 @@ public class ScoreManager : Singleton<ScoreManager>
     {
         yield return new WaitForSeconds(3f);
         GameManager.Instance.SwitchState(new ShopState());
+    }
+
+    /// <summary>
+    /// Switch To Main Menu after Combat finshes and you did not win, with a delay
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator SwitchToMainMenu()
+    {
+        yield return new WaitForSeconds(3f);
+        MenuManager.Instance.SwitchState(new MainMenuState());
     }
 }

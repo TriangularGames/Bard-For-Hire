@@ -1,10 +1,7 @@
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class EnemyManager : Singleton<EnemyManager>
+public class EnemyManager : MonoBehaviour
 {
     [Header("Enemy Data")]
     /// <summary>
@@ -33,17 +30,24 @@ public class EnemyManager : Singleton<EnemyManager>
     /// </summary>
     [SerializeField] int totalScore;
 
-    [Header("UI")]
-    [SerializeField] TMP_Text scoreToBeat;
-
+    public bool AreEnemiesAlive()
+    {
+        foreach(Transform point in spawnPoints)
+        {
+            if (point.childCount >0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         SpawnEnemies();
 
-        Debug.Log("Total Score: " + totalScore);
-        scoreToBeat.text = totalScore.ToString();
+        GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().score = totalScore;
     }
 
     private void SpawnEnemies()

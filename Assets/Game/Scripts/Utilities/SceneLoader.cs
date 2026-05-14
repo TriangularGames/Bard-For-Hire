@@ -24,10 +24,10 @@ public class SceneLoader : Singleton<SceneLoader>
     [SerializeField, Range(0.1f, 2f), Tooltip("Minimum time the loading screen is shown")]
     private float minimumDisplayTime = 0.6f;
     [SerializeField]
-    private List<UnityEngine.Object> managerScenesToLoad = new();
+    private List<string> managerScenesToLoad = new();
 
     [SerializeField, Tooltip("The scene to load after all managers are initialized")]
-    private UnityEngine.Object firstGameplayScene = null!;
+    private string firstGameplayScene = null!;
 
     // Events (useful for UI animations, sound, etc.)
     public event Action? OnLoadingStarted;
@@ -62,12 +62,12 @@ public class SceneLoader : Singleton<SceneLoader>
         // 2. Load all manager scenes additively
         foreach (var sceneObject in managerScenesToLoad)
         {
-            if (SceneIsAlreadyLoaded(sceneObject.name)) continue;
+            if (SceneIsAlreadyLoaded(sceneObject)) continue;
 
             Debug.Log($"[Bootstrap] Loading manager scene: {sceneObject}");
             // We use a internal load method that doesn't mess with the 'isLoading' flag
             // to allow multiple additive loads during bootstrap.
-            yield return StartCoroutine(LoadSceneInternal(sceneObject.name, LoadSceneMode.Additive));
+            yield return StartCoroutine(LoadSceneInternal(sceneObject, LoadSceneMode.Additive));
         }
 
         // 3. Wait a frame to ensure all Awake/OnEnable in managers have run
@@ -77,7 +77,7 @@ public class SceneLoader : Singleton<SceneLoader>
         Debug.Log($"[Bootstrap] Loading first gameplay scene: {firstGameplayScene}");
         if (firstGameplayScene != null)
         {
-            yield return StartCoroutine(LoadSceneInternal(firstGameplayScene.name, LoadSceneMode.Single));
+            yield return StartCoroutine(LoadSceneInternal(firstGameplayScene, LoadSceneMode.Single));
             // 5. Initialize Game State
             if (GameManager.Instance != null)
             {
