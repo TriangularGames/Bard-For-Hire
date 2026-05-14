@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -88,6 +89,7 @@ public class ScoreManager : Singleton<ScoreManager>
             }
 
             // TODO: add completed screen panel of some kind
+            StartCoroutine(SwitchToShop());
         }
         else
         {
@@ -100,5 +102,15 @@ public class ScoreManager : Singleton<ScoreManager>
         }
 
             
+    }
+
+    /// <summary>
+    /// Switch To Shop After Combat is Completed, with a delay to show the final score and round completion message
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator SwitchToShop()
+    {
+        yield return new WaitForSeconds(3f);
+        GameManager.Instance.SwitchState(new ShopState());
     }
 }
