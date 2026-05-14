@@ -8,6 +8,9 @@ TagManager:
   - Canvas
   - AttackHand
   - ItemPool
+  - ScoreManager
+  - ItemManager
+  - EnemyManager
   layers:
   - Default
   - TransparentFX

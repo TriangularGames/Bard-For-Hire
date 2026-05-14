@@ -36,15 +36,15 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
         if (!isSelected)
         {
             selection.color = new Color(0f, 256f, 0f, 0.5f);
-            ItemManager.Instance.ItemsToDelete.Add(gameObject);
+            GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsToDelete.Add(gameObject);
             isSelected = true;
         }
         else
         {
             selection.color = new Color(0f, 0f, 256f, 0.5f);
-            if (ItemManager.Instance.ItemsToDelete.Contains(gameObject))
+            if (GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsToDelete.Contains(gameObject))
             {
-                ItemManager.Instance.ItemsToDelete.Remove(gameObject);
+                GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsToDelete.Remove(gameObject);
                 isSelected = false;
             }
         }
@@ -60,9 +60,9 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
         {
             selection.color = new Color(selection.color.r, selection.color.g, selection.color.b, 0f);
             isSelected = false;
-            if (ItemManager.Instance.ItemsToDelete.Contains(gameObject))
+            if (GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsToDelete.Contains(gameObject))
             {
-                ItemManager.Instance.ItemsToDelete.Remove(gameObject);
+                GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsToDelete.Remove(gameObject);
             }
         }
     }
