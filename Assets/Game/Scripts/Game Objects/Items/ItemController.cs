@@ -29,13 +29,13 @@ public class ItemController : MonoBehaviour
         }
         else
         {
-            damageTxt.text = "+" + itemData.Damage.ToString();
+            damageTxt.text = "ATk " + itemData.Damage.ToString();
         }
         
     }
 
     private void SetPlayableTxt()
     {
-        playableText.text = "(" + itemData.Playable.ToString() + ")";
+        playableText.text = "D (" + itemData.Playable.ToString() + ")";
     }
 }

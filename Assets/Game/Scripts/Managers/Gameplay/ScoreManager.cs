@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// ScoreManager calculates the score based on the Items added to AttackHand
@@ -16,8 +18,11 @@ public class ScoreManager : MonoBehaviour
     public int curRound = 1;
     private int MaxRounds = 3;
 
+    public float waitForRoll = 7f;
+
     public DiceRoller roller;
     private List<ItemData> pendingItems;
+    private int curItem = -1;
 
     private void Start()
     {
@@ -29,11 +34,18 @@ public class ScoreManager : MonoBehaviour
     /// Calculates the final score for a round using ItemData List
     /// </summary>
     /// <param name="items">List of Items to be scored</param>
-    public void CalculateScore(List<ItemData> items)
+    public IEnumerator CalculateScore(List<ItemData> items)
     {
         pendingItems = items;
-        roller.RollDie(this, OnRollComplete);
-
+        curItem = -1;
+        foreach (ItemData item in pendingItems)
+        {
+            curItem += 1;
+            Debug.Log("Item " + curItem + " being rolled for.");
+            roller.RollDie(this, OnRollComplete);
+            yield return new WaitForSeconds(waitForRoll);
+        }
+        yield return null;
     }
 
     /// <summary>
@@ -43,44 +55,48 @@ public class ScoreManager : MonoBehaviour
     private void OnRollComplete(int rollValue)
     {
         float curScore = 0f;
+        ItemData item = pendingItems[curItem];
         // Include in here some effect thats displayed as each note is determined
         // to be scored or not
-        foreach (ItemData item in pendingItems)
+        if (item.Playable <= rollValue)
         {
-            if (item.Playable <= rollValue)
+            Debug.Log($"{item.name} was played!");
+            if (item.Mult)
             {
-                Debug.Log($"{item.name} was played!");
-                if (item.Mult)
-                {
-                    curScore *= item.Damage;
-                }
-                else
-                {
-                    curScore += item.Damage;
-                }
+                curScore *= item.Damage;
+            }
+            else
+            {
+                curScore += item.Damage;
+            }
 
-                foreach (Transform enemyLocation in GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().spawnPoints)
+            foreach (Transform enemyLocation in GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().spawnPoints)
+            {
+                // Check if the location has an enemy in it
+                if (enemyLocation.transform.childCount > 0)
                 {
-                    // Check if the location has an enemy in it
-                    if (enemyLocation.transform.childCount > 0)
+                    // Get the enemy at this location
+                    GameObject enemy = enemyLocation.transform.GetChild(0).gameObject;
+
+                    if (enemy.GetComponent<EnemyController>().GetHealth() > 0)
                     {
-                        // Get the enemy at this location
-                        GameObject enemy = enemyLocation.transform.GetChild(0).gameObject;
-
-                        if (enemy.GetComponent<EnemyController>().GetHealth() > 0)
-                        {
-                            EventBus.Publish<DamageTakenEvent>(
-                                    new DamageTakenEvent(enemyLocation.transform.GetChild(0).gameObject.GetEntityId(), item.Damage));
-                            break;
-                        }
+                        EventBus.Publish<DamageTakenEvent>(
+                                new DamageTakenEvent(enemyLocation.transform.GetChild(0).gameObject.GetEntityId(), item.Damage));
+                        break;
                     }
                 }
             }
-            EventBus.Publish<ItemRemovedEvent>(new ItemRemovedEvent(item));
         }
+
+
+        //item.gameObject.GetComponentInChildren<Image>().color = new Color(1f, 1f, 1f, 1f);
+
         Debug.Log("Total Score Obtained: " + curScore);
         score -= curScore;
-        FinalizeScore(score);
+        if ((curItem + 1) == pendingItems.Count)
+        {
+            FinalizeScore(score);
+        }
     }
 
     /// <summary>
@@ -89,11 +105,17 @@ public class ScoreManager : MonoBehaviour
     /// <param name="playedScore">Final score obtained</param>
     private void FinalizeScore(float playedScore)
     {
-        // Check if we have hit the MaxRounds
-        if (curRound == MaxRounds)
+        foreach (ItemData item in pendingItems)
+        {
+            EventBus.Publish<ItemRemovedEvent>(new ItemRemovedEvent(item));
+        }
+
+        // Check if we have hit the MaxRounds or all Enemies are dead
+        // TODO: fix this
+        if (!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive() || curRound == MaxRounds)
         {
             // If we have, determine if the player has won
-            if (playedScore <= 0 && GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive())
+            if (playedScore <= 0 && !GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive())
             {
                 combatCompleteText.text = "Winner!";
                 Debug.Log("Combat Completed!");
@@ -107,7 +129,7 @@ public class ScoreManager : MonoBehaviour
             }
 
             // TODO: add completed screen panel of some kind
-            
+
         }
         else
         {
@@ -119,7 +141,7 @@ public class ScoreManager : MonoBehaviour
             GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().GrabNewItems();
         }
 
-            
+
     }
 
     /// <summary>

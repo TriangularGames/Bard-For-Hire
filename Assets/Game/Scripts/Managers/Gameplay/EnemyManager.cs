@@ -34,7 +34,7 @@ public class EnemyManager : MonoBehaviour
     {
         foreach(Transform point in spawnPoints)
         {
-            if (point.childCount >0)
+            if (point.childCount > 0)
             {
                 return true;
             }

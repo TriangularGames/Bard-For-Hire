@@ -49,6 +49,7 @@ public class EnemyController : MonoBehaviour
             if (health <= 0)
             {
                 Debug.Log("Enemy killed.");
+                //GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().enemies
                 Destroy(gameObject);
             }
         }

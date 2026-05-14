@@ -9,6 +9,8 @@ public class AttackHand : BaseItemContainer
 {
     public Button attackBtn;
 
+    private bool btnDisable = false;
+
     private void OnEnable()
     {
         EventBus.Subscribe<ItemRemovedEvent>(DeleteItems);
@@ -26,7 +28,7 @@ public class AttackHand : BaseItemContainer
 
     private void Update()
     {
-        if (GetItems().Count == 0)
+        if (GetItems().Count == 0 || btnDisable)
         {
             attackBtn.interactable = false;
         }
@@ -55,6 +57,7 @@ public class AttackHand : BaseItemContainer
             Destroy(item);
         }
         ClearItems();
+        btnDisable = false;
     }
 
     /// <summary>
@@ -85,7 +88,7 @@ public class AttackHand : BaseItemContainer
         {
             itemData.Add(itemObj.GetComponent<ItemController>().itemData);
         }
-        GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().CalculateScore(itemData);
-        //DeleteItems();
+        GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().StartCoroutine("CalculateScore", itemData);
+        btnDisable = true;
     }
 }
