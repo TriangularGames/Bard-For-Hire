@@ -91,7 +91,10 @@ public class ItemManager : MonoBehaviour
         Debug.Log("Getting new items!");
         if (itemPool.GetItems().Count != itemPool.GetMaxSlots())
         {
-            itemPool.InstantiateItem(PlayerManager.Instance.GetRandomItem(), itemPool.transform);
+            for (int i = 0; i < (itemPool.GetMaxSlots() - itemPool.GetItems().Count) + 1; i++)
+            {
+                itemPool.InstantiateItem(PlayerManager.Instance.GetRandomItem(), itemPool.transform);
+            }
         }
     }
 
@@ -100,6 +103,7 @@ public class ItemManager : MonoBehaviour
     /// </summary>
     public void ClearItems()
     {
+        // TODO: fix this
         List<GameObject> toRemove = new List<GameObject>();
         foreach (GameObject item in attackHand.GetItems())
         {

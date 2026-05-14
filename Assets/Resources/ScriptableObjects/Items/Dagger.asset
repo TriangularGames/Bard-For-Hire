@@ -19,5 +19,5 @@ MonoBehaviour:
   Rarity: 0
   Damage: 4
   Mult: 0
-  Playable: 5
+  Playable: 4
   icon: {fileID: 21300000, guid: 2777904444dca1744bdc0ff8a0531815, type: 3}
