@@ -893,8 +893,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DiceRoller
   display: {fileID: 1440715977}
   diePrefab: {fileID: 5006750835629230564, guid: 191de0a53e2638a42ac4ee51ac38515b, type: 3}
-  spawnPoint: {fileID: 375211992}
-  displayPoint: {fileID: 0}
+  spawnPoint: {fileID: 656249770}
+  displayPoint: {fileID: 375211992}
   lateralForceRange: {x: 3.5, y: 6}
   upwardForceRange: {x: 1, y: 2.2}
   torqueRange: {x: 8, y: 20}
@@ -1182,7 +1182,7 @@ Transform:
   m_GameObject: {fileID: 375211991}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.71, z: -9.51}
+  m_LocalPosition: {x: 0.129, y: 0.8635, z: -9.1931}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3048,7 +3048,7 @@ Transform:
   m_GameObject: {fileID: 1872572574}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5, y: -0.4, z: 0.2}
+  m_LocalPosition: {x: -0.5, y: -0.4, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
