@@ -25,23 +25,4 @@ public class ItemShopSlot : ShopSlot
         // Subtract money from player
         EventBus.Publish(new PurchaseEvent(int.Parse(value.text)));
     }
-
-    public override void SelectSlot(bool select)
-    {
-        base.SelectSlot(select);
-        EventBus.Publish<ItemSelectedEvent>(new ItemSelectedEvent(gameObject.GetEntityId()));
-    }
-}
-
-/// <summary>
-/// Event for when an Item in the shop is Selected
-/// </summary>
-public struct ItemSelectedEvent
-{
-    public EntityId id;
-
-    public ItemSelectedEvent(EntityId _id)
-    {
-        id = _id;
-    }
 }

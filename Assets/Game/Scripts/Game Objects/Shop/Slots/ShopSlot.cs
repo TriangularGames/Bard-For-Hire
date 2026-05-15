@@ -27,6 +27,7 @@ public abstract class ShopSlot : MonoBehaviour, IPointerDownHandler
     public virtual void SelectSlot(bool select)
     {
         buy.gameObject.SetActive(select);
+        EventBus.Publish<ItemSelectedEvent>(new ItemSelectedEvent(gameObject.GetEntityId()));
     }
 
     public void Deselect()

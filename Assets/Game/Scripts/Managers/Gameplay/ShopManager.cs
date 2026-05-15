@@ -46,8 +46,6 @@ public class ShopManager : MonoBehaviour
 
     public void SetupShop()
     {
-        // This will generate the 5 notes and 3 upgrades available for purchase
-
         // TODO: figure out how it gets the data to input. Presumably it'll use the resource manager for that?
 
         // Setup the Weapons
@@ -58,14 +56,51 @@ public class ShopManager : MonoBehaviour
             items.Add(randomData);
         }
         _items.SetupSlots(items);
+
+        // Setup the Upgrades
+        List<UpgradeData> upgrades = new List<UpgradeData>();
+        for (int i = 0; i < MAXUpgrades; i++)
+        {
+            UpgradeData randomData = ResourceManager.Instance.UpgradeData[Random.Range(0, ResourceManager.Instance.UpgradeData.Length - 1)];
+            upgrades.Add(randomData);
+        }
+        _upgrades.SetupSlots(upgrades);
+
+        // Setup the Consumables
+        List<ConsumableData> consumables = new List<ConsumableData>();
+        for (int i = 0; i < MAXConsumables; i++)
+        {
+            ConsumableData randomData = ResourceManager.Instance.ConsumableData[Random.Range(0, ResourceManager.Instance.ConsumableData.Length - 1)];
+            consumables.Add(randomData);
+        }
+        _consumables.SetupSlots(consumables);
     }
 
     private void CheckItemSelection(ItemSelectedEvent e)
     {
         // Check all Upgrade slots, if one is selected- disable and return
+        foreach (GameObject slot in _upgrades.GetSlots())
+        {
+            UpgradeShopSlot upgradeSlot = slot.GetComponent<UpgradeShopSlot>();
+            if (slot.GetEntityId() != e.id && upgradeSlot._isSelected)
+            {
+                upgradeSlot.Deselect();
+                return;
+            }
+        }
 
         // Check all Consumable slots, if one is selected- disable and return
+        foreach (GameObject slot in _consumables.GetSlots())
+        {
+            ConsumableShopSlot consumableSlot = slot.GetComponent<ConsumableShopSlot>();
+            if (slot.GetEntityId() != e.id && consumableSlot._isSelected)
+            {
+                consumableSlot.Deselect();
+                return;
+            }
+        }
 
+        // Check all Item slots, if one is selected- disable and return
         foreach (GameObject slot in _items.GetSlots())
         {
             ItemShopSlot itemSlot = slot.GetComponent<ItemShopSlot>();

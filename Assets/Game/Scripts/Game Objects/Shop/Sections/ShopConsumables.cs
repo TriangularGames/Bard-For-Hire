@@ -1,20 +1,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShopItems : MonoBehaviour
+public class ShopConsumables : MonoBehaviour
 {
     [Tooltip("Slots where the Items will be displayed")]
     private List<GameObject> displaySlots;
 
-    private List<ItemData> _data;
+    private List<ConsumableData> _data;
 
     private void Awake()
     {
-        _data = new List<ItemData>();
+        _data = new List<ConsumableData>();
         displaySlots = new List<GameObject>();
     }
 
-    public List<ItemData> GetData()
+    void Start()
+    {
+        // Get the Item display slots on this Object
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            displaySlots.Add(transform.GetChild(i).gameObject);
+        }
+    }
+
+    public List<ConsumableData> GetData()
     {
         return _data;
     }
@@ -24,7 +33,7 @@ public class ShopItems : MonoBehaviour
         return displaySlots;
     }
 
-    public void SetupSlots(List<ItemData> itemList)
+    public void SetupSlots(List<ConsumableData> itemList)
     {
         // Set the data for this shop section
         _data.AddRange(itemList);
@@ -33,17 +42,8 @@ public class ShopItems : MonoBehaviour
         int i = 0;
         foreach (GameObject slot in displaySlots)
         {
-            slot.GetComponent<ItemShopSlot>().SetupSlotInfo(_data[i]);
+            slot.GetComponent<ConsumableShopSlot>().SetupSlotInfo(_data[i]);
             i++;
-        }
-    }
-
-    void Start()
-    {
-        // Get the Item display slots on this Object
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            displaySlots.Add(transform.GetChild(i).gameObject);
         }
     }
 }

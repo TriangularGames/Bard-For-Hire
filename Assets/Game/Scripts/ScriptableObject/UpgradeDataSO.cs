@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Upgrade", menuName = "Scriptable Objects/UpgradeData")]
+[CreateAssetMenu(fileName = "Upgrade", menuName = "Scriptable Objects/Upgrade")]
 public class UpgradeData : ScriptableObject
 {
     [Header("Upgrade Info")]
