@@ -1,17 +1,37 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ShopManager : MonoBehaviour
 {
-    [SerializeField] GameObject NoteLayout;
-    [SerializeField] GameObject UpgradeLayout;
-
+    [Header("Shop Specific")]
     [SerializeField] Button rerollBtn;
+
+    [Header("Shop Loadout Limits")]
+    private static int MAXItems = 4;
+    private static int MAXUpgrades = 2;
+    private static int MAXConsumables = 2;
+
+    [Header("Loadouts")]
+    [SerializeField] private ShopItems _items;
+    [SerializeField] private ShopUpgrades _upgrades;
+    [SerializeField] private ShopConsumables _consumables;
 
     // TODO: setup rerollCost
     public int rerollCost = 5;
 
-    private void Awake()
+    private void OnEnable()
+    {
+        EventBus.Subscribe<ItemSelectedEvent>(CheckItemSelection);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe<ItemSelectedEvent>(CheckItemSelection);
+    }
+
+    private void Start()
     {
         SetupShop();
     }
@@ -30,21 +50,32 @@ public class ShopManager : MonoBehaviour
 
         // TODO: figure out how it gets the data to input. Presumably it'll use the resource manager for that?
 
-        // Setup the Note slots
-        for (int i = 0; i < NoteLayout.transform.childCount; i++)
+        // Setup the Weapons
+        List<ItemData> items = new List<ItemData>();
+        for (int i = 0; i < MAXItems; i++)
         {
-            ShopSlot slot = NoteLayout.transform.GetChild(i).gameObject.GetComponent<ShopSlot>();
-            // Add data to the slot
-            slot.SetupSlotInfo();
+            ItemData randomData = ResourceManager.Instance.ItemData[Random.Range(0, ResourceManager.Instance.ItemData.Length - 1)];
+            items.Add(randomData);
         }
+        _items.SetupSlots(items);
+    }
 
-        // Setup the Upgrade slots
-        for (int j = 0; j < UpgradeLayout.transform.childCount; j++)
+    private void CheckItemSelection(ItemSelectedEvent e)
+    {
+        // Check all Upgrade slots, if one is selected- disable and return
+
+        // Check all Consumable slots, if one is selected- disable and return
+
+        foreach (GameObject slot in _items.GetSlots())
         {
-            ShopSlot slot = UpgradeLayout.transform.GetChild(j).gameObject.GetComponent<ShopSlot>();
-            // Add data to the slot
-            slot.SetupSlotInfo();
+            ItemShopSlot itemSlot = slot.GetComponent<ItemShopSlot>();
+            if (slot.GetEntityId() != e.id && itemSlot._isSelected)
+            {
+                itemSlot.Deselect();
+                return;
+            }
         }
+        return;
     }
 
     public void ReRoll()

@@ -45,15 +45,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInventoryManager
   itemInventory:
-  - {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
   - {fileID: 11400000, guid: 867c2f2b90985ea4386571c47e4fe35b, type: 2}
   - {fileID: 11400000, guid: 867c2f2b90985ea4386571c47e4fe35b, type: 2}
   - {fileID: 11400000, guid: 867c2f2b90985ea4386571c47e4fe35b, type: 2}
   - {fileID: 11400000, guid: 867c2f2b90985ea4386571c47e4fe35b, type: 2}
-  - {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
+  - {fileID: 11400000, guid: 867c2f2b90985ea4386571c47e4fe35b, type: 2}
+  - {fileID: 11400000, guid: 867c2f2b90985ea4386571c47e4fe35b, type: 2}
+  - {fileID: 11400000, guid: 867c2f2b90985ea4386571c47e4fe35b, type: 2}
+  - {fileID: 11400000, guid: 867c2f2b90985ea4386571c47e4fe35b, type: 2}
+  - {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
+  - {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
+  - {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
+  - {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
+  - {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
+  - {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
+  - {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
   - {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
   - {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
-  - {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
+  - {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
+  - {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
   - {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
   upgradeInventory: []
   itemsUsed: []

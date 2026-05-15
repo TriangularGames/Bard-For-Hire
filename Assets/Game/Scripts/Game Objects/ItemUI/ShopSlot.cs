@@ -1,23 +1,37 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public abstract class ShopSlot : MonoBehaviour
+public abstract class ShopSlot : MonoBehaviour, IPointerDownHandler
 {
     [SerializeField] public TMP_Text value;
     [SerializeField] public Button buy;
 
-    private void Update()
+    [HideInInspector] public bool _isSelected = false;
+
+    private void Start()
     {
-        if (value != null || value.text != "")
-        {
-            if (PlayerManager.Instance.GetCoinAmount() < int.Parse(value.text))
-            {
-                buy.interactable = false;
-            }
-        }
+        buy.onClick.AddListener(Purchase);
+        buy.gameObject.SetActive(false);
     }
-    public abstract void SetupSlotInfo();
 
     public abstract void Purchase();
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        _isSelected = !_isSelected;
+        SelectSlot(_isSelected);
+    }
+
+    public virtual void SelectSlot(bool select)
+    {
+        buy.gameObject.SetActive(select);
+    }
+
+    public void Deselect()
+    {
+        _isSelected = false;
+        buy.gameObject.SetActive(_isSelected);
+    }
 }

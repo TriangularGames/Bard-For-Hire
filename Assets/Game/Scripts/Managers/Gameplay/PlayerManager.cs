@@ -15,7 +15,11 @@ public class PlayerManager : Singleton<PlayerManager>
     // Current selected Character
     public BaseBard selectedCharacter;
 
+    [Tooltip("Amount of money the Player has")]
     public int Coins;
+
+    [Tooltip("Max amount of Upgrades player can hold")]
+    public static int MAXUpgrades = 3;
 
     private void Start()
     {
