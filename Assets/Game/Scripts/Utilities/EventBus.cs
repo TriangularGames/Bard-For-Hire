@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 /// <summary>
 /// Event Bus implementation using delegates.
 /// </summary>
@@ -110,6 +111,19 @@ public struct ItemRemovedEvent
     public ItemRemovedEvent(ItemData _item)
     {
         item = _item;
+    }
+}
+
+/// <summary>
+/// Event for when an Item in the shop is Selected
+/// </summary>
+public struct ItemSelectedEvent
+{
+    public EntityId id;
+
+    public ItemSelectedEvent(EntityId _id)
+    {
+        id = _id;
     }
 }
 
