@@ -141,14 +141,14 @@ public struct ItemSelectedEvent
 }
 
 /// <summary>
-/// Event for when Performance Starts
+/// Event for when Combat Starts
 /// </summary>
-public struct PerformanceStartEvent { }
+public struct CombatStartEvent { }
 
 /// <summary>
-/// Event for when Performance Ends- Specifically after the Win screen is shown
+/// Event for when Combat Ends- Specifically after the Win screen is shown
 /// </summary>
-public struct PerformanceEndEvent { }
+public struct CombatEndEvent { }
 
 /// <summary>
 /// Event for when Round Starts
