@@ -10,6 +10,7 @@ public class MainMenuState : IMenuState
 
     public void ExitState(MenuManager gm)
     {
+        Debug.Log("Exiting Main Menu State");
     }
 
     public void UpdateState(MenuManager gm)

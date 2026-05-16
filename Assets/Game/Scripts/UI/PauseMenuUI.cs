@@ -11,6 +11,11 @@ public class PauseMenuUI : MonoBehaviour
     [Tooltip("Button to close the Pause Menu.")]
     [SerializeField] private Button backButton;
 
+    private void Start()
+    {
+        gameObject.SetActive(false); // Ensure the pause menu is hidden at the start
+    }
+
     public void ReturnToMainMenu()
     {
         MenuManager.Instance.SwitchState(new MainMenuState());

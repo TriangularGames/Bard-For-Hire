@@ -79,16 +79,9 @@ public class SceneLoader : Singleton<SceneLoader>
         {
             yield return StartCoroutine(LoadSceneInternal(firstGameplayScene, LoadSceneMode.Single));
             // 5. Initialize Game State
-            if (GameManager.Instance != null)
+            if (MenuManager.Instance != null)
             {
-                //if (firstGameplayScene.name == "MainMenu")
-                //{
-                //    GameManager.Instance.SwitchState(new MainMenuState());
-                //}
-                //else
-                //{
-                //    GameManager.Instance.SwitchState(new NewGameState());
-                //}
+                MenuManager.Instance.SwitchState(new MainMenuState());
             }
             else
             {
