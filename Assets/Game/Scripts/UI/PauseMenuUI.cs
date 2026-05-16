@@ -24,6 +24,7 @@ public class PauseMenuUI : MonoBehaviour
     public void OptionsMenu()
     {
         MenuManager.Instance.SwitchState(new OptionsMenuState());
+        PauseManager.Instance.IsPaused = true; // Ensure the game remains paused when opening options
     }
 
     public void Back()
