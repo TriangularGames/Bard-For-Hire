@@ -26,15 +26,25 @@ public class InputManager : Singleton<InputManager>
 
     private void OnPause(InputAction.CallbackContext ctx)
     {
+        // If the game is already paused, we don't want to open the pause menu again or interfere with the current menu state.
         if (PauseManager.Instance.IsPaused) return;
 
+        // Check the current menu state to prevent opening the pause menu in inappropriate contexts (like already being in a menu).
         IMenuState currentState = MenuManager.Instance.GetCurrentState();
-
-        // Only allow pausing if current state is NOT MainMenuState
-        if (currentState is IMenuState menuState && menuState is not MainMenuState)
+        if (currentState == null)
         {
-            MenuManager.Instance.SwitchState(new PauseMenuState());
+            Debug.LogWarning("No current menu state found. Cannot open pause menu.");
+            return;
         }
+        if (currentState is PauseMenuState
+            || currentState is MainMenuState
+            || currentState is OptionsMenuState)
+        {
+            Debug.Log("Already in a menu state that cant be paused, ignoring pause input.");
+            return;
+        }
+
+        MenuManager.Instance.SwitchState(new PauseMenuState());
     }
 
     // Call these from GameManager or states to swap action maps
