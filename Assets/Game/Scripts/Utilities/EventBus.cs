@@ -102,6 +102,19 @@ public struct UpgradeBoughtEvent
 }
 
 /// <summary>
+/// Event for when a Consumable is purchased
+/// </summary>
+public struct ConsumableBoughtEvent
+{
+    public ConsumableData data;
+
+    public ConsumableBoughtEvent(ConsumableData _data)
+    {
+        data = _data;
+    }
+}
+
+/// <summary>
 /// Event for when an Item is being Discarded/Scored
 /// </summary>
 public struct ItemRemovedEvent

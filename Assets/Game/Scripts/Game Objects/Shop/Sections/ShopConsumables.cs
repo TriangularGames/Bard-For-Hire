@@ -46,4 +46,13 @@ public class ShopConsumables : MonoBehaviour
             i++;
         }
     }
+
+    public void ClearSlots()
+    {
+        foreach (GameObject slot in displaySlots)
+        {
+            slot.GetComponent<ConsumableShopSlot>().ClearInfo();
+        }
+        _data.Clear();
+    }
 }

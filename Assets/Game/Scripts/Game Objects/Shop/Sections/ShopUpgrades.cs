@@ -46,4 +46,13 @@ public class ShopUpgrades : MonoBehaviour
             i++;
         }
     }
+
+    public void ClearSlots()
+    {
+        foreach (GameObject slot in displaySlots)
+        {
+            slot.GetComponent<UpgradeShopSlot>().ClearInfo();
+        }
+        _data.Clear();
+    }
 }
