@@ -33,6 +33,7 @@ public class UpgradeShopSlot : ShopSlot
             // Subtract money from player
             EventBus.Publish(new PurchaseEvent(int.Parse(value.text)));
             EventBus.Publish(new UpgradeBoughtEvent(_data));
+            _Purchased = true;
             ClearInfo();
         }
         else

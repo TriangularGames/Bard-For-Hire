@@ -1133,6 +1133,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ItemSlot
       objectReference: {fileID: 0}
+    - target: {fileID: 3302792935167239240, guid: e3049f045c265c646ad8d933c9229ab4, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8475005082516530480, guid: e3049f045c265c646ad8d933c9229ab4, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -3538,7 +3542,7 @@ MonoBehaviour:
   _items: {fileID: 591752443}
   _upgrades: {fileID: 322788680}
   _consumables: {fileID: 784648340}
-  rerollCost: 0
+  rerollCost: 5
 --- !u!4 &1409301577
 Transform:
   m_ObjectHideFlags: 0

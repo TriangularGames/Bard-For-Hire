@@ -9,11 +9,13 @@ public abstract class ShopSlot : MonoBehaviour, IPointerDownHandler
     [SerializeField] public Button buy;
 
     [HideInInspector] public bool _isSelected = false;
+    [HideInInspector] public bool _Purchased = false;
 
     private void Start()
     {
         buy.onClick.AddListener(Purchase);
         buy.gameObject.SetActive(false);
+        _Purchased = false;
     }
 
     public abstract void Purchase();

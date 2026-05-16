@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,6 +35,7 @@ public class ShopManager : MonoBehaviour
     private void Start()
     {
         SetupShop();
+        SetRerollText();
     }
 
     private void Update()
@@ -42,6 +44,11 @@ public class ShopManager : MonoBehaviour
         {
             rerollBtn.interactable = false;
         }
+    }
+
+    private void SetRerollText()
+    {
+        rerollBtn.transform.GetChild(0).GetComponent<TMP_Text>().text = "Reroll\n$" + rerollCost;
     }
 
     public void SetupShop()
@@ -127,10 +134,17 @@ public class ShopManager : MonoBehaviour
     {
         // Subtract coins from player
         EventBus.Publish(new PurchaseEvent(rerollCost));
+        IncreaseCost();
 
         //Generate different items
         ClearShop();
         SetupShop();
+    }
+
+    private void IncreaseCost()
+    {
+        rerollCost += 5;
+        rerollBtn.transform.GetChild(0).GetComponent<TMP_Text>().text = "Reroll\n$" + rerollCost;
     }
 
     public void NextRound()

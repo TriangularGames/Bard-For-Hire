@@ -35,14 +35,16 @@ public class ShopUpgrades : MonoBehaviour
 
     public void SetupSlots(List<UpgradeData> itemList)
     {
-        // Set the data for this shop section
-        _data.AddRange(itemList);
-
         // Setup the slots to display data
         int i = 0;
         foreach (GameObject slot in displaySlots)
         {
-            slot.GetComponent<UpgradeShopSlot>().SetupSlotInfo(_data[i]);
+            // If slot hasn't been purchased, fill out the item in the slot, and add it's data to list of Upgrades
+            if (!slot.GetComponent<UpgradeShopSlot>()._Purchased)
+            {
+                slot.GetComponent<UpgradeShopSlot>().SetupSlotInfo(itemList[i]);
+                _data.Add(itemList[i]);
+            }
             i++;
         }
     }

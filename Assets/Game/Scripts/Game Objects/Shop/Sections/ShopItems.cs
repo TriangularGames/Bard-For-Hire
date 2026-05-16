@@ -35,14 +35,16 @@ public class ShopItems : MonoBehaviour
 
     public void SetupSlots(List<ItemData> itemList)
     {
-        // Set the data for this shop section
-        _data.AddRange(itemList);
-
         // Setup the slots to display data
         int i = 0;
         foreach (GameObject slot in displaySlots)
         {
-            slot.GetComponent<ItemShopSlot>().SetupSlotInfo(_data[i]);
+            if (!slot.GetComponent<ItemShopSlot>()._Purchased)
+            {
+                // If slot hasn't been purchased, fill out the item in the slot, and add it's data to list of Items
+                slot.GetComponent<ItemShopSlot>().SetupSlotInfo(itemList[i]);
+                _data.Add(itemList[i]);
+            }
             i++;
         }
     }
