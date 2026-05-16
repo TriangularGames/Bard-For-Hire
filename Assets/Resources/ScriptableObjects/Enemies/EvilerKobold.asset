@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   health: 10
   coinReward: 0
-  icon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  icon: {fileID: 21300000, guid: 44dfab80a0e07814d88af2b4175b76a2, type: 3}
   Description: 
   hasBonus: 0
   bonusStat: 0
