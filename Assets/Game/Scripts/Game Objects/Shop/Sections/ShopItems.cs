@@ -45,5 +45,14 @@ public class ShopItems : MonoBehaviour
             slot.GetComponent<ItemShopSlot>().SetupSlotInfo(_data[i]);
             i++;
         }
-    }  
+    }
+    
+    public void ClearSlots()
+    {
+        foreach (GameObject slot in displaySlots)
+        {
+            slot.GetComponent<ItemShopSlot>().ClearInfo();
+        }
+        _data.Clear();
+    }
 }

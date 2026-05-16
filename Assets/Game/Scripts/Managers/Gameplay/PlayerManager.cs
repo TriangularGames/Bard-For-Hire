@@ -5,6 +5,7 @@ public class PlayerManager : Singleton<PlayerManager>
 {
     public List<ItemData> itemInventory;
     public List<UpgradeData> upgradeInventory;
+    public List<ConsumableData> consumableInventory;
 
     // For Gameplay, what Notes are still available to be grabbed from Inventory,
     // what Notes are active, and what Notes aren't
@@ -19,7 +20,10 @@ public class PlayerManager : Singleton<PlayerManager>
     public int Coins;
 
     [Tooltip("Max amount of Upgrades player can hold")]
-    public static int MAXUpgrades = 3;
+    public int MAXUpgrades = 3;
+
+    [Tooltip("Max amount of Consumables player can hold")]
+    public int MAXConsumables = 2;
 
     private void Start()
     {
@@ -34,6 +38,7 @@ public class PlayerManager : Singleton<PlayerManager>
         EventBus.Subscribe<PurchaseEvent>(OnPurchase);
         EventBus.Subscribe<ItemBoughtEvent>(OnItemBought);
         EventBus.Subscribe<UpgradeBoughtEvent>(OnUpgradeBought);
+        EventBus.Subscribe<ConsumableBoughtEvent>(OnConsumableBought);
     }
 
     private void OnDisable()
@@ -42,6 +47,7 @@ public class PlayerManager : Singleton<PlayerManager>
         EventBus.Unsubscribe<PurchaseEvent>(OnPurchase);
         EventBus.Unsubscribe<ItemBoughtEvent>(OnItemBought);
         EventBus.Unsubscribe<UpgradeBoughtEvent>(OnUpgradeBought);
+        EventBus.Unsubscribe<ConsumableBoughtEvent>(OnConsumableBought);
     }
 
     /// <summary>
@@ -86,6 +92,15 @@ public class PlayerManager : Singleton<PlayerManager>
     private void OnUpgradeBought(UpgradeBoughtEvent e)
     {
         upgradeInventory.Add(e.data);
+    }
+
+    /// <summary>
+    /// When an Consumable is purchased from the shop, add it's data to the inventory
+    /// </summary>
+    /// <param name="e">Data of Consumable to add</param>
+    private void OnConsumableBought(ConsumableBoughtEvent e)
+    {
+        consumableInventory.Add(e.data);
     }
 
     public override void Awake()

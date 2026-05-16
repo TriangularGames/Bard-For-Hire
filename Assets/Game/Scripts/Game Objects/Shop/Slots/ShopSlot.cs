@@ -24,6 +24,14 @@ public abstract class ShopSlot : MonoBehaviour, IPointerDownHandler
         SelectSlot(_isSelected);
     }
 
+    public virtual void ClearInfo()
+    {
+        value.text = "";
+        GetComponent<Image>().sprite = null;
+        GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
+        buy.gameObject.SetActive(false);
+    }
+
     public virtual void SelectSlot(bool select)
     {
         buy.gameObject.SetActive(select);

@@ -46,7 +46,7 @@ public class ShopManager : MonoBehaviour
 
     public void SetupShop()
     {
-        // TODO: figure out how it gets the data to input. Presumably it'll use the resource manager for that?
+        // TODO: Edit so the items are grabbed based on rarity weight
 
         // Setup the Weapons
         List<ItemData> items = new List<ItemData>();
@@ -74,6 +74,13 @@ public class ShopManager : MonoBehaviour
             consumables.Add(randomData);
         }
         _consumables.SetupSlots(consumables);
+    }
+
+    private void ClearShop()
+    {
+        _items.ClearSlots();
+        _upgrades.ClearSlots();
+        _consumables.ClearSlots();
     }
 
     private void CheckItemSelection(ItemSelectedEvent e)
@@ -113,12 +120,17 @@ public class ShopManager : MonoBehaviour
         return;
     }
 
+    /// <summary>
+    /// Reroll the Shop Items for a Cost
+    /// </summary>
     public void ReRoll()
     {
         // Subtract coins from player
         EventBus.Publish(new PurchaseEvent(rerollCost));
 
-        //Generate different notes and upgrades
+        //Generate different items
+        ClearShop();
+        SetupShop();
     }
 
     public void NextRound()
