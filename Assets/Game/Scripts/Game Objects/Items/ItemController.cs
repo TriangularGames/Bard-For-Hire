@@ -18,7 +18,15 @@ public class ItemController : MonoBehaviour
 
     private void SetSprite()
     {
-        transform.GetChild(1).GetComponent<Image>().sprite = itemData.icon;
+        if (transform.childCount == 3)
+        {
+            transform.GetChild(0).GetComponent<Image>().sprite = itemData.icon;
+        }
+        else
+        {
+            transform.GetChild(1).GetComponent<Image>().sprite = itemData.icon;
+        }
+        
     }
 
     private void SetDamageTxt()

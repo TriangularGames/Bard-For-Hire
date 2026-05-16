@@ -298,7 +298,6 @@ GameObject:
   - component: {fileID: 7047863187680575947}
   - component: {fileID: 8622836177064081620}
   - component: {fileID: 973112624450877254}
-  - component: {fileID: 5579982606040957341}
   - component: {fileID: 7663575314815611068}
   m_Layer: 5
   m_Name: Item
@@ -353,20 +352,6 @@ MonoBehaviour:
   itemData: {fileID: 0}
   damageTxt: {fileID: 6911767550555668763}
   playableText: {fileID: 2758709336684097847}
---- !u!114 &5579982606040957341
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9005676489685703692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32c85e67536befa4abf065b299a5f6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Drag
-  originalPos: {x: 0, y: 0}
-  inItemPool: 0
 --- !u!114 &7663575314815611068
 MonoBehaviour:
   m_ObjectHideFlags: 0

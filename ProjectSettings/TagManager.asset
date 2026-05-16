@@ -11,6 +11,7 @@ TagManager:
   - ScoreManager
   - ItemManager
   - EnemyManager
+  - Coins
   layers:
   - Default
   - TransparentFX

@@ -6,16 +6,6 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
     private Image selection;
     private bool isSelected = false;
 
-    private void OnEnable()
-    {
-        EventBus.Subscribe<DragEvent>(DeselectItem);
-    }
-
-    private void OnDisable()
-    {
-        EventBus.Unsubscribe<DragEvent>(DeselectItem);
-    }
-
     private void Awake()
     {
         Debug.Assert(selection = transform.GetChild(0).GetComponent<Image>(), "GameObject requires an Image component");
@@ -36,34 +26,28 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
         if (!isSelected)
         {
             selection.color = new Color(0f, 256f, 0f, 0.5f);
-            GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsToDelete.Add(gameObject);
+            GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsSelected.Add(gameObject);
             isSelected = true;
         }
         else
         {
             selection.color = new Color(0f, 0f, 256f, 0.5f);
-            if (GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsToDelete.Contains(gameObject))
+            if (GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsSelected.Contains(gameObject))
             {
-                GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsToDelete.Remove(gameObject);
+                GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsSelected.Remove(gameObject);
                 isSelected = false;
             }
         }
     }
 
-    /// <summary>
-    /// If item is being dragged, remove it from being selected
-    /// </summary>
-    /// <param name="e">Data containing what item is being dragged</param>
-    private void DeselectItem(DragEvent e)
+    public void Deselect()
     {
-        if (gameObject == e.item)
+        isSelected = false;
+        selection.color = new Color(1f, 1f, 1f, 0f);
+        if (GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsSelected.Contains(gameObject))
         {
-            selection.color = new Color(selection.color.r, selection.color.g, selection.color.b, 0f);
+            GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsSelected.Remove(gameObject);
             isSelected = false;
-            if (GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsToDelete.Contains(gameObject))
-            {
-                GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsToDelete.Remove(gameObject);
-            }
         }
     }
 

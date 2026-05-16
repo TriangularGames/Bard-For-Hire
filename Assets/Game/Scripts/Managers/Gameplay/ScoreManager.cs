@@ -13,6 +13,8 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] TMP_Text combatCompleteText;
     public float score;
 
+    [SerializeField] GameObject itemDisplay;
+
     // TODO: add CurrentRound Count to GameManager
     [SerializeField] private TMP_Text roundText;
     public int curRound = 1;
@@ -28,6 +30,7 @@ public class ScoreManager : MonoBehaviour
     {
         score = 0f;
         combatCompleteText.text = "";
+        itemDisplay.SetActive(false);
     }
 
     /// <summary>
@@ -42,6 +45,12 @@ public class ScoreManager : MonoBehaviour
         {
             curItem += 1;
             Debug.Log("Item " + curItem + " being rolled for.");
+            
+            // Display item being rolled for
+            itemDisplay.GetComponent<ItemController>().itemData = item;
+            itemDisplay.GetComponent<ItemController>().Setup();
+            itemDisplay.SetActive(true);
+
             roller.RollDie(this, OnRollComplete);
             yield return new WaitForSeconds(waitForRoll);
         }
@@ -105,10 +114,13 @@ public class ScoreManager : MonoBehaviour
     /// <param name="playedScore">Final score obtained</param>
     private void FinalizeScore(float playedScore)
     {
+        int count = pendingItems.Count;
         foreach (ItemData item in pendingItems)
         {
             EventBus.Publish<ItemRemovedEvent>(new ItemRemovedEvent(item));
         }
+
+        itemDisplay.SetActive(false);
 
         // Check if we have hit the MaxRounds or all Enemies are dead
         // TODO: fix this
@@ -137,8 +149,8 @@ public class ScoreManager : MonoBehaviour
             // QUESTION: Should "next round" setup be handled by the GameManager?
             Debug.Log("Round " + curRound.ToString() + " Completed!");
             curRound++;
-            roundText.text = "Round " + curRound;
-            GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().GrabNewItems();
+            roundText.text = "Round " + curRound + "/3";
+            GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().GrabNewItems(count);
         }
 
 

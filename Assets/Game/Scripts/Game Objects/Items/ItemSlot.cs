@@ -37,15 +37,11 @@ public class ItemSlot : MonoBehaviour, IDropHandler
     private Transform OverSlot(GameObject _dropped)
     {
         float disPool = Vector3.Distance(_dropped.transform.position, GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().itemPool.transform.position);
-        float disHand = Vector3.Distance(_dropped.transform.position, GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().attackHand.transform.position);
+        //float disHand = Vector3.Distance(_dropped.transform.position, GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().attackHand.transform.position);
 
         if (disPool <= DropThreshold)
         {
             return GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().itemPool.transform;
-        }
-        else if (disHand <= DropThreshold)
-        {
-            return GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().attackHand.transform;
         }
         else
         {

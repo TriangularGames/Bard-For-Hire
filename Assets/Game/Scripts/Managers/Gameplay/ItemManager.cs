@@ -6,32 +6,44 @@ using UnityEngine.UI;
 public class ItemManager : MonoBehaviour
 {
     public Button discardBtn;
-    public List<GameObject> ItemsToDelete;
-    public int numofDiscards = 3;
+    public Button attackBtn;
+
+    [HideInInspector] public List<GameObject> ItemsSelected;
+    
+    // Number of Items that have been Discarded
+    private int itemsDiscarded = 0;
+
+    // Max discards a player can make
+    public int MAXDiscards = 3;
 
     public ItemPool itemPool;
-    public AttackHand attackHand;
-
-    private int itemsDiscarded = 0;
 
     private void Start()
     {
-        ItemsToDelete = new List<GameObject>();
-        numofDiscards = 3;
-        discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discards x" + numofDiscards.ToString();
+        ItemsSelected = new List<GameObject>();
+        MAXDiscards = 3;
+        discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard x" + MAXDiscards.ToString();
         Debug.Assert(itemPool = GameObject.FindWithTag("ItemPool").GetComponent<ItemPool>(), "ItemManager requires ItemPool");
-        Debug.Assert(attackHand = GameObject.FindWithTag("AttackHand").GetComponent<AttackHand>(), "ItemManager requires AttackHand");
     }
 
     private void Update()
     {
-        if (numofDiscards != 0)
+        if (MAXDiscards != 0)
         {
             discardBtn.interactable = true;
         }
         else
         {
             discardBtn.interactable = false;
+        }
+
+        if (ItemsSelected.Count == 0)
+        {
+            attackBtn.interactable = false;
+        }
+        else
+        {
+            attackBtn.interactable = true;
         }
     }
 
@@ -41,39 +53,25 @@ public class ItemManager : MonoBehaviour
     public void DiscardItem()
     {
         itemsDiscarded = 0;
-        if (numofDiscards != 0)
+        if (MAXDiscards != 0)
         {
-            if (ItemsToDelete.Count > 0)
+            if (ItemsSelected.Count > 0)
             {
                 if (PlayerManager.Instance.itemsNotUsed.Count != 0)
                 {
-                    for (int i = 0; i < ItemsToDelete.Count; i++)
+                    for (int i = 0; i < ItemsSelected.Count; i++)
                     {
-                        // Checks if the Items to Delete is in the ItemPool or the AttackHand
-                        if (itemPool.GetItems().Contains(ItemsToDelete[i]) || attackHand.GetItems().Contains(ItemsToDelete[i]))
+                        if (itemPool.GetItems().Contains(ItemsSelected[i]))
                         {
-                            // Remove the Item from it's respective slot
-                            if (ItemsToDelete[i].GetComponent<Drag>().inItemPool)
-                            {
-                                itemPool.RemoveItem(ItemsToDelete[i]);
-                            }
-                            else
-                            {
-                                attackHand.RemoveItem(ItemsToDelete[i]);
-                            }
-
-                            // Notify that an Item has been removed
-                            EventBus.Publish<ItemRemovedEvent>(new ItemRemovedEvent(ItemsToDelete[i].GetComponent<ItemController>().itemData));
-
-                            GameObject remove = ItemsToDelete[i];
-                            ItemsToDelete.Remove(remove);
-                            Destroy(remove);
+                            Destroy(ItemsSelected[i]);
                             itemsDiscarded++;
                         }
                     }
-                    GrabNewItems();
-                    numofDiscards--;
-                    discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discards x" + numofDiscards.ToString();
+                    itemPool.RemoveAll(ItemsSelected);
+                    ItemsSelected.Clear();
+                    GrabNewItems(itemsDiscarded);
+                    MAXDiscards--;
+                    discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard x" + MAXDiscards.ToString();
                 }
                 else
                 {
@@ -86,32 +84,40 @@ public class ItemManager : MonoBehaviour
     /// <summary>
     /// When round is over, or Items are discarded- get new Items from the inventory to take their place
     /// </summary>
-    public void GrabNewItems()
+    public void GrabNewItems(int amount)
     {
         Debug.Log("Getting new items!");
         if (itemPool.GetItems().Count != itemPool.GetMaxSlots())
         {
-            for (int i = 0; i < (itemPool.GetMaxSlots() - itemPool.GetItems().Count) + 1; i++)
+            for (int i = 0; i < amount; i++)
             {
-                itemPool.InstantiateItem(PlayerManager.Instance.GetRandomItem(), itemPool.transform);
+                itemPool.InstantiateItem(PlayerManager.Instance.GetRandomItem());
             }
         }
     }
 
     /// <summary>
-    /// Remove Items from AttackHand and return them to the ItemPool
+    /// Deselect all Items selected
     /// </summary>
     public void ClearItems()
     {
         // TODO: fix this
-        List<GameObject> toRemove = new List<GameObject>();
-        foreach (GameObject item in attackHand.GetItems())
+        foreach (GameObject item in itemPool.storedObjects)
         {
-            item.GetComponent<Drag>().inItemPool = true;
-            item.transform.SetParent(itemPool.transform);
-            toRemove.Add(item);
+            item.GetComponent<Select>().Deselect();
         }
-        attackHand.RemoveAll(toRemove);
-        itemPool.AddAll(toRemove);
+    }
+
+    /// <summary>
+    /// Sends Item List to ScoreManager for final score total
+    /// </summary>
+    public void CalculateScore()
+    {
+        List<ItemData> itemData = new List<ItemData>();
+        foreach (GameObject itemObj in ItemsSelected)
+        {
+            itemData.Add(itemObj.GetComponent<ItemController>().itemData);
+        }
+        GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().StartCoroutine("CalculateScore", itemData);
     }
 }

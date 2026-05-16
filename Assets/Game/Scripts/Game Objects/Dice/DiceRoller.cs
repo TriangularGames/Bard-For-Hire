@@ -122,5 +122,6 @@ public class DiceRoller : MonoBehaviour
         yield return new WaitForSeconds(timer);
         Destroy(diceRef.gameObject);
         elapsedTime = 0f;
+        display.text = "";
     }
 }

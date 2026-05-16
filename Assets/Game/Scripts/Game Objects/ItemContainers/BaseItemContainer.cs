@@ -4,9 +4,9 @@ using UnityEngine;
 public class BaseItemContainer : MonoBehaviour
 {
     /// <summary>
-    /// Script for Handling the Slot
+    /// List of Objects in the Container
     /// </summary>
-    private ItemSlot items;
+    public List<GameObject> storedObjects;
 
     /// <summary>
     /// Maximum Slots for Container
@@ -25,7 +25,7 @@ public class BaseItemContainer : MonoBehaviour
     /// <returns>List of GameObjects</returns>
     public List<GameObject> GetItems()
     {
-        return items.storedObjects;
+        return storedObjects;
     }
 
     /// <summary>
@@ -35,18 +35,11 @@ public class BaseItemContainer : MonoBehaviour
     public List<ItemData> GetItemList()
     {
         List<ItemData> data = new List<ItemData>();
-        foreach (GameObject item in items.storedObjects)
+        foreach (GameObject item in storedObjects)
         {
             data.Add(item.GetComponent<ItemData>());
         }
         return data;
-    }
-
-    private void Awake()
-    {
-        Debug.Assert(items = GetComponent<ItemSlot>(), "ItemContainer requires ItemSlot");
-
-        items.limit = maxSlots;
     }
 
     /// <summary>
@@ -55,7 +48,7 @@ public class BaseItemContainer : MonoBehaviour
     /// <param name="item">Item to be added</param>
     public void AddItem(GameObject item)
     {
-        items.storedObjects.Add(item);
+        storedObjects.Add(item);
     }
 
     /// <summary>
@@ -64,7 +57,7 @@ public class BaseItemContainer : MonoBehaviour
     /// <param name="list"></param>
     public void AddAll(List<GameObject> list)
     {
-        items.storedObjects.AddRange(list);
+        storedObjects.AddRange(list);
     }
 
     /// <summary>
@@ -73,9 +66,9 @@ public class BaseItemContainer : MonoBehaviour
     /// <param name="item">Item to be removed</param>
     public void RemoveItem(GameObject item)
     {
-        if (items.storedObjects.Contains(item))
+        if (storedObjects.Contains(item))
         {
-            items.storedObjects.Remove(item);
+            storedObjects.Remove(item);
         }
     }
 
@@ -85,6 +78,6 @@ public class BaseItemContainer : MonoBehaviour
     /// <param name="list">List of Items to remove</param>
     public void RemoveAll(List<GameObject> list)
     {
-        items.storedObjects.RemoveAll(item => list.Contains(item));
+        storedObjects.RemoveAll(item => list.Contains(item));
     }
 }
