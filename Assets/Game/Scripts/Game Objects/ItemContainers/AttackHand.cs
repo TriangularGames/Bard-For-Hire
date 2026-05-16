@@ -13,12 +13,12 @@ public class AttackHand : BaseItemContainer
 
     private void OnEnable()
     {
-        EventBus.Subscribe<ItemRemovedEvent>(DeleteItems);
+        EventBus.Subscribe<ItemScoredEvent>(DeleteItems);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<ItemRemovedEvent>(DeleteItems);
+        EventBus.Unsubscribe<ItemScoredEvent>(DeleteItems);
     }
 
     private void Start()
@@ -49,7 +49,7 @@ public class AttackHand : BaseItemContainer
     /// <summary>
     /// Clears Items in AttackHand after scoring is completed
     /// </summary>
-    private void DeleteItems(ItemRemovedEvent e)
+    private void DeleteItems(ItemScoredEvent e)
     {
         // This should eventually be edited to allow for effects and such when they're removed
         foreach (GameObject item in GetItems())

@@ -115,13 +115,26 @@ public struct ConsumableBoughtEvent
 }
 
 /// <summary>
-/// Event for when an Item is being Discarded/Scored
+/// Event for when an Item is being Scored
 /// </summary>
-public struct ItemRemovedEvent
+public struct ItemScoredEvent
 {
     public ItemData item;
 
-    public ItemRemovedEvent(ItemData _item)
+    public ItemScoredEvent(ItemData _item)
+    {
+        item = _item;
+    }
+}
+
+/// <summary>
+/// Event for when an Item is Discarded
+/// </summary>
+public struct ItemDiscardedEvent
+{
+    public ItemData item;
+
+    public ItemDiscardedEvent(ItemData _item)
     {
         item = _item;
     }

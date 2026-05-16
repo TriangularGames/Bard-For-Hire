@@ -117,7 +117,7 @@ public class ScoreManager : MonoBehaviour
         int count = pendingItems.Count;
         foreach (ItemData item in pendingItems)
         {
-            EventBus.Publish<ItemRemovedEvent>(new ItemRemovedEvent(item));
+            EventBus.Publish<ItemScoredEvent>(new ItemScoredEvent(item));
         }
 
         itemDisplay.SetActive(false);

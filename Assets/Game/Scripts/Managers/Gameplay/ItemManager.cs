@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,6 +19,42 @@ public class ItemManager : MonoBehaviour
     public int MAXDiscards = 3;
 
     public ItemPool itemPool;
+
+    private void OnEnable()
+    {
+        EventBus.Subscribe<ItemScoredEvent>(DeleteItems);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe<ItemScoredEvent>(DeleteItems);
+    }
+
+    private void DeleteItems(ItemScoredEvent e)
+    {
+        itemsDiscarded = 0;
+        if (ItemsSelected.Count > 0)
+        {
+            if (PlayerManager.Instance.itemsNotUsed.Count != 0)
+            {
+                for (int i = 0; i < ItemsSelected.Count; i++)
+                {
+                    if (itemPool.GetItems().Contains(ItemsSelected[i]))
+                    {
+                        Destroy(ItemsSelected[i]);
+                        itemsDiscarded++;
+                    }
+                }
+                itemPool.RemoveAll(ItemsSelected);
+                ItemsSelected.Clear();
+                GrabNewItems(itemsDiscarded);
+            }
+            else
+            {
+                Debug.Log("Item Inventory is Empty! Cannot Discard.");
+            }
+        }
+    }
 
     private void Start()
     {
@@ -50,7 +88,7 @@ public class ItemManager : MonoBehaviour
     /// <summary>
     /// When discarding Items, destroy them.
     /// </summary>
-    public void DiscardItem()
+    public void DiscardItems()
     {
         itemsDiscarded = 0;
         if (MAXDiscards != 0)
@@ -64,6 +102,7 @@ public class ItemManager : MonoBehaviour
                         if (itemPool.GetItems().Contains(ItemsSelected[i]))
                         {
                             Destroy(ItemsSelected[i]);
+                            EventBus.Publish(new ItemDiscardedEvent(ItemsSelected[i].GetComponent<ItemController>().itemData));
                             itemsDiscarded++;
                         }
                     }

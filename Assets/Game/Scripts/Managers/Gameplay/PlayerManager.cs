@@ -35,7 +35,8 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private void OnEnable()
     {
-        EventBus.Subscribe<ItemRemovedEvent>(OnItemRemoved);
+        EventBus.Subscribe<ItemScoredEvent>(OnItemScored);
+        EventBus.Subscribe<ItemDiscardedEvent>(OnItemDiscarded);
         EventBus.Subscribe<PurchaseEvent>(OnPurchase);
         EventBus.Subscribe<ItemBoughtEvent>(OnItemBought);
         EventBus.Subscribe<UpgradeBoughtEvent>(OnUpgradeBought);
@@ -44,7 +45,8 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<ItemRemovedEvent>(OnItemRemoved);
+        EventBus.Unsubscribe<ItemScoredEvent>(OnItemScored);
+        EventBus.Subscribe<ItemDiscardedEvent>(OnItemDiscarded);
         EventBus.Unsubscribe<PurchaseEvent>(OnPurchase);
         EventBus.Unsubscribe<ItemBoughtEvent>(OnItemBought);
         EventBus.Unsubscribe<UpgradeBoughtEvent>(OnUpgradeBought);
@@ -52,15 +54,29 @@ public class PlayerManager : Singleton<PlayerManager>
     }
 
     /// <summary>
-    /// When an Item is Discarded/Scored, remove it from the NotUsed list
+    /// When an Item is Scored, remove it from the NotUsed list
     /// </summary>
     /// <param name="e">Event Data with Item to remove</param>
-    private void OnItemRemoved(ItemRemovedEvent e)
+    private void OnItemScored(ItemScoredEvent e)
     {
-        if (itemsHeld.Contains(e.item))
+        RemoveItem(e.item);
+    }
+
+    /// <summary>
+    /// When an Item is Discarded, remove it from the NotUsed list
+    /// </summary>
+    /// <param name="e">Event Data with Item to remove</param>
+    private void OnItemDiscarded(ItemDiscardedEvent e)
+    {
+        RemoveItem(e.item);
+    }
+
+    private void RemoveItem(ItemData item)
+    {
+        if (itemsHeld.Contains(item))
         {
-            itemsUsed.Add(e.item);
-            itemsHeld.Remove(e.item);
+            itemsUsed.Add(item);
+            itemsHeld.Remove(item);
         }
         else
         {
