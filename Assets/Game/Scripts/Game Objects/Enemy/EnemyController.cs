@@ -49,8 +49,8 @@ public class EnemyController : MonoBehaviour
             if (health <= 0)
             {
                 Debug.Log("Enemy killed.");
+                EventBus.Publish(new EnemyDefeatedEvent(gameObject));
                 //GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().enemies
-                Destroy(gameObject);
             }
         }
     }
@@ -68,5 +68,15 @@ public struct DamageTakenEvent
     {
         id = _id;
         damage = _damage;
+    }
+}
+
+public struct EnemyDefeatedEvent
+{
+    public GameObject enemy;
+
+    public EnemyDefeatedEvent(GameObject _enemy)
+    {
+        enemy = _enemy;
     }
 }

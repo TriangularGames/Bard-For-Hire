@@ -43,6 +43,8 @@ public class ScoreManager : MonoBehaviour
         curItem = -1;
         foreach (ItemData item in pendingItems)
         {
+            if(!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive()) { FinalizeScore(); break; }
+            
             curItem += 1;
             Debug.Log("Item " + curItem + " being rolled for.");
             
@@ -97,22 +99,16 @@ public class ScoreManager : MonoBehaviour
             }
         }
 
-
-        //item.gameObject.GetComponentInChildren<Image>().color = new Color(1f, 1f, 1f, 1f);
-
-        Debug.Log("Total Score Obtained: " + curScore);
-        score -= curScore;
         if ((curItem + 1) == pendingItems.Count)
         {
-            FinalizeScore(score);
+            FinalizeScore();
         }
     }
 
     /// <summary>
     /// Finalize the Score calculation for display.
     /// </summary>
-    /// <param name="playedScore">Final score obtained</param>
-    private void FinalizeScore(float playedScore)
+    private void FinalizeScore()
     {
         int count = pendingItems.Count;
         foreach (ItemData item in pendingItems)
@@ -127,7 +123,7 @@ public class ScoreManager : MonoBehaviour
         if (!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive() || curRound == MaxRounds)
         {
             // If we have, determine if the player has won
-            if (playedScore <= 0 && !GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive())
+            if (!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive())
             {
                 combatCompleteText.text = "Winner!";
                 Debug.Log("Combat Completed!");
@@ -141,6 +137,7 @@ public class ScoreManager : MonoBehaviour
             }
 
             // TODO: add completed screen panel of some kind
+            // TODO: include some coin bonus if player finishes early!
 
         }
         else

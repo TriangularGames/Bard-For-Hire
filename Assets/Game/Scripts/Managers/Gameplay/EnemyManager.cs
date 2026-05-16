@@ -30,16 +30,32 @@ public class EnemyManager : MonoBehaviour
     /// </summary>
     [SerializeField] int totalScore;
 
+    private void OnEnable()
+    {
+        EventBus.Subscribe<EnemyDefeatedEvent>(RemoveEnemy);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe<EnemyDefeatedEvent>(RemoveEnemy);
+    }
+
+    private void RemoveEnemy(EnemyDefeatedEvent e)
+    {
+        int index = -1;
+        if (enemies.Contains(e.enemy))
+        {
+            index = enemies.IndexOf(e.enemy);
+            Destroy(e.enemy);
+        }
+
+        enemies.RemoveAt(index);
+    }
+
     public bool AreEnemiesAlive()
     {
-        foreach(Transform point in spawnPoints)
-        {
-            if (point.childCount > 0)
-            {
-                return true;
-            }
-        }
-        return false;
+        bool alive = enemies.Count > 0 ? true : false;
+        return alive;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
