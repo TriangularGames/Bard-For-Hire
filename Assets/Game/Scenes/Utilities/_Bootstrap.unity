@@ -527,6 +527,8 @@ MonoBehaviour:
   - _PlayerManager
   - _MenuManager
   - _OptionsManager
+  - _InputManager
+  - _PauseManager
   firstGameplayScene: MainMenu
 --- !u!4 &910452830
 Transform:
