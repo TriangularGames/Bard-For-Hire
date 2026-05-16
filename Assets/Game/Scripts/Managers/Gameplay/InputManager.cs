@@ -26,6 +26,8 @@ public class InputManager : Singleton<InputManager>
 
     private void OnPause(InputAction.CallbackContext ctx)
     {
+        if (PauseManager.Instance.IsPaused) return;
+
         IMenuState currentState = MenuManager.Instance.GetCurrentState();
 
         // Only allow pausing if current state is NOT MainMenuState
