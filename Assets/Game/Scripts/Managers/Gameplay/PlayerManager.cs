@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerManager : Singleton<PlayerManager>
@@ -74,6 +75,7 @@ public class PlayerManager : Singleton<PlayerManager>
     private void OnPurchase(PurchaseEvent e)
     {
         Coins -= e._amount;
+        SetCoinText();
     }
 
     /// <summary>
@@ -112,6 +114,11 @@ public class PlayerManager : Singleton<PlayerManager>
         }
 
         //selectedBard = new LuteBard(); // Start with lute bard
+    }
+
+    public void SetCoinText()
+    {
+        GameObject.FindWithTag("Coins").GetComponent<TMP_Text>().text = Coins.ToString();
     }
 
     /// <summary>
