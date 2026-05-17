@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -116,7 +115,6 @@ public class ScoreManager : MonoBehaviour
         itemDisplay.SetActive(false);
 
         // Check if we have hit the MaxRounds or all Enemies are dead
-        // TODO: fix this
         if (!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive() || curRound == MaxRounds)
         {
             // If we have, determine if the player has won
@@ -139,12 +137,11 @@ public class ScoreManager : MonoBehaviour
         }
         else
         {
-            // If we have not hit MaxRounds, go to the next round
-            // QUESTION: Should "next round" setup be handled by the GameManager?
+            // If we have not hit MaxRounds & Enemies are still alive, go to the next round
             Debug.Log("Round " + curRound.ToString() + " Completed!");
             curRound++;
             roundText.text = "Round " + curRound + "/3";
-            GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().GrabNewItems(count);
+            EventBus.Publish(new ScoringCompletedEvent(count));
         }
 
 

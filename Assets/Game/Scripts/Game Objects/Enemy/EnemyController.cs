@@ -1,8 +1,5 @@
-using NUnit.Framework.Interfaces;
-using System;
 using System.Collections;
 using TMPro;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -17,6 +14,9 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private TMP_Text healthTxt;
     // TODO: use ResourceManager
     [SerializeField] private GameObject DmgTxtPrefab;
+
+    [SerializeField] private SpriteRenderer EnemySprite;
+    [SerializeField] private Animator anim;
 
     public int GetHealth() {  return health; }
 
@@ -39,7 +39,7 @@ public class EnemyController : MonoBehaviour
 
     private void SetSprite()
     {
-        GetComponent<SpriteRenderer>().sprite = enemyData.icon;
+        EnemySprite.sprite = enemyData.icon;
     }
 
     private void SetDamageTxt()
@@ -60,7 +60,7 @@ public class EnemyController : MonoBehaviour
     {
         for (int i = 0; i < flashTimes; i++)
         {
-            GetComponent<SpriteRenderer>().material.color = Color.white;
+            EnemySprite.material.color = Color.white;
             yield return new WaitForSeconds(delayTime);
 
             // TODO: object pool or change to particle effect perhaps?
@@ -73,11 +73,15 @@ public class EnemyController : MonoBehaviour
                 Debug.Log("Enemy killed.");
                 EventBus.Publish(new EnemyDefeatedEvent(gameObject));
             }
+            else
+            {
+                anim.SetTrigger("Hit");
+            }
 
-            GetComponent<SpriteRenderer>().material.color = flashColor;
+            EnemySprite.material.color = flashColor;
             yield return new WaitForSeconds(delayTime);
         }
-        GetComponent<SpriteRenderer>().material.color = Color.white;
+        EnemySprite.material.color = Color.white;
         yield return null;
     }
 }
