@@ -1,5 +1,6 @@
 using NUnit.Framework.Interfaces;
 using System;
+using System.Collections;
 using TMPro;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
@@ -7,6 +8,10 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] public EnemyData enemyData;
+
+    private Color flashColor = new Color(1f,1f,1f,0.5f);
+    [SerializeField] private float delayTime = 0.1f;
+    [SerializeField] private int flashTimes = 2;
 
     private int health;
     [SerializeField] private TMP_Text healthTxt;
@@ -52,7 +57,24 @@ public class EnemyController : MonoBehaviour
                 EventBus.Publish(new EnemyDefeatedEvent(gameObject));
                 //GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().enemies
             }
+            else
+            {
+                StartCoroutine("Flash");
+            }
         }
+    }
+
+    private IEnumerator Flash()
+    {
+        for (int i = 0; i < flashTimes; i++)
+        {
+            GetComponent<SpriteRenderer>().material.color = Color.white;
+            yield return new WaitForSeconds(delayTime);
+            GetComponent<SpriteRenderer>().material.color = flashColor;
+            yield return new WaitForSeconds(delayTime);
+        }
+        GetComponent<SpriteRenderer>().material.color = Color.white;
+        yield return null;
     }
 }
 
