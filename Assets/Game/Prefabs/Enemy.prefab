@@ -345,4 +345,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   enemyData: {fileID: 0}
+  delayTime: 0.1
   healthTxt: {fileID: 656622697491976621}
+  DmgTxtPrefab: {fileID: 4620715596389784687, guid: 5109dd767d9c08f4ebf5a5e6773dedff, type: 3}
