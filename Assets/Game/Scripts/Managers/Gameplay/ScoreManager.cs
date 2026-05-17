@@ -53,7 +53,11 @@ public class ScoreManager : MonoBehaviour
             itemDisplay.GetComponent<ItemController>().Setup();
             itemDisplay.SetActive(true);
 
-            roller.RollDie(this, OnRollComplete);
+            int rollResult = -1;
+            yield return roller.RollDie(result => rollResult = result); // coroutine now used for rolling die
+
+            OnRollComplete(rollResult);
+
             yield return new WaitForSeconds(waitForRoll);
         }
         yield return null;

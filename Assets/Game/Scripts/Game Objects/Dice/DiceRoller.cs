@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DiceRoller : MonoBehaviour
@@ -42,10 +43,10 @@ public class DiceRoller : MonoBehaviour
     /// </summary>
     /// <param name="runner"></param>
     /// <param name="onResult"></param>
-    public void RollDie(MonoBehaviour runner, Action<int> onResult)
+    public IEnumerator RollDie(Action<int> onResult)
     {
-        if (isRolling) return;
-        runner.StartCoroutine(RollRoutine(onResult));
+        if (isRolling) yield break;
+        yield return RollRoutine(onResult);
     }
 
     /// <summary>
