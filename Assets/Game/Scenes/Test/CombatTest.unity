@@ -2662,7 +2662,7 @@ MonoBehaviour:
   lateralForceRange: {x: 3.5, y: 6}
   upwardForceRange: {x: 1, y: 2.2}
   torqueRange: {x: 8, y: 20}
-  maxRollDuration: 5
+  maxRollDuration: 3
   postSettleDelay: 0.15
   diceLerp: 1
   diceShowTimer: 3

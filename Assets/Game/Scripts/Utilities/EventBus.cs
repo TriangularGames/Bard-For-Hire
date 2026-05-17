@@ -164,11 +164,14 @@ public struct CombatStartEvent { }
 public struct CombatEndEvent { }
 
 /// <summary>
-/// Event for when Round Starts
+/// Event for when Scoring is Completed
 /// </summary>
-public struct RoundStartEvent { }
+public struct ScoringCompletedEvent
+{
+    public int count;
 
-/// <summary>
-/// Event for when Round Ends
-/// </summary>
-public struct RoundEndEvent { }
+    public ScoringCompletedEvent(int _count)
+    {
+        count = _count;
+    }
+}
