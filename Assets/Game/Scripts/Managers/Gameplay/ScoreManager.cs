@@ -50,6 +50,7 @@ public class ScoreManager : MonoBehaviour
             
             // Display item being rolled for
             itemDisplay.GetComponent<ItemController>().itemData = item;
+            itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 0f, 0f, 0f);
             itemDisplay.GetComponent<ItemController>().Setup();
             itemDisplay.SetActive(true);
 
@@ -65,21 +66,13 @@ public class ScoreManager : MonoBehaviour
     /// <param name="rollValue">The value of the roll</param>
     private void OnRollComplete(int rollValue)
     {
-        float curScore = 0f;
         ItemData item = pendingItems[curItem];
         // Include in here some effect thats displayed as each note is determined
         // to be scored or not
         if (item.Playable <= rollValue)
         {
             Debug.Log($"{item.name} was played!");
-            if (item.Mult)
-            {
-                curScore *= item.Damage;
-            }
-            else
-            {
-                curScore += item.Damage;
-            }
+            itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 1f, 0f, 1f);
 
             foreach (Transform enemyLocation in GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().spawnPoints)
             {
@@ -97,6 +90,10 @@ public class ScoreManager : MonoBehaviour
                     }
                 }
             }
+        }
+        else
+        {
+            itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(1f, 0f, 0f, 1f);
         }
 
         if ((curItem + 1) == pendingItems.Count)
