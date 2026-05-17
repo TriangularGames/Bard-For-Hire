@@ -11,10 +11,12 @@ public class EnemyController : MonoBehaviour
 
     private Color flashColor = new Color(1f,1f,1f,0.5f);
     [SerializeField] private float delayTime = 0.1f;
-    [SerializeField] private int flashTimes = 2;
+    private int flashTimes = 0;
 
     private int health;
     [SerializeField] private TMP_Text healthTxt;
+    // TODO: use ResourceManager
+    [SerializeField] private GameObject DmgTxtPrefab;
 
     public int GetHealth() {  return health; }
 
@@ -49,18 +51,8 @@ public class EnemyController : MonoBehaviour
     {
         if (e.id == gameObject.GetEntityId())
         {
-            health -= e.damage;
-            SetDamageTxt();
-            if (health <= 0)
-            {
-                Debug.Log("Enemy killed.");
-                EventBus.Publish(new EnemyDefeatedEvent(gameObject));
-                //GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().enemies
-            }
-            else
-            {
-                StartCoroutine("Flash");
-            }
+            flashTimes = e.damage;
+            StartCoroutine("Flash");
         }
     }
 
@@ -70,6 +62,18 @@ public class EnemyController : MonoBehaviour
         {
             GetComponent<SpriteRenderer>().material.color = Color.white;
             yield return new WaitForSeconds(delayTime);
+
+            // TODO: object pool or change to particle effect perhaps?
+            var txt = Instantiate(DmgTxtPrefab, transform.position, Quaternion.identity, transform);
+            txt.GetComponent<TMP_Text>().text = "-1";
+            health -= 1;
+            SetDamageTxt();
+            if (health <= 0)
+            {
+                Debug.Log("Enemy killed.");
+                EventBus.Publish(new EnemyDefeatedEvent(gameObject));
+            }
+
             GetComponent<SpriteRenderer>().material.color = flashColor;
             yield return new WaitForSeconds(delayTime);
         }

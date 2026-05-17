@@ -2136,6 +2136,7 @@ MonoBehaviour:
   discardBtn: {fileID: 1451013656}
   attackBtn: {fileID: 133154867}
   ItemsSelected: []
+  selectionLimit: 4
   MAXDiscards: 3
   itemPool: {fileID: 1186631605}
 --- !u!4 &1016375506
