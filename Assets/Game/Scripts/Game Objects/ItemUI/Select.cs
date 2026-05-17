@@ -23,7 +23,7 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (!isSelected)
+        if (!isSelected && GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().HasRoom())
         {
             selection.color = new Color(0f, 256f, 0f, 0.5f);
             GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsSelected.Add(gameObject);

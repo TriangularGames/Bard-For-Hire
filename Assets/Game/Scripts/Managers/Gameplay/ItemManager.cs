@@ -11,6 +11,7 @@ public class ItemManager : MonoBehaviour
     public Button attackBtn;
 
     [HideInInspector] public List<GameObject> ItemsSelected;
+    [SerializeField] private int selectionLimit = 4;
     
     // Number of Items that have been Discarded
     private int itemsDiscarded = 0;
@@ -28,6 +29,12 @@ public class ItemManager : MonoBehaviour
     private void OnDisable()
     {
         EventBus.Unsubscribe<ItemScoredEvent>(DeleteItems);
+    }
+
+    public bool HasRoom()
+    {
+        if (ItemsSelected.Count < selectionLimit) return true;
+        return false;
     }
 
     private void DeleteItems(ItemScoredEvent e)
