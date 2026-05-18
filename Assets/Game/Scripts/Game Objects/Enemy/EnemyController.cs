@@ -1,8 +1,5 @@
-using NUnit.Framework.Interfaces;
-using System;
 using System.Collections;
 using TMPro;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -11,10 +8,15 @@ public class EnemyController : MonoBehaviour
 
     private Color flashColor = new Color(1f,1f,1f,0.5f);
     [SerializeField] private float delayTime = 0.1f;
-    [SerializeField] private int flashTimes = 2;
+    private int flashTimes = 0;
 
     private int health;
     [SerializeField] private TMP_Text healthTxt;
+    // TODO: use ResourceManager
+    [SerializeField] private GameObject DmgTxtPrefab;
+
+    [SerializeField] private SpriteRenderer EnemySprite;
+    [SerializeField] private Animator anim;
 
     public int GetHealth() {  return health; }
 
@@ -37,7 +39,7 @@ public class EnemyController : MonoBehaviour
 
     private void SetSprite()
     {
-        GetComponent<SpriteRenderer>().sprite = enemyData.icon;
+        EnemySprite.sprite = enemyData.icon;
     }
 
     private void SetDamageTxt()
@@ -49,18 +51,8 @@ public class EnemyController : MonoBehaviour
     {
         if (e.id == gameObject.GetEntityId())
         {
-            health -= e.damage;
-            SetDamageTxt();
-            if (health <= 0)
-            {
-                Debug.Log("Enemy killed.");
-                EventBus.Publish(new EnemyDefeatedEvent(gameObject));
-                //GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().enemies
-            }
-            else
-            {
-                StartCoroutine("Flash");
-            }
+            flashTimes = e.damage;
+            StartCoroutine("Flash");
         }
     }
 
@@ -68,12 +60,28 @@ public class EnemyController : MonoBehaviour
     {
         for (int i = 0; i < flashTimes; i++)
         {
-            GetComponent<SpriteRenderer>().material.color = Color.white;
+            EnemySprite.material.color = Color.white;
             yield return new WaitForSeconds(delayTime);
-            GetComponent<SpriteRenderer>().material.color = flashColor;
+
+            // TODO: object pool or change to particle effect perhaps?
+            var txt = Instantiate(DmgTxtPrefab, transform.position, Quaternion.identity, transform);
+            txt.GetComponent<TMP_Text>().text = "-1";
+            health -= 1;
+            SetDamageTxt();
+            if (health <= 0)
+            {
+                Debug.Log("Enemy killed.");
+                EventBus.Publish(new EnemyDefeatedEvent(gameObject));
+            }
+            else
+            {
+                anim.SetTrigger("Hit");
+            }
+
+            EnemySprite.material.color = flashColor;
             yield return new WaitForSeconds(delayTime);
         }
-        GetComponent<SpriteRenderer>().material.color = Color.white;
+        EnemySprite.material.color = Color.white;
         yield return null;
     }
 }

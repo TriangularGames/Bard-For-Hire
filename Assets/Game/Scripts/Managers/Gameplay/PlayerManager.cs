@@ -15,7 +15,7 @@ public class PlayerManager : Singleton<PlayerManager>
     public List<ItemData> itemsNotUsed;
 
     // Current selected Character
-    public BaseBard selectedCharacter;
+    public PlayerController selectedCharacter;
 
     [Tooltip("Amount of money the Player has")]
     public int Coins;
@@ -128,8 +128,6 @@ public class PlayerManager : Singleton<PlayerManager>
         {
             itemInventory = new List<ItemData>();
         }
-
-        //selectedBard = new LuteBard(); // Start with lute bard
     }
 
     public void SetCoinText()

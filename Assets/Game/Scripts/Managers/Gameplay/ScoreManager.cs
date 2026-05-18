@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,7 +19,7 @@ public class ScoreManager : MonoBehaviour
     public int curRound = 1;
     private int MaxRounds = 3;
 
-    public float waitForRoll = 7f;
+    public float waitForRoll = 2f;
 
     public DiceRoller roller;
     private List<ItemData> pendingItems;
@@ -54,7 +53,11 @@ public class ScoreManager : MonoBehaviour
             itemDisplay.GetComponent<ItemController>().Setup();
             itemDisplay.SetActive(true);
 
-            roller.RollDie(this, OnRollComplete);
+            int rollResult = -1;
+            yield return roller.RollDie(result => rollResult = result); // coroutine now used for rolling die
+
+            OnRollComplete(rollResult);
+
             yield return new WaitForSeconds(waitForRoll);
         }
         yield return null;
@@ -76,6 +79,7 @@ public class ScoreManager : MonoBehaviour
         {
             Debug.Log($"{item.name} was played!");
             itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 1f, 0f, 1f);
+            EventBus.Publish<AttackEvent>(new AttackEvent());
             int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex);
             UpgradeFightingManager.Instance.SuccessfulAction(item, totalDamage);
 
@@ -106,7 +110,7 @@ public class ScoreManager : MonoBehaviour
 
             if (UpgradeFightingManager.Instance.CanUseSecondChance())
             {
-                roller.RollDie(this, OnRollComplete);
+                roller.RollDie(OnRollComplete);
                 return;
             }
             if (UpgradeFightingManager.Instance.CanUseQuickSave())
@@ -159,7 +163,6 @@ public class ScoreManager : MonoBehaviour
         itemDisplay.SetActive(false);
 
         // Check if we have hit the MaxRounds or all Enemies are dead
-        // TODO: fix this
         if (!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive() || curRound == MaxRounds)
         {
             // If we have, determine if the player has won
@@ -182,12 +185,11 @@ public class ScoreManager : MonoBehaviour
         }
         else
         {
-            // If we have not hit MaxRounds, go to the next round
-            // QUESTION: Should "next round" setup be handled by the GameManager?
+            // If we have not hit MaxRounds & Enemies are still alive, go to the next round
             Debug.Log("Round " + curRound.ToString() + " Completed!");
             curRound++;
             roundText.text = "Round " + curRound + "/3";
-            GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().GrabNewItems(count);
+            EventBus.Publish(new ScoringCompletedEvent(count));
         }
 
 

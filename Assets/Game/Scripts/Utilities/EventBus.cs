@@ -156,19 +156,17 @@ public struct ItemSelectedEvent
 /// <summary>
 /// Event for when Combat Starts
 /// </summary>
-public struct CombatStartEvent { }
+public struct AttackEvent { }
 
 /// <summary>
-/// Event for when Combat Ends- Specifically after the Win screen is shown
+/// Event for when Scoring is Completed
 /// </summary>
-public struct CombatEndEvent { }
+public struct ScoringCompletedEvent
+{
+    public int count;
 
-/// <summary>
-/// Event for when Round Starts
-/// </summary>
-public struct RoundStartEvent { }
-
-/// <summary>
-/// Event for when Round Ends
-/// </summary>
-public struct RoundEndEvent { }
+    public ScoringCompletedEvent(int _count)
+    {
+        count = _count;
+    }
+}

@@ -12,6 +12,8 @@ public class ItemManager : MonoBehaviour
 
     [HideInInspector] public List<GameObject> ItemsSelected;
     [SerializeField] private int selectionLimit = 4;
+
+    private bool scoringCompleted = true;
     
     // Number of Items that have been Discarded
     private int itemsDiscarded = 0;
@@ -24,11 +26,13 @@ public class ItemManager : MonoBehaviour
     private void OnEnable()
     {
         EventBus.Subscribe<ItemScoredEvent>(DeleteItems);
+        EventBus.Subscribe<ScoringCompletedEvent>(PrepNewRound);
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<ItemScoredEvent>(DeleteItems);
+        EventBus.Unsubscribe<ScoringCompletedEvent>(PrepNewRound);
     }
 
     public bool HasRoom()
@@ -86,7 +90,7 @@ public class ItemManager : MonoBehaviour
             discardBtn.interactable = false;
         }
 
-        if (ItemsSelected.Count == 0)
+        if (ItemsSelected.Count == 0 || !scoringCompleted)
         {
             attackBtn.interactable = false;
         }
@@ -163,11 +167,18 @@ public class ItemManager : MonoBehaviour
     /// </summary>
     public void CalculateScore()
     {
+        scoringCompleted = false;
         List<ItemData> itemData = new List<ItemData>();
         foreach (GameObject itemObj in ItemsSelected)
         {
             itemData.Add(itemObj.GetComponent<ItemController>().itemData);
         }
         GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().StartCoroutine("CalculateScore", itemData);
+    }
+
+    private void PrepNewRound(ScoringCompletedEvent e)
+    {
+        GrabNewItems(e.count);
+        scoringCompleted = true;
     }
 }
