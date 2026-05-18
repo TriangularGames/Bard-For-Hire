@@ -19,7 +19,7 @@ public class ScoreManager : MonoBehaviour
     public int curRound = 1;
     private int MaxRounds = 3;
 
-    public float waitForRoll = 7f;
+    public float waitForRoll = 2f;
 
     public DiceRoller roller;
     private List<ItemData> pendingItems;
@@ -76,6 +76,7 @@ public class ScoreManager : MonoBehaviour
         {
             Debug.Log($"{item.name} was played!");
             itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 1f, 0f, 1f);
+            EventBus.Publish<AttackEvent>(new AttackEvent());
 
             foreach (Transform enemyLocation in GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().spawnPoints)
             {
