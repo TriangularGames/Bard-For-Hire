@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dac3702ff3d5d8c4583fb2a130044aea, type: 3}
-  m_Name: Action Surge
+  m_Name: Double Crit
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  UpgradeName: Action Surge
-  UpgradeDescription: Gain 1 more action per turn
-  cost: 15
-  UpgradeType: 0
-  Rarity: 2
-  UpgradeID: 0
+  UpgradeName: Double Crit
+  UpgradeDescription: Attack again whenever you roll a natural 20
+  cost: 14
+  UpgradeType: 1
+  Rarity: 1
+  UpgradeID: 16
   icon: {fileID: 0}

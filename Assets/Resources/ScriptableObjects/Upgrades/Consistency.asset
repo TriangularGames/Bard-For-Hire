@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dac3702ff3d5d8c4583fb2a130044aea, type: 3}
-  m_Name: Action Surge
+  m_Name: Consistency
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  UpgradeName: Action Surge
-  UpgradeDescription: Gain 1 more action per turn
-  cost: 15
+  UpgradeName: Consistency
+  UpgradeDescription: Whenever the first 3 actions played is the same as the last
+    turn, those notes gain 50% damage
+  cost: 18
   UpgradeType: 0
-  Rarity: 2
-  UpgradeID: 0
+  Rarity: 1
+  UpgradeID: 10
   icon: {fileID: 0}
