@@ -612,7 +612,7 @@ Transform:
   m_GameObject: {fileID: 3667151491057193553}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 818.7564, y: 406.08167, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -635,7 +635,7 @@ MonoBehaviour:
   angularSleepThreshold: 0.05
   settleTimeRequired: 0.35
   overrideGlobalGravity: 1
-  customGravity: {x: 0, y: 0, z: 2}
+  customGravity: {x: 0, y: -3, z: 0}
   meshRoot: {fileID: 4026692751503793271}
   facesRoot: {fileID: 6392925838399612163}
   normalDotThreshold: 0.985
