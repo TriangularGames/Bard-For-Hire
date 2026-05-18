@@ -59,8 +59,7 @@ public class UpgradeFightingManager : MonoBehaviour
 
     public int GetBonusRoll(int roll)
     {
-        if (UpgradeManager.Instance.HasUpgrade("Skill Proficiency"))
-        {
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.SkillProficiency)) {
             roll += 2;
         }
         if (roll > 20) roll = 20;
@@ -73,16 +72,16 @@ public class UpgradeFightingManager : MonoBehaviour
         int damage = item.Damage;
 
         // this is for the upgrade "Battle Tactics" (1 bonus damage for actions in middle slots)
-        if(UpgradeManager.Instance.HasUpgrade("Battle Tactics"))
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.BattleTactics))
         {
-            if (slotIndex == 3 || slotIndex == 4)
+            if (slotIndex == 2 || slotIndex == 3)
             {
                 damage += 2;
             }
         }
 
         // this is for the upgrade "Rhythmic Attacks" (1  bonus damage for each of the same action type in a row)
-        if (UpgradeManager.Instance.HasUpgrade("Rhythmic Attacks"))
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.RhythmicAttacks))
         {
             int combo = 0;
             for (int i = currentActions.Count - 1; i >= 0; i--) {
@@ -100,13 +99,13 @@ public class UpgradeFightingManager : MonoBehaviour
         }
 
         // this is for the upgrade "Overwhelming Blows" (1 bonus damage for each action used)
-        if (UpgradeManager.Instance.HasUpgrade("Overwhelming Blows"))
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.OverwhelmingBlows))
         {
             damage += currentActions.Count;
         }
 
         // this is for the upgrade "Adaptive Combat" (1 bonus damage for each different action used in a row)
-        if (UpgradeManager.Instance.HasUpgrade("Adaptive Combat"))
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.AdaptiveCombat))
         {
             List<ItemType> list = new List<ItemType>();
             list.Add(item.ItemType);
@@ -128,7 +127,7 @@ public class UpgradeFightingManager : MonoBehaviour
         }
 
         // this is for the upgrade "Shining Star" (2 bonus damage for each rare weapon played)
-        if (UpgradeManager.Instance.HasUpgrade("Shining Star"))
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.ShiningStar))
         {
             if(item.Rarity == ObjectRarity.Rare)
             {
@@ -136,19 +135,19 @@ public class UpgradeFightingManager : MonoBehaviour
             }
         }
         //this is for the upgrade "Flow State" (Each action does extra damage equal to 10% of previous round's damage)
-        if (UpgradeManager.Instance.HasUpgrade("Flow State"))
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.FlowState))
         {
             damage += Mathf.RoundToInt(previousRoundDamage * 0.1f);
         }
 
         //this is for the upgrade "Perfect Battle" (Each consecutive action played without failing a DC gives 10% bonus damage)
-        if (UpgradeManager.Instance.HasUpgrade("Perfect Battle"))
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.PerfectBattle))
         {
             float mult = 1f + (successStreak * 0.1f);
             damage += Mathf.RoundToInt(item.Damage * (mult - 1f));
         }
         //this is for the upgrade "Timed Swings" (Odd slots gain +1, Even slots gain +2)
-        if (UpgradeManager.Instance.HasUpgrade("Timed Swings"))
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.TimedSwings))
         {
             if(slotIndex % 2 == 0)
             {
@@ -160,7 +159,7 @@ public class UpgradeFightingManager : MonoBehaviour
             }
         }
         //this is for the upgrade "Consistency" (Whenever the first 3 actions played is the same as the last turn, those notes gain 50% damage)
-        if (UpgradeManager.Instance.HasUpgrade("Consistency"))
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.Consistency))
         {
             if (slotIndex < 3)
             {
@@ -173,7 +172,7 @@ public class UpgradeFightingManager : MonoBehaviour
                 }
             }
             //this is for the upgrade "Lucky Strike" (1.25x bonus score for random slot (changes every turn))
-            if (UpgradeManager.Instance.HasUpgrade("Lucky Strike"))
+            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.LuckyStrike))
             {
                 if(slotIndex == luckySlot)
                 {
@@ -185,7 +184,7 @@ public class UpgradeFightingManager : MonoBehaviour
     }
     //this is for the upgrade "Second Chance" (Once per combat you may reroll a failed check)
     public bool CanUseSecondChance(){
-        if (UpgradeManager.Instance.HasUpgrade("Second Chance"))
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.SecondChance))
         {
             if (!secondChanceUsed)
             {
@@ -200,7 +199,7 @@ public class UpgradeFightingManager : MonoBehaviour
     //this is for the upgrade "Quick Save" (First failed DC of each round still activates upgrade ability.)
     public bool CanUseQuickSave()
     {
-        if (UpgradeManager.Instance.HasUpgrade("Quick Save"))
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.QuickSave))
         {
             if (!quickSaveUsed)
             {

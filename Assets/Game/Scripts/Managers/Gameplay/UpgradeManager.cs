@@ -6,7 +6,7 @@ public class UpgradeManager : MonoBehaviour
 {
     public static UpgradeManager Instance;
 
-    public List<UpgradeData> Upgrades = new List<UpgradeData>();
+    public List<UpgradeID> Upgrades = new List<UpgradeID>();
 
 
     private void Awake()
@@ -16,20 +16,16 @@ public class UpgradeManager : MonoBehaviour
 
     public void AddUpgrade(UpgradeData upgrade)
     {
-        Upgrades.Add(upgrade);
+        Upgrades.Add(upgrade.UpgradeID);
 
     }
 
-    public bool HasUpgrade(string name)
+    public bool HasUpgrade(UpgradeID id)
     {
-        for (int i = 0; i < Upgrades.Count; i++)
-        {
-            if (Upgrades[i].name == name) return true;
-        }
-        return false;
+        return Upgrades.Contains(id);
     }
 
-    public void ClearUpgrades()
+        public void ClearUpgrades()
     {
         Upgrades.Clear();
     }

@@ -79,28 +79,44 @@ public class ScoreManager : MonoBehaviour
             int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex);
             UpgradeFightingManager.Instance.SuccessfulAction(item, totalDamage);
 
-            foreach (Transform enemyLocation in GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().spawnPoints)
-            {
-                // Check if the location has an enemy in it
-                if (enemyLocation.transform.childCount > 0)
-                {
-                    // Get the enemy at this location
-                    GameObject enemy = enemyLocation.transform.GetChild(0).gameObject;
+            AttackEnemy(totalDamage);
 
-                    if (enemy.GetComponent<EnemyController>().GetHealth() > 0)
-                    {
-                        EventBus.Publish<DamageTakenEvent>(
-                                new DamageTakenEvent(enemyLocation.transform.GetChild(0).gameObject.GetEntityId(), totalDamage));
-                        break;
-                    }
-                }
+            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.ComboChain))
+            {
+                int comboDMG = Mathf.RoundToInt(totalDamage * 0.5f);
+                AttackEnemy(comboDMG);
+            }
+
+            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.DoubleCrit))
+            {
+                if(finalroll == 20)
+                AttackEnemy(totalDamage);
+            }
+
+            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.EchoStrike))
+            {
+                if(slotIndex == pendingItems.Count - 1)
+                AttackEnemy(totalDamage);
             }
         }
         else
         {
             itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(1f, 0f, 0f, 1f);
             UpgradeFightingManager.Instance.FailedAction();
+
+            if (UpgradeFightingManager.Instance.CanUseSecondChance())
+            {
+                roller.RollDie(this, OnRollComplete);
+                return;
+            }
+            if (UpgradeFightingManager.Instance.CanUseQuickSave())
+            { int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex);
+              AttackEnemy(totalDamage);
+
+            }
         }
+
+
 
         if ((curItem + 1) == pendingItems.Count)
         {
@@ -108,9 +124,30 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
+    private void AttackEnemy(int damage)
+    {
+        foreach (Transform enemyLocation in GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().spawnPoints)
+        {
+            // Check if the location has an enemy in it
+            if (enemyLocation.transform.childCount > 0)
+            {
+                // Get the enemy at this location
+                GameObject enemy = enemyLocation.transform.GetChild(0).gameObject;
+
+                if (enemy.GetComponent<EnemyController>().GetHealth() > 0)
+                {
+                    EventBus.Publish<DamageTakenEvent>(
+                            new DamageTakenEvent(enemyLocation.transform.GetChild(0).gameObject.GetEntityId(), damage));
+                    break;
+                }
+            }
+        }
+    }
+
     /// <summary>
     /// Finalize the Score calculation for display.
     /// </summary>
+    /// 
     private void FinalizeScore()
     {
         int count = pendingItems.Count;

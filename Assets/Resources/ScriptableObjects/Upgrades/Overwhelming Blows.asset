@@ -17,4 +17,5 @@ MonoBehaviour:
   cost: 25
   UpgradeType: 0
   Rarity: 2
+  UpgradeID: 1
   icon: {fileID: 0}

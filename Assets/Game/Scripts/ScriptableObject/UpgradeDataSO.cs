@@ -12,6 +12,7 @@ public class UpgradeData : ScriptableObject
     [Header("Upgrade Descriptors")]
     [SerializeField] public UpgradeType UpgradeType;
     [SerializeField] public ObjectRarity Rarity;
+    [SerializeField] public UpgradeID UpgradeID;
 
     [Header("Visual Data")]
     [SerializeField] public Sprite icon;

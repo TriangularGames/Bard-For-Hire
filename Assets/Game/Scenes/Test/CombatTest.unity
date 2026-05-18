@@ -178,43 +178,43 @@ PrefabInstance:
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
+      objectReference: {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
+      objectReference: {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[2]'
       value: 
-      objectReference: {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
+      objectReference: {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[3]'
       value: 
-      objectReference: {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
+      objectReference: {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[4]'
       value: 
-      objectReference: {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
+      objectReference: {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[5]'
       value: 
-      objectReference: {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
+      objectReference: {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[6]'
       value: 
-      objectReference: {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
+      objectReference: {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[7]'
       value: 
-      objectReference: {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
+      objectReference: {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[8]'
       value: 
-      objectReference: {fileID: 11400000, guid: 867c2f2b90985ea4386571c47e4fe35b, type: 2}
+      objectReference: {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[9]'
       value: 
-      objectReference: {fileID: 11400000, guid: 867c2f2b90985ea4386571c47e4fe35b, type: 2}
+      objectReference: {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'noteInventory.Array.data[0]'
       value: 
@@ -258,27 +258,27 @@ PrefabInstance:
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[10]'
       value: 
-      objectReference: {fileID: 11400000, guid: 867c2f2b90985ea4386571c47e4fe35b, type: 2}
+      objectReference: {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[11]'
       value: 
-      objectReference: {fileID: 11400000, guid: 867c2f2b90985ea4386571c47e4fe35b, type: 2}
+      objectReference: {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[12]'
       value: 
-      objectReference: {fileID: 11400000, guid: 867c2f2b90985ea4386571c47e4fe35b, type: 2}
+      objectReference: {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[13]'
       value: 
-      objectReference: {fileID: 11400000, guid: 867c2f2b90985ea4386571c47e4fe35b, type: 2}
+      objectReference: {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[14]'
       value: 
-      objectReference: {fileID: 11400000, guid: 867c2f2b90985ea4386571c47e4fe35b, type: 2}
+      objectReference: {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[15]'
       value: 
-      objectReference: {fileID: 11400000, guid: 867c2f2b90985ea4386571c47e4fe35b, type: 2}
+      objectReference: {fileID: 11400000, guid: 1c8dbe43996776f4b88b1b32a03361e7, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[16]'
       value: 
@@ -2168,8 +2168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 502b01f5a4518fe4e9d850b9ce72c20b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
-  Upgrades:
-  - {fileID: 11400000, guid: df7e965bd914a8b4295ca7595977adc6, type: 2}
+  Upgrades: 11000000
 --- !u!1 &1050412168
 GameObject:
   m_ObjectHideFlags: 0

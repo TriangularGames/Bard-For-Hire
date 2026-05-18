@@ -30,4 +30,25 @@ public enum UpgradeType
     Dice
 }
 
+public enum UpgradeID{
+    ActionSurge,
+    BattleTactics,
+    LuckyStrike,
+    RhythmicAttacks,
+    OverwhelmingBlows,
+    AdaptiveCombat,
+    ShiningStar,
+    SkillProficiency,
+    SecondChance,
+    EarlyAdvantage,
+    Consistency,
+    TimedSwings,
+    FlowState,
+    PerfectBattle,
+    QuickSave,
+    ComboChain,
+    DoubleCrit,
+    EchoStrike,
+}
+
 
