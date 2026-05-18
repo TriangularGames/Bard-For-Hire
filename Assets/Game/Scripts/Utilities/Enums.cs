@@ -16,7 +16,8 @@ public enum ObjectRarity
 /// </summary>
 public enum ItemType
 {
-    Physical,
+    Piercing,
+    Slashing,
     Magical
 }
 
@@ -27,6 +28,27 @@ public enum UpgradeType
 {
     AttackHand,
     Dice
+}
+
+public enum UpgradeID{
+    ActionSurge,
+    BattleTactics,
+    LuckyStrike,
+    RhythmicAttacks,
+    OverwhelmingBlows,
+    AdaptiveCombat,
+    ShiningStar,
+    SkillProficiency,
+    SecondChance,
+    EarlyAdvantage,
+    Consistency,
+    TimedSwings,
+    FlowState,
+    PerfectBattle,
+    QuickSave,
+    ComboChain,
+    DoubleCrit,
+    EchoStrike,
 }
 
 
