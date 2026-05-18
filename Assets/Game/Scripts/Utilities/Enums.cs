@@ -16,7 +16,8 @@ public enum ObjectRarity
 /// </summary>
 public enum ItemType
 {
-    Physical,
+    Piercing,
+    Slashing,
     Magical
 }
 
