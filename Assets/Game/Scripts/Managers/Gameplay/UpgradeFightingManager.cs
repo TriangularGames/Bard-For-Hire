@@ -57,16 +57,27 @@ public class UpgradeFightingManager : MonoBehaviour
         successStreak = 0;
     }
 
+    public int GetBonusRoll(int roll)
+    {
+        if (UpgradeManager.Instance.HasUpgrade("Skill Proficiency"))
+        {
+            roll += 2;
+        }
+        if (roll > 20) roll = 20;
+        if (roll < 1) roll = 1;
+        return roll;
+    }
+
     public int GetBonusDamage(ItemData item, int slotIndex)
     {
-        int bonus = 0;
+        int damage = item.Damage;
 
         // this is for the upgrade "Battle Tactics" (1 bonus damage for actions in middle slots)
         if(UpgradeManager.Instance.HasUpgrade("Battle Tactics"))
         {
             if (slotIndex == 3 || slotIndex == 4)
             {
-                bonus += 2;
+                damage += 2;
             }
         }
 
@@ -85,13 +96,13 @@ public class UpgradeFightingManager : MonoBehaviour
                     break;
                 }
             }
-            bonus += combo;
+            damage += combo;
         }
 
         // this is for the upgrade "Overwhelming Blows" (1 bonus damage for each action used)
         if (UpgradeManager.Instance.HasUpgrade("Overwhelming Blows"))
         {
-            bonus += currentActions.Count;
+            damage += currentActions.Count;
         }
 
         // this is for the upgrade "Adaptive Combat" (1 bonus damage for each different action used in a row)
@@ -113,7 +124,7 @@ public class UpgradeFightingManager : MonoBehaviour
                     break;
                 }
             }
-            bonus += combo;
+            damage += combo;
         }
 
         // this is for the upgrade "Shining Star" (2 bonus damage for each rare weapon played)
@@ -121,31 +132,31 @@ public class UpgradeFightingManager : MonoBehaviour
         {
             if(item.Rarity == ObjectRarity.Rare)
             {
-                bonus += 2;
+                damage += 2;
             }
         }
         //this is for the upgrade "Flow State" (Each action does extra damage equal to 10% of previous round's damage)
         if (UpgradeManager.Instance.HasUpgrade("Flow State"))
         {
-            bonus += Mathf.RoundToInt(previousRoundDamage * 0.1f);
+            damage += Mathf.RoundToInt(previousRoundDamage * 0.1f);
         }
 
         //this is for the upgrade "Perfect Battle" (Each consecutive action played without failing a DC gives 10% bonus damage)
         if (UpgradeManager.Instance.HasUpgrade("Perfect Battle"))
         {
             float mult = 1f + (successStreak * 0.1f);
-            bonus += Mathf.RoundToInt(item.Damage * (mult - 1f));
+            damage += Mathf.RoundToInt(item.Damage * (mult - 1f));
         }
         //this is for the upgrade "Timed Swings" (Odd slots gain +1, Even slots gain +2)
         if (UpgradeManager.Instance.HasUpgrade("Timed Swings"))
         {
             if(slotIndex % 2 == 0)
             {
-                bonus += 1;
+                damage += 1;
             }
             else
             {
-                bonus += 2;
+                damage += 2;
             }
         }
         //this is for the upgrade "Consistency" (Whenever the first 3 actions played is the same as the last turn, those notes gain 50% damage)
@@ -157,7 +168,7 @@ public class UpgradeFightingManager : MonoBehaviour
                 {
                     if (previousActions[slotIndex] == item.ItemType)
                     {
-                        bonus += Mathf.RoundToInt(item.Damage * 0.5f);
+                        damage += Mathf.RoundToInt(item.Damage * 0.5f);
                     }
                 }
             }
@@ -166,11 +177,11 @@ public class UpgradeFightingManager : MonoBehaviour
             {
                 if(slotIndex == luckySlot)
                 {
-                    bonus += Mathf.RoundToInt(item.Damage * 0.25f);
+                    damage += Mathf.RoundToInt(item.Damage * 0.25f);
                 }
             }
         }
-        return bonus;
+        return damage;
     }
     //this is for the upgrade "Second Chance" (Once per combat you may reroll a failed check)
     public bool CanUseSecondChance(){

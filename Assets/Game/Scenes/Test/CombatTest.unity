@@ -1782,6 +1782,7 @@ Transform:
   - {fileID: 1534831705}
   - {fileID: 1700638987}
   - {fileID: 1421705251}
+  - {fileID: 1050412169}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &958254162 stripped
@@ -2114,6 +2115,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1016375506}
   - component: {fileID: 1016375505}
+  - component: {fileID: 1016375507}
   m_Layer: 0
   m_Name: _ItemManager
   m_TagString: ItemManager
@@ -2136,6 +2138,7 @@ MonoBehaviour:
   discardBtn: {fileID: 1451013656}
   attackBtn: {fileID: 133154867}
   ItemsSelected: []
+  selectionLimit: 4
   MAXDiscards: 3
   itemPool: {fileID: 1186631605}
 --- !u!4 &1016375506
@@ -2153,6 +2156,72 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1016375507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1016375504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 502b01f5a4518fe4e9d850b9ce72c20b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
+  Upgrades:
+  - {fileID: 11400000, guid: df7e965bd914a8b4295ca7595977adc6, type: 2}
+--- !u!1 &1050412168
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1050412169}
+  - component: {fileID: 1050412170}
+  m_Layer: 0
+  m_Name: _CombatManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1050412169
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050412168}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 908861401}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1050412170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1050412168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37d91d8cd5d6f784bbe419000528f61c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeFightingManager
+  currentActions: 
+  previousActions: 
+  roundDamage: 0
+  previousRoundDamage: 0
+  secondChanceUsed: 0
+  quickSaveUsed: 0
+  luckySlot: 0
+  successStreak: 0
 --- !u!1 &1082438378
 GameObject:
   m_ObjectHideFlags: 0
@@ -2298,7 +2367,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -27.777496}
+  m_AnchoredPosition: {x: 0, y: -27.777527}
   m_SizeDelta: {x: 0, y: 55.555}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1141452192

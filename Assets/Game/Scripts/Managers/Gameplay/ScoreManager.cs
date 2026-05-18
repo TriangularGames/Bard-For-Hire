@@ -67,12 +67,17 @@ public class ScoreManager : MonoBehaviour
     private void OnRollComplete(int rollValue)
     {
         ItemData item = pendingItems[curItem];
+        int slotIndex = curItem;
+
+        int finalroll = UpgradeFightingManager.Instance.GetBonusRoll(rollValue);
         // Include in here some effect thats displayed as each note is determined
         // to be scored or not
-        if (item.Playable <= rollValue)
+        if (item.Playable <= finalroll)
         {
             Debug.Log($"{item.name} was played!");
             itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 1f, 0f, 1f);
+            int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex);
+            UpgradeFightingManager.Instance.SuccessfulAction(item, totalDamage);
 
             foreach (Transform enemyLocation in GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().spawnPoints)
             {
@@ -85,7 +90,7 @@ public class ScoreManager : MonoBehaviour
                     if (enemy.GetComponent<EnemyController>().GetHealth() > 0)
                     {
                         EventBus.Publish<DamageTakenEvent>(
-                                new DamageTakenEvent(enemyLocation.transform.GetChild(0).gameObject.GetEntityId(), item.Damage));
+                                new DamageTakenEvent(enemyLocation.transform.GetChild(0).gameObject.GetEntityId(), totalDamage));
                         break;
                     }
                 }
@@ -94,6 +99,7 @@ public class ScoreManager : MonoBehaviour
         else
         {
             itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(1f, 0f, 0f, 1f);
+            UpgradeFightingManager.Instance.FailedAction();
         }
 
         if ((curItem + 1) == pendingItems.Count)
