@@ -110,7 +110,7 @@ public class ScoreManager : MonoBehaviour
 
             if (UpgradeFightingManager.Instance.CanUseSecondChance())
             {
-                roller.RollDie(this, OnRollComplete);
+                roller.RollDie(OnRollComplete);
                 return;
             }
             if (UpgradeFightingManager.Instance.CanUseQuickSave())

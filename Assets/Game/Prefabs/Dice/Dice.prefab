@@ -635,7 +635,7 @@ MonoBehaviour:
   angularSleepThreshold: 0.05
   settleTimeRequired: 0.35
   overrideGlobalGravity: 1
-  customGravity: {x: 0, y: -3, z: 0}
+  customGravity: {x: 0, y: -4, z: 0}
   meshRoot: {fileID: 4026692751503793271}
   facesRoot: {fileID: 6392925838399612163}
   normalDotThreshold: 0.985
