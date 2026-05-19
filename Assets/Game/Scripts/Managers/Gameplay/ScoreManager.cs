@@ -69,7 +69,7 @@ public class ScoreManager : MonoBehaviour
     /// Called when the roll is complete, and the score is calculated
     /// </summary>
     /// <param name="rollValue">The value of the roll</param>
-    private void OnRollComplete(int rollValue)
+    private async void OnRollComplete(int rollValue)
     {
         ItemData item = pendingItems[curItem];
         int slotIndex = curItem;
@@ -112,7 +112,7 @@ public class ScoreManager : MonoBehaviour
 
             if (UpgradeFightingManager.Instance.CanUseSecondChance())
             {
-                roller.RollDie(OnRollComplete);
+                rollValue = await roller.RollDie();
                 return;
             }
             if (UpgradeFightingManager.Instance.CanUseQuickSave())
