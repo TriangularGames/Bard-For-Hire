@@ -17,8 +17,13 @@ public class Drag : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
 
     private void Awake()
     {
+#if UNITY_EDITOR
         Debug.Assert(canvasTransform = GameObject.FindWithTag("Canvas").GetComponent<RectTransform>(), "Scene must contain tagged Canvas");
         Debug.Assert(objectTransform = GetComponent<RectTransform>(), "GameObject must have RectTransform");
+#else
+        canvasTransform = GameObject.FindWithTag("Canvas").GetComponent<RectTransform>();
+        objectTransform = GetComponent<RectTransform>();
+#endif
     }
 
     public void ResetPosition()

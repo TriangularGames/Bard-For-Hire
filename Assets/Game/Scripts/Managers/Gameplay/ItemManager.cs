@@ -72,7 +72,11 @@ public class ItemManager : MonoBehaviour
         ItemsSelected = new List<GameObject>();
         MAXDiscards = 3;
         discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard x" + MAXDiscards.ToString();
+# if UNITY_EDITOR
         Debug.Assert(itemPool = GameObject.FindWithTag("ItemPool").GetComponent<ItemPool>(), "ItemManager requires ItemPool");
+#else
+        itemPool = GameObject.FindWithTag("ItemPool").GetComponent<ItemPool>();
+#endif
     }
 
     private void Update()
