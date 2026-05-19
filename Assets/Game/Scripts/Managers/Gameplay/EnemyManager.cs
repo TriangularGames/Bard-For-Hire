@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyManager : MonoBehaviour
+public class EnemyManager : Singleton<EnemyManager>
 {
     [Header("Enemy Data")]
     /// <summary>
@@ -25,19 +25,18 @@ public class EnemyManager : MonoBehaviour
     /// </summary>
     [SerializeField] public List<Transform> spawnPoints;
 
-    /// <summary>
-    /// Total Score value for these Enemies
-    /// </summary>
-    [SerializeField] int totalScore;
-
     private void OnEnable()
     {
         EventBus.Subscribe<EnemyDefeatedEvent>(RemoveEnemy);
+        EventBus.Subscribe<EnterCombatEvent>(CombatSetup);
+        EventBus.Subscribe<EnterShopEvent>(ShopSetup);
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<EnemyDefeatedEvent>(RemoveEnemy);
+        EventBus.Unsubscribe<EnterCombatEvent>(CombatSetup);
+        EventBus.Unsubscribe<EnterShopEvent>(ShopSetup);
     }
 
     private void RemoveEnemy(EnemyDefeatedEvent e)
@@ -61,13 +60,23 @@ public class EnemyManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        SpawnEnemies();
+        // NOTE: UNCOMMENT THIS WHEN USING COMBATTEST SCENE
+        //SpawnEnemies();
+    }
 
-        GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().score = totalScore;
+    private void CombatSetup(EnterCombatEvent @event)
+    {
+        SpawnEnemies();
+    }
+
+    private void ShopSetup(EnterShopEvent @event)
+    {
+        LookAhead();
     }
 
     private void SpawnEnemies()
     {
+        // TODO: add event call that calls this function when entering Combat
         for (int i = 0; i < numberOfEnemies; i++)
         {
             int memberType = Random.Range(0, memberTypes.Count);
@@ -82,7 +91,6 @@ public class EnemyManager : MonoBehaviour
                     enemySpawned.GetComponent<EnemyController>().Setup();
                     enemySpawned.name = data.name + " " + enemySpawned.GetEntityId();
 
-                    totalScore += data.health;
                     enemies.Add(enemySpawned);
                 }
             }
@@ -90,11 +98,13 @@ public class EnemyManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Takes a Value to either add or remove from Total Score
+    /// Called when entering Shop to setup Data for next Combat and Display to player
     /// </summary>
-    /// <param name="val">Value to add or remove</param>
-    public void EditScore(int val)
+    private void LookAhead()
     {
-        totalScore += val;
+        // Generate list of enemies based on Round # specific data
+        // send data to panel in Shop
+        // TODO: make functionality
+        // TODO: Add event call when entering shop that calls this function
     }
 }

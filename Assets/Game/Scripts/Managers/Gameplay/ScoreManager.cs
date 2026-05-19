@@ -10,7 +10,6 @@ using UnityEngine.UI;
 public class ScoreManager : MonoBehaviour
 {
     [SerializeField] TMP_Text combatCompleteText;
-    public float score;
 
     [SerializeField] GameObject itemDisplay;
 
@@ -27,9 +26,9 @@ public class ScoreManager : MonoBehaviour
 
     private void Start()
     {
-        score = 0f;
         combatCompleteText.text = "";
         itemDisplay.SetActive(false);
+        EventBus.Publish<EnterCombatEvent>(new EnterCombatEvent());
     }
 
     /// <summary>

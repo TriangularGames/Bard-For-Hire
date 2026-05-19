@@ -20,3 +20,5 @@ public class ShopState : IGameState
 
     }
 }
+
+public struct EnterShopEvent { }
