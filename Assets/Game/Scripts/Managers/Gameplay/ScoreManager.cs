@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,7 +37,7 @@ public class ScoreManager : MonoBehaviour
     /// Calculates the final score for a round using ItemData List
     /// </summary>
     /// <param name="items">List of Items to be scored</param>
-    public IEnumerator CalculateScore(List<ItemData> items)
+    public async Task CalculateScore(List<ItemData> items)
     {
         pendingItems = items;
         curItem = -1;
@@ -54,13 +55,15 @@ public class ScoreManager : MonoBehaviour
             itemDisplay.SetActive(true);
 
             int rollResult = -1;
-            yield return roller.RollDie(result => rollResult = result); // coroutine now used for rolling die
+            //yield return roller.RollDie(result => rollResult = result); // coroutine now used for rolling die
 
+            //OnRollComplete(rollResult);
+
+            //yield return new WaitForSeconds(waitForRoll);
+
+            rollResult = await roller.RollDie();
             OnRollComplete(rollResult);
-
-            yield return new WaitForSeconds(waitForRoll);
         }
-        yield return null;
     }
 
     /// <summary>
