@@ -1,5 +1,6 @@
 using System.Collections;
 using TMPro;
+using UnityEditor.Animations;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -34,12 +35,18 @@ public class EnemyController : MonoBehaviour
     {
         health = enemyData.health;
         SetSprite();
+        SetAnimation();
         SetDamageTxt();
     }
 
     private void SetSprite()
     {
         EnemySprite.sprite = enemyData.icon;
+    }
+
+    private void SetAnimation()
+    {
+        anim.runtimeAnimatorController = enemyData.animator;
     }
 
     private void SetDamageTxt()

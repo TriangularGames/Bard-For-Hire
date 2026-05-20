@@ -1787,7 +1787,7 @@ GameObject:
   - component: {fileID: 1008172641}
   m_Layer: 0
   m_Name: EnemySpawnPoints
-  m_TagString: Untagged
+  m_TagString: SpawnPoints
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2224,7 +2224,7 @@ MonoBehaviour:
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 30, y: 30}
+  m_CellSize: {x: 50, y: 50}
   m_Spacing: {x: 45, y: 0}
   m_Constraint: 2
   m_ConstraintCount: 1
@@ -2452,7 +2452,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
   combatCompleteText: {fileID: 407369666}
-  score: 0
   itemDisplay: {fileID: 958254162}
   roundText: {fileID: 422085961}
   curRound: 1
@@ -2719,7 +2718,6 @@ MonoBehaviour:
   - {fileID: 1316537236}
   - {fileID: 562990003}
   - {fileID: 1799662131}
-  totalScore: 0
 --- !u!4 &1658900633
 Transform:
   m_ObjectHideFlags: 0
@@ -2919,23 +2917,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6118806297738788843, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 20
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 6118806297738788843, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 20
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 6118806297738788843, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 6118806297738788843, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 6118806297738788843, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 6118806297738788843, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
       propertyPath: m_LocalPosition.x

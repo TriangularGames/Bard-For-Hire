@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Threading.Tasks;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -38,16 +39,27 @@ public class DiceRoller : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Starts coroutine to roll the die and get the result, prevents multiple rolls at once
-    /// </summary>
-    /// <param name="runner"></param>
-    /// <param name="onResult"></param>
-    public IEnumerator RollDie(Action<int> onResult)
+    public async Task<int> RollDie()
     {
-        if (isRolling) yield break;
-        yield return RollRoutine(onResult);
+        Debug.Log("Rolling die...");
+        display.text = "Rolling die...";
+        await Task.Delay(500);
+        int oneD20 = UnityEngine.Random.Range(1, 21);
+        Debug.Log("You rolled: " + oneD20);
+        display.text = "You rolled: " + oneD20;
+        return oneD20;
     }
+
+    ///// <summary>
+    ///// Starts coroutine to roll the die and get the result, prevents multiple rolls at once
+    ///// </summary>
+    ///// <param name="runner"></param>
+    ///// <param name="onResult"></param>
+    //public IEnumerator RollDie(Action<int> onResult)
+    //{
+    //    if (isRolling) yield break;
+    //    yield return RollRoutine(onResult); // replace this with a random number while keeping the roll routine for later (this is just for testing purposes)
+    //}
 
     /// <summary>
     /// Rolls the die and returns the result

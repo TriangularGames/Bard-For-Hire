@@ -1503,7 +1503,7 @@ GameObject:
   - component: {fileID: 1008172641}
   m_Layer: 0
   m_Name: EnemySpawnPoints
-  m_TagString: Untagged
+  m_TagString: SpawnPoints
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2167,7 +2167,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
   combatCompleteText: {fileID: 407369666}
-  score: 0
   itemDisplay: {fileID: 958254162}
   roundText: {fileID: 422085961}
   curRound: 1
@@ -2354,12 +2353,11 @@ MonoBehaviour:
   - Kobold
   - EvilerKobold
   numberOfEnemies: 3
-  enemies: []
   spawnPoints:
   - {fileID: 1316537236}
   - {fileID: 562990003}
   - {fileID: 1799662131}
-  totalScore: 0
+  enemyDisplays: []
 --- !u!4 &1658900633
 Transform:
   m_ObjectHideFlags: 0

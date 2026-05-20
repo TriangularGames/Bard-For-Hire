@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +11,6 @@ using UnityEngine.UI;
 public class ScoreManager : MonoBehaviour
 {
     [SerializeField] TMP_Text combatCompleteText;
-    public float score;
 
     [SerializeField] GameObject itemDisplay;
 
@@ -27,16 +27,16 @@ public class ScoreManager : MonoBehaviour
 
     private void Start()
     {
-        score = 0f;
         combatCompleteText.text = "";
         itemDisplay.SetActive(false);
+        EventBus.Publish<EnterCombatEvent>(new EnterCombatEvent());
     }
 
     /// <summary>
     /// Calculates the final score for a round using ItemData List
     /// </summary>
     /// <param name="items">List of Items to be scored</param>
-    public IEnumerator CalculateScore(List<ItemData> items)
+    public async Task CalculateScore(List<ItemData> items)
     {
         pendingItems = items;
         curItem = -1;
@@ -54,20 +54,22 @@ public class ScoreManager : MonoBehaviour
             itemDisplay.SetActive(true);
 
             int rollResult = -1;
-            yield return roller.RollDie(result => rollResult = result); // coroutine now used for rolling die
+            //yield return roller.RollDie(result => rollResult = result); // coroutine now used for rolling die
 
+            //OnRollComplete(rollResult);
+
+            //yield return new WaitForSeconds(waitForRoll);
+
+            rollResult = await roller.RollDie();
             OnRollComplete(rollResult);
-
-            yield return new WaitForSeconds(waitForRoll);
         }
-        yield return null;
     }
 
     /// <summary>
     /// Called when the roll is complete, and the score is calculated
     /// </summary>
     /// <param name="rollValue">The value of the roll</param>
-    private void OnRollComplete(int rollValue)
+    private async void OnRollComplete(int rollValue)
     {
         ItemData item = pendingItems[curItem];
         int slotIndex = curItem;
@@ -110,7 +112,7 @@ public class ScoreManager : MonoBehaviour
 
             if (UpgradeFightingManager.Instance.CanUseSecondChance())
             {
-                roller.RollDie(OnRollComplete);
+                rollValue = await roller.RollDie();
                 return;
             }
             if (UpgradeFightingManager.Instance.CanUseQuickSave())

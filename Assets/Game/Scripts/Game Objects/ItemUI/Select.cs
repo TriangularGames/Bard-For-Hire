@@ -8,7 +8,11 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
 
     private void Awake()
     {
+# if UNITY_EDITOR
         Debug.Assert(selection = transform.GetChild(0).GetComponent<Image>(), "GameObject requires an Image component");
+#else
+        selection = transform.GetChild(0).GetComponent<Image>();
+#endif
         selection.color = new Color(selection.color.r, selection.color.g, selection.color.b, 0f);
     }
 

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyManager : MonoBehaviour
+public class EnemyManager : Singleton<EnemyManager>
 {
     [Header("Enemy Data")]
     /// <summary>
@@ -14,30 +14,33 @@ public class EnemyManager : MonoBehaviour
     /// </summary>
     [SerializeField] int numberOfEnemies;
 
-    [Header("Enemies")]
     /// <summary>
     /// Current active Enemies
     /// </summary>
-    [SerializeField] List<GameObject> enemies;
+    List<GameObject> enemies;
 
     /// <summary>
     /// Spawnpoints for the enemies
     /// </summary>
-    [SerializeField] public List<Transform> spawnPoints;
+    public List<Transform> spawnPoints;
 
     /// <summary>
-    /// Total Score value for these Enemies
+    /// Enemy Display Objects
     /// </summary>
-    [SerializeField] int totalScore;
+    public List<GameObject> enemyDisplays;
 
     private void OnEnable()
     {
         EventBus.Subscribe<EnemyDefeatedEvent>(RemoveEnemy);
+        EventBus.Subscribe<EnterCombatEvent>(CombatSetup);
+        EventBus.Subscribe<EnterShopEvent>(ShopSetup);
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<EnemyDefeatedEvent>(RemoveEnemy);
+        EventBus.Unsubscribe<EnterCombatEvent>(CombatSetup);
+        EventBus.Unsubscribe<EnterShopEvent>(ShopSetup);
     }
 
     private void RemoveEnemy(EnemyDefeatedEvent e)
@@ -58,16 +61,27 @@ public class EnemyManager : MonoBehaviour
         return alive;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void CombatSetup(EnterCombatEvent @event)
     {
         SpawnEnemies();
-
-        GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().score = totalScore;
     }
 
+    private void ShopSetup(EnterShopEvent @event)
+    {
+        LookAhead();
+    }
+
+    /// <summary>
+    /// Called when entering Combat scene to setup Enemies
+    /// </summary>
     private void SpawnEnemies()
     {
+        GameObject spawnPointHolder = GameObject.FindWithTag("SpawnPoints");
+        for (int c = 0; c < spawnPointHolder.transform.childCount; c++)
+        {
+            spawnPoints.Add(spawnPointHolder.transform.GetChild(c));
+        }
+
         for (int i = 0; i < numberOfEnemies; i++)
         {
             int memberType = Random.Range(0, memberTypes.Count);
@@ -82,7 +96,6 @@ public class EnemyManager : MonoBehaviour
                     enemySpawned.GetComponent<EnemyController>().Setup();
                     enemySpawned.name = data.name + " " + enemySpawned.GetEntityId();
 
-                    totalScore += data.health;
                     enemies.Add(enemySpawned);
                 }
             }
@@ -90,11 +103,20 @@ public class EnemyManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Takes a Value to either add or remove from Total Score
+    /// Called when entering Shop to setup Data for next Combat and Display to player
     /// </summary>
-    /// <param name="val">Value to add or remove</param>
-    public void EditScore(int val)
+    private void LookAhead()
     {
-        totalScore += val;
+        // Generate list of enemies based on Round # specific data
+        // send data to panel in Shop
+        // TODO: make functionality
+        GameObject enemyDisplayHolder = GameObject.FindWithTag("EnemyDisplays");
+        for (int c = 0; c < enemyDisplayHolder.transform.childCount; c++)
+        {
+            enemyDisplays.Add(enemyDisplayHolder.transform.GetChild(c).gameObject);
+        }
+
+        // Similar to spawning, goes through each display to place icon, and number of enemies
+        // The Icon object also has a script that requires the EnemyData for the tool-tip functionality
     }
 }
