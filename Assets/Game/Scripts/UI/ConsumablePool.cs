@@ -2,13 +2,11 @@ using UnityEngine;
 
 public class ConsumablePool : BaseItemContainer
 {
-    public GameObject consumablePrefab;
-
     public void InstantiateConsumable(
         ConsumableData consumable
     )
     {
-        GameObject consumableSpawned = Instantiate(consumablePrefab, transform);
+        GameObject consumableSpawned = AssetManager.Instance.Spawn("Consumable", transform);
 
         consumableSpawned.GetComponent<ConsumableController>().consumableData = consumable;
 
