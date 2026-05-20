@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -27,6 +28,16 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         }
         // TODO: add for EnemyDisplay
             
+    }
+
+    private void OnDestroy()
+    {
+        TooltipSystem.Instance?.Hide();
+    }
+
+    private void OnDisable()
+    {
+        TooltipSystem.Instance?.Hide();
     }
 
     public void OnPointerExit(PointerEventData eventData)

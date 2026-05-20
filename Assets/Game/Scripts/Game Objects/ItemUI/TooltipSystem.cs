@@ -1,15 +1,27 @@
 
+using System.Collections;
+using UnityEngine;
+
 public class TooltipSystem : Singleton<TooltipSystem>
 {
     public Tooltip toolTip;
     public void Show(string content, string header = "", string attack = "", string roll = "")
     {
         toolTip.SetText(content, header, attack, roll);
-        toolTip.gameObject.SetActive(true);
+        StartCoroutine("DelayShow");
+        
     }
 
     public void Hide()
     {
+        StopCoroutine("DelayShow");
         toolTip.gameObject.SetActive(false);
+    }
+
+    IEnumerator DelayShow()
+    {
+        yield return new WaitForSeconds(0.5f);
+        toolTip.Pivot();
+        toolTip.gameObject.SetActive(true);
     }
 }

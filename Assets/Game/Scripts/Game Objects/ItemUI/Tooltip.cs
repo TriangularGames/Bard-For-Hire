@@ -40,17 +40,21 @@ public class Tooltip : MonoBehaviour
         int headerLength = headerTxt.text.Length;
         int contentLength = contentTxt.text.Length;
 
-        layoutElement.enabled = (headerLength > characterWrapLimit || contentLength > characterWrapLimit) ? true : false;
+        layoutElement.enabled = headerLength > characterWrapLimit || contentLength > characterWrapLimit;
     }
 
     private void Update()
+    {
+        Pivot();
+    }
+
+    public void Pivot()
     {
         Vector2 position = InputManager.Instance.inputActions.UI.Point.ReadValue<Vector2>();
         var normalizedPosition = new Vector2(position.x / Screen.width, position.y / Screen.height);
         var pivot = CalculatePivot(normalizedPosition);
         GetComponent<RectTransform>().pivot = pivot;
         transform.position = position;
-
     }
 
     private Vector2 CalculatePivot(Vector2 normalizedPosition)
