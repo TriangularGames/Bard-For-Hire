@@ -14,16 +14,20 @@ public class EnemyManager : Singleton<EnemyManager>
     /// </summary>
     [SerializeField] int numberOfEnemies;
 
-    [Header("Enemies")]
     /// <summary>
     /// Current active Enemies
     /// </summary>
-    [SerializeField] List<GameObject> enemies;
+    List<GameObject> enemies;
 
     /// <summary>
     /// Spawnpoints for the enemies
     /// </summary>
-    [SerializeField] public List<Transform> spawnPoints;
+    public List<Transform> spawnPoints;
+
+    /// <summary>
+    /// Enemy Display Objects
+    /// </summary>
+    public List<GameObject> enemyDisplays;
 
     private void OnEnable()
     {
@@ -57,13 +61,6 @@ public class EnemyManager : Singleton<EnemyManager>
         return alive;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        // NOTE: UNCOMMENT THIS WHEN USING COMBATTEST SCENE
-        //SpawnEnemies();
-    }
-
     private void CombatSetup(EnterCombatEvent @event)
     {
         SpawnEnemies();
@@ -74,9 +71,17 @@ public class EnemyManager : Singleton<EnemyManager>
         LookAhead();
     }
 
+    /// <summary>
+    /// Called when entering Combat scene to setup Enemies
+    /// </summary>
     private void SpawnEnemies()
     {
-        // TODO: add event call that calls this function when entering Combat
+        GameObject spawnPointHolder = GameObject.FindWithTag("SpawnPoints");
+        for (int c = 0; c < spawnPointHolder.transform.childCount; c++)
+        {
+            spawnPoints.Add(spawnPointHolder.transform.GetChild(c));
+        }
+
         for (int i = 0; i < numberOfEnemies; i++)
         {
             int memberType = Random.Range(0, memberTypes.Count);
@@ -105,6 +110,13 @@ public class EnemyManager : Singleton<EnemyManager>
         // Generate list of enemies based on Round # specific data
         // send data to panel in Shop
         // TODO: make functionality
-        // TODO: Add event call when entering shop that calls this function
+        GameObject enemyDisplayHolder = GameObject.FindWithTag("EnemyDisplays");
+        for (int c = 0; c < enemyDisplayHolder.transform.childCount; c++)
+        {
+            enemyDisplays.Add(enemyDisplayHolder.transform.GetChild(c).gameObject);
+        }
+
+        // Similar to spawning, goes through each display to place icon, and number of enemies
+        // The Icon object also has a script that requires the EnemyData for the tool-tip functionality
     }
 }

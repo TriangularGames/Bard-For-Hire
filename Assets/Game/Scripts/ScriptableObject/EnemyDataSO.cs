@@ -1,5 +1,6 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "EnemyData", menuName = "Scriptable Objects/EnemyData")]
 public class EnemyData : ScriptableObject
@@ -10,6 +11,7 @@ public class EnemyData : ScriptableObject
 
     [Header("Enemy Info")]
     [SerializeField] public Sprite icon;
+    [SerializeField] public AnimatorOverrideController animator;
     [SerializeField] string Description;
 
     [Header("Additional Bonus")]

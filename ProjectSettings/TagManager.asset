@@ -12,6 +12,7 @@ TagManager:
   - ItemManager
   - EnemyManager
   - Coins
+  - SpawnPoints
   layers:
   - Default
   - TransparentFX
