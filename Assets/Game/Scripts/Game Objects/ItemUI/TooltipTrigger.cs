@@ -20,6 +20,11 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             ConsumableData data = GetComponent<ConsumableShopSlot>().GetData();
             TooltipSystem.Instance.Show(data.ConsumableDescription, data.ConsumableName, "");
         }
+        else if (GetComponent<ConsumableController>())
+        {
+            ConsumableData data = GetComponent<ConsumableController>().consumableData;
+            TooltipSystem.Instance.Show(data.ConsumableDescription, data.ConsumableName, "");
+        }
         // TODO: add for EnemyDisplay
             
     }
