@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4266208897047485302}
   - component: {fileID: 3302792935167239240}
   - component: {fileID: 6978309947371171493}
+  - component: {fileID: 1885617746749218953}
   m_Layer: 5
   m_Name: ItemSlot
   m_TagString: Untagged
@@ -92,6 +93,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemShopSlot
   value: {fileID: 1682140586031248960}
   buy: {fileID: 829672875276406145}
+  _isSelected: 0
+  _Purchased: 0
+--- !u!114 &1885617746749218953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2484180083775032184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42af6df539950514ab00b0af3132fca8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TooltipTrigger
 --- !u!1 &3983668744838834917
 GameObject:
   m_ObjectHideFlags: 0

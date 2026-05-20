@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class InputManager : Singleton<InputManager>
 {
-    private InputSystem_Actions inputActions;
+    public InputSystem_Actions inputActions;
 
     public override void Awake()
     {

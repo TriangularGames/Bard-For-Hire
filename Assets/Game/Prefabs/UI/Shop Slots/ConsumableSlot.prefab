@@ -149,6 +149,7 @@ GameObject:
   - component: {fileID: 4109587431498451397}
   - component: {fileID: 6621158209382161569}
   - component: {fileID: 7452656374918456437}
+  - component: {fileID: 1387760228974545305}
   m_Layer: 5
   m_Name: ConsumableSlot
   m_TagString: Untagged
@@ -230,6 +231,19 @@ MonoBehaviour:
   value: {fileID: 7649505181534702669}
   buy: {fileID: 3842338469865568674}
   _isSelected: 0
+  _Purchased: 0
+--- !u!114 &1387760228974545305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5089212437796748201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42af6df539950514ab00b0af3132fca8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TooltipTrigger
 --- !u!1 &8314239086835291453
 GameObject:
   m_ObjectHideFlags: 0
