@@ -526,6 +526,7 @@ MonoBehaviour:
   - _ResourceManager
   - _PlayerManager
   - _MenuManager
+  - _AudioManager
   - _OptionsManager
   - _InputManager
   - _PauseManager

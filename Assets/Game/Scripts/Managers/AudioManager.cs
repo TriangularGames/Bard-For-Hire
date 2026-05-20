@@ -4,7 +4,7 @@ using UnityEngine.Audio;
 public class AudioManager : Singleton<AudioManager>
 {
     //Audio Mixer for Volume Controls
-    public AudioMixer master;
+    public AudioMixer Master;
 
     [Header("AudioClips")]
     [SerializeField] private AudioClip[] _musicClips;
@@ -17,6 +17,10 @@ public class AudioManager : Singleton<AudioManager>
     [SerializeField] private AudioSource _sfxAudioSource;
 
     // Funcs to control Audio
+    private void Start()
+    {
+        PlayClip(0, _musicClips[0]);
+    }
     public void PlayClip(int audioType, int clipVal)
     {
         AudioSource source = new AudioSource();
@@ -79,16 +83,16 @@ public class AudioManager : Singleton<AudioManager>
     //Volume adjustment for Volume Sliders for Options Menu
     public void setMaster(float sliderValue)
     {
-        master.SetFloat("MasterVol", Mathf.Log10(sliderValue) * 20);
+        Master.SetFloat("MasterVol", Mathf.Log10(sliderValue) * 20);
     }
 
     public void setMusic(float sliderValue)
     {
-        master.SetFloat("MusicVol", Mathf.Log10(sliderValue) * 20);
+        Master.SetFloat("MusicVol", Mathf.Log10(sliderValue) * 20);
     }
 
     public void setSFX(float sliderValue)
     {
-        master.SetFloat("SFXVol", Mathf.Log10(sliderValue) * 20);
+        Master.SetFloat("SFXVol", Mathf.Log10(sliderValue) * 20);
     }
 }
