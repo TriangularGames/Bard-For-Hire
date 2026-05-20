@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bed2d82b622b0b44aaa8876836cf34e1, type: 3}
+  m_Name: Potion of Polymorph
+  m_EditorClassIdentifier: Assembly-CSharp::ConsumableData
+  ConsumableName: Potion of Polymorph
+  ConsumableDescription: Permanently removes 2 weapons from your bag
+  cost: 0
+  Type: 6
+  Rarity: 0
+  icon: {fileID: 21300000, guid: 54de6795341cf344d9b25e56e38d3c71, type: 3}

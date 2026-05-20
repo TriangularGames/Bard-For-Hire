@@ -10,6 +10,7 @@ public class ConsumableData : ScriptableObject
     [SerializeField] public int cost;
 
     [Header("Consumable Descriptors")]
+    [SerializeField] public ConsumableID Type;
     [SerializeField] public ObjectRarity Rarity;
 
     [Header("Visual Data")]

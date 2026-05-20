@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Action Surge
   UpgradeDescription: Gain 1 more action per turn
-  cost: 25
+  cost: 15
   UpgradeType: 0
   Rarity: 2
-  icon: {fileID: 0}
+  UpgradeID: 0
+  icon: {fileID: 21300000, guid: a01efb1efb877e141aa5238493bae323, type: 3}

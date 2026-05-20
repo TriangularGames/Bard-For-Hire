@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Rhythmic Attacks
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Rhythmic Attacks
-  UpgradeDescription: Gain 1 more action per turn
-  cost: 25
+  UpgradeDescription: 1  bonus damage for each of the same action type in a row
+  cost: 9
   UpgradeType: 0
-  Rarity: 2
-  UpgradeID: 11
-  icon: {fileID: 0}
+  Rarity: 0
+  UpgradeID: 3
+  icon: {fileID: 21300000, guid: 569b91d9153776c4cac2bc8b2c7d0f5d, type: 3}

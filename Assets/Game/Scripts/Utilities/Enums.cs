@@ -30,7 +30,8 @@ public enum UpgradeType
     Dice
 }
 
-public enum UpgradeID{
+public enum UpgradeID
+{
     ActionSurge,
     BattleTactics,
     LuckyStrike,
@@ -49,6 +50,18 @@ public enum UpgradeID{
     ComboChain,
     DoubleCrit,
     EchoStrike,
+}
+
+public enum ConsumableID
+{
+    FocusPotion,
+    PoisonPotion,
+    SharpeningStone,
+    LuckPotion,
+    RerollPotion,
+    PotionOfMelting,
+    PotionOfPolymorph,
+    PotionOfCloning
 }
 
 

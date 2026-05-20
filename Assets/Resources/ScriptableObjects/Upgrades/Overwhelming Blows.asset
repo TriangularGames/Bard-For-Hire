@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Overwhelming Blows
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Overwhelming Blows
-  UpgradeDescription: Gain 1 more action per turn
-  cost: 25
+  UpgradeDescription: 1 bonus damage for each action used
+  cost: 15
   UpgradeType: 0
-  Rarity: 2
-  UpgradeID: 1
-  icon: {fileID: 0}
+  Rarity: 1
+  UpgradeID: 4
+  icon: {fileID: 21300000, guid: e905478799bd956459f8bba5056d8ca5, type: 3}
