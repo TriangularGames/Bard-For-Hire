@@ -186,4 +186,49 @@ public class PlayerManager : Singleton<PlayerManager>
         itemsHeld.Add(item);
         return item;
     }
+
+    public void RemoveInventoryItem(ItemData item)
+    {
+        if (itemInventory.Contains(item))
+        {
+            itemInventory.Remove(item);
+        }
+    }
+
+    public void CloneInventoryItem(ItemData item)
+    {
+        itemInventory.Add(item);
+    }
+
+    public ItemData TransformInventoryItem(ItemData oldItem)
+    {
+        ItemData newItem = GetRandomInventoryItem();
+        int inventoryIndex = itemInventory.IndexOf(oldItem);
+
+        if (inventoryIndex != -1)
+        {
+            itemInventory[inventoryIndex] = newItem;
+        }
+
+        int heldIndex = itemsHeld.IndexOf(oldItem);
+
+        if (heldIndex != -1)
+        {
+            itemsHeld[heldIndex] = newItem;
+        }
+
+        int unusedIndex = itemsNotUsed.IndexOf(oldItem);
+
+        if (unusedIndex != -1)
+        {
+            itemsNotUsed[unusedIndex] = newItem;
+        }
+
+        return newItem;
+    }
+
+    public ItemData GetRandomInventoryItem()
+    {
+        return itemInventory[Random.Range(0, itemInventory.Count)];
+    }
 }

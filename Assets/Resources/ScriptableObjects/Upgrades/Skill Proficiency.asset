@@ -18,4 +18,4 @@ MonoBehaviour:
   UpgradeType: 1
   Rarity: 1
   UpgradeID: 7
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 54de6795341cf344d9b25e56e38d3c71, type: 3}

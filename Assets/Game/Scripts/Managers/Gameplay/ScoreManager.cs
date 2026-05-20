@@ -81,24 +81,24 @@ public class ScoreManager : MonoBehaviour
             int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex);
             UpgradeFightingManager.Instance.SuccessfulAction(item, totalDamage);
 
-            AttackEnemy(totalDamage);
+            AttackEnemy(item, totalDamage);
 
             if (UpgradeManager.Instance.HasUpgrade(UpgradeID.ComboChain))
             {
                 int comboDMG = Mathf.RoundToInt(totalDamage * 0.5f);
-                AttackEnemy(comboDMG);
+                AttackEnemy(item, comboDMG);
             }
 
             if (UpgradeManager.Instance.HasUpgrade(UpgradeID.DoubleCrit))
             {
                 if(finalroll == 20)
-                AttackEnemy(totalDamage);
+                AttackEnemy(item, totalDamage);
             }
 
             if (UpgradeManager.Instance.HasUpgrade(UpgradeID.EchoStrike))
             {
                 if(slotIndex == pendingItems.Count - 1)
-                AttackEnemy(totalDamage);
+                AttackEnemy(item, totalDamage);
             }
         }
         else
@@ -114,7 +114,7 @@ public class ScoreManager : MonoBehaviour
             if (UpgradeFightingManager.Instance.CanUseQuickSave())
             {
                 int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex);
-                AttackEnemy(totalDamage);
+                AttackEnemy(item, totalDamage);
             }
         }
 
@@ -126,7 +126,7 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    private void AttackEnemy(int damage)
+    private void AttackEnemy(ItemData item, int damage)
     {
         foreach (Transform enemyLocation in GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().spawnPoints)
         {
@@ -135,6 +135,11 @@ public class ScoreManager : MonoBehaviour
             {
                 // Get the enemy at this location
                 GameObject enemy = enemyLocation.transform.GetChild(0).gameObject;
+
+                if (enemy.GetComponent<EnemyController>().enemyData.weakness == item.ItemType)
+                {
+                    damage = Mathf.RoundToInt(damage * 1.5f);
+                }
 
                 if (enemy.GetComponent<EnemyController>().GetHealth() > 0)
                 {

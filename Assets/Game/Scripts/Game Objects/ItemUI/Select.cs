@@ -27,6 +27,36 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
 
     public void OnPointerDown(PointerEventData eventData)
     {
+
+        //destroy
+        if (ConsumableEffectManager.Instance.selectingItemToDestroy)
+        {
+            ConsumableEffectManager.Instance.DestroyItem(GetComponent<ItemController>().itemData);
+
+            Destroy(gameObject);
+
+            return;
+        }
+
+        // clonin
+        if (ConsumableEffectManager.Instance.selectingItemToClone)
+        {
+            ConsumableEffectManager.Instance.CloneItem(GetComponent<ItemController>().itemData);
+
+            return;
+        }
+
+        // polymorphin
+        if (ConsumableEffectManager.Instance.selectingItemToPolymorph)
+        {
+            ItemData newItem = ConsumableEffectManager.Instance.PolymorphItem(GetComponent<ItemController>().itemData);
+
+            GetComponent<ItemController>().itemData = newItem;
+
+            GetComponent<ItemController>().Setup();
+
+            return;
+        }
         if (!isSelected && GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().HasRoom())
         {
             selection.color = new Color(0f, 256f, 0f, 0.5f);
