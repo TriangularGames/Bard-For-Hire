@@ -43,6 +43,12 @@ public class EnemyManager : Singleton<EnemyManager>
         EventBus.Unsubscribe<EnterShopEvent>(ShopSetup);
     }
 
+    public override void Awake()
+    {
+        base.Awake();
+        enemies = new List<GameObject>();
+    }
+
     private void RemoveEnemy(EnemyDefeatedEvent e)
     {
         int index = -1;
