@@ -168,6 +168,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
+      propertyPath: Coins
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: itemInventory.Array.size
       value: 20
       objectReference: {fileID: 0}
@@ -2628,8 +2632,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2782632570690546455, guid: 86e10fe7d8294474a911a8fe1534696e, type: 3}
       propertyPath: registeredPrefabs.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 2782632570690546455, guid: 86e10fe7d8294474a911a8fe1534696e, type: 3}
+      propertyPath: 'registeredPrefabs.Array.data[3]'
+      value: 
+      objectReference: {fileID: 4620715596389784687, guid: 5109dd767d9c08f4ebf5a5e6773dedff, type: 3}
     - target: {fileID: 2782632570690546455, guid: 86e10fe7d8294474a911a8fe1534696e, type: 3}
       propertyPath: 'registeredPrefabs.Array.data[7]'
       value: 

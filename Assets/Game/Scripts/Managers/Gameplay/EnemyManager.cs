@@ -59,6 +59,8 @@ public class EnemyManager : Singleton<EnemyManager>
         }
 
         enemies.RemoveAt(index);
+        // Set new first enemy in list to active target (as list is ordered)
+        enemies[0].GetComponent<EnemyController>().SetIndicator();
     }
 
     public bool AreEnemiesAlive()
@@ -106,6 +108,9 @@ public class EnemyManager : Singleton<EnemyManager>
                 }
             }
         }
+
+        // Set indicator of First enemy On
+        enemies[0].GetComponent<EnemyController>().SetIndicator();
     }
 
     /// <summary>
