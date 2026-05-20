@@ -15,7 +15,10 @@ public class TooltipSystem : Singleton<TooltipSystem>
     public void Hide()
     {
         StopCoroutine("DelayShow");
-        toolTip.gameObject.SetActive(false);
+        if (gameObject.scene.isLoaded)
+        {
+            toolTip.gameObject.SetActive(false);
+        }
     }
 
     IEnumerator DelayShow()

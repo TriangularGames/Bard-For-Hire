@@ -27,17 +27,17 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             TooltipSystem.Instance.Show(data.ConsumableDescription, data.ConsumableName, "");
         }
         // TODO: add for EnemyDisplay
-            
+
     }
 
     private void OnDestroy()
     {
-        TooltipSystem.Instance?.Hide();
+        TooltipSystem.Instance.Hide();
     }
 
     private void OnDisable()
     {
-        TooltipSystem.Instance?.Hide();
+        TooltipSystem.Instance.Hide();
     }
 
     public void OnPointerExit(PointerEventData eventData)
