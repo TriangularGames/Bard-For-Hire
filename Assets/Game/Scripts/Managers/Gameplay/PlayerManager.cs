@@ -35,35 +35,49 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private void OnEnable()
     {
-        EventBus.Subscribe<ItemScoredEvent>(OnItemScored);
+        EventBus.Subscribe<ItemUsedEvent>(OnItemScored);
         EventBus.Subscribe<ItemDiscardedEvent>(OnItemDiscarded);
         EventBus.Subscribe<PurchaseEvent>(OnPurchase);
         EventBus.Subscribe<ItemBoughtEvent>(OnItemBought);
         EventBus.Subscribe<UpgradeBoughtEvent>(OnUpgradeBought);
         EventBus.Subscribe<ConsumableBoughtEvent>(OnConsumableBought);
+        EventBus.Subscribe<EnterShopEvent>(EnterShop);
+        EventBus.Subscribe<EnterCombatEvent>(EnterCombat);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<ItemScoredEvent>(OnItemScored);
-        EventBus.Subscribe<ItemDiscardedEvent>(OnItemDiscarded);
+        EventBus.Unsubscribe<ItemUsedEvent>(OnItemScored);
+        EventBus.Unsubscribe<ItemDiscardedEvent>(OnItemDiscarded);
         EventBus.Unsubscribe<PurchaseEvent>(OnPurchase);
         EventBus.Unsubscribe<ItemBoughtEvent>(OnItemBought);
         EventBus.Unsubscribe<UpgradeBoughtEvent>(OnUpgradeBought);
         EventBus.Unsubscribe<ConsumableBoughtEvent>(OnConsumableBought);
+        EventBus.Unsubscribe<EnterShopEvent>(EnterShop);
+        EventBus.Unsubscribe<EnterCombatEvent>(EnterCombat);
+    }
+
+    private void EnterCombat(EnterCombatEvent e)
+    {
+        SetCoinText();
+    }
+
+    private void EnterShop(EnterShopEvent e)
+    {
+        SetCoinText();
     }
 
     /// <summary>
-    /// When an Item is Scored, remove it from the NotUsed list
+    /// When an Item is Scored, remove it from the Held list
     /// </summary>
     /// <param name="e">Event Data with Item to remove</param>
-    private void OnItemScored(ItemScoredEvent e)
+    private void OnItemScored(ItemUsedEvent e)
     {
         RemoveItem(e.item);
     }
 
     /// <summary>
-    /// When an Item is Discarded, remove it from the NotUsed list
+    /// When an Item is Discarded, remove it from the Held list
     /// </summary>
     /// <param name="e">Event Data with Item to remove</param>
     private void OnItemDiscarded(ItemDiscardedEvent e)

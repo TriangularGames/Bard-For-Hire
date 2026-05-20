@@ -115,13 +115,13 @@ public struct ConsumableBoughtEvent
 }
 
 /// <summary>
-/// Event for when an Item is being Scored
+/// Event for when an Item is used either Successfully or not
 /// </summary>
-public struct ItemScoredEvent
+public struct ItemUsedEvent
 {
     public ItemData item;
 
-    public ItemScoredEvent(ItemData _item)
+    public ItemUsedEvent(ItemData _item)
     {
         item = _item;
     }

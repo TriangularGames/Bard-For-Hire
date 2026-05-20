@@ -25,13 +25,13 @@ public class ItemManager : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus.Subscribe<ItemScoredEvent>(DeleteItems);
+        EventBus.Subscribe<ItemUsedEvent>(DeleteItem);
         EventBus.Subscribe<ScoringCompletedEvent>(PrepNewRound);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<ItemScoredEvent>(DeleteItems);
+        EventBus.Unsubscribe<ItemUsedEvent>(DeleteItem);
         EventBus.Unsubscribe<ScoringCompletedEvent>(PrepNewRound);
     }
 
@@ -41,29 +41,22 @@ public class ItemManager : MonoBehaviour
         return false;
     }
 
-    private void DeleteItems(ItemScoredEvent e)
+    private void DeleteItem(ItemUsedEvent e)
     {
-        itemsDiscarded = 0;
-        if (ItemsSelected.Count > 0)
+        GameObject toDelete = null;
+        foreach (GameObject item in ItemsSelected)
         {
-            if (PlayerManager.Instance.itemsNotUsed.Count != 0)
+            if (item.GetComponent<ItemController>().itemData == e.item)
             {
-                for (int i = 0; i < ItemsSelected.Count; i++)
-                {
-                    if (itemPool.GetItems().Contains(ItemsSelected[i]))
-                    {
-                        Destroy(ItemsSelected[i]);
-                        itemsDiscarded++;
-                    }
-                }
-                itemPool.RemoveAll(ItemsSelected);
-                ItemsSelected.Clear();
-                GrabNewItems(itemsDiscarded);
+                toDelete = item;
             }
-            else
-            {
-                Debug.Log("Item Inventory is Empty! Cannot Discard.");
-            }
+        }
+
+        if (toDelete != null)
+        {
+            ItemsSelected.Remove(toDelete);
+            itemPool.RemoveItem(toDelete);
+            Destroy(toDelete);
         }
     }
 

@@ -52,6 +52,8 @@ public class ScoreManager : MonoBehaviour
             itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 0f, 0f, 0f);
             itemDisplay.GetComponent<ItemController>().Setup();
             itemDisplay.SetActive(true);
+            // Remove item being checked from Hotbar
+            EventBus.Publish<ItemUsedEvent>(new ItemUsedEvent(item));
 
             int rollResult = -1;
 
@@ -70,12 +72,13 @@ public class ScoreManager : MonoBehaviour
         int slotIndex = curItem;
 
         int finalroll = UpgradeFightingManager.Instance.GetBonusRoll(rollValue);
-        // Include in here some effect thats displayed as each note is determined
+        // Include in here some effect thats displayed as each weapon is determined
         // to be scored or not
         if (item.Playable <= finalroll)
         {
             Debug.Log($"{item.name} was played!");
             itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 1f, 0f, 1f);
+            
             await Task.Delay(400);
             EventBus.Publish<AttackEvent>(new AttackEvent());
             int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex);
@@ -153,17 +156,17 @@ public class ScoreManager : MonoBehaviour
     private void FinalizeScore()
     {
         int count = pendingItems.Count;
-        foreach (ItemData item in pendingItems)
-        {
-            EventBus.Publish<ItemScoredEvent>(new ItemScoredEvent(item));
-        }
-
+        //foreach (ItemData item in pendingItems)
+        //{
+        //    EventBus.Publish<ItemScoredEvent>(new ItemScoredEvent(item));
+        //}
         itemDisplay.SetActive(false);
 
         // Check if we have hit the MaxRounds or all Enemies are dead
         if (!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive() || curRound == MaxRounds)
         {
             // If we have, determine if the player has won
+            // TODO: change these to actually have some kind of proper display
             if (!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive())
             {
                 combatCompleteText.text = "Winner!";
@@ -176,13 +179,10 @@ public class ScoreManager : MonoBehaviour
                 Debug.Log("Combat Failed!");
                 StartCoroutine(SwitchToMainMenu());
             }
-
-            // TODO: add completed screen panel of some kind
-            // TODO: include some coin bonus if player finishes early!
-
         }
         else
         {
+            // TODO: add some better way of indicating next round!
             // If we have not hit MaxRounds & Enemies are still alive, go to the next round
             Debug.Log("Round " + curRound.ToString() + " Completed!");
             curRound++;

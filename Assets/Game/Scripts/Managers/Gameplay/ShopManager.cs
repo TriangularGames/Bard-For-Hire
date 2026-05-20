@@ -34,9 +34,6 @@ public class ShopManager : MonoBehaviour
 
     private void Start()
     {
-        // TODO: add this as an event publish when Scene Switching
-        PlayerManager.Instance.SetCoinText();
-
         EventBus.Publish<EnterShopEvent>(new EnterShopEvent());
         SetupShop();
         SetRerollText();

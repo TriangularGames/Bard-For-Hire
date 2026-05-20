@@ -1,6 +1,5 @@
 using System.Collections;
 using TMPro;
-using UnityEditor.Animations;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -13,13 +12,14 @@ public class EnemyController : MonoBehaviour
 
     private int health;
     [SerializeField] private TMP_Text healthTxt;
-    // TODO: use ResourceManager
-    [SerializeField] private GameObject DmgTxtPrefab;
 
     [SerializeField] private SpriteRenderer EnemySprite;
     [SerializeField] private Animator anim;
+    [SerializeField] private GameObject indicator;
 
     public int GetHealth() {  return health; }
+
+    public void SetIndicator() { indicator.SetActive(!indicator.activeSelf); }
 
     private void OnEnable()
     {
@@ -71,7 +71,7 @@ public class EnemyController : MonoBehaviour
             yield return new WaitForSeconds(delayTime);
 
             // TODO: object pool or change to particle effect perhaps?
-            var txt = Instantiate(DmgTxtPrefab, transform.position, Quaternion.identity, transform);
+            var txt = Instantiate(AssetManager.Instance.GetPrefab("DmgTxt"), transform.position, Quaternion.identity, transform);
             txt.GetComponent<TMP_Text>().text = "-1";
             health -= 1;
             SetDamageTxt();
