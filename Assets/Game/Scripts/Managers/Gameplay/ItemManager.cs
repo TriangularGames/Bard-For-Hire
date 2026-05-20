@@ -62,7 +62,11 @@ public class ItemManager : MonoBehaviour
 
     private void Start()
     {
-        ItemsSelected = new List<GameObject>();
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.ActionSurge))
+        {
+            selectionLimit += 1;
+        }
+            ItemsSelected = new List<GameObject>();
         MAXDiscards = 3;
         discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard x" + MAXDiscards.ToString();
 # if UNITY_EDITOR

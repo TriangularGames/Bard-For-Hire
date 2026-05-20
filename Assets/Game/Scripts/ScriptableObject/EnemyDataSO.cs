@@ -8,6 +8,7 @@ public class EnemyData : ScriptableObject
     [Header("Enemy Stats")]
     [SerializeField] public int health;
     [SerializeField] public int coinReward;
+    [SerializeField] public ItemType weakness;
 
     [Header("Enemy Info")]
     [SerializeField] public Sprite icon;
