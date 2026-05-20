@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IPointerExitHandler
 {
     private Image selection;
+    public void SetImage(Sprite _selection) { selection.sprite = _selection; }
     private bool isSelected = false;
 
     private void Awake()
@@ -21,6 +22,7 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
         //selection.color = Color.blue;
         if (!isSelected)
         {
+            selection.sprite = null;
             selection.color = new Color(0f, 0f, 256f, 0.5f);
         }
     }
@@ -57,10 +59,11 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
 
             return;
         }
+
         if (!isSelected && GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().HasRoom())
         {
-            selection.color = new Color(0f, 256f, 0f, 0.5f);
-            GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsSelected.Add(gameObject);
+            selection.color = new Color(1f, 1f, 1f, 1f);
+            GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().SelectItem(gameObject, selection);
             isSelected = true;
         }
         else
@@ -68,7 +71,7 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
             selection.color = new Color(0f, 0f, 256f, 0.5f);
             if (GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsSelected.Contains(gameObject))
             {
-                GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsSelected.Remove(gameObject);
+                GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().DeselectItem(gameObject, selection);
                 isSelected = false;
             }
         }
@@ -80,7 +83,7 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
         selection.color = new Color(1f, 1f, 1f, 0f);
         if (GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsSelected.Contains(gameObject))
         {
-            GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsSelected.Remove(gameObject);
+            GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().DeselectItem(gameObject, selection);
             isSelected = false;
         }
     }
@@ -89,6 +92,7 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
     {
         if (!isSelected)
         {
+            selection.sprite = null;
             selection.color = new Color(1f, 1f, 1f, 0f);
         }
     }

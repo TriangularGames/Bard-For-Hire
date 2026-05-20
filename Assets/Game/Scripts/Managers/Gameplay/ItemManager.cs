@@ -12,6 +12,7 @@ public class ItemManager : MonoBehaviour
 
     [HideInInspector] public List<GameObject> ItemsSelected;
     [SerializeField] private int selectionLimit = 4;
+    [SerializeField] private List<Sprite> selectionBoxes;
 
     private bool scoringCompleted = true;
     
@@ -177,5 +178,24 @@ public class ItemManager : MonoBehaviour
     {
         GrabNewItems(e.count);
         scoringCompleted = true;
+    }
+
+    public void SelectItem(GameObject item, Image selection)
+    {
+        if (HasRoom())
+        {
+            ItemsSelected.Add(item);
+            selection.sprite = selectionBoxes[ItemsSelected.IndexOf(item)];
+        }
+    }
+
+    public void DeselectItem(GameObject item, Image selection)
+    {
+        ItemsSelected.Remove(item);
+        selection.color = new Color(0f, 0f, 0f, 0f);
+        foreach (GameObject selectedItem in ItemsSelected)
+        {
+            selectedItem.GetComponent<Select>().SetImage(selectionBoxes[ItemsSelected.IndexOf(selectedItem)]);
+        }
     }
 }
