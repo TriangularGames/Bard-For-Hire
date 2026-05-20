@@ -2061,6 +2061,11 @@ MonoBehaviour:
   attackBtn: {fileID: 133154867}
   ItemsSelected: []
   selectionLimit: 4
+  selectionBoxes:
+  - {fileID: -438273147, guid: 7eb0f431427775e42b7da3637b5f56c5, type: 3}
+  - {fileID: 79728539, guid: 7eb0f431427775e42b7da3637b5f56c5, type: 3}
+  - {fileID: 228739827, guid: 7eb0f431427775e42b7da3637b5f56c5, type: 3}
+  - {fileID: 1296937366, guid: 7eb0f431427775e42b7da3637b5f56c5, type: 3}
   MAXDiscards: 3
   itemPool: {fileID: 1186631605}
 --- !u!4 &1016375506
