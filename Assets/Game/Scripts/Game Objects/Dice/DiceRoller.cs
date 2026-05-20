@@ -43,11 +43,16 @@ public class DiceRoller : MonoBehaviour
     {
         Debug.Log("Rolling die...");
         display.text = "Rolling die...";
-        await Task.Delay(500);
+        await Task.Delay(600);
         int oneD20 = UnityEngine.Random.Range(1, 21);
         Debug.Log("You rolled: " + oneD20);
         display.text = "You rolled: " + oneD20;
         return oneD20;
+    }
+
+    public void ResetText()
+    {
+        display.text = "";
     }
 
     ///// <summary>
