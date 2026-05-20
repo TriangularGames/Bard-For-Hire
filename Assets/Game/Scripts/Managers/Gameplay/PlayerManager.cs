@@ -41,6 +41,8 @@ public class PlayerManager : Singleton<PlayerManager>
         EventBus.Subscribe<ItemBoughtEvent>(OnItemBought);
         EventBus.Subscribe<UpgradeBoughtEvent>(OnUpgradeBought);
         EventBus.Subscribe<ConsumableBoughtEvent>(OnConsumableBought);
+        EventBus.Subscribe<EnterShopEvent>(EnterShop);
+        EventBus.Subscribe<EnterCombatEvent>(EnterCombat);
     }
 
     private void OnDisable()
@@ -51,6 +53,18 @@ public class PlayerManager : Singleton<PlayerManager>
         EventBus.Unsubscribe<ItemBoughtEvent>(OnItemBought);
         EventBus.Unsubscribe<UpgradeBoughtEvent>(OnUpgradeBought);
         EventBus.Unsubscribe<ConsumableBoughtEvent>(OnConsumableBought);
+        EventBus.Unsubscribe<EnterShopEvent>(EnterShop);
+        EventBus.Unsubscribe<EnterCombatEvent>(EnterCombat);
+    }
+
+    private void EnterCombat(EnterCombatEvent e)
+    {
+        SetCoinText();
+    }
+
+    private void EnterShop(EnterShopEvent e)
+    {
+        SetCoinText();
     }
 
     /// <summary>
