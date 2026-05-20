@@ -299,6 +299,7 @@ GameObject:
   - component: {fileID: 8622836177064081620}
   - component: {fileID: 6891084017404811159}
   - component: {fileID: 732904740934453420}
+  - component: {fileID: 2157048080095550490}
   m_Layer: 5
   m_Name: Consumable
   m_TagString: Note
@@ -362,3 +363,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9de39a5cffac561418fdee42d73ada2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConsumableSelect
+--- !u!114 &2157048080095550490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9005676489685703692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42af6df539950514ab00b0af3132fca8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TooltipTrigger
