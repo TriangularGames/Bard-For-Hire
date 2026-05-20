@@ -42,7 +42,8 @@ public class OptionsManager : Singleton<OptionsManager>
         base.Awake();
         if (audioMixer == null)
         {
-            audioMixer = Resources.Load<AudioMixer>("Audio/AudioMixer");
+            //audioMixer = Resources.Load<AudioMixer>("Audio/AudioMixer");
+            audioMixer = AudioManager.Instance.Master;
         }
         if (optionsMenuUI == null)
         {
