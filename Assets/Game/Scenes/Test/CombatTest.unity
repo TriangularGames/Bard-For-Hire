@@ -2628,7 +2628,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2782632570690546455, guid: 86e10fe7d8294474a911a8fe1534696e, type: 3}
       propertyPath: registeredPrefabs.Array.size
-      value: 8
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2782632570690546455, guid: 86e10fe7d8294474a911a8fe1534696e, type: 3}
       propertyPath: 'registeredPrefabs.Array.data[7]'
@@ -2712,11 +2712,8 @@ MonoBehaviour:
   - Kobold
   - EvilerKobold
   numberOfEnemies: 3
-  enemies: []
-  spawnPoints:
-  - {fileID: 1316537236}
-  - {fileID: 562990003}
-  - {fileID: 1799662131}
+  spawnPoints: []
+  enemyDisplays: []
 --- !u!4 &1658900633
 Transform:
   m_ObjectHideFlags: 0

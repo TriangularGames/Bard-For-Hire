@@ -14,7 +14,6 @@ public class ScoreManager : MonoBehaviour
 
     [SerializeField] GameObject itemDisplay;
 
-    // TODO: add CurrentRound Count to GameManager
     [SerializeField] private TMP_Text roundText;
     public int curRound = 1;
     private int MaxRounds = 3;
@@ -40,6 +39,7 @@ public class ScoreManager : MonoBehaviour
     {
         pendingItems = items;
         curItem = -1;
+
         foreach (ItemData item in pendingItems)
         {
             if(!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive()) { FinalizeScore(); break; }
@@ -54,14 +54,9 @@ public class ScoreManager : MonoBehaviour
             itemDisplay.SetActive(true);
 
             int rollResult = -1;
-            //yield return roller.RollDie(result => rollResult = result); // coroutine now used for rolling die
-
-            //OnRollComplete(rollResult);
-
-            //yield return new WaitForSeconds(waitForRoll);
 
             rollResult = await roller.RollDie();
-            OnRollComplete(rollResult);
+            await OnRollComplete(rollResult);
         }
     }
 
@@ -69,7 +64,7 @@ public class ScoreManager : MonoBehaviour
     /// Called when the roll is complete, and the score is calculated
     /// </summary>
     /// <param name="rollValue">The value of the roll</param>
-    private async void OnRollComplete(int rollValue)
+    private async Task OnRollComplete(int rollValue)
     {
         ItemData item = pendingItems[curItem];
         int slotIndex = curItem;
@@ -81,6 +76,7 @@ public class ScoreManager : MonoBehaviour
         {
             Debug.Log($"{item.name} was played!");
             itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 1f, 0f, 1f);
+            await Task.Delay(400);
             EventBus.Publish<AttackEvent>(new AttackEvent());
             int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex);
             UpgradeFightingManager.Instance.SuccessfulAction(item, totalDamage);
@@ -116,14 +112,14 @@ public class ScoreManager : MonoBehaviour
                 return;
             }
             if (UpgradeFightingManager.Instance.CanUseQuickSave())
-            { int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex);
-              AttackEnemy(totalDamage);
-
+            {
+                int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex);
+                AttackEnemy(totalDamage);
             }
         }
 
-
-
+        // Wait for possible animations
+        await Task.Delay(1000);
         if ((curItem + 1) == pendingItems.Count)
         {
             FinalizeScore();
@@ -193,8 +189,7 @@ public class ScoreManager : MonoBehaviour
             roundText.text = "Round " + curRound + "/3";
             EventBus.Publish(new ScoringCompletedEvent(count));
         }
-
-
+        roller.ResetText();
     }
 
     /// <summary>
