@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Rendering;
 
 public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -9,18 +8,19 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         if (GetComponent<ItemShopSlot>())
         {
             ItemData data = GetComponent<ItemShopSlot>().GetData();
-            TooltipSystem.Instance.Show(data.ItemDescription, data.ItemName);
+            TooltipSystem.Instance.Show(data.ItemDescription, data.ItemName, data.Damage.ToString(), data.Playable.ToString());
         }
         else if (GetComponent<UpgradeShopSlot>())
         {
             UpgradeData data = GetComponent<UpgradeShopSlot>().GetData();
-            TooltipSystem.Instance.Show(data.UpgradeDescription, data.UpgradeName);
+            TooltipSystem.Instance.Show(data.UpgradeDescription, data.UpgradeName, "");
         }
         else if (GetComponent<ConsumableShopSlot>())
         {
             ConsumableData data = GetComponent<ConsumableShopSlot>().GetData();
-            TooltipSystem.Instance.Show(data.ConsumableDescription, data.ConsumableName);
+            TooltipSystem.Instance.Show(data.ConsumableDescription, data.ConsumableName, "");
         }
+        // TODO: add for EnemyDisplay
             
     }
 

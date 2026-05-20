@@ -5,13 +5,14 @@ using UnityEngine.UI;
 public class Tooltip : MonoBehaviour
 {
     public TMP_Text headerTxt;
+    public Transform data;
     public TMP_Text contentTxt;
 
     public LayoutElement layoutElement;
 
     public int characterWrapLimit;
 
-    public void SetText(string content, string header = "")
+    public void SetText(string content, string header = "", string attack = "", string roll = "")
     {
         if (string.IsNullOrEmpty(header))
         {
@@ -21,6 +22,17 @@ public class Tooltip : MonoBehaviour
         {
             transform.GetChild(0).gameObject.SetActive(true);
             headerTxt.text = header;
+        }
+
+        if (string.IsNullOrEmpty(attack) || string.IsNullOrEmpty(roll))
+        {
+            transform.GetChild(1).gameObject.SetActive(false);
+        }
+        else
+        {
+            transform.GetChild(1).gameObject.SetActive(true);
+            data.GetChild(0).GetComponent<TMP_Text>().text = "Attack: " + attack;
+            data.GetChild(1).GetComponent<TMP_Text>().text = "Roll: " + roll;
         }
 
         contentTxt.text = content;
