@@ -44,10 +44,45 @@ public class DiceRoller : MonoBehaviour
         Debug.Log("Rolling die...");
         display.text = "Rolling die...";
         await Task.Delay(600);
-        int oneD20 = UnityEngine.Random.Range(1, 21);
-        Debug.Log("You rolled: " + oneD20);
-        display.text = "You rolled: " + oneD20;
-        return oneD20;
+        int roll = RollOnce();
+        Debug.Log("You rolled: " + roll);
+        display.text = "You rolled: " + roll;
+        return roll;
+    }
+
+    public int RollOnce()
+    {
+        int roll = UnityEngine.Random.Range(1, 21);
+
+        // Natural20: doubles the chance of rolling a 20
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.Natural20))
+        {
+            int second = UnityEngine.Random.Range(1, 21);
+            if (second == 20) roll = 20;
+        }
+
+        // WeightedDice: rolls above 10 become 50% more likely
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.WeightedDice))
+        {
+            int second = UnityEngine.Random.Range(1, 21);
+            roll = Mathf.Max(roll, second);
+        }
+
+        return roll;
+    }
+
+    // EarlyAdvantage: rolls 2 dice and takes the higher (advantage)
+    public async Task<int> RollWithAdvantage()
+    {
+        display.text = "Rolling with advantage!!!!";
+        await Task.Delay(600);
+
+        int a = UnityEngine.Random.Range(1, 21);
+        int b = UnityEngine.Random.Range(1, 21);
+        int roll = Mathf.Max(a, b);
+
+        display.text = "You rolled: " + roll + " (advantage)";
+        return roll;
     }
 
     public void ResetText()

@@ -57,7 +57,13 @@ public class ScoreManager : MonoBehaviour
 
             int rollResult = -1;
 
-            rollResult = await roller.RollDie();
+            if(UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage)&& UpgradeFightingManager.Instance.isFirstTurn){
+                rollResult = await roller.RollWithAdvantage();
+            }
+            else
+            {
+                rollResult = await roller.RollDie();
+            }
             await OnRollComplete(rollResult);
         }
     }
@@ -112,6 +118,7 @@ public class ScoreManager : MonoBehaviour
             if (UpgradeFightingManager.Instance.CanUseSecondChance())
             {
                 rollValue = await roller.RollDie();
+                await OnRollComplete(rollValue);
                 return;
             }
             if (UpgradeFightingManager.Instance.CanUseQuickSave())

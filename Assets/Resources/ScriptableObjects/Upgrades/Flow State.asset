@@ -15,7 +15,7 @@ MonoBehaviour:
   UpgradeName: Flow State
   UpgradeDescription: Each action does extra damage equal to 10% of previous round's
     damage
-  cost: 33
+  cost: 26
   UpgradeType: 0
   Rarity: 3
   UpgradeID: 12

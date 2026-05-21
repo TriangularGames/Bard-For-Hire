@@ -50,6 +50,11 @@ public enum UpgradeID
     ComboChain,
     DoubleCrit,
     EchoStrike,
+    MercenaryContract,
+    Natural20,
+    WeightedDice,
+    FullHouse,
+    Comprehension
 }
 
 public enum ConsumableID

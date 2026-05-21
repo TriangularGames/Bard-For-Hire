@@ -12,7 +12,13 @@ public class EnemyManager : Singleton<EnemyManager>
     /// <summary>
     /// Number of Enemies for the encounter
     /// </summary>
-    [SerializeField] int numberOfEnemies;
+    /// 
+
+    [SerializeField] private RoundData roundData;
+
+    private List<EnemyData> nextEncounter = new List<EnemyData>();
+
+    public int currentRound = 0;
 
     /// <summary>
     /// Current active Enemies
@@ -49,6 +55,17 @@ public class EnemyManager : Singleton<EnemyManager>
         enemies = new List<GameObject>();
     }
 
+    private void CombatSetup(EnterCombatEvent @event)
+    {
+        // generate encounter first
+        if (nextEncounter.Count == 0)
+        {
+            GenerateRound();
+        }
+        SpawnEnemies();
+        nextEncounter.Clear();
+    }
+
     private void RemoveEnemy(EnemyDefeatedEvent e)
     {
         int index = -1;
@@ -69,48 +86,106 @@ public class EnemyManager : Singleton<EnemyManager>
         return alive;
     }
 
-    private void CombatSetup(EnterCombatEvent @event)
-    {
-        SpawnEnemies();
-    }
-
     private void ShopSetup(EnterShopEvent @event)
     {
+        GenerateRound();
+        currentRound++;
         LookAhead();
+    }
+
+    public void GenerateNext()
+    {
+        GenerateRound();
+    }
+
+    private void GenerateRound()
+    {
+        nextEncounter.Clear();
+
+        int minHealth = roundData.startMinTotalHealth + (currentRound * roundData.startMinTotalHealth);
+        int maxHealth = roundData.startMaxTotalHealth + (currentRound * roundData.startMaxTotalHealth);
+        int targetHealth = Random.Range(minHealth, maxHealth + 1);
+        int remainingHealth = targetHealth;
+        EnemyData[] enemyList = ResourceManager.Instance.EnemyData;
+
+        while (remainingHealth > 0 && nextEncounter.Count < roundData.maxEnemies)
+        {
+            List<EnemyData> affordableGuys = new List<EnemyData>();
+            foreach (EnemyData enemy in enemyList)
+            {
+                if (enemy.health <= remainingHealth)
+                    affordableGuys.Add(enemy);
+            }
+
+            if (affordableGuys.Count == 0)
+            {
+                EnemyData cheapest = enemyList[0];
+                foreach (EnemyData enemy in enemyList)
+                {
+                    if (enemy.health < cheapest.health)
+                        cheapest = enemy;
+                }
+                nextEncounter.Add(cheapest);
+                break;
+            }
+
+            EnemyData chosen = affordableGuys[Random.Range(0, affordableGuys.Count)];
+            nextEncounter.Add(chosen);
+            remainingHealth -= chosen.health;
+        }
     }
 
     /// <summary>
     /// Called when entering Combat scene to setup Enemies
     /// </summary>
+    /// 
     private void SpawnEnemies()
     {
+        enemies.Clear();
+        spawnPoints.Clear();
+
         GameObject spawnPointHolder = GameObject.FindWithTag("SpawnPoints");
         for (int c = 0; c < spawnPointHolder.transform.childCount; c++)
         {
+            Debug.Log("Spawn Points Found: " + spawnPoints.Count);
             spawnPoints.Add(spawnPointHolder.transform.GetChild(c));
         }
 
-        for (int i = 0; i < numberOfEnemies; i++)
+        for (int i = 0; i < nextEncounter.Count; i++)
         {
-            int memberType = Random.Range(0, memberTypes.Count);
-            for (int a = 0; a < ResourceManager.Instance.EnemyData.Length; a++)
+            EnemyData data = nextEncounter[i];
+            GameObject enemySpawned = AssetManager.Instance.Spawn("Enemy", spawnPoints[i]);
+            enemySpawned.GetComponent<EnemyController>().enemyData = data;
+
+            enemySpawned.GetComponent<EnemyController>().Setup();
+            enemySpawned.name = data.name + " " + enemySpawned.GetEntityId();
+
+            enemies.Add(enemySpawned);
+
+            if (enemies.Count > 0)
             {
-                if (ResourceManager.Instance.EnemyData[a].name == memberTypes[memberType])
-                {
-                    GameObject enemySpawned = AssetManager.Instance.Spawn("Enemy", spawnPoints[i]);
-                    EnemyData data = ResourceManager.Instance.EnemyData[a];
-                    enemySpawned.GetComponent<EnemyController>().enemyData = data;
-
-                    enemySpawned.GetComponent<EnemyController>().Setup();
-                    enemySpawned.name = data.name + " " + enemySpawned.GetEntityId();
-
-                    enemies.Add(enemySpawned);
-                }
+               enemies[0].GetComponent<EnemyController>().SetIndicator();
             }
-        }
+            //    int memberType = Random.Range(0, memberTypes.Count);
+            //    for (int a = 0; a < ResourceManager.Instance.EnemyData.Length; a++)
+            //    {
+            //        if (ResourceManager.Instance.EnemyData[a].name == memberTypes[memberType])
+            //        {
+            //            GameObject enemySpawned = AssetManager.Instance.Spawn("Enemy", spawnPoints[i]);
+            //            EnemyData data = ResourceManager.Instance.EnemyData[a];
+            //            enemySpawned.GetComponent<EnemyController>().enemyData = data;
 
-        // Set indicator of First enemy On
-        enemies[0].GetComponent<EnemyController>().SetIndicator();
+            //            enemySpawned.GetComponent<EnemyController>().Setup();
+            //            enemySpawned.name = data.name + " " + enemySpawned.GetEntityId();
+
+            //            enemies.Add(enemySpawned);
+            //        }
+            //    }
+            //}
+
+            //// Set indicator of First enemy On
+
+        }
     }
 
     /// <summary>
@@ -122,12 +197,26 @@ public class EnemyManager : Singleton<EnemyManager>
         // send data to panel in Shop
         // TODO: make functionality
         GameObject enemyDisplayHolder = GameObject.FindWithTag("EnemyDisplays");
+        enemyDisplays.Clear();
         for (int c = 0; c < enemyDisplayHolder.transform.childCount; c++)
         {
             enemyDisplays.Add(enemyDisplayHolder.transform.GetChild(c).gameObject);
+        }
+        foreach (GameObject disp in enemyDisplays)
+        {
+            disp.SetActive(false);
+        }
+        for(int i = 0;i < nextEncounter.Count && i < enemyDisplays.Count; i++)
+        {
+            enemyDisplays[i].SetActive(true);
+            EnemyDisplay displayComponent = enemyDisplays[i].GetComponent<EnemyDisplay>();
+
+            if (displayComponent != null)
+                displayComponent.Setup(nextEncounter[i]);
         }
 
         // Similar to spawning, goes through each display to place icon, and number of enemies
         // The Icon object also has a script that requires the EnemyData for the tool-tip functionality
     }
+
 }

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Quick Save
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Quick Save
-  UpgradeDescription: First failed DC of each round still activates upgrade ability.
-  cost: 17
+  UpgradeDescription: First failed DC of each round still activates attack.
+  cost: 12
   UpgradeType: 1
   Rarity: 1
   UpgradeID: 14

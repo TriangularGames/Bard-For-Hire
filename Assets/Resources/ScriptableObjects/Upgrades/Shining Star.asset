@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Shining Star
   UpgradeDescription: 2 bonus damage for each rare weapon played
-  cost: 22
+  cost: 17
   UpgradeType: 0
   Rarity: 2
   UpgradeID: 6

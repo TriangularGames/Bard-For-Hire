@@ -15,7 +15,7 @@ MonoBehaviour:
   UpgradeName: Perfect Battle
   UpgradeDescription: Each consecutive action played without failing a DC gives 10%
     bonus damage
-  cost: 22
+  cost: 18
   UpgradeType: 0
   Rarity: 2
   UpgradeID: 13

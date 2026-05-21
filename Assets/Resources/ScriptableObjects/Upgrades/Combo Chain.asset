@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Combo Chain
   UpgradeDescription: Actions gain a second hit that does 50% damage
-  cost: 34
+  cost: 25
   UpgradeType: 0
   Rarity: 3
   UpgradeID: 15
