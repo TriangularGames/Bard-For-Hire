@@ -2095,8 +2095,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 502b01f5a4518fe4e9d850b9ce72c20b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
-  Upgrades:
-  - {fileID: 11400000, guid: fb9be2e5f55603444847ed21f233ec3c, type: 2}
+  Upgrades: []
 --- !u!114 &1016375508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2963,7 +2962,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AudienceMemberManager
   memberTypes:
   - Kobold
-  - EvilerKobold
+  - Goblin
+  - Skeleton
   numberOfEnemies: 3
   spawnPoints: []
   enemyDisplays: []

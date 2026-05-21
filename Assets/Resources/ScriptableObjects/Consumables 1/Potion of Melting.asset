@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ConsumableData
   ConsumableName: Potion of Melting
   ConsumableDescription: Permanently removes 2 weapons from your bag
-  cost: 0
+  cost: 6
   Type: 5
   Rarity: 0
-  icon: {fileID: 21300000, guid: 4ddf3b122a40cf7499111c1ad4e1b790, type: 3}
+  icon: {fileID: 21300000, guid: 0c713659974fdfd49935ee3e69f61be5, type: 3}

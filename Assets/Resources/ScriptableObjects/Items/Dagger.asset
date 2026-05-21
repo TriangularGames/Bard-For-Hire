@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Note
   ItemName: Dagger
   ItemDescription: Short swift blade
-  cost: 2
+  cost: 6
   ItemType: 0
   Rarity: 0
   Damage: 4
   Mult: 0
-  Playable: 4
+  Playable: 5
   icon: {fileID: 21300000, guid: 81f9d840f28bc4cf6ad53960594638a1, type: 3}
