@@ -414,6 +414,14 @@ PrefabInstance:
       propertyPath: noteInventory.Array.size
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
+      propertyPath: upgradeInventory.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
+      propertyPath: 'upgradeInventory.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: fb9be2e5f55603444847ed21f233ec3c, type: 2}
     - target: {fileID: 8025483659626453430, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: m_Name
       value: _PlayerManager
@@ -2696,7 +2704,7 @@ GameObject:
   m_Component:
   - component: {fileID: 908861401}
   m_Layer: 0
-  m_Name: Managers
+  m_Name: GlobalManagers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3785,6 +3793,7 @@ MonoBehaviour:
   _items: {fileID: 591752443}
   _upgrades: {fileID: 322788680}
   _consumables: {fileID: 784648340}
+  upgradeWindow: {fileID: 1503709064}
   rerollCost: 5
 --- !u!4 &1409301577
 Transform:
@@ -3976,8 +3985,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 14}
-  m_SizeDelta: {x: 160, y: 257}
+  m_AnchoredPosition: {x: 0, y: -25.115}
+  m_SizeDelta: {x: 160, y: 292.6098}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1503709065
 MonoBehaviour:
@@ -3999,8 +4008,8 @@ MonoBehaviour:
   m_ChildAlignment: 1
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 30, y: 30}
-  m_Spacing: {x: 0, y: 0}
+  m_CellSize: {x: 50, y: 50}
+  m_Spacing: {x: 30, y: 40}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!4 &1534831705 stripped

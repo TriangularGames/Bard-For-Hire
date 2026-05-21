@@ -19,23 +19,29 @@ public class ShopManager : MonoBehaviour
     [SerializeField] private ShopUpgrades _upgrades;
     [SerializeField] private ShopConsumables _consumables;
 
+    [Header("Upgrade Showcase Window")]
+    [SerializeField] private Transform upgradeWindow;
+
     // TODO: setup rerollCost
     public int rerollCost = 5;
 
     private void OnEnable()
     {
         EventBus.Subscribe<ItemSelectedEvent>(CheckItemSelection);
+        EventBus.Subscribe<UpgradeBoughtEvent>(UpdateUpgradeDisplay);
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<ItemSelectedEvent>(CheckItemSelection);
+        EventBus.Unsubscribe<UpgradeBoughtEvent>(UpdateUpgradeDisplay);
     }
 
     private void Start()
     {
         EventBus.Publish<EnterShopEvent>(new EnterShopEvent());
         SetupShop();
+        SetupUpgradeDisplay();
         SetRerollText();
     }
 
@@ -66,13 +72,7 @@ public class ShopManager : MonoBehaviour
         _items.SetupSlots(items);
 
         // Setup the Upgrades
-        List<UpgradeData> upgrades = new List<UpgradeData>();
-        for (int i = 0; i < MAXUpgrades; i++)
-        {
-            UpgradeData randomData = ResourceManager.Instance.UpgradeData[Random.Range(0, ResourceManager.Instance.UpgradeData.Length - 1)];
-            upgrades.Add(randomData);
-        }
-        _upgrades.SetupSlots(upgrades);
+        GenerateUpgrades();
 
         // Setup the Consumables
         List<ConsumableData> consumables = new List<ConsumableData>();
@@ -82,6 +82,41 @@ public class ShopManager : MonoBehaviour
             consumables.Add(randomData);
         }
         _consumables.SetupSlots(consumables);
+    }
+
+    private void GenerateUpgrades()
+    {
+        List<UpgradeData> upgrades = new List<UpgradeData>();
+        while (upgrades.Count != MAXUpgrades)
+        {
+            UpgradeData randomData = ResourceManager.Instance.UpgradeData[Random.Range(0, ResourceManager.Instance.UpgradeData.Length - 1)];
+            if (upgrades.Count == 1)
+            {
+                if (upgrades[0] != randomData && !PlayerManager.Instance.upgradeInventory.Contains(randomData))
+                {
+                    upgrades.Add(randomData);
+                }
+            }
+            else
+            {
+                upgrades.Add(randomData);
+            }
+            
+        }
+        _upgrades.SetupSlots(upgrades);
+    }
+
+    private void SetupUpgradeDisplay()
+    {
+        if (PlayerManager.Instance.upgradeInventory.Count > 0)
+        {
+            foreach (UpgradeData upgrade in PlayerManager.Instance.upgradeInventory)
+            {
+                GameObject obj = AssetManager.Instance.Spawn("Upgrade", upgradeWindow);
+                obj.GetComponent<UpgradeController>().upgradeData = upgrade;
+                obj.GetComponent<UpgradeController>().Setup();
+            }
+        }
     }
 
     private void ClearShop()
@@ -126,6 +161,11 @@ public class ShopManager : MonoBehaviour
             }
         }
         return;
+    }
+
+    private void UpdateUpgradeDisplay(UpgradeBoughtEvent e)
+    {
+        SetupUpgradeDisplay();
     }
 
     /// <summary>
