@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Focus Potion
   m_EditorClassIdentifier: Assembly-CSharp::ConsumableData
   ConsumableName: Focus Potion
-  ConsumableDescription: Reduces Roll DC by 2 for this turn
-  cost: 0
+  ConsumableDescription: Increases each roll by +2 this turn
+  cost: 3
   Type: 0
   Rarity: 0
-  icon: {fileID: 21300000, guid: a01efb1efb877e141aa5238493bae323, type: 3}
+  icon: {fileID: 21300000, guid: bc73044ce55c8f74cbef993eaa34a32f, type: 3}

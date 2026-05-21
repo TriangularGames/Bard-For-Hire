@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Potion of Polymorph
   m_EditorClassIdentifier: Assembly-CSharp::ConsumableData
   ConsumableName: Potion of Polymorph
-  ConsumableDescription: Permanently removes 2 weapons from your bag
-  cost: 0
+  ConsumableDescription: Changes one weapon into another random weapon
+  cost: 5
   Type: 6
   Rarity: 0
-  icon: {fileID: 21300000, guid: 54de6795341cf344d9b25e56e38d3c71, type: 3}
+  icon: {fileID: 21300000, guid: 284dd48f616081e448a6f3e809aa7339, type: 3}

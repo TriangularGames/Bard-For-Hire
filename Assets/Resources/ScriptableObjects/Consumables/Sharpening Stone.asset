@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Sharpening Stone
   m_EditorClassIdentifier: Assembly-CSharp::ConsumableData
   ConsumableName: Sharpening Stone
-  ConsumableDescription: Attacks Deal 30% more damage for this turn
-  cost: 0
+  ConsumableDescription: Attacks deal 30% more damage this turn
+  cost: 6
   Type: 2
   Rarity: 0
-  icon: {fileID: 21300000, guid: a20adda6d120ce145b9490df2210b349, type: 3}
+  icon: {fileID: 21300000, guid: 05e0eb83eb8e7634395802316b366109, type: 3}
