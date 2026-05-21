@@ -60,6 +60,7 @@ public class PlayerManager : Singleton<PlayerManager>
     private void EnterCombat(EnterCombatEvent e)
     {
         SetCoinText();
+        SetConsumables();
     }
 
     private void EnterShop(EnterShopEvent e)
@@ -133,6 +134,11 @@ public class PlayerManager : Singleton<PlayerManager>
     private void OnConsumableBought(ConsumableBoughtEvent e)
     {
         consumableInventory.Add(e.data);
+    }
+
+    private void SetConsumables()
+    {
+        GameObject.FindWithTag("ItemManager").GetComponent<ConsumableManager>().consumables.AddRange(consumableInventory);
     }
 
     public override void Awake()

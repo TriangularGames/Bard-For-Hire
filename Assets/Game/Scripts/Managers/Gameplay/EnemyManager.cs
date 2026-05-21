@@ -60,7 +60,10 @@ public class EnemyManager : Singleton<EnemyManager>
 
         enemies.RemoveAt(index);
         // Set new first enemy in list to active target (as list is ordered)
-        enemies[0].GetComponent<EnemyController>().SetIndicator();
+        if (enemies.Count != 0)
+        {
+            enemies[0].GetComponent<EnemyController>().SetIndicator();
+        }
     }
 
     public bool AreEnemiesAlive()
@@ -71,11 +74,15 @@ public class EnemyManager : Singleton<EnemyManager>
 
     private void CombatSetup(EnterCombatEvent @event)
     {
+        spawnPoints.Clear();
+        enemies.Clear();
         SpawnEnemies();
     }
 
     private void ShopSetup(EnterShopEvent @event)
     {
+        spawnPoints.Clear();
+        enemies.Clear();
         LookAhead();
     }
 
@@ -121,11 +128,12 @@ public class EnemyManager : Singleton<EnemyManager>
         // Generate list of enemies based on Round # specific data
         // send data to panel in Shop
         // TODO: make functionality
-        GameObject enemyDisplayHolder = GameObject.FindWithTag("EnemyDisplays");
-        for (int c = 0; c < enemyDisplayHolder.transform.childCount; c++)
-        {
-            enemyDisplays.Add(enemyDisplayHolder.transform.GetChild(c).gameObject);
-        }
+        
+        //GameObject enemyDisplayHolder = GameObject.FindWithTag("EnemyDisplays");
+        //for (int c = 0; c < enemyDisplayHolder.transform.childCount; c++)
+        //{
+        //    enemyDisplays.Add(enemyDisplayHolder.transform.GetChild(c).gameObject);
+        //}
 
         // Similar to spawning, goes through each display to place icon, and number of enemies
         // The Icon object also has a script that requires the EnemyData for the tool-tip functionality

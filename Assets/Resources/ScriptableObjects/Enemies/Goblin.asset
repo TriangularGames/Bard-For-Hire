@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Goblin
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   health: 24
-  coinReward: 2
+  coinReward: 15
   weakness: 1
   icon: {fileID: 846255775, guid: 8dee7f141cc954181a73b09d05ef0e67, type: 3}
   animator: {fileID: 22100000, guid: c7c9b9fb6271a204182ababe9d891efe, type: 2}

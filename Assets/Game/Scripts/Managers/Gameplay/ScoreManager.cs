@@ -122,7 +122,7 @@ public class ScoreManager : MonoBehaviour
         }
 
         // Wait for possible animations
-        await Task.Delay(1000);
+        await Task.Delay(1500);
         if ((curItem + 1) == pendingItems.Count)
         {
             FinalizeScore();
