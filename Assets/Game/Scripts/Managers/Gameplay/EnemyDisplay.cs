@@ -10,6 +10,7 @@ public class EnemyDisplay : MonoBehaviour
     public void Setup(EnemyData enemy)
     {
         enemyImage.sprite = enemy.icon;
+        enemyImage.gameObject.GetComponent<EnemyInfo>().enemyData = enemy;
 
         health.text = enemy.health.ToString();
     }

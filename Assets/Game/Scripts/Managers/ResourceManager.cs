@@ -14,4 +14,16 @@ public class ResourceManager : Singleton<ResourceManager>
         ConsumableData = Resources.LoadAll<ConsumableData>("ScriptableObjects/Consumables");
         EnemyData = Resources.LoadAll<EnemyData>("ScriptableObjects/Enemies");
     }
+
+    public EnemyData GetEnemy(string name)
+    {
+        foreach (EnemyData data in EnemyData)
+        {
+            if (data.name == name)
+            {
+                return data;
+            }
+        }
+        return null;
+    }
 }

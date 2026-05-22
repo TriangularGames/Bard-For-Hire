@@ -77,7 +77,10 @@ public class EnemyManager : Singleton<EnemyManager>
 
         enemies.RemoveAt(index);
         // Set new first enemy in list to active target (as list is ordered)
-        enemies[0].GetComponent<EnemyController>().SetIndicator();
+        if (enemies.Count > 0)
+        {
+            enemies[0].GetComponent<EnemyController>().SetIndicator();
+        }
     }
 
     public bool AreEnemiesAlive()
@@ -106,12 +109,11 @@ public class EnemyManager : Singleton<EnemyManager>
         int maxHealth = roundData.startMaxTotalHealth + (currentRound * roundData.startMaxTotalHealth);
         int targetHealth = Random.Range(minHealth, maxHealth + 1);
         int remainingHealth = targetHealth;
-        EnemyData[] enemyList = ResourceManager.Instance.EnemyData;
 
         while (remainingHealth > 0 && nextEncounter.Count < roundData.maxEnemies)
         {
             List<EnemyData> affordableGuys = new List<EnemyData>();
-            foreach (EnemyData enemy in enemyList)
+            foreach (EnemyData enemy in ResourceManager.Instance.EnemyData)
             {
                 if (enemy.health <= remainingHealth)
                     affordableGuys.Add(enemy);
@@ -119,8 +121,8 @@ public class EnemyManager : Singleton<EnemyManager>
 
             if (affordableGuys.Count == 0)
             {
-                EnemyData cheapest = enemyList[0];
-                foreach (EnemyData enemy in enemyList)
+                EnemyData cheapest = ResourceManager.Instance.EnemyData[0];
+                foreach (EnemyData enemy in ResourceManager.Instance.EnemyData)
                 {
                     if (enemy.health < cheapest.health)
                         cheapest = enemy;
@@ -198,15 +200,18 @@ public class EnemyManager : Singleton<EnemyManager>
         // TODO: make functionality
         GameObject enemyDisplayHolder = GameObject.FindWithTag("EnemyDisplays");
         enemyDisplays.Clear();
+
         for (int c = 0; c < enemyDisplayHolder.transform.childCount; c++)
         {
             enemyDisplays.Add(enemyDisplayHolder.transform.GetChild(c).gameObject);
         }
+
         foreach (GameObject disp in enemyDisplays)
         {
             disp.SetActive(false);
         }
-        for(int i = 0;i < nextEncounter.Count && i < enemyDisplays.Count; i++)
+
+        for(int i = 0; i < nextEncounter.Count && i < enemyDisplays.Count; i++)
         {
             enemyDisplays[i].SetActive(true);
             EnemyDisplay displayComponent = enemyDisplays[i].GetComponent<EnemyDisplay>();
@@ -214,9 +219,6 @@ public class EnemyManager : Singleton<EnemyManager>
             if (displayComponent != null)
                 displayComponent.Setup(nextEncounter[i]);
         }
-
-        // Similar to spawning, goes through each display to place icon, and number of enemies
-        // The Icon object also has a script that requires the EnemyData for the tool-tip functionality
     }
 
 }

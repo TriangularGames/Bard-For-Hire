@@ -13,7 +13,8 @@ public class EnemyData : ScriptableObject
     [Header("Enemy Info")]
     [SerializeField] public Sprite icon;
     [SerializeField] public AnimatorOverrideController animator;
-    [SerializeField] string Description;
+    [SerializeField] public string Name;
+    [SerializeField] public string Description;
 
     [Header("Additional Bonus")]
     [SerializeField] bool hasBonus;

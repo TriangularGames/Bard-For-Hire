@@ -5,34 +5,71 @@ using UnityEngine.UI;
 public class Tooltip : MonoBehaviour
 {
     public TMP_Text headerTxt;
-    public Transform data;
+    public TMP_Text rarityTxt;
+    public TMP_Text attackTxt;
+    public TMP_Text rollTxt;
+    public TMP_Text typeTxt;
     public TMP_Text contentTxt;
 
     public LayoutElement layoutElement;
 
     public int characterWrapLimit;
 
-    public void SetText(string content, string header = "", string attack = "", string roll = "")
+    public void SetText(string content, string header, string rarity = "", string type = "", bool isWeakness = false, string attack = "", string roll = "")
     {
-        if (string.IsNullOrEmpty(header))
+        // Header Text
+        headerTxt.text = header;
+
+        // Rarity Text
+        if (string.IsNullOrEmpty(rarity))
         {
-            transform.GetChild(0).gameObject.SetActive(false);
+            transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
         }
         else
         {
-            transform.GetChild(0).gameObject.SetActive(true);
-            headerTxt.text = header;
+            transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
+            rarityTxt.text = rarity;
+            
         }
 
-        if (string.IsNullOrEmpty(attack) || string.IsNullOrEmpty(roll))
+        // Type Text
+        if (string.IsNullOrEmpty(type))
+        {
+            transform.GetChild(2).gameObject.SetActive(false);
+        }
+        else
+        {
+            transform.GetChild(2).gameObject.SetActive(true);
+            typeTxt.text = type;
+        }
+
+        // Attack / Roll OR Weakness
+        if (string.IsNullOrEmpty(attack))
         {
             transform.GetChild(1).gameObject.SetActive(false);
         }
         else
         {
+            // Attack/Weakness Text
             transform.GetChild(1).gameObject.SetActive(true);
-            data.GetChild(0).GetComponent<TMP_Text>().text = "Attack: " + attack;
-            data.GetChild(1).GetComponent<TMP_Text>().text = "Roll: " + roll;
+            if (isWeakness)
+            {
+                attackTxt.text = "Weakness: " + attack;
+            }
+            else
+            {
+                attackTxt.text = "Attack: " + attack;
+            }
+
+            if (string.IsNullOrEmpty(roll))
+            {
+                transform.GetChild(1).GetChild(1).gameObject.SetActive(false);
+            }
+            else
+            {
+                transform.GetChild(1).GetChild(1).gameObject.SetActive(true);
+                rollTxt.text = "Roll: " + roll;
+            }
         }
 
         contentTxt.text = content;

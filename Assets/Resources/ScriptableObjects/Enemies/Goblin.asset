@@ -17,7 +17,8 @@ MonoBehaviour:
   weakness: 1
   icon: {fileID: 846255775, guid: 8dee7f141cc954181a73b09d05ef0e67, type: 3}
   animator: {fileID: 22100000, guid: c7c9b9fb6271a204182ababe9d891efe, type: 2}
-  Description: Lil guy
+  Name: Goblin
+  Description: Little fellow with some serious problems
   hasBonus: 0
   bonusStat: 0
   isMultiplier: 0

@@ -5,9 +5,9 @@ using UnityEngine;
 public class TooltipSystem : Singleton<TooltipSystem>
 {
     public Tooltip toolTip;
-    public void Show(string content, string header = "", string attack = "", string roll = "")
+    public void Show(string content, string header, string rarity = "", string type = "", bool isWeakness = false, string attack = "", string roll = "")
     {
-        toolTip.SetText(content, header, attack, roll);
+        toolTip.SetText(content, header, rarity, type, isWeakness, attack, roll);
         StartCoroutine("DelayShow");
         
     }
