@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dac3702ff3d5d8c4583fb2a130044aea, type: 3}
-  m_Name: (X) Second Chance
+  m_Name: Second Chance
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Second Chance
   UpgradeDescription: Once per combat you may reroll a failed check
@@ -18,4 +18,4 @@ MonoBehaviour:
   UpgradeType: 1
   Rarity: 0
   UpgradeID: 8
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 0ad85f42c1f895d49925b29a6540d845, type: 3}

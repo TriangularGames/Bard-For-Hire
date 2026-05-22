@@ -16,8 +16,8 @@ MonoBehaviour:
   ItemDescription: A beam of pure cold
   cost: 10
   ItemType: 2
-  Rarity: 1
-  Damage: 6
+  Rarity: 0
+  Damage: 4
   Mult: 0
-  Playable: 7
+  Playable: 5
   icon: {fileID: 21300000, guid: e89e06cb9971d4b47b276d53d7233a3f, type: 3}

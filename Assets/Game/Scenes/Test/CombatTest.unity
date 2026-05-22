@@ -2095,7 +2095,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 502b01f5a4518fe4e9d850b9ce72c20b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
-  Upgrades: []
+  Upgrades:
+  - {fileID: 11400000, guid: 6ecf1f8c9ef652b49acb2d91d28b0629, type: 2}
+  - {fileID: 11400000, guid: 1d6b1bff6aaa63b499cee15897e54ed8, type: 2}
+  - {fileID: 11400000, guid: 6135e09b9639c0f44a0874b23f27941f, type: 2}
 --- !u!114 &1016375508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2170,6 +2173,7 @@ MonoBehaviour:
   tempDamgeIncrease: 1
   rollAbove10: 0
   reroll: 0
+  isFirstTurn: 0
 --- !u!114 &1050412171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2964,9 +2968,17 @@ MonoBehaviour:
   - Kobold
   - Goblin
   - Skeleton
-  numberOfEnemies: 3
+  - Toddler
+  roundData:
+    startMinTotalHealth: 20
+    startMaxTotalHealth: 30
+    minIncrease: 8
+    maxIncrease: 10
+    maxEnemies: 3
+  currentRound: 0
   spawnPoints: []
-  enemyDisplays: []
+  enemyDisplays:
+  - {fileID: 2052818470973231883, guid: bd8955d62696ff64d86c2806f78e823f, type: 3}
 --- !u!4 &1658900633
 Transform:
   m_ObjectHideFlags: 0
@@ -3138,7 +3150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5323185349871657516, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6118806297738788843, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
       propertyPath: m_Pivot.x

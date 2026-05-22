@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +14,12 @@ public class ShopManager : MonoBehaviour
     private static int MAXItems = 4;
     private static int MAXUpgrades = 2;
     private static int MAXConsumables = 2;
+
+    [Header("Weight of Each Rarity")]
+    [SerializeField] private int commonWeight = 60;
+    [SerializeField] private int uncommonWeight = 25;
+    [SerializeField] private int rareWeight = 12;
+    [SerializeField] private int legendaryWeight = 3;
 
     [Header("Loadouts")]
     [SerializeField] private ShopItems _items;
@@ -53,6 +60,68 @@ public class ShopManager : MonoBehaviour
         }
     }
 
+    private ObjectRarity RollRarity()
+    {
+        int total = commonWeight + uncommonWeight + rareWeight + legendaryWeight;
+        int roll = Random.Range(0, total);
+
+        if (roll < commonWeight) return ObjectRarity.Common;
+        if (roll < uncommonWeight + commonWeight) return ObjectRarity.Uncommon;
+        if (roll < rareWeight + commonWeight + uncommonWeight) return ObjectRarity.Rare;
+        return ObjectRarity.Legendary;
+    }
+
+    private ItemData GetRandomItem()
+    {
+        ObjectRarity targetRarity = RollRarity();
+
+        List<ItemData> pool = new List<ItemData>();
+        foreach (ItemData item in ResourceManager.Instance.ItemData)
+        {
+            if (item.Rarity == targetRarity) pool.Add(item);
+        }
+
+        if (pool.Count == 0)
+        {
+            pool = new List<ItemData>(ResourceManager.Instance.ItemData);
+        }
+        return pool[Random.Range(0, pool.Count)];
+    }
+
+    private UpgradeData GetRandomUpgrade()
+    {
+        ObjectRarity targetRarity = RollRarity();
+
+        List<UpgradeData> pool = new List<UpgradeData>();
+        foreach (UpgradeData upgrade in ResourceManager.Instance.UpgradeData)
+        {
+            if (upgrade.Rarity == targetRarity) pool.Add(upgrade);
+        }
+
+        if (pool.Count == 0)
+        {
+            pool = new List<UpgradeData>(ResourceManager.Instance.UpgradeData);
+        }
+        return pool[Random.Range(0, pool.Count)];
+    }
+
+    private ConsumableData GetRandomConsumable()
+    {
+        ObjectRarity targetRarity = RollRarity();
+
+        List<ConsumableData> pool = new List<ConsumableData>();
+        foreach (ConsumableData cons in ResourceManager.Instance.ConsumableData)
+        {
+            if (cons.Rarity == targetRarity) pool.Add(cons);
+        }
+
+        if (pool.Count == 0)
+        {
+            pool = new List<ConsumableData>(ResourceManager.Instance.ConsumableData);
+        }
+        return pool[Random.Range(0, pool.Count)];
+    }
+
     private void SetRerollText()
     {
         rerollBtn.transform.GetChild(0).GetComponent<TMP_Text>().text = "Reroll\n$" + rerollCost;
@@ -66,8 +135,7 @@ public class ShopManager : MonoBehaviour
         List<ItemData> items = new List<ItemData>();
         for (int i = 0; i < MAXItems; i++)
         {
-            ItemData randomData = ResourceManager.Instance.ItemData[Random.Range(0, ResourceManager.Instance.ItemData.Length - 1)];
-            items.Add(randomData);
+            items.Add(GetRandomItem());
         }
         _items.SetupSlots(items);
 
@@ -78,8 +146,7 @@ public class ShopManager : MonoBehaviour
         List<ConsumableData> consumables = new List<ConsumableData>();
         for (int i = 0; i < MAXConsumables; i++)
         {
-            ConsumableData randomData = ResourceManager.Instance.ConsumableData[Random.Range(0, ResourceManager.Instance.ConsumableData.Length - 1)];
-            consumables.Add(randomData);
+            consumables.Add(GetRandomConsumable());
         }
         _consumables.SetupSlots(consumables);
     }
@@ -89,19 +156,11 @@ public class ShopManager : MonoBehaviour
         List<UpgradeData> upgrades = new List<UpgradeData>();
         while (upgrades.Count != MAXUpgrades)
         {
-            UpgradeData randomData = ResourceManager.Instance.UpgradeData[Random.Range(0, ResourceManager.Instance.UpgradeData.Length - 1)];
-            if (upgrades.Count == 1)
-            {
-                if (upgrades[0] != randomData && !PlayerManager.Instance.upgradeInventory.Contains(randomData))
-                {
-                    upgrades.Add(randomData);
-                }
-            }
-            else
-            {
-                upgrades.Add(randomData);
-            }
-            
+            UpgradeData option = GetRandomUpgrade();
+            bool alreadyThere = upgrades.Contains(option);
+            bool alreadyGotThatOne = PlayerManager.Instance.upgradeInventory.Contains(option);
+           if (!alreadyThere && !alreadyGotThatOne)
+                upgrades.Add(option);
         }
         _upgrades.SetupSlots(upgrades);
     }

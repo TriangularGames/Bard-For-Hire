@@ -17,6 +17,8 @@ public class UpgradeFightingManager : MonoBehaviour
     public float tempDamgeIncrease = 1f;
     public bool rollAbove10;
     public bool reroll;
+    public bool isFirstTurn;
+    public bool rolledNat20;
 
     private void Awake()
     {
@@ -29,6 +31,7 @@ public class UpgradeFightingManager : MonoBehaviour
         quickSaveUsed = false;
         successStreak = 0;
         luckySlot = Random.Range(0, 6);
+        isFirstTurn = true;
     }
 
     public void EndRound()
@@ -46,13 +49,15 @@ public class UpgradeFightingManager : MonoBehaviour
         tempDCReduce = 0;
 
         tempDamgeIncrease = 1f;
-
+        isFirstTurn = false;
         rollAbove10 = false;
     }
 
     public void EndCombat()
     {
         secondChanceUsed = false;
+        EnemyManager.Instance.currentRound++;
+        EnemyManager.Instance.GenerateNext();
     }
 
     public void SuccessfulAction(ItemData item, int damage)
@@ -83,6 +88,7 @@ public class UpgradeFightingManager : MonoBehaviour
             roll += tempDCReduce;
 
         if (roll > 20) roll = 20;
+        rolledNat20 = (roll == 20);
         if (roll < 1) roll = 1;
         return roll;
     }
@@ -202,6 +208,10 @@ public class UpgradeFightingManager : MonoBehaviour
         }
         damage = Mathf.RoundToInt(
         damage * tempDamgeIncrease);
+        if (rolledNat20)
+        {
+            damage *= 2;
+        }
         return damage;
     }
     //this is for the upgrade "Second Chance" (Once per combat you may reroll a failed check)
