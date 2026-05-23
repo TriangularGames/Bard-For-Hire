@@ -138,6 +138,10 @@ public class ScoreManager : MonoBehaviour
 
     private void AttackEnemy(ItemData item, int damage)
     {
+        if(EnemyManager.Instance.isBossRound && EnemyManager.Instance.hasDisabled && EnemyManager.Instance.disabledItem == item.ItemType) {
+            return;
+        }
+
         foreach (Transform enemyLocation in GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().spawnPoints)
         {
             // Check if the location has an enemy in it
@@ -148,7 +152,12 @@ public class ScoreManager : MonoBehaviour
 
                 if (enemy.GetComponent<EnemyController>().enemyData.weakness == item.ItemType)
                 {
-                    damage = Mathf.RoundToInt(damage * 1.5f);
+                    damage = Mathf.RoundToInt(damage * 1.55f);
+                }
+
+                if(EnemyManager.Instance.isBossRound && EnemyManager.Instance.bossData.ability == BossAbilities.EvenNumberReduce && damage % 2 == 0)
+                {
+                    damage = Mathf.RoundToInt(damage * 0.5f);
                 }
 
                 if (enemy.GetComponent<EnemyController>().GetHealth() > 0)

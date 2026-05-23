@@ -69,4 +69,9 @@ public enum ConsumableID
     PotionOfCloning
 }
 
-
+public enum BossAbilities
+{
+    EvenNumberReduce,
+    DisableAction,
+    None
+}

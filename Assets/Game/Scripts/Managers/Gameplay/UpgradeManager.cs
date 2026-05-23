@@ -14,6 +14,12 @@ public class UpgradeManager : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        Upgrades.Clear();
+        Upgrades.AddRange(PlayerManager.Instance.upgradeInventory);
+    }
+
     public void AddUpgrade(UpgradeData upgrade)
     {
         Upgrades.Add(upgrade);

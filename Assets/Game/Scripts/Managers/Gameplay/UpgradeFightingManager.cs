@@ -19,7 +19,6 @@ public class UpgradeFightingManager : MonoBehaviour
     public bool reroll;
     public bool isFirstTurn;
     public bool rolledNat20;
-
     private void Awake()
     {
         Instance = this;
@@ -34,7 +33,7 @@ public class UpgradeFightingManager : MonoBehaviour
         isFirstTurn = true;
     }
 
-    public void EndRound()
+    public void EndRound(List<ItemData> currentHand)
     {
         previousActions.Clear();
 
@@ -51,6 +50,26 @@ public class UpgradeFightingManager : MonoBehaviour
         tempDamgeIncrease = 1f;
         isFirstTurn = false;
         rollAbove10 = false;
+
+        if (EnemyManager.Instance.isBossRound)
+        {
+            if(EnemyManager.Instance.bossData.ability == BossAbilities.DisableAction)
+            {
+                List<ItemType> items = new List<ItemType>();
+                foreach (ItemData item in currentHand)
+                {
+                    if (!items.Contains(item.ItemType))
+                    {
+                        items.Add(item.ItemType);
+                    }
+                }
+                if (items.Count == 0) {
+                    return;
+                }
+                EnemyManager.Instance.disabledItem = items[Random.Range(0, items.Count)];
+                EnemyManager.Instance.hasDisabled = true;
+            }
+        }
     }
 
     public void EndCombat()
@@ -127,7 +146,8 @@ public class UpgradeFightingManager : MonoBehaviour
         // this is for the upgrade "Overwhelming Blows" (1 bonus damage for each action used)
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.OverwhelmingBlows))
         {
-            damage += currentActions.Count;
+            if (currentActions.Count >= 2)
+                damage += currentActions.Count - 1;
         }
 
         // this is for the upgrade "Adaptive Combat" (1 bonus damage for each different action used in a row)
@@ -198,13 +218,13 @@ public class UpgradeFightingManager : MonoBehaviour
                 }
             }
             //this is for the upgrade "Lucky Strike" (1.25x bonus score for random slot (changes every turn))
-            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.LuckyStrike))
-            {
-                if(slotIndex == luckySlot)
-                {
-                    damage += Mathf.RoundToInt(item.Damage * 0.25f);
-                }
-            }
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.LuckyStrike))
+         {
+             if(slotIndex == luckySlot)
+             {
+                 damage += Mathf.RoundToInt(item.Damage * 0.25f);
+             }
+         }
         }
         damage = Mathf.RoundToInt(
         damage * tempDamgeIncrease);

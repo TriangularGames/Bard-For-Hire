@@ -15,6 +15,8 @@ public class EnemyData : ScriptableObject
     [SerializeField] public AnimatorOverrideController animator;
     [SerializeField] public string Name;
     [SerializeField] public string Description;
+    [SerializeField] public bool isBoss;
+    [SerializeField] public BossAbilities ability;
 
     [Header("Additional Bonus")]
     [SerializeField] bool hasBonus;

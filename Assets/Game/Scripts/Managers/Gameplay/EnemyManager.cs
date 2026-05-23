@@ -8,6 +8,11 @@ public class EnemyManager : Singleton<EnemyManager>
     /// Enemy types available for this Performance
     /// </summary>
     [SerializeField] List<string> memberTypes;
+    [SerializeField] public int roundsTilBoss = 3;
+    public bool isBossRound;
+    public EnemyData bossData;
+    public ItemType disabledItem;
+    public bool hasDisabled;
 
     /// <summary>
     /// Number of Enemies for the encounter
@@ -57,6 +62,8 @@ public class EnemyManager : Singleton<EnemyManager>
 
     private void CombatSetup(EnterCombatEvent @event)
     {
+        hasDisabled = false;
+
         // generate encounter first
         if (nextEncounter.Count == 0)
         {
@@ -69,6 +76,10 @@ public class EnemyManager : Singleton<EnemyManager>
     private void RemoveEnemy(EnemyDefeatedEvent e)
     {
         int index = -1;
+        EnemyController enemyC = e.enemy.GetComponent<EnemyController>();
+        PlayerManager.Instance.Coins += enemyC.enemyData.coinReward;
+        PlayerManager.Instance.SetCoinText();
+
         if (enemies.Contains(e.enemy))
         {
             index = enemies.IndexOf(e.enemy);
@@ -91,8 +102,9 @@ public class EnemyManager : Singleton<EnemyManager>
 
     private void ShopSetup(EnterShopEvent @event)
     {
-        GenerateRound();
         currentRound++;
+        isBossRound = (currentRound % roundsTilBoss == 0 && currentRound != 0);
+        GenerateRound();
         LookAhead();
     }
 
@@ -104,6 +116,22 @@ public class EnemyManager : Singleton<EnemyManager>
     private void GenerateRound()
     {
         nextEncounter.Clear();
+        bossData = null;
+
+        if (isBossRound)
+        {
+            List<EnemyData> list = new List<EnemyData>();
+            foreach (EnemyData enemy in ResourceManager.Instance.EnemyData)
+            {
+                if (enemy.isBoss)
+                {
+                    list.Add(enemy);
+                }
+            }
+            bossData = list[Random.Range(0, list.Count)];
+            nextEncounter.Add(bossData);
+            return;
+        }
 
         int minHealth = roundData.startMinTotalHealth + (currentRound * roundData.startMinTotalHealth);
         int maxHealth = roundData.startMaxTotalHealth + (currentRound * roundData.startMaxTotalHealth);
@@ -115,7 +143,7 @@ public class EnemyManager : Singleton<EnemyManager>
             List<EnemyData> affordableGuys = new List<EnemyData>();
             foreach (EnemyData enemy in ResourceManager.Instance.EnemyData)
             {
-                if (enemy.health <= remainingHealth)
+                if (!enemy.isBoss & enemy.health <= remainingHealth)
                     affordableGuys.Add(enemy);
             }
 
@@ -124,7 +152,7 @@ public class EnemyManager : Singleton<EnemyManager>
                 EnemyData cheapest = ResourceManager.Instance.EnemyData[0];
                 foreach (EnemyData enemy in ResourceManager.Instance.EnemyData)
                 {
-                    if (enemy.health < cheapest.health)
+                    if (!enemy.isBoss & enemy.health < cheapest.health)
                         cheapest = enemy;
                 }
                 nextEncounter.Add(cheapest);
