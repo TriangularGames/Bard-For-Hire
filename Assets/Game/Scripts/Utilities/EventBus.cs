@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 /// <summary>
 /// Event Bus implementation using delegates.
 /// </summary>
@@ -62,34 +63,110 @@ public static class EventBus
 }
 
 /// <summary>
-/// Event for when a Note is being Discarded/Scored
+/// Event for when a Purchase is made
 /// </summary>
-public struct NoteRemovedEvent
+public struct PurchaseEvent
 {
-    public NoteData _note;
+    public int _amount;
 
-    public NoteRemovedEvent(NoteData note)
+    public PurchaseEvent(int amount)
     {
-        _note = note;
+        _amount = amount;
     }
 }
 
 /// <summary>
-/// Event for when Performance Starts
+/// Event for when an Item is purchased
 /// </summary>
-public struct PerformanceStartEvent { }
+public struct ItemBoughtEvent
+{
+    public ItemData data;
+
+    public ItemBoughtEvent(ItemData _data)
+    {
+        data = _data;
+    }
+}
 
 /// <summary>
-/// Event for when Performance Ends- Specifically after the Win screen is shown
+/// Event for when an Upgrade is purchased
 /// </summary>
-public struct PerformanceEndEvent { }
+public struct UpgradeBoughtEvent
+{
+    public UpgradeData data;
+
+    public UpgradeBoughtEvent(UpgradeData _data)
+    {
+        data = _data;
+    }
+}
 
 /// <summary>
-/// Event for when Round Starts
+/// Event for when a Consumable is purchased
 /// </summary>
-public struct RoundStartEvent { }
+public struct ConsumableBoughtEvent
+{
+    public ConsumableData data;
+
+    public ConsumableBoughtEvent(ConsumableData _data)
+    {
+        data = _data;
+    }
+}
 
 /// <summary>
-/// Event for when Round Ends
+/// Event for when an Item is used either Successfully or not
 /// </summary>
-public struct RoundEndEvent { }
+public struct ItemUsedEvent
+{
+    public ItemData item;
+
+    public ItemUsedEvent(ItemData _item)
+    {
+        item = _item;
+    }
+}
+
+/// <summary>
+/// Event for when an Item is Discarded
+/// </summary>
+public struct ItemDiscardedEvent
+{
+    public ItemData item;
+
+    public ItemDiscardedEvent(ItemData _item)
+    {
+        item = _item;
+    }
+}
+
+/// <summary>
+/// Event for when an Item in the shop is Selected
+/// </summary>
+public struct ItemSelectedEvent
+{
+    public EntityId id;
+
+    public ItemSelectedEvent(EntityId _id)
+    {
+        id = _id;
+    }
+}
+
+/// <summary>
+/// Event for when Combat Starts
+/// </summary>
+public struct AttackEvent { }
+
+/// <summary>
+/// Event for when Scoring is Completed
+/// </summary>
+public struct ScoringCompletedEvent
+{
+    public int count;
+
+    public ScoringCompletedEvent(int _count)
+    {
+        count = _count;
+    }
+}

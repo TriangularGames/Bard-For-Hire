@@ -129,15 +129,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2557450157422753619, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 633.6567
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2557450157422753619, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 455.226
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2557450157422753619, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 43.54401
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2557450157422753619, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: m_LocalRotation.w
@@ -166,6 +166,10 @@ PrefabInstance:
     - target: {fileID: 2557450157422753619, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
+      propertyPath: Coins
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8025483659626453430, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: m_Name

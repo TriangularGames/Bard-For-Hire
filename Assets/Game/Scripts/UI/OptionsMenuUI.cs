@@ -33,15 +33,17 @@ public class OptionsMenuUI : MonoBehaviour
     private void Awake()
     {
         InitializeUIState();
+        InitializeUIComponents();
     }
 
     private void Start()
     {
-        InitializeUIComponents();
+        Debug.Log(Equals(OptionsManager.Instance, null) ? "OptionsManager instance is null in OptionsMenuUI Start" : "OptionsManager instance found in OptionsMenuUI Start");
     }
 
     private void OnEnable()
     {
+        Debug.Log("OptionsMenuUI enabled, updating UI with current settings.");
         UpdateUIWithCurrentSettings();
     }
 

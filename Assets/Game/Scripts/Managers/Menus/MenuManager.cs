@@ -33,5 +33,6 @@ public class MenuManager : Singleton<MenuManager>
         Debug.Log("Resume Previous State");
         stateHistory.Pop(); // Remove current state
         if (stateHistory.Count > 0) SwitchState(stateHistory.Peek(), addToHistory: false);
+        else currentState.ExitState(this);
     }
 }

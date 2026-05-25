@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e26645ea2acf9941b0aaa3ad7faf951, type: 3}
+  m_Name: Chromatic Orb
+  m_EditorClassIdentifier: Assembly-CSharp::Note
+  ItemName: Chromatic Orb
+  ItemDescription: Magical orb
+  cost: 6
+  ItemType: 2
+  Rarity: 1
+  Damage: 8
+  Mult: 0
+  Playable: 14
+  icon: {fileID: 21300000, guid: 456d32116bef6b840be5cbc83410f441, type: 3}

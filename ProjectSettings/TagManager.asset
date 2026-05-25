@@ -5,6 +5,15 @@ TagManager:
   serializedVersion: 3
   tags:
   - Note
+  - Canvas
+  - AttackHand
+  - ItemPool
+  - ScoreManager
+  - ItemManager
+  - EnemyManager
+  - Coins
+  - SpawnPoints
+  - EnemyDisplays
   layers:
   - Default
   - TransparentFX

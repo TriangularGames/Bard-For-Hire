@@ -7,7 +7,7 @@ public class ShopState : IGameState
 {
     public void EnterState(GameManager gm)
     {
-
+        SceneLoader.Instance.LoadScene("Shop", UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
 
     public void ExitState(GameManager gm)
@@ -20,3 +20,5 @@ public class ShopState : IGameState
 
     }
 }
+
+public struct EnterShopEvent { }
