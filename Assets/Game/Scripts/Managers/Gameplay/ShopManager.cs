@@ -129,8 +129,6 @@ public class ShopManager : MonoBehaviour
 
     public void SetupShop()
     {
-        // TODO: Edit so the items are grabbed based on rarity weight
-
         // Setup the Weapons
         List<ItemData> items = new List<ItemData>();
         for (int i = 0; i < MAXItems; i++)
@@ -167,6 +165,7 @@ public class ShopManager : MonoBehaviour
 
     private void SetupUpgradeDisplay()
     {
+        ClearUpgradeDisplay();
         if (PlayerManager.Instance.upgradeInventory.Count > 0)
         {
             foreach (UpgradeData upgrade in PlayerManager.Instance.upgradeInventory)
@@ -225,6 +224,14 @@ public class ShopManager : MonoBehaviour
     private void UpdateUpgradeDisplay(UpgradeBoughtEvent e)
     {
         SetupUpgradeDisplay();
+    }
+
+    private void ClearUpgradeDisplay()
+    {
+        foreach (Transform child in upgradeWindow)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
     }
 
     /// <summary>
