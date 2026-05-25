@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 878132170539416949}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.87751, y: 0.89882, z: -1.59143}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -49,6 +49,11 @@ MonoBehaviour:
   - Goblin
   - Skeleton
   - Toddler
+  roundsTilBoss: 3
+  isBossRound: 0
+  bossData: {fileID: 0}
+  disabledItem: 0
+  hasDisabled: 0
   roundData:
     startMinTotalHealth: 20
     startMaxTotalHealth: 30
@@ -57,5 +62,4 @@ MonoBehaviour:
     maxEnemies: 3
   currentRound: 0
   spawnPoints: []
-  enemyDisplays:
-  - {fileID: 2052818470973231883, guid: bd8955d62696ff64d86c2806f78e823f, type: 3}
+  enemyDisplays: []
