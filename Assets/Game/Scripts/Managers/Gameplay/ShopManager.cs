@@ -265,4 +265,12 @@ public class ShopManager : MonoBehaviour
         // Show a pop-up view of the inventory
         MenuManager.Instance.SwitchState(new InventoryMenuState());
     }
+
+    /// <summary>
+    /// Access Options Menu from Shop
+    /// </summary>
+    public void Options()
+    {
+        MenuManager.Instance.SwitchState(new OptionsMenuState());
+    }
 }
