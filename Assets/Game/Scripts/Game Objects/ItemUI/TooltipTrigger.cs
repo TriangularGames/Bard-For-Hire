@@ -37,26 +37,55 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
                     TooltipSystem.Instance.Show(data.ConsumableDescription, data.ConsumableName, data.Rarity.ToString());
                 }
             }
-            else if (GetComponent<InventorySlot>() && GetComponent<InventorySlot>().GetData() != null)
+            else if (GetComponent<InventorySlot>())
             {
                 ItemData data = GetComponent<InventorySlot>().GetData();
-                TooltipSystem.Instance.Show(data.ItemDescription, data.ItemName, data.Rarity.ToString(),
-                        data.ItemType.ToString(), false, data.Damage.ToString(), data.Playable.ToString());
+                if (data != null)
+                {
+                    TooltipSystem.Instance.Show(data.ItemDescription, data.ItemName, data.Rarity.ToString(),
+                            data.ItemType.ToString(), false, data.Damage.ToString(), data.Playable.ToString());
+                }
             }
-            else if (GetComponent<UpgradeController>() && GetComponent<UpgradeController>().upgradeData != null)
+            else if (GetComponent<ItemController>())
+            {
+                ItemData data = GetComponent<ItemController>().itemData;
+                if (data != null)
+                {
+                    TooltipSystem.Instance.Show("", data.ItemName, "",
+                        data.ItemType.ToString(), false, data.Damage.ToString(), data.Playable.ToString());
+                }
+            }
+            else if (GetComponent<UpgradeController>())
             {
                 UpgradeData data = GetComponent<UpgradeController>().upgradeData;
-                TooltipSystem.Instance.Show(data.UpgradeDescription, data.UpgradeName, data.Rarity.ToString());
+                if (data != null)
+                {
+                    TooltipSystem.Instance.Show(data.UpgradeDescription, data.UpgradeName, data.Rarity.ToString());
+                }
             }
-            else if (GetComponent<ConsumableController>() && GetComponent<ConsumableController>().consumableData != null)
+            else if (GetComponent<ConsumableController>())
             {
                 ConsumableData data = GetComponent<ConsumableController>().consumableData;
-                TooltipSystem.Instance.Show(data.ConsumableDescription, data.ConsumableName, data.Rarity.ToString());
+                if (data != null)
+                {
+                    TooltipSystem.Instance.Show(data.ConsumableDescription, data.ConsumableName, data.Rarity.ToString());
+                }
             }
-            else if (GetComponent<EnemyInfo>() && GetComponent<EnemyInfo>().enemyData != null)
+            else if (GetComponent<EnemyInfo>())
             {
                 EnemyData data = GetComponent<EnemyInfo>().enemyData;
-                TooltipSystem.Instance.Show(data.Description, data.Name, "", "", true, data.weakness.ToString());
+                if (data != null)
+                {
+                    TooltipSystem.Instance.Show(data.Description, data.Name, "", "", true, data.weakness.ToString());
+                }
+            }
+            else if (GetComponent<EnemyController>())
+            {
+                EnemyData data = GetComponent<EnemyController>().enemyData;
+                if (data != null)
+                {
+                    TooltipSystem.Instance.Show("", data.Name, "", "", true, data.weakness.ToString());
+                }
             }
         }
 

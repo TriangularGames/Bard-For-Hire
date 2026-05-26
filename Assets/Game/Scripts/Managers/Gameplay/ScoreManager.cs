@@ -20,6 +20,8 @@ public class ScoreManager : MonoBehaviour
 
     public float waitForRoll = 2f;
 
+    public int GameSpeed = 4;
+
     public DiceRoller roller;
     private List<ItemData> pendingItems;
     private int curItem = -1;
@@ -62,7 +64,7 @@ public class ScoreManager : MonoBehaviour
             }
             else
             {
-                rollResult = await roller.RollDie();
+                rollResult = await roller.RollDie(GameSpeed);
             }
             await OnRollComplete(rollResult);
         }
@@ -85,8 +87,9 @@ public class ScoreManager : MonoBehaviour
             Debug.Log($"{item.name} was played!");
             itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 1f, 0f, 1f);
             
-            await Task.Delay(400);
+            await Task.Delay(300 * GameSpeed);
             EventBus.Publish<AttackEvent>(new AttackEvent());
+            await Task.Delay(100 * GameSpeed);
             int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex);
             UpgradeFightingManager.Instance.SuccessfulAction(item, totalDamage);
 
@@ -117,7 +120,7 @@ public class ScoreManager : MonoBehaviour
 
             if (UpgradeFightingManager.Instance.CanUseSecondChance())
             {
-                rollValue = await roller.RollDie();
+                rollValue = await roller.RollDie(GameSpeed);
                 await OnRollComplete(rollValue);
                 return;
             }
@@ -129,7 +132,7 @@ public class ScoreManager : MonoBehaviour
         }
 
         // Wait for possible animations
-        await Task.Delay(1500);
+        await Task.Delay(800 * GameSpeed);
         if ((curItem + 1) == pendingItems.Count)
         {
             FinalizeScore();
@@ -152,11 +155,13 @@ public class ScoreManager : MonoBehaviour
 
                 if (enemy.GetComponent<EnemyController>().enemyData.weakness == item.ItemType)
                 {
+                    // TODO: make weakness damage more obvious
                     damage = Mathf.RoundToInt(damage * 1.55f);
                 }
 
                 if(EnemyManager.Instance.isBossRound && EnemyManager.Instance.bossData.ability == BossAbilities.EvenNumberReduce && damage % 2 == 0)
                 {
+                    // TODO: make enemy resistance more obvious
                     damage = Mathf.RoundToInt(damage * 0.5f);
                 }
 

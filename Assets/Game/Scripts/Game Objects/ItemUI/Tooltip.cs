@@ -40,6 +40,18 @@ public class Tooltip : MonoBehaviour
         else
         {
             transform.GetChild(2).gameObject.SetActive(true);
+            switch (type)
+            {
+                case "Magical":
+                    typeTxt.color = Color.purple;
+                    break;
+                case "Piercing":
+                    typeTxt.color = Color.darkCyan;
+                    break;
+                case "Slashing":
+                    typeTxt.color = Color.darkGreen;
+                    break;
+            }
             typeTxt.text = type;
         }
 
@@ -54,10 +66,23 @@ public class Tooltip : MonoBehaviour
             transform.GetChild(1).gameObject.SetActive(true);
             if (isWeakness)
             {
+                switch (attack)
+                {
+                    case "Magical":
+                        attackTxt.color = Color.purple;
+                        break;
+                    case "Piercing":
+                        attackTxt.color = Color.darkCyan;
+                        break;
+                    case "Slashing":
+                        attackTxt.color = Color.darkGreen;
+                        break;
+                }
                 attackTxt.text = "Weakness: " + attack;
             }
             else
             {
+                attackTxt.color = Color.red;
                 attackTxt.text = "Attack: " + attack;
             }
 

@@ -39,11 +39,11 @@ public class DiceRoller : MonoBehaviour
         }
     }
 
-    public async Task<int> RollDie()
+    public async Task<int> RollDie(int GameSpeed)
     {
         Debug.Log("Rolling die...");
         display.text = "Rolling die...";
-        await Task.Delay(600);
+        await Task.Delay(600 * GameSpeed);
         int roll = RollOnce();
         Debug.Log("You rolled: " + roll);
         display.text = "You rolled: " + roll;

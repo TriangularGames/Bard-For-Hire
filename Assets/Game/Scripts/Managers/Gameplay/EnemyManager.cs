@@ -177,7 +177,6 @@ public class EnemyManager : Singleton<EnemyManager>
         GameObject spawnPointHolder = GameObject.FindWithTag("SpawnPoints");
         for (int c = 0; c < spawnPointHolder.transform.childCount; c++)
         {
-            Debug.Log("Spawn Points Found: " + spawnPoints.Count);
             spawnPoints.Add(spawnPointHolder.transform.GetChild(c));
         }
 
