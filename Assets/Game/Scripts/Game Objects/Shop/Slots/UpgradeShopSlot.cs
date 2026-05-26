@@ -17,7 +17,7 @@ public class UpgradeShopSlot : ShopSlot
 
         value.text = _data.cost.ToString();
         icon.sprite = _data.icon;
-        icon.color = new Color(1f, 1f, 1f, 1f);
+        icon.color = new Color(0f, 0f, 0f, 1f);
     }
 
     public override void ClearInfo()
