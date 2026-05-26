@@ -1,36 +1,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShopConsumables : MonoBehaviour
+public class ShopConsumables : ShopSection
 {
-    [Tooltip("Slots where the Items will be displayed")]
-    private List<GameObject> displaySlots;
-
     private List<ConsumableData> _data;
 
-    private void Awake()
+    public override void Awake()
     {
+        base.Awake();
         _data = new List<ConsumableData>();
-        displaySlots = new List<GameObject>();
-    }
-
-    void Start()
-    {
-        // Get the Item display slots on this Object
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            displaySlots.Add(transform.GetChild(i).gameObject);
-        }
     }
 
     public List<ConsumableData> GetData()
     {
         return _data;
-    }
-
-    public List<GameObject> GetSlots()
-    {
-        return displaySlots;
     }
 
     public void SetupSlots(List<ConsumableData> itemList)

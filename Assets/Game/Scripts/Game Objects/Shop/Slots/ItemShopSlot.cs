@@ -1,6 +1,4 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.ProBuilder.MeshOperations;
 using UnityEngine.UI;
 
 public class ItemShopSlot : ShopSlot
@@ -18,8 +16,8 @@ public class ItemShopSlot : ShopSlot
         _data = item;
 
         value.text = _data.cost.ToString();
-        GetComponent<Image>().sprite = _data.icon;
-        GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
+        icon.sprite = _data.icon;
+        icon.color = new Color(1f, 1f, 1f, 1f);
     }
 
     public override void ClearInfo()
@@ -30,11 +28,14 @@ public class ItemShopSlot : ShopSlot
 
     public override void SelectSlot(bool select)
     {
-        if (PlayerManager.Instance.GetCoinAmount() < _data.cost)
+        if (_data != null)
         {
-            buy.interactable = false;
+            if (PlayerManager.Instance.GetCoinAmount() < _data.cost)
+            {
+                buy.interactable = false;
+            }
+            base.SelectSlot(select);
         }
-        base.SelectSlot(select);
     }
 
     public override void Purchase()

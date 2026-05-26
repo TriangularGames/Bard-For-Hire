@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public abstract class ShopSlot : MonoBehaviour, IPointerDownHandler
 {
     [SerializeField] public TMP_Text value;
+    [SerializeField] public Image icon;
     [SerializeField] public Button buy;
 
     [HideInInspector] public bool _isSelected = false;
@@ -29,8 +30,8 @@ public abstract class ShopSlot : MonoBehaviour, IPointerDownHandler
     public virtual void ClearInfo()
     {
         value.text = "";
-        GetComponent<Image>().sprite = null;
-        GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
+        icon.sprite = null;
+        icon.color = new Color(1f, 1f, 1f, 0f);
         buy.gameObject.SetActive(false);
     }
 

@@ -8,25 +8,45 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         // string content, string header, string rarity = "", string type = "", bool isWeakness = false, string attack = "", string roll = ""
         if (gameObject.activeSelf)
         {
-            if (GetComponent<ItemShopSlot>() && GetComponent<ItemShopSlot>().GetData() != null)
+            ShopSlot slot = GetComponent<ShopSlot>();
+            if (slot is ItemShopSlot)
             {
-                ItemData data = GetComponent<ItemShopSlot>().GetData();
-                TooltipSystem.Instance.Show(data.ItemDescription, data.ItemName, data.Rarity.ToString(), data.ItemType.ToString(), false, data.Damage.ToString(), data.Playable.ToString());
+                ItemShopSlot itemSlot = (ItemShopSlot)slot;
+                ItemData data = itemSlot.GetData();
+                if (data != null)
+                {
+                    TooltipSystem.Instance.Show(data.ItemDescription, data.ItemName, data.Rarity.ToString(),
+                        data.ItemType.ToString(), false, data.Damage.ToString(), data.Playable.ToString());
+                }
             }
-            else if (GetComponent<UpgradeShopSlot>() && GetComponent<UpgradeShopSlot>().GetData() != null)
+            else if (slot is UpgradeShopSlot)
             {
-                UpgradeData data = GetComponent<UpgradeShopSlot>().GetData();
-                TooltipSystem.Instance.Show(data.UpgradeDescription, data.UpgradeName, data.Rarity.ToString());
+                UpgradeShopSlot upgradeSlot = (UpgradeShopSlot)slot;
+                UpgradeData data = upgradeSlot.GetData();
+                if (data != null)
+                {
+                    TooltipSystem.Instance.Show(data.UpgradeDescription, data.UpgradeName, data.Rarity.ToString());
+                }
+            }
+            else if (slot is ConsumableShopSlot)
+            {
+                ConsumableShopSlot consumableSlot = (ConsumableShopSlot)slot;
+                ConsumableData data = consumableSlot.GetData();
+                if (data != null)
+                {
+                    TooltipSystem.Instance.Show(data.ConsumableDescription, data.ConsumableName, data.Rarity.ToString());
+                }
+            }
+            else if (GetComponent<InventorySlot>() && GetComponent<InventorySlot>().GetData() != null)
+            {
+                ItemData data = GetComponent<InventorySlot>().GetData();
+                TooltipSystem.Instance.Show(data.ItemDescription, data.ItemName, data.Rarity.ToString(),
+                        data.ItemType.ToString(), false, data.Damage.ToString(), data.Playable.ToString());
             }
             else if (GetComponent<UpgradeController>() && GetComponent<UpgradeController>().upgradeData != null)
             {
                 UpgradeData data = GetComponent<UpgradeController>().upgradeData;
                 TooltipSystem.Instance.Show(data.UpgradeDescription, data.UpgradeName, data.Rarity.ToString());
-            }
-            else if (GetComponent<ConsumableShopSlot>() && GetComponent<ConsumableShopSlot>().GetData() != null)
-            {
-                ConsumableData data = GetComponent<ConsumableShopSlot>().GetData();
-                TooltipSystem.Instance.Show(data.ConsumableDescription, data.ConsumableName, data.Rarity.ToString());
             }
             else if (GetComponent<ConsumableController>() && GetComponent<ConsumableController>().consumableData != null)
             {

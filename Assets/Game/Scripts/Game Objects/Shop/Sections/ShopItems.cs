@@ -1,26 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShopItems : MonoBehaviour
+public class ShopItems : ShopSection
 {
-    [Tooltip("Slots where the Items will be displayed")]
-    private List<GameObject> displaySlots;
-
     private List<ItemData> _data;
 
-    private void Awake()
+    public override void Awake()
     {
+        base.Awake();
         _data = new List<ItemData>();
-        displaySlots = new List<GameObject>();
-    }
-
-    void Start()
-    {
-        // Get the Item display slots on this Object
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            displaySlots.Add(transform.GetChild(i).gameObject);
-        }
     }
 
     public List<ItemData> GetData()
@@ -28,21 +16,35 @@ public class ShopItems : MonoBehaviour
         return _data;
     }
 
-    public List<GameObject> GetSlots()
-    {
-        return displaySlots;
-    }
-
     public void SetupSlots(List<ItemData> itemList)
     {
         // Setup the slots to display data
-        int i = 0;
-        foreach (GameObject slot in displaySlots)
+        //int i = 0;
+        //foreach (GameObject slot in displaySlots)
+        //{
+        //    if (!slot.GetComponent<ItemShopSlot>()._Purchased)
+        //    {
+        //        // If slot hasn't been purchased, fill out the item in the slot, and add it's data to list of Items
+        //        slot.GetComponent<ItemShopSlot>().SetupSlotInfo(itemList[i]);
+        //        _data.Add(itemList[i]);
+        //    }
+        //    i++;
+        //}
+
+        List<GameObject> slots = new List<GameObject>();
+        // Get the Item display slots on this Object
+        for (int j = 0; j < transform.childCount; j++)
         {
-            if (!slot.GetComponent<ItemShopSlot>()._Purchased)
+            slots.Add(transform.GetChild(j).gameObject);
+        }
+
+        int i = 0;
+        foreach (GameObject slot in slots)
+        {
+            ItemShopSlot itemSlot = slot.GetComponent<ItemShopSlot>();
+            if (itemSlot != null)
             {
-                // If slot hasn't been purchased, fill out the item in the slot, and add it's data to list of Items
-                slot.GetComponent<ItemShopSlot>().SetupSlotInfo(itemList[i]);
+                itemSlot.SetupSlotInfo(itemList[i]);
                 _data.Add(itemList[i]);
             }
             i++;

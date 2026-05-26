@@ -12,6 +12,6 @@ public class EnemyDisplay : MonoBehaviour
         enemyImage.sprite = enemy.icon;
         enemyImage.gameObject.GetComponent<EnemyInfo>().enemyData = enemy;
 
-        health.text = enemy.health.ToString();
+        health.text = enemy.health.ToString() + " hp";
     }
 }
