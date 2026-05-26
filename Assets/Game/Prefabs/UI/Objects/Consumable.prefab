@@ -148,6 +148,7 @@ GameObject:
   - component: {fileID: 7100558704097825710}
   - component: {fileID: 1702517148424959673}
   - component: {fileID: 5755494396327229342}
+  - component: {fileID: 6719653683198064421}
   m_Layer: 5
   m_Name: imgIcon
   m_TagString: Untagged
@@ -212,6 +213,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6719653683198064421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8669958310284737485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Shadow
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.34901962}
+  m_EffectDistance: {x: 4, y: -7}
+  m_UseGraphicAlpha: 1
 --- !u!1 &8700706825445321532
 GameObject:
   m_ObjectHideFlags: 0
