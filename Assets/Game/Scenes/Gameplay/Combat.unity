@@ -1848,6 +1848,8 @@ MonoBehaviour:
   tempDamgeIncrease: 1
   rollAbove10: 0
   reroll: 0
+  isFirstTurn: 0
+  rolledNat20: 0
 --- !u!114 &1050412171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2575,7 +2577,18 @@ MonoBehaviour:
   - Kobold
   - Goblin
   - Skeleton
-  numberOfEnemies: 3
+  roundsTilBoss: 3
+  isBossRound: 0
+  bossData: {fileID: 0}
+  disabledItem: 0
+  hasDisabled: 0
+  roundData:
+    startMinTotalHealth: 25
+    startMaxTotalHealth: 30
+    minIncrease: 5
+    maxIncrease: 8
+    maxEnemies: 3
+  currentRound: 0
   spawnPoints: []
   enemyDisplays: []
 --- !u!4 &1658900633

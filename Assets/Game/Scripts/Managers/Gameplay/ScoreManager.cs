@@ -191,6 +191,13 @@ public class ScoreManager : MonoBehaviour
             if (!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive())
             {
                 combatCompleteText.text = "Winner!";
+                int remainingRounds = MaxRounds - curRound;
+                if (remainingRounds > 0)
+                {
+                    int bonusCoins = remainingRounds * 5;
+                    PlayerManager.Instance.Coins += bonusCoins;
+                    PlayerManager.Instance.SetCoinText();
+                }
                 Debug.Log("Combat Completed!");
                 StartCoroutine(SwitchToShop());
             }

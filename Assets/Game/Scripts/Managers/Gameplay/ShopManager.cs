@@ -28,9 +28,9 @@ public class ShopManager : MonoBehaviour
 
     [Header("Upgrade Showcase Window")]
     [SerializeField] private Transform upgradeWindow;
-
+    [SerializeField] private float rerollCostChange = 1.4f;
     // TODO: setup rerollCost
-    public int rerollCost = 5;
+    public float rerollCost = 5;
 
     private void OnEnable()
     {
@@ -54,9 +54,13 @@ public class ShopManager : MonoBehaviour
 
     private void Update()
     {
-        if (PlayerManager.Instance.GetCoinAmount() < rerollCost)
+        if (PlayerManager.Instance.GetCoinAmount() < Mathf.RoundToInt(rerollCost))
         {
             rerollBtn.interactable = false;
+        }
+        else
+        {
+           rerollBtn.interactable= true;
         }
     }
 
@@ -240,7 +244,7 @@ public class ShopManager : MonoBehaviour
     public void ReRoll()
     {
         // Subtract coins from player
-        EventBus.Publish(new PurchaseEvent(rerollCost));
+        EventBus.Publish(new PurchaseEvent(Mathf.RoundToInt(rerollCost)));
         IncreaseCost();
 
         //Generate different items
@@ -250,8 +254,8 @@ public class ShopManager : MonoBehaviour
 
     private void IncreaseCost()
     {
-        rerollCost += 5;
-        rerollBtn.transform.GetChild(0).GetComponent<TMP_Text>().text = "Reroll\n$" + rerollCost;
+        rerollCost *= rerollCostChange;
+        rerollBtn.transform.GetChild(0).GetComponent<TMP_Text>().text = "Reroll\n$" + Mathf.RoundToInt(rerollCost);
     }
 
     public void NextRound()
