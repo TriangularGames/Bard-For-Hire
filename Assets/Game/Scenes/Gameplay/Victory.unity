@@ -253,12 +253,12 @@ GameObject:
   - component: {fileID: 228559841}
   - component: {fileID: 228559843}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: VictoryUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &228559840
 RectTransform:
   m_ObjectHideFlags: 0
@@ -663,8 +663,9 @@ GameObject:
   - component: {fileID: 748541938}
   - component: {fileID: 748541937}
   - component: {fileID: 748541936}
+  - component: {fileID: 748541940}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: VictoryManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -753,6 +754,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &748541940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748541935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9ed1c62448ddef46b5fd567f1f21727, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VictoryMenuManager
+  victoryUI: {fileID: 228559843}
 --- !u!1 &802027659
 GameObject:
   m_ObjectHideFlags: 0

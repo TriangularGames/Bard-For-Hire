@@ -262,6 +262,7 @@ public class ShopManager : MonoBehaviour
     {
         // Switch to Performance scene
         GameManager.Instance.SwitchState(new CombatState());
+        MenuManager.Instance.SwitchState(new CoreHUDState());
     }
 
     public void ViewInventory()

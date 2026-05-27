@@ -208,7 +208,7 @@ public class ScoreManager : MonoBehaviour
                     PlayerManager.Instance.SetCoinText();
                 }
                 Debug.Log("Combat Completed!");
-                GameManager.Instance.SwitchState(new VictoryState());
+                MenuManager.Instance.SwitchState(new VictoryMenuState());
                 //StartCoroutine(SwitchToShop());
             }
             else
