@@ -19,6 +19,7 @@ public class PauseMenuUI : MonoBehaviour
     public void ReturnToMainMenu()
     {
         MenuManager.Instance.SwitchState(new MainMenuState());
+        GameManager.Instance.SwitchState(new DefaultGameState());
     }
 
     public void OptionsMenu()
