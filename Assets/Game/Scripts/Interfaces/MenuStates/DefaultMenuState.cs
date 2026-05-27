@@ -1,15 +1,15 @@
 using UnityEngine;
 
-public class CoreHUDState : IMenuState
+public class DefaultMenuState : IMenuState
 {
     public void EnterState(MenuManager gm)
     {
-        Debug.Log("Entered Core HUD State");
+        Debug.Log("Entered Default Menu State");
     }
 
     public void ExitState(MenuManager gm)
     {
-        Debug.Log("Exiting Core HUD State");
+        Debug.Log("Exiting Default Menu State");
     }
 
     public void UpdateState(MenuManager gm)
