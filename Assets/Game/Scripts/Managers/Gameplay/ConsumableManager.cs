@@ -4,27 +4,29 @@ using UnityEngine;
 public class ConsumableManager : MonoBehaviour
 {
     public static ConsumableManager Instance;
-    public List<ConsumableData> consumables = new List<ConsumableData>();
-    public ConsumablePool consumablePool;
-    public int maxConsumables = 2;
 
-    void Awake()
+    private List<ConsumableData> consumables;
+    public ConsumablePool consumablePool;
+
+    private void Awake()
     {
         Instance = this;
     }
 
     void Start()
     {
+        SetupConsumables();
         RefreshConsumables();
+    }
+
+    private void SetupConsumables()
+    {
+        consumables = new List<ConsumableData>();
+        consumables.AddRange(PlayerManager.Instance.consumableInventory);
     }
 
     public void AddConsumable(ConsumableData consumable)
     {
-        if (consumables.Count >= maxConsumables)
-        {
-            return;
-        }
-
         consumables.Add(consumable);
 
         RefreshConsumables();

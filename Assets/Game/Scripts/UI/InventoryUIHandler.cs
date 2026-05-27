@@ -3,11 +3,28 @@ using UnityEngine;
 
 public class InventoryUIHandler : MonoBehaviour
 {
-    [SerializeField] private GameObject inventorySlot;
-    [SerializeField] private Transform parent;
+    private void OnEnable()
+    {
+        EventBus.Subscribe<RefreshInventoryDisplayEvent>(RefreshDisplay);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe<RefreshInventoryDisplayEvent>(RefreshDisplay);
+    }
 
     private void Start()
     {
+        DisplayGroupedInventory();
+    }
+
+    private void RefreshDisplay(RefreshInventoryDisplayEvent e)
+    {
+        // TODO: figure out better way of doing this without just deleting and respawning objects
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
         DisplayGroupedInventory();
     }
 
@@ -38,7 +55,7 @@ public class InventoryUIHandler : MonoBehaviour
         // Spawn one slot per unique item, passing in the quantity
         foreach (KeyValuePair<ItemData, int> entry in groupedItems)
         {
-            GameObject slot = Instantiate(inventorySlot, parent);
+            GameObject slot = AssetManager.Instance.Spawn("InventorySlot", transform);
             slot.GetComponent<InventorySlot>().SetupSlotInfo(entry.Key, entry.Value);
         }
     }

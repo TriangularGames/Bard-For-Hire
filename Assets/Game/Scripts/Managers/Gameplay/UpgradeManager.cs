@@ -1,12 +1,10 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class UpgradeManager : MonoBehaviour
 {
     public static UpgradeManager Instance;
-
-    public List<UpgradeData> Upgrades;
+    private List<UpgradeData> Upgrades;
 
 
     private void Awake()
@@ -23,7 +21,6 @@ public class UpgradeManager : MonoBehaviour
     public void AddUpgrade(UpgradeData upgrade)
     {
         Upgrades.Add(upgrade);
-
     }
 
     public bool HasUpgrade(UpgradeID id)
