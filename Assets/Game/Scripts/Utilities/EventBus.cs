@@ -154,9 +154,14 @@ public struct ItemSelectedEvent
 }
 
 /// <summary>
-/// Event for when Combat Starts
+/// Event for when an Attack Hits
 /// </summary>
-public struct AttackEvent { }
+public struct HitEvent { }
+
+/// <summary>
+/// Event for when an Attack Misses
+/// </summary>
+public struct MissEvent { }
 
 /// <summary>
 /// Event for when Scoring is Completed

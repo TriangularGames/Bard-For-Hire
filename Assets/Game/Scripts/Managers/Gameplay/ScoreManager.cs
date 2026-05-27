@@ -88,7 +88,7 @@ public class ScoreManager : MonoBehaviour
             itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 1f, 0f, 1f);
             
             await Task.Delay(300 * GameSpeed);
-            EventBus.Publish<AttackEvent>(new AttackEvent());
+            EventBus.Publish<HitEvent>(new HitEvent());
             await Task.Delay(100 * GameSpeed);
             int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex);
             UpgradeFightingManager.Instance.SuccessfulAction(item, totalDamage);
@@ -117,6 +117,8 @@ public class ScoreManager : MonoBehaviour
         {
             itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(1f, 0f, 0f, 1f);
             UpgradeFightingManager.Instance.FailedAction();
+            EventBus.Publish<MissEvent>(new MissEvent());
+            await Task.Delay(100 * GameSpeed);
 
             if (UpgradeFightingManager.Instance.CanUseSecondChance())
             {

@@ -7,17 +7,24 @@ public class PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus.Subscribe<AttackEvent>(Attack);
+        EventBus.Subscribe<HitEvent>(Attack);
+        EventBus.Subscribe<MissEvent>(Miss);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<AttackEvent>(Attack);
+        EventBus.Unsubscribe<HitEvent>(Attack);
+        EventBus.Unsubscribe<MissEvent>(Miss);
     }
 
-    private void Attack(AttackEvent e)
+    private void Attack(HitEvent e)
     {
         anim.SetTrigger("Attack");
+    }
+
+    private void Miss(MissEvent @event)
+    {
+        anim.SetTrigger("Miss");
     }
 
 }
