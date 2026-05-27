@@ -25,7 +25,7 @@ public class ShopManager : MonoBehaviour
     [SerializeField] private ShopConsumables _consumables;
 
     [Header("Upgrade Showcase Window")]
-    [SerializeField] private Transform upgradeWindow;
+    [SerializeField] private UpgradePool upgradeDisplayPool;
 
     [Header("Consumable Showcase Window")]
     [SerializeField] private Transform consumableWindow;
@@ -178,12 +178,9 @@ public class ShopManager : MonoBehaviour
         ClearUpgradeDisplay();
         if (PlayerManager.Instance.upgradeInventory.Count > 0)
         {
+            ClearUpgradeDisplay();
             foreach (UpgradeData upgrade in PlayerManager.Instance.upgradeInventory)
-            {
-                GameObject obj = AssetManager.Instance.Spawn("Upgrade", upgradeWindow);
-                obj.GetComponent<UpgradeController>().upgradeData = upgrade;
-                obj.GetComponent<UpgradeController>().Setup();
-            }
+                upgradeDisplayPool.BringEmIn(upgrade, SetupUpgradeDisplay);
         }
     }
 
@@ -209,6 +206,7 @@ public class ShopManager : MonoBehaviour
         _upgrades.ClearSlots();
         _consumables.ClearSlots();
     }
+
 
     private void CheckItemSelection(ItemSelectedEvent e)
     {
@@ -258,10 +256,9 @@ public class ShopManager : MonoBehaviour
 
     private void ClearUpgradeDisplay()
     {
-        foreach (Transform child in upgradeWindow)
-        {
-            Destroy(child.gameObject);
-        }
+        foreach (GameObject obj in upgradeDisplayPool.storedObjects)
+            Destroy(obj);
+        upgradeDisplayPool.storedObjects.Clear();
     }
 
     private void ClearConsumableDisplay()
