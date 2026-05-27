@@ -208,7 +208,8 @@ public class ScoreManager : MonoBehaviour
                     PlayerManager.Instance.SetCoinText();
                 }
                 Debug.Log("Combat Completed!");
-                StartCoroutine(SwitchToShop());
+                GameManager.Instance.SwitchState(new VictoryState());
+                //StartCoroutine(SwitchToShop());
             }
             else
             {
