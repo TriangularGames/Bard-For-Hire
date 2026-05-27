@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
@@ -10,8 +9,6 @@ using UnityEngine.UI;
 /// </summary>
 public class ScoreManager : MonoBehaviour
 {
-    [SerializeField] TMP_Text combatCompleteText;
-
     [SerializeField] GameObject itemDisplay;
 
     [SerializeField] private TMP_Text roundText;
@@ -28,7 +25,7 @@ public class ScoreManager : MonoBehaviour
 
     private void Start()
     {
-        combatCompleteText.text = "";
+        //combatCompleteText.text = "";
         itemDisplay.SetActive(false);
         EventBus.Publish<EnterCombatEvent>(new EnterCombatEvent());
     }
@@ -206,7 +203,7 @@ public class ScoreManager : MonoBehaviour
             // TODO: change these to actually have some kind of proper display
             if (!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive())
             {
-                combatCompleteText.text = "Winner!";
+                //combatCompleteText.text = "Winner!";
                 int remainingRounds = MaxRounds - curRound;
                 if (remainingRounds > 0)
                 {
@@ -216,14 +213,12 @@ public class ScoreManager : MonoBehaviour
                 }
                 Debug.Log("Combat Completed!");
                 MenuManager.Instance.SwitchState(new VictoryMenuState());
-                //StartCoroutine(SwitchToShop());
             }
             else
             {
-                combatCompleteText.text = "Loser.";
+                //combatCompleteText.text = "Loser.";
                 Debug.Log("Combat Failed!");
                 MenuManager.Instance.SwitchState(new GameOverMenuState());
-                //StartCoroutine(SwitchToMainMenu());
             }
         }
         else
@@ -236,25 +231,5 @@ public class ScoreManager : MonoBehaviour
             EventBus.Publish(new ScoringCompletedEvent(count));
         }
         roller.ResetText();
-    }
-
-    /// <summary>
-    /// Switch To Shop After Combat is Completed, with a delay to show the final score and round completion message
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator SwitchToShop()
-    {
-        yield return new WaitForSeconds(3f);
-        GameManager.Instance.SwitchState(new ShopState());
-    }
-
-    /// <summary>
-    /// Switch To Main Menu after Combat finshes and you did not win, with a delay
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator SwitchToMainMenu()
-    {
-        yield return new WaitForSeconds(3f);
-        MenuManager.Instance.SwitchState(new MainMenuState());
     }
 }
