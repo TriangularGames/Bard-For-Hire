@@ -1116,6 +1116,8 @@ GameObject:
   m_Component:
   - component: {fileID: 459749831}
   - component: {fileID: 459749832}
+  - component: {fileID: 459749834}
+  - component: {fileID: 459749833}
   m_Layer: 5
   m_Name: PlayerUpgrades
   m_TagString: Untagged
@@ -1163,9 +1165,36 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 50, y: 50}
-  m_Spacing: {x: 50, y: 30}
+  m_Spacing: {x: 50, y: 100}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!114 &459749833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 459749830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c860b7722d9ad141a32b1d7227ad45f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradePool
+  storedObjects: []
+  maxSlots: 4
+--- !u!114 &459749834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 459749830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 653a2598e5b6b15469976d8dc4bcb913, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeDisplay
+  upgradePool: {fileID: 459749833}
 --- !u!1 &505017242
 GameObject:
   m_ObjectHideFlags: 0
@@ -2945,14 +2974,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShopManager
   rerollBtn: {fileID: 54071545}
-  commonWeight: 60
-  uncommonWeight: 25
-  rareWeight: 12
-  legendaryWeight: 3
+  commonWeight: 52
+  uncommonWeight: 31
+  rareWeight: 13
+  legendaryWeight: 4
   _items: {fileID: 1516798803}
   _upgrades: {fileID: 2018655132}
   _consumables: {fileID: 368741273}
-  upgradeWindow: {fileID: 459749831}
+  upgradeDisplayPool: {fileID: 459749833}
   consumableWindow: {fileID: 441848844}
   rerollCostChange: 1.4
   rerollCost: 5
