@@ -28,6 +28,11 @@ public class ShopManager : MonoBehaviour
 
     [Header("Upgrade Showcase Window")]
     [SerializeField] private Transform upgradeWindow;
+
+    [Header("Consumable Showcase Window")]
+    [SerializeField] private Transform consumableWindow;
+
+    [Header("Reroll Info")]
     [SerializeField] private float rerollCostChange = 1.4f;
     // TODO: setup rerollCost
     public float rerollCost = 5;
@@ -36,12 +41,14 @@ public class ShopManager : MonoBehaviour
     {
         EventBus.Subscribe<ItemSelectedEvent>(CheckItemSelection);
         EventBus.Subscribe<UpgradeBoughtEvent>(UpdateUpgradeDisplay);
+        EventBus.Subscribe<ConsumableBoughtEvent>(UpdateConsumableDisplay);
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<ItemSelectedEvent>(CheckItemSelection);
         EventBus.Unsubscribe<UpgradeBoughtEvent>(UpdateUpgradeDisplay);
+        EventBus.Unsubscribe<ConsumableBoughtEvent>(UpdateConsumableDisplay);
     }
 
     private void Start()
@@ -181,6 +188,21 @@ public class ShopManager : MonoBehaviour
         }
     }
 
+    private void SetupConsumableDisplay()
+    {
+        ClearConsumableDisplay();
+        if (PlayerManager.Instance.consumableInventory.Count > 0)
+        {
+            foreach (ConsumableData consumable in PlayerManager.Instance.consumableInventory)
+            {
+                GameObject obj = AssetManager.Instance.Spawn("Consumable", consumableWindow);
+                obj.GetComponent<ConsumableController>().consumableData = consumable;
+                obj.GetComponent<ConsumableController>().Setup();
+                Destroy(obj.GetComponent<ConsumableSelect>());
+            }
+        }
+    }
+
     private void ClearShop()
     {
         _items.ClearSlots();
@@ -229,12 +251,24 @@ public class ShopManager : MonoBehaviour
     {
         SetupUpgradeDisplay();
     }
+    private void UpdateConsumableDisplay(ConsumableBoughtEvent e)
+    {
+        SetupConsumableDisplay();
+    }
 
     private void ClearUpgradeDisplay()
     {
         foreach (Transform child in upgradeWindow)
         {
-            GameObject.Destroy(child.gameObject);
+            Destroy(child.gameObject);
+        }
+    }
+
+    private void ClearConsumableDisplay()
+    {
+        foreach (Transform child in consumableWindow)
+        {
+            Destroy(child.gameObject);
         }
     }
 

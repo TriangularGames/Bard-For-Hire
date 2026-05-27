@@ -1,7 +1,5 @@
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.ProBuilder.MeshOperations;
 using UnityEngine.UI;
 
 public class InventorySlot : MonoBehaviour
@@ -21,6 +19,6 @@ public class InventorySlot : MonoBehaviour
         GetComponent<Image>().sprite = _data.icon;
         GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
 
-        quantityText.text = quantity > 1 ? quantity.ToString() : "";
+        quantityText.text = quantity > 1 ? "x" + quantity.ToString() : "";
     }
 }
