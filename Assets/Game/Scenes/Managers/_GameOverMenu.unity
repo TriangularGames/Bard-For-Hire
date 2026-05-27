@@ -201,7 +201,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 19509200}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 228559843}
+        m_TargetAssemblyTypeName: GameOverUI, Assembly-CSharp
+        m_MethodName: OnClick_GoToMainMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &19509200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,7 +270,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &228559840
 RectTransform:
   m_ObjectHideFlags: 0
@@ -327,9 +339,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 228559839}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70d18645dad87bb4aa797790b404b4b1, type: 3}
+  m_Script: {fileID: 11500000, guid: 8e82d5c45907e22499830259453ab8c5, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::VictoryUI
+  m_EditorClassIdentifier: Assembly-CSharp::GameOverUI
 --- !u!1 &455732171
 GameObject:
   m_ObjectHideFlags: 0
@@ -623,10 +635,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 748541935}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ed1c62448ddef46b5fd567f1f21727, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b5a9338ed03e294b82f6021481cd7c2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::VictoryMenuManager
-  victoryUI: {fileID: 228559843}
+  m_EditorClassIdentifier: Assembly-CSharp::GameOverManager
+  gameOverUI: {fileID: 228559843}
 --- !u!1 &802027659
 GameObject:
   m_ObjectHideFlags: 0
