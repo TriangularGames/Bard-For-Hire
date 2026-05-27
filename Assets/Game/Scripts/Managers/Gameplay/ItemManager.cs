@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -13,6 +14,8 @@ public class ItemManager : MonoBehaviour
     [HideInInspector] public List<GameObject> ItemsSelected;
     [SerializeField] private int selectionLimit = 4;
     [SerializeField] private List<Sprite> selectionBoxes;
+    [SerializeField] private Transform lineupParent;
+    [SerializeField] private float lineupMoveSpeed = 8f;
 
     private bool scoringCompleted = true;
     
@@ -163,15 +166,44 @@ public class ItemManager : MonoBehaviour
     /// <summary>
     /// Sends Item List to ScoreManager for final score total
     /// </summary>
-    public void CalculateScore()
+    public async void CalculateScore()
     {
         scoringCompleted = false;
         List<ItemData> itemData = new List<ItemData>();
-        foreach (GameObject itemObj in ItemsSelected)
+        List<GameObject> orderedUp = new List<GameObject>(ItemsSelected);
+        foreach (GameObject itemObj in orderedUp)
         {
             itemData.Add(itemObj.GetComponent<ItemController>().itemData);
         }
-        GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().StartCoroutine("CalculateScore", itemData);
+        await Lineup(orderedUp, itemData);
+    }
+
+    private async Task Lineup(List<GameObject> itemObjects, List<ItemData> itemData)
+    {
+        List<Vector3> startPositions = new List<Vector3>();
+        foreach (GameObject objecte in itemObjects)
+        {
+            startPositions.Add(objecte.transform.position);
+            objecte.transform.SetParent(lineupParent, true);
+        }
+
+        await Task.Yield();
+        List<Vector3> targetPositions = new List<Vector3>();
+        foreach (GameObject obj in itemObjects)
+            targetPositions.Add(obj.transform.position);
+
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.deltaTime * lineupMoveSpeed;
+            for (int i = 0; i < itemObjects.Count; i++)
+                itemObjects[i].transform.position = Vector3.Lerp(startPositions[i], targetPositions[i], Mathf.SmoothStep(0f, 1f, t));
+            await Task.Yield();
+        }
+
+        await Task.Delay(300);
+
+        await GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().CalculateScore(itemData);
     }
 
     private void PrepNewRound(ScoringCompletedEvent e)

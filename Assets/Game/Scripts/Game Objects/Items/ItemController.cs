@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using System.Threading.Tasks;
 using UnityEngine.UI;
 
 public class ItemController : MonoBehaviour
@@ -14,6 +16,28 @@ public class ItemController : MonoBehaviour
         SetSprite();
         SetDamageTxt();
         SetPlayableTxt();
+    }
+
+    public async Task ShowDamageBonuses(List<UpgradeFightingManager.DamageBonus> bonuses, int baseDamage)
+    {
+        int baseD = baseDamage;
+        SetDamageTxtRaw(baseD);
+
+        foreach (var bonus in bonuses)
+        {
+            if (bonus.amount <= 0) continue;
+
+            await Task.Delay(400);
+            damageTxt.text = ("ATk ") + baseD + $"  <color=yellow>+ {bonus.amount} {bonus.source}</color>";
+            await Task.Delay(700);
+            baseD += bonus.amount;
+            SetDamageTxtRaw(baseD);
+        }
+    }
+
+    private void SetDamageTxtRaw(int value)
+    {
+        damageTxt.text = ("ATk ") + value.ToString();
     }
 
     private void SetSprite()

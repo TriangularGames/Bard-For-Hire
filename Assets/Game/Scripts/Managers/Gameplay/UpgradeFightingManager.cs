@@ -24,6 +24,12 @@ public class UpgradeFightingManager : MonoBehaviour
         Instance = this;
     }
 
+    public struct DamageBonus
+    {
+        public string source;
+        public int amount;
+    }
+
     public void StartRound()
     {
         currentActions.Clear();
@@ -101,10 +107,10 @@ public class UpgradeFightingManager : MonoBehaviour
             }
         }
 
-        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.SkillProficiency)) {
-            roll += 2;
-        }
-            roll += tempDCReduce;
+        //if (UpgradeManager.Instance.HasUpgrade(UpgradeID.SkillProficiency)) {
+        //    roll += 2;
+        //}
+        //    roll += tempDCReduce;
 
         if (roll > 20) roll = 20;
         rolledNat20 = (roll == 20);
@@ -112,9 +118,10 @@ public class UpgradeFightingManager : MonoBehaviour
         return roll;
     }
 
-    public int GetBonusDamage(ItemData item, int slotIndex)
+    public int GetBonusDamage(ItemData item, int slotIndex, out List<DamageBonus> bonuses)
     {
         int damage = item.Damage;
+        bonuses = new List<DamageBonus>();
 
         // this is for the upgrade "Battle Tactics" (1 bonus damage for actions in middle slots)
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.BattleTactics))
@@ -122,6 +129,7 @@ public class UpgradeFightingManager : MonoBehaviour
             if (slotIndex == 2 || slotIndex == 3)
             {
                 damage += 2;
+                bonuses.Add(new DamageBonus { source = "Battle Tactics", amount = 2});
             }
         }
 
@@ -141,6 +149,7 @@ public class UpgradeFightingManager : MonoBehaviour
                 }
             }
             damage += combo;
+            bonuses.Add(new DamageBonus { source = "Rhythmic Attacks", amount = combo });
         }
 
         // this is for the upgrade "Overwhelming Blows" (1 bonus damage for each action used)
@@ -148,6 +157,7 @@ public class UpgradeFightingManager : MonoBehaviour
         {
             if (currentActions.Count >= 2)
                 damage += currentActions.Count - 1;
+                bonuses.Add(new DamageBonus { source = "Overwhelming Blows", amount = currentActions.Count - 1 });
         }
 
         // this is for the upgrade "Adaptive Combat" (1 bonus damage for each different action used in a row)
@@ -170,20 +180,23 @@ public class UpgradeFightingManager : MonoBehaviour
                 }
             }
             damage += combo;
+            bonuses.Add(new DamageBonus { source = "Adaptive Combat", amount = combo });
         }
 
         // this is for the upgrade "Shining Star" (2 bonus damage for each rare weapon played)
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.ShiningStar))
         {
-            if(item.Rarity == ObjectRarity.Rare)
+            if(item.Rarity == ObjectRarity.Uncommon)
             {
                 damage += 2;
+                bonuses.Add(new DamageBonus { source = "Shining Star", amount = 2 });
             }
         }
         //this is for the upgrade "Flow State" (Each action does extra damage equal to 10% of previous round's damage)
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.FlowState))
         {
             damage += Mathf.RoundToInt(previousRoundDamage * 0.1f);
+            bonuses.Add(new DamageBonus { source = "Flow State", amount = Mathf.RoundToInt(previousRoundDamage * 0.1f) });
         }
 
         //this is for the upgrade "Perfect Battle" (Each consecutive action played without failing a DC gives 10% bonus damage)
@@ -191,6 +204,7 @@ public class UpgradeFightingManager : MonoBehaviour
         {
             float mult = 1f + (successStreak * 0.1f);
             damage += Mathf.RoundToInt(item.Damage * (mult - 1f));
+            bonuses.Add(new DamageBonus { source = "Perfect Battle", amount = Mathf.RoundToInt(item.Damage * (mult - 1f)) });
         }
         //this is for the upgrade "Timed Swings" (Odd slots gain +1, Even slots gain +2)
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.TimedSwings))
@@ -198,10 +212,12 @@ public class UpgradeFightingManager : MonoBehaviour
             if(slotIndex % 2 == 0)
             {
                 damage += 1;
+                bonuses.Add(new DamageBonus { source = "Timed Swings", amount = 1});
             }
             else
             {
                 damage += 2;
+                bonuses.Add(new DamageBonus { source = "Timed Swings", amount = 2 });
             }
         }
         //this is for the upgrade "Consistency" (Whenever the first 3 actions played is the same as the last turn, those notes gain 50% damage)
@@ -214,6 +230,7 @@ public class UpgradeFightingManager : MonoBehaviour
                     if (previousActions[slotIndex] == item.ItemType)
                     {
                         damage += Mathf.RoundToInt(item.Damage * 0.5f);
+                        bonuses.Add(new DamageBonus { source = "Consistency", amount = Mathf.RoundToInt(item.Damage * 0.5f) });
                     }
                 }
             }
@@ -223,17 +240,26 @@ public class UpgradeFightingManager : MonoBehaviour
              if(slotIndex == luckySlot)
              {
                  damage += Mathf.RoundToInt(item.Damage * 0.25f);
-             }
+                 bonuses.Add(new DamageBonus { source = "Lucky Strike", amount = Mathf.RoundToInt(item.Damage * 0.25f) });
+                }
          }
         }
         damage = Mathf.RoundToInt(
         damage * tempDamgeIncrease);
         if (rolledNat20)
         {
+            int before = damage;
             damage *= 2;
+            bonuses.Add(new DamageBonus { source = "Critical Hit", amount = damage - before });
         }
         return damage;
     }
+
+    public int GetBonusDamage(ItemData item, int slotIndex)
+    {
+        return GetBonusDamage(item, slotIndex, out _);
+    }
+
     //this is for the upgrade "Second Chance" (Once per combat you may reroll a failed check)
     public bool CanUseSecondChance(){
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.SecondChance))

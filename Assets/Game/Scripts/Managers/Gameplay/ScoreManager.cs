@@ -19,7 +19,7 @@ public class ScoreManager : MonoBehaviour
     private int MaxRounds = 3;
 
     public float waitForRoll = 2f;
-
+    private List<GameObject> lineupObjects;
     public int GameSpeed = 4;
 
     public DiceRoller roller;
@@ -41,6 +41,7 @@ public class ScoreManager : MonoBehaviour
     {
         pendingItems = items;
         curItem = -1;
+        UpgradeFightingManager.Instance.StartRound();
 
         foreach (ItemData item in pendingItems)
         {
@@ -48,7 +49,6 @@ public class ScoreManager : MonoBehaviour
             
             curItem += 1;
             Debug.Log("Item " + curItem + " being rolled for.");
-            
             // Display item being rolled for
             itemDisplay.GetComponent<ItemController>().itemData = item;
             itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 0f, 0f, 0f);
@@ -58,13 +58,19 @@ public class ScoreManager : MonoBehaviour
             EventBus.Publish<ItemUsedEvent>(new ItemUsedEvent(item));
 
             int rollResult = -1;
+            int modifier = 0;
 
-            if(UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage)&& UpgradeFightingManager.Instance.isFirstTurn){
-                rollResult = await roller.RollWithAdvantage();
+            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.SkillProficiency))
+            {
+                modifier += 2;
+            }
+
+            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage)&& UpgradeFightingManager.Instance.isFirstTurn && curItem == 0){
+                rollResult = await roller.RollWithAdvantage(modifier);
             }
             else
             {
-                rollResult = await roller.RollDie(GameSpeed);
+                rollResult = await roller.RollDie(modifier);
             }
             await OnRollComplete(rollResult);
         }
@@ -90,7 +96,8 @@ public class ScoreManager : MonoBehaviour
             await Task.Delay(300 * GameSpeed);
             EventBus.Publish<HitEvent>(new HitEvent());
             await Task.Delay(100 * GameSpeed);
-            int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex);
+            int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex, out var bonuses);
+            await itemDisplay.GetComponent<ItemController>().ShowDamageBonuses(bonuses, item.Damage);
             UpgradeFightingManager.Instance.SuccessfulAction(item, totalDamage);
 
             AttackEnemy(item, totalDamage);
