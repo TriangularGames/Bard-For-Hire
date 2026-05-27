@@ -215,7 +215,8 @@ public class ScoreManager : MonoBehaviour
             {
                 combatCompleteText.text = "Loser.";
                 Debug.Log("Combat Failed!");
-                StartCoroutine(SwitchToMainMenu());
+                MenuManager.Instance.SwitchState(new GameOverMenuState());
+                //StartCoroutine(SwitchToMainMenu());
             }
         }
         else
