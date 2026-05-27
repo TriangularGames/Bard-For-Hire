@@ -53,6 +53,7 @@ public class ShopManager : MonoBehaviour
         EventBus.Publish<EnterShopEvent>(new EnterShopEvent());
         SetupShop();
         SetupUpgradeDisplay();
+        SetupConsumableDisplay();
         SetRerollText();
     }
 
