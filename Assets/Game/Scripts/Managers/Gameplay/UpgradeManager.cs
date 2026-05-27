@@ -4,7 +4,7 @@ using UnityEngine;
 public class UpgradeManager : MonoBehaviour
 {
     public static UpgradeManager Instance;
-    private List<UpgradeData> Upgrades;
+    private List<UpgradeData> Upgrades = new List<UpgradeData>();
 
 
     private void Awake()
