@@ -19,32 +19,13 @@ public class ShopUpgrades : ShopSection
     public void SetupSlots(List<UpgradeData> itemList)
     {
         // Setup the slots to display data
-        //int i = 0;
-        //foreach (GameObject slot in displaySlots)
-        //{
-        //    // If slot hasn't been purchased, fill out the item in the slot, and add it's data to list of Upgrades
-        //    if (!slot.GetComponent<UpgradeShopSlot>()._Purchased)
-        //    {
-        //        slot.GetComponent<UpgradeShopSlot>().SetupSlotInfo(itemList[i]);
-        //        _data.Add(itemList[i]);
-        //    }
-        //    i++;
-        //}
-
-        List<GameObject> slots = new List<GameObject>();
-        // Get the Item display slots on this Object
-        for (int j = 0; j < transform.childCount; j++)
-        {
-            slots.Add(transform.GetChild(j).gameObject);
-        }
-
         int i = 0;
-        foreach (GameObject slot in slots)
+        foreach (GameObject slot in displaySlots)
         {
-            UpgradeShopSlot itemSlot = slot.GetComponent<UpgradeShopSlot>();
-            if (itemSlot != null)
+            // If slot hasn't been purchased, fill out the item in the slot, and add it's data to list of Upgrades
+            if (!slot.GetComponent<UpgradeShopSlot>()._Purchased)
             {
-                itemSlot.SetupSlotInfo(itemList[i]);
+                slot.GetComponent<UpgradeShopSlot>().SetupSlotInfo(itemList[i]);
                 _data.Add(itemList[i]);
             }
             i++;
