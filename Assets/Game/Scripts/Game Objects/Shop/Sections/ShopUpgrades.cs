@@ -18,9 +18,15 @@ public class ShopUpgrades : ShopSection
 
     public void SetupSlots(List<UpgradeData> itemList)
     {
+        List<GameObject> slots = new List<GameObject>();
+        for (int j = 0; j < transform.childCount; j++)
+        {
+            slots.Add(transform.GetChild(j).gameObject);
+        }
+
         // Setup the slots to display data
         int i = 0;
-        foreach (GameObject slot in displaySlots)
+        foreach (GameObject slot in slots)
         {
             // If slot hasn't been purchased, fill out the item in the slot, and add it's data to list of Upgrades
             if (!slot.GetComponent<UpgradeShopSlot>()._Purchased)
@@ -30,6 +36,7 @@ public class ShopUpgrades : ShopSection
             }
             i++;
         }
+        
     }
 
     public void ClearSlots()
