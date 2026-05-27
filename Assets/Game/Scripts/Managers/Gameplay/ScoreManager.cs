@@ -152,23 +152,25 @@ public class ScoreManager : MonoBehaviour
             {
                 // Get the enemy at this location
                 GameObject enemy = enemyLocation.transform.GetChild(0).gameObject;
+                bool weakness = false;
+                bool resistance = false;
 
                 if (enemy.GetComponent<EnemyController>().enemyData.weakness == item.ItemType)
                 {
-                    // TODO: make weakness damage more obvious
                     damage = Mathf.RoundToInt(damage * 1.55f);
+                    weakness = true;
                 }
 
                 if(EnemyManager.Instance.isBossRound && EnemyManager.Instance.bossData.ability == BossAbilities.EvenNumberReduce && damage % 2 == 0)
                 {
-                    // TODO: make enemy resistance more obvious
                     damage = Mathf.RoundToInt(damage * 0.5f);
+                    resistance = true;
                 }
 
                 if (enemy.GetComponent<EnemyController>().GetHealth() > 0)
                 {
                     EventBus.Publish<DamageTakenEvent>(
-                            new DamageTakenEvent(enemyLocation.transform.GetChild(0).gameObject.GetEntityId(), damage));
+                            new DamageTakenEvent(enemyLocation.transform.GetChild(0).gameObject.GetEntityId(), damage, weakness, resistance));
                     break;
                 }
             }

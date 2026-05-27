@@ -2914,6 +2914,7 @@ MonoBehaviour:
   roundText: {fileID: 422085961}
   curRound: 1
   waitForRoll: 2
+  GameSpeed: 4
   roller: {fileID: 1344256443}
 --- !u!4 &1344256445
 Transform:
@@ -3152,6 +3153,7 @@ GameObject:
   - component: {fileID: 1718929711}
   - component: {fileID: 1718929710}
   - component: {fileID: 1718929713}
+  - component: {fileID: 1718929714}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3277,6 +3279,22 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &1718929714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718929709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c49b4cc203aa6414fae5c798d1d0e7d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.PhysicsRaycaster
+  m_EventMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_MaxRayIntersections: 0
 --- !u!1 &1770819330
 GameObject:
   m_ObjectHideFlags: 0
@@ -3685,6 +3703,10 @@ PrefabInstance:
     - target: {fileID: 2338348622536006590, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
       propertyPath: m_Name
       value: ItemDisplay
+      objectReference: {fileID: 0}
+    - target: {fileID: 2338348622536006590, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2409952213380443163, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
       propertyPath: m_Pivot.x

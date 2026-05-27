@@ -59,7 +59,18 @@ public class EnemyController : MonoBehaviour
         if (e.id == gameObject.GetEntityId())
         {
             flashTimes = e.damage;
-            StartCoroutine("Flash");
+            if (e.weakness)
+            {
+                StartCoroutine("WeakFlash");
+            }
+            else if (e.resistance)
+            {
+                StartCoroutine("ResistFlash");
+            }
+            else
+            {
+                StartCoroutine("Flash");
+            }
         }
     }
 
@@ -91,6 +102,85 @@ public class EnemyController : MonoBehaviour
         EnemySprite.material.color = Color.white;
         yield return null;
     }
+
+    // Flash but wth ORANGE text and flash
+    private IEnumerator WeakFlash()
+    {
+        for (int i = 0; i < flashTimes; i++)
+        {
+            EnemySprite.material.color = Color.white;
+            yield return new WaitForSeconds(delayTime);
+
+            // If this is the first instance, showcase this damage is due to Weakness
+            if (i == 0)
+            {
+                // TODO: adjust position of spawned text
+                var resistTxt = Instantiate(AssetManager.Instance.GetPrefab("DmgTxt"), transform.position, Quaternion.identity, transform);
+                resistTxt.GetComponent<TMP_Text>().color = Color.orange;
+                resistTxt.GetComponent<TMP_Text>().text = "Weak";
+            }
+
+            // TODO: object pool or change to particle effect perhaps?
+            var txt = Instantiate(AssetManager.Instance.GetPrefab("DmgTxt"), transform.position, Quaternion.identity, transform);
+            txt.GetComponent<TMP_Text>().color = Color.orange;
+            txt.GetComponent<TMP_Text>().text = "-1";
+            health -= 1;
+            SetDamageTxt();
+            if (health <= 0)
+            {
+                Debug.Log("Enemy killed.");
+                EventBus.Publish(new EnemyDefeatedEvent(gameObject));
+            }
+            else
+            {
+                anim.SetTrigger("Hit");
+            }
+
+            EnemySprite.material.color = Color.orange;
+            yield return new WaitForSeconds(delayTime);
+        }
+        EnemySprite.material.color = Color.white;
+        yield return null;
+    }
+
+    private IEnumerator ResistFlash()
+    {
+        for (int i = 0; i < flashTimes; i++)
+        {
+            EnemySprite.material.color = Color.white;
+            yield return new WaitForSeconds(delayTime);
+
+            // If this is the first instance, showcase this is being Resisted
+            if (i == 0)
+            {
+                // TODO: adjust position of spawned text
+                var resistTxt = Instantiate(AssetManager.Instance.GetPrefab("DmgTxt"), transform.position, Quaternion.identity, transform);
+                resistTxt.GetComponent<TMP_Text>().color = Color.grey;
+                resistTxt.GetComponent<TMP_Text>().text = "Resist";
+            }
+
+            // TODO: object pool or change to particle effect perhaps?
+            var txt = Instantiate(AssetManager.Instance.GetPrefab("DmgTxt"), transform.position, Quaternion.identity, transform);
+            txt.GetComponent<TMP_Text>().color = Color.grey;
+            txt.GetComponent<TMP_Text>().text = "-1";
+            health -= 1;
+            SetDamageTxt();
+            if (health <= 0)
+            {
+                Debug.Log("Enemy killed.");
+                EventBus.Publish(new EnemyDefeatedEvent(gameObject));
+            }
+            else
+            {
+                anim.SetTrigger("Hit");
+            }
+
+            EnemySprite.material.color = Color.grey;
+            yield return new WaitForSeconds(delayTime);
+        }
+        EnemySprite.material.color = Color.white;
+        yield return null;
+    }
 }
 
 /// <summary>
@@ -100,11 +190,15 @@ public struct DamageTakenEvent
 {
     public int damage;
     public EntityId id;
+    public bool weakness;
+    public bool resistance;
 
-    public DamageTakenEvent(int _id, int _damage)
+    public DamageTakenEvent(int _id, int _damage, bool _weakness, bool _resistance)
     {
         id = _id;
         damage = _damage;
+        weakness = _weakness;
+        resistance = _resistance;
     }
 }
 
