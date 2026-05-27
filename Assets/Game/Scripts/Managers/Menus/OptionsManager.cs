@@ -29,12 +29,17 @@ public class OptionsManager : Singleton<OptionsManager>
     [Tooltip("Options menu UI.")]
     [SerializeField] private OptionsMenuUI optionsMenuUI;
 
+    [Header("GamePlay Settings")]
+    [Tooltip("Speed of Gameplay.")]
+    [SerializeField] private int gameSpeed;
+
     public float MasterVolume { get { return masterVolume; } private set { masterVolume = value; } }
     public float MusicVolume { get { return musicVolume; } private set { musicVolume = value; } }
     public float SfxVolume { get { return sfxVolume; } private set { sfxVolume = value; } }
     public int QualityLevel { get { return qualityLevel; } private set { qualityLevel = value; } }
     public Resolution GameResolution { get { return gameResolution; } private set { gameResolution = value; } }
     public bool IsFullScreen { get { return isFullScreen; } private set { isFullScreen = value; } }
+    public int GameSpeed { get { return gameSpeed; } private set { gameSpeed = value; } }
 
 
     public override void Awake()
@@ -72,6 +77,7 @@ public class OptionsManager : Singleton<OptionsManager>
         LoadIsFullScreen();
         LoadResolution();
         LoadQualityLevel();
+        LoadGameplaySettings();
         ApplySettings();
     }
 
@@ -145,6 +151,18 @@ public class OptionsManager : Singleton<OptionsManager>
         PlayerPrefs.SetInt("qualityLevel", QualityLevel);
         PlayerPrefs.Save();
         ApplySettings();
+    }
+
+    private void LoadGameplaySettings()
+    {
+        gameSpeed = PlayerPrefs.GetInt("GameSpeed", 1);
+    }
+
+    public void SaveGameplaySettings(int GameSpeed)
+    {
+        gameSpeed = GameSpeed;
+        PlayerPrefs.SetInt("GameSpeed", gameSpeed);
+        PlayerPrefs.Save();
     }
 
     /// <summary>

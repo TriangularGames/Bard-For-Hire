@@ -28,6 +28,27 @@ public class ScoreManager : MonoBehaviour
         //combatCompleteText.text = "";
         itemDisplay.SetActive(false);
         EventBus.Publish<EnterCombatEvent>(new EnterCombatEvent());
+        SetGameSpeed();
+    }
+
+    private void SetGameSpeed()
+    {
+        GameSpeed = PlayerPrefs.GetInt("GameSpeed");
+        switch (GameSpeed)
+        {
+            case 0:
+                GameSpeed = 4;
+                break;
+            case 1:
+                GameSpeed = 3;
+                break;
+            case 2:
+                GameSpeed = 2;
+                break;
+            case 3:
+                GameSpeed = 1;
+                break;
+        }
     }
 
     /// <summary>
@@ -194,7 +215,10 @@ public class ScoreManager : MonoBehaviour
         //{
         //    EventBus.Publish<ItemScoredEvent>(new ItemScoredEvent(item));
         //}
-        itemDisplay.SetActive(false);
+        if (itemDisplay.activeSelf)
+        {
+            itemDisplay.SetActive(false);
+        }
 
         // Check if we have hit the MaxRounds or all Enemies are dead
         if (!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive() || curRound == MaxRounds)

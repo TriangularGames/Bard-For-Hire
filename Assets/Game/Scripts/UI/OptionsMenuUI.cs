@@ -24,11 +24,15 @@ public class OptionsMenuUI : MonoBehaviour
     [SerializeField] private Slider musicVolumeSlider;
     [Tooltip("Slider for SFX volume.")]
     [SerializeField] private Slider sfxVolumeSlider;
+    [Tooltip("Dropdown for GameSpeed.")]
+    [SerializeField] private TMP_Dropdown gamespeedDropdown;
+    [SerializeField] private string[] gamespeedOptions;
     [Tooltip("Button to close the options menu.")]
     [SerializeField] private Button backButton;
     [Header("Other Components")]
     private Resolution[] resolutions;
     private string[] qualityOptions;
+    
 
     private void Awake()
     {
@@ -109,6 +113,11 @@ public class OptionsMenuUI : MonoBehaviour
             OptionsManager.Instance.SaveQualityLevel(index);
         });
 
+        gamespeedDropdown.onValueChanged.AddListener(index =>
+        {
+            OptionsManager.Instance.SaveGameplaySettings(index);
+        });
+
     }
 
     /// <summary>
@@ -118,6 +127,7 @@ public class OptionsMenuUI : MonoBehaviour
     {
         LoadResolutions();
         LoadQualityOptions();
+        LoadGameSpeedOptions();
     }
 
     /// <summary>
@@ -146,6 +156,11 @@ public class OptionsMenuUI : MonoBehaviour
             if (qualityOptions != null)
             {
                 qualityDropdown.value = OptionsManager.Instance.QualityLevel;
+            }
+
+            if (gamespeedDropdown != null)
+            {
+                gamespeedDropdown.value = OptionsManager.Instance.GameSpeed;
             }
         }
         else
@@ -193,5 +208,13 @@ public class OptionsMenuUI : MonoBehaviour
         qualityDropdown.AddOptions(qualityOptions.ToList());
         qualityDropdown.value = QualitySettings.GetQualityLevel();
         qualityDropdown.RefreshShownValue();
+    }
+
+    private void LoadGameSpeedOptions()
+    {
+        gamespeedDropdown.ClearOptions();
+        gamespeedDropdown.AddOptions(gamespeedOptions.ToList());
+        gamespeedDropdown.value = OptionsManager.Instance.GameSpeed;
+        gamespeedDropdown.RefreshShownValue();
     }
 }
