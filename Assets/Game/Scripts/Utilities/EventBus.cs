@@ -89,6 +89,11 @@ public struct ItemBoughtEvent
 }
 
 /// <summary>
+/// Event for when Item is added to Inventory
+/// </summary>
+public struct RefreshInventoryDisplayEvent { }
+
+/// <summary>
 /// Event for when an Upgrade is purchased
 /// </summary>
 public struct UpgradeBoughtEvent

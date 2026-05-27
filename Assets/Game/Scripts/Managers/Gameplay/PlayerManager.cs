@@ -115,6 +115,7 @@ public class PlayerManager : Singleton<PlayerManager>
     private void OnItemBought(ItemBoughtEvent e)
     {
         itemInventory.Add(e.data);
+        EventBus.Publish(new RefreshInventoryDisplayEvent());
     }
 
     /// <summary>

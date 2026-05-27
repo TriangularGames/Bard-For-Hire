@@ -736,8 +736,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -182.6439, y: 100}
-  m_SizeDelta: {x: 888.712, y: 180}
+  m_AnchoredPosition: {x: -182, y: 100}
+  m_SizeDelta: {x: 888, y: 180}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &294102428
 MonoBehaviour:
@@ -751,8 +751,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08a80897dbf299543a66370778fafb98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoryUIHandler
-  inventorySlot: {fileID: 2484180083775032184, guid: 27f4cbeab3b6cc94dbe2bc45e4f106a7, type: 3}
-  parent: {fileID: 294102427}
 --- !u!114 &294102429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -767,7 +765,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.HorizontalLayoutGroup
   m_Padding:
     m_Left: 0
-    m_Right: 0
+    m_Right: 50
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
@@ -1114,8 +1112,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 441.03204, y: 100}
-  m_SizeDelta: {x: 367.9359, y: 180}
+  m_AnchoredPosition: {x: 441, y: 100}
+  m_SizeDelta: {x: 367, y: 180}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &441848845
 MonoBehaviour:

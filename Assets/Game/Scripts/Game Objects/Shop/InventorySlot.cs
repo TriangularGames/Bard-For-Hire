@@ -19,6 +19,6 @@ public class InventorySlot : MonoBehaviour
         GetComponent<Image>().sprite = _data.icon;
         GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
 
-        quantityText.text = quantity > 1 ? "x" + quantity.ToString() : "";
+        quantityText.text = "x" + quantity.ToString();
     }
 }

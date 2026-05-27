@@ -1,6 +1,4 @@
-using NUnit.Framework;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,7 +32,6 @@ public class ShopManager : MonoBehaviour
 
     [Header("Reroll Info")]
     [SerializeField] private float rerollCostChange = 1.4f;
-    // TODO: setup rerollCost
     public float rerollCost = 5;
 
     private void OnEnable()
@@ -176,6 +173,7 @@ public class ShopManager : MonoBehaviour
 
     private void SetupUpgradeDisplay()
     {
+        // TODO: fix this to not just delete and respawn the objects
         ClearUpgradeDisplay();
         if (PlayerManager.Instance.upgradeInventory.Count > 0)
         {
@@ -190,6 +188,7 @@ public class ShopManager : MonoBehaviour
 
     private void SetupConsumableDisplay()
     {
+        // TODO: fix this to not just delete and respawn the objects
         ClearConsumableDisplay();
         if (PlayerManager.Instance.consumableInventory.Count > 0)
         {
