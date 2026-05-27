@@ -530,7 +530,7 @@ MonoBehaviour:
   - _OptionsManager
   - _InputManager
   - _PauseManager
-  - Victory
+  - _VictoryMenu
   firstGameplayScene: MainMenu
 --- !u!4 &910452830
 Transform:
