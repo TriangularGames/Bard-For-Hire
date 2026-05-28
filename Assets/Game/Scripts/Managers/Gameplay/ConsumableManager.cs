@@ -8,6 +8,8 @@ public class ConsumableManager : MonoBehaviour
     private List<ConsumableData> consumables;
     public ConsumablePool consumablePool;
 
+    [SerializeField] private List<GameObject> consumableDisplays;
+
     private void Awake()
     {
         Instance = this;
@@ -32,9 +34,25 @@ public class ConsumableManager : MonoBehaviour
         RefreshConsumables();
     }
 
+    /// <summary>
+    /// Remove Consumable on use and add to Display
+    /// </summary>
+    /// <param name="consumable"></param>
     public void RemoveConsumable(ConsumableData consumable)
     {
         consumables.Remove(consumable);
+
+        foreach (GameObject display in consumableDisplays)
+        {
+            ConsumableController controller = display.GetComponent<ConsumableController>();
+            if (controller.consumableData == null)
+            {
+                controller.consumableData = consumable;
+                controller.Setup();
+                display.SetActive(true);
+                return;
+            }
+        }
 
         RefreshConsumables();
     }

@@ -12,7 +12,10 @@ public class ConsumableController : MonoBehaviour
     {
         SetSprite();
 
-        SetName();
+        if (nameTxt != null)
+        {
+            SetName();
+        }
     }
 
     private void SetSprite()
