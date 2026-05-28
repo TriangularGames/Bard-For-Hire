@@ -15,12 +15,15 @@ public class EnemyManager : Singleton<EnemyManager>
     public bool hasDisabled;
 
     /// <summary>
+    /// Default Starting Round Data
+    /// </summary>
+    [SerializeField] private RoundData DEFAULTRoundData;
+
+    /// <summary>
     /// Number of Enemies for the encounter
     /// </summary>
-    /// 
-
     [SerializeField] private RoundData roundData;
-
+      
     private List<EnemyData> nextEncounter = new List<EnemyData>();
 
     public int currentDay = 0;
@@ -39,6 +42,16 @@ public class EnemyManager : Singleton<EnemyManager>
     /// Enemy Display Objects
     /// </summary>
     public List<GameObject> enemyDisplays;
+
+    /// <summary>
+    /// Reset EnemyManager on Game End
+    /// </summary>
+    public void Reset()
+    {
+        currentDay = 0;
+        enemies.Clear();
+        roundData = DEFAULTRoundData;
+    }
 
     private void OnEnable()
     {

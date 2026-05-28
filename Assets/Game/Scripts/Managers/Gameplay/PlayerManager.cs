@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerManager : Singleton<PlayerManager>
 {
+    [SerializeField] private List<ItemData> _defaultInventory;
     public List<ItemData> itemInventory;
     public List<UpgradeData> upgradeInventory;
     public List<ConsumableData> consumableInventory;
@@ -31,6 +32,18 @@ public class PlayerManager : Singleton<PlayerManager>
         itemsUsed = new List<ItemData>();
         itemsHeld = new List<ItemData>();
         itemsNotUsed = new List<ItemData>();
+    }
+
+    // Reset Item Lists on Game End
+    public void Reset()
+    {
+        upgradeInventory.Clear();
+        consumableInventory.Clear();
+        itemsUsed.Clear();
+        itemsHeld.Clear();
+        itemsNotUsed.Clear();
+        itemInventory.Clear();
+        itemInventory.AddRange(_defaultInventory);
     }
 
     private void OnEnable()

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,29 @@ public class ConsumableManager : MonoBehaviour
     public ConsumablePool consumablePool;
 
     [SerializeField] private List<GameObject> consumableDisplays;
+
+    private void OnEnable()
+    {
+        EventBus.Subscribe<ScoringCompletedEvent>(RefreshConsumableDisplays);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe<ScoringCompletedEvent>(RefreshConsumableDisplays);
+    }
+
+    private void RefreshConsumableDisplays(ScoringCompletedEvent @event)
+    {
+        foreach (GameObject consumable in consumableDisplays)
+        {
+            ConsumableController controller = consumable.GetComponent<ConsumableController>();
+            if (controller.consumableData != null)
+            {
+                controller.consumableData = null;
+                controller.Clear();                
+            }
+        }
+    }
 
     private void Awake()
     {
