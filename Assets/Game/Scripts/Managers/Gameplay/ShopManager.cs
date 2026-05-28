@@ -202,6 +202,7 @@ public class ShopManager : MonoBehaviour
                 GameObject obj = AssetManager.Instance.Spawn("Consumable", consumableWindow);
                 obj.GetComponent<ConsumableController>().consumableData = consumable;
                 obj.GetComponent<ConsumableController>().Setup();
+                obj.GetComponent<ConsumableController>().SetTextColor(Color.white);
                 Destroy(obj.GetComponent<ConsumableSelect>());
             }
         }
