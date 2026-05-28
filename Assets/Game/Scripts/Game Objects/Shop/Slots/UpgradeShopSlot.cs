@@ -28,11 +28,15 @@ public class UpgradeShopSlot : ShopSlot
 
     public override void SelectSlot(bool select)
     {
-        if (PlayerManager.Instance.GetCoinAmount() < _data.cost && PlayerManager.Instance.upgradeInventory.Count != PlayerManager.Instance.MAXUpgrades)
+        if (_data != null)
         {
-            buy.interactable = false;
+            if (PlayerManager.Instance.GetCoinAmount() < _data.cost
+                || PlayerManager.Instance.upgradeInventory.Count == PlayerManager.Instance.MAXUpgrades)
+            {
+                buy.interactable = false;
+            }
+            base.SelectSlot(select);
         }
-        base.SelectSlot(select);        
     }
 
     public override void Purchase()

@@ -27,11 +27,15 @@ public class ConsumableShopSlot : ShopSlot
 
     public override void SelectSlot(bool select)
     {
-        if (PlayerManager.Instance.GetCoinAmount() < _data.cost && PlayerManager.Instance.MAXConsumables != PlayerManager.Instance.consumableInventory.Count)
+        if (_data != null)
         {
-            buy.interactable = false;
+            if (PlayerManager.Instance.GetCoinAmount() < _data.cost
+                || PlayerManager.Instance.consumableInventory.Count == PlayerManager.Instance.MAXConsumables)
+            {
+                buy.interactable = false;
+            }
+            base.SelectSlot(select);
         }
-        base.SelectSlot(select);    
     }
 
     public override void Purchase()
