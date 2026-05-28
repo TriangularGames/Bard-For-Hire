@@ -1,0 +1,73 @@
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using System.Threading.Tasks;
+using UnityEngine.UI;
+
+public class ItemController : MonoBehaviour
+{
+    [SerializeField] public ItemData itemData;
+
+    [SerializeField] private TMP_Text damageTxt;
+    [SerializeField] private TMP_Text playableText;
+
+    public void Setup()
+    {
+        SetSprite();
+        SetDamageTxt();
+        SetPlayableTxt();
+    }
+
+    public async Task ShowDamageBonuses(List<UpgradeFightingManager.DamageBonus> bonuses, int baseDamage)
+    {
+        int baseD = baseDamage;
+        SetDamageTxtRaw(baseD);
+
+        foreach (var bonus in bonuses)
+        {
+            if (bonus.amount <= 0) continue;
+
+            await Task.Delay(400);
+            damageTxt.text = ("ATk ") + baseD + $"  <color=yellow>+ {bonus.amount} {bonus.source}</color>";
+            await Task.Delay(700);
+            baseD += bonus.amount;
+            SetDamageTxtRaw(baseD);
+        }
+    }
+
+    private void SetDamageTxtRaw(int value)
+    {
+        damageTxt.text = ("ATk ") + value.ToString();
+    }
+
+    private void SetSprite()
+    {
+        if (transform.childCount == 3)
+        {
+            transform.GetChild(0).GetComponent<Image>().sprite = itemData.icon;
+        }
+        else
+        {
+            transform.GetChild(1).GetComponent<Image>().sprite = itemData.icon;
+        }
+        
+    }
+
+    private void SetDamageTxt()
+    {
+        if (itemData.Mult)
+        {
+            damageTxt.text = "x" + itemData.Damage.ToString();
+        }
+        else
+        {
+            damageTxt.text = "ATk " + itemData.Damage.ToString();
+        }
+        
+    }
+
+    private void SetPlayableTxt()
+    {
+        playableText.text = "D (" + itemData.Playable.ToString() + ")";
+    }
+}
