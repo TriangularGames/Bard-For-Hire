@@ -168,7 +168,8 @@ public class ScoreManager : MonoBehaviour
 
     private void AttackEnemy(ItemData item, int damage)
     {
-        if(EnemyManager.Instance.isBossRound && EnemyManager.Instance.hasDisabled && EnemyManager.Instance.disabledItem == item.ItemType) {
+        if(EnemyManager.Instance.isBossDay && EnemyManager.Instance.hasDisabled
+            && EnemyManager.Instance.disabledItem == item.ItemType) {
             return;
         }
 
@@ -188,7 +189,8 @@ public class ScoreManager : MonoBehaviour
                     weakness = true;
                 }
 
-                if(EnemyManager.Instance.isBossRound && EnemyManager.Instance.bossData.ability == BossAbilities.EvenNumberReduce && damage % 2 == 0)
+                if(EnemyManager.Instance.isBossDay && EnemyManager.Instance.bossData.ability == BossAbilities.EvenNumberReduce
+                    && damage % 2 == 0)
                 {
                     damage = Mathf.RoundToInt(damage * 0.5f);
                     resistance = true;

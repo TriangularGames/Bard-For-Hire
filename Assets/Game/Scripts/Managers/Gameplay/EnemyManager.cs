@@ -8,8 +8,8 @@ public class EnemyManager : Singleton<EnemyManager>
     /// Enemy types available for this Performance
     /// </summary>
     [SerializeField] List<string> memberTypes;
-    [SerializeField] public int roundsTilBoss = 3;
-    public bool isBossRound;
+    [SerializeField] public int daysTilBoss = 3;
+    public bool isBossDay;
     public EnemyData bossData;
     public ItemType disabledItem;
     public bool hasDisabled;
@@ -23,7 +23,7 @@ public class EnemyManager : Singleton<EnemyManager>
 
     private List<EnemyData> nextEncounter = new List<EnemyData>();
 
-    public int currentRound = 0;
+    public int currentDay = 0;
 
     /// <summary>
     /// Current active Enemies
@@ -102,8 +102,8 @@ public class EnemyManager : Singleton<EnemyManager>
 
     private void ShopSetup(EnterShopEvent @event)
     {
-        currentRound++;
-        isBossRound = (currentRound % roundsTilBoss == 0 && currentRound != 0);
+        currentDay++;
+        isBossDay = (currentDay % daysTilBoss == 0 && currentDay != 0);
         GenerateRound();
         LookAhead();
     }
@@ -118,7 +118,7 @@ public class EnemyManager : Singleton<EnemyManager>
         nextEncounter.Clear();
         bossData = null;
 
-        if (isBossRound)
+        if (isBossDay)
         {
             List<EnemyData> list = new List<EnemyData>();
             foreach (EnemyData enemy in ResourceManager.Instance.EnemyData)
@@ -133,8 +133,8 @@ public class EnemyManager : Singleton<EnemyManager>
             return;
         }
 
-        int minHealth = roundData.startMinTotalHealth + (currentRound * roundData.startMinTotalHealth);
-        int maxHealth = roundData.startMaxTotalHealth + (currentRound * roundData.startMaxTotalHealth);
+        int minHealth = roundData.startMinTotalHealth + (currentDay * roundData.startMinTotalHealth);
+        int maxHealth = roundData.startMaxTotalHealth + (currentDay * roundData.startMaxTotalHealth);
         int targetHealth = Random.Range(minHealth, maxHealth + 1);
         int remainingHealth = targetHealth;
 

@@ -57,7 +57,7 @@ public class UpgradeFightingManager : MonoBehaviour
         isFirstTurn = false;
         rollAbove10 = false;
 
-        if (EnemyManager.Instance.isBossRound)
+        if (EnemyManager.Instance.isBossDay)
         {
             if(EnemyManager.Instance.bossData.ability == BossAbilities.DisableAction)
             {
@@ -81,7 +81,7 @@ public class UpgradeFightingManager : MonoBehaviour
     public void EndCombat()
     {
         secondChanceUsed = false;
-        EnemyManager.Instance.currentRound++;
+        EnemyManager.Instance.currentDay++;
         EnemyManager.Instance.GenerateNext();
     }
 

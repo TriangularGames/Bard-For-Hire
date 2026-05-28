@@ -7,6 +7,7 @@ public class ShopManager : MonoBehaviour
 {
     [Header("Shop Specific")]
     [SerializeField] Button rerollBtn;
+    [SerializeField] TMP_Text dayDisplay;
 
     [Header("Shop Loadout Limits")]
     private static int MAXItems = 4;
@@ -51,6 +52,7 @@ public class ShopManager : MonoBehaviour
     private void Start()
     {
         EventBus.Publish<EnterShopEvent>(new EnterShopEvent());
+        SetDayText();
         SetupShop();
         SetupUpgradeDisplay();
         SetupConsumableDisplay();
@@ -67,6 +69,11 @@ public class ShopManager : MonoBehaviour
         {
            rerollBtn.interactable= true;
         }
+    }
+
+    private void SetDayText()
+    {
+        dayDisplay.text = "Day " + GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().currentDay.ToString();
     }
 
     private ObjectRarity RollRarity()
