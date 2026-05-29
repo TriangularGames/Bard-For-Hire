@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Luck Potion
   m_EditorClassIdentifier: Assembly-CSharp::ConsumableData
   ConsumableName: Luck Potion
-  ConsumableDescription: Cannot roll below a 10 this turn
+  ConsumableDescription: If roll is below a 10, treat roll as 10
   cost: 6
   Type: 3
   Rarity: 1
