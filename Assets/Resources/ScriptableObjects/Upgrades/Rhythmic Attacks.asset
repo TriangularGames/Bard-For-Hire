@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Rhythmic Attacks
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Rhythmic Attacks
-  UpgradeDescription: 1  bonus damage for each of the same action type in a row
+  UpgradeDescription: 1 bonus damage for each of the same attack type used in a row
   cost: 9
   UpgradeType: 0
   Rarity: 0

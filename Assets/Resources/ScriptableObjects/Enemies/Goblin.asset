@@ -21,6 +21,8 @@ MonoBehaviour:
   Description: Little fellow with some serious problems
   isBoss: 0
   ability: 2
+  minDay: 2
+  maxDay: 0
   hasBonus: 0
   bonusStat: 0
   isMultiplier: 0

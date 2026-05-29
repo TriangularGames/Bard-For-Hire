@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Lucky Strike
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Lucky Strike
-  UpgradeDescription: 1.25x bonus score for random slot (changes every turn)
+  UpgradeDescription: 1.25x bonus score for a random attack each round
   cost: 7
   UpgradeType: 0
   Rarity: 0

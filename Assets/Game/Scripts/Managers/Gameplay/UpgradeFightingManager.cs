@@ -35,7 +35,7 @@ public class UpgradeFightingManager : MonoBehaviour
         currentActions.Clear();
         quickSaveUsed = false;
         successStreak = 0;
-        luckySlot = Random.Range(0, 6);
+        luckySlot = Random.Range(0, 3);
         isFirstTurn = true;
     }
 

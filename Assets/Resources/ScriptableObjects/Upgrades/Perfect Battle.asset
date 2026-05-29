@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Perfect Battle
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Perfect Battle
-  UpgradeDescription: Each consecutive action played without failing a DC gives 10%
-    bonus damage
+  UpgradeDescription: Each consecutive attack played without failing a roll gives
+    10% bonus damage
   cost: 18
   UpgradeType: 0
   Rarity: 2

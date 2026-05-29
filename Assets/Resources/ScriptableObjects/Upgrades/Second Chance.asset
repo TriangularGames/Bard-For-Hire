@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Second Chance
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Second Chance
-  UpgradeDescription: Once per combat you may reroll a failed check
+  UpgradeDescription: Once per combat you may reroll a failed roll
   cost: 5
   UpgradeType: 1
   Rarity: 0

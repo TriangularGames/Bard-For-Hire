@@ -23,12 +23,6 @@ public class DiceRoller : MonoBehaviour
         display.gameObject.SetActive(true);
         displayRoll.gameObject.SetActive(true);
         displayAdvantage.gameObject.SetActive(false);
-        // Natural20: doubles the chance of rolling a 20
-        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.Natural20))
-        {
-            int second = UnityEngine.Random.Range(1, 21);
-            if (second == 20) nat = 20;
-        }
 
         // WeightedDice: rolls above 10 become 50% more likely
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.WeightedDice))
@@ -36,6 +30,14 @@ public class DiceRoller : MonoBehaviour
             int second = UnityEngine.Random.Range(1, 21);
             nat = Mathf.Max(nat, second);
         }
+
+        // Natural20: doubles the chance of rolling a 20
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.Natural20))
+        {
+            int second = UnityEngine.Random.Range(1, 21);
+            if (second == 20) nat = 20;
+        }
+
         display.text = "Rolling die...";
         await ShuffleDice(displayRoll, nat);
 

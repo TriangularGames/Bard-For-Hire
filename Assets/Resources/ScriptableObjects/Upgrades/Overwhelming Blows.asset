@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Overwhelming Blows
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Overwhelming Blows
-  UpgradeDescription: 1 bonus damage for each action used past 2
+  UpgradeDescription: 1 bonus damage for each consecutive attack used after 2
   cost: 15
   UpgradeType: 0
   Rarity: 0
