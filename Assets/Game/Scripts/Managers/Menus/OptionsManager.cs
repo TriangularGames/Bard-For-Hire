@@ -155,7 +155,7 @@ public class OptionsManager : Singleton<OptionsManager>
 
     private void LoadGameplaySettings()
     {
-        gameSpeed = PlayerPrefs.GetInt("GameSpeed", 1);
+        gameSpeed = PlayerPrefs.GetInt("GameSpeed", 0);
     }
 
     public void SaveGameplaySettings(int GameSpeed)
