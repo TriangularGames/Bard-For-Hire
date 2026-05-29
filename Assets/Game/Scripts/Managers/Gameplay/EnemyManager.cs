@@ -199,7 +199,7 @@ public class EnemyManager : Singleton<EnemyManager>
         List<EnemyData> encGuy = new List<EnemyData>();
         int remainingHealth = Random.Range(minBudget, maxBudget + 1);
 
-        while (remainingHealth > 0 && nextEncounter.Count < roundData.maxEnemies)
+        while (remainingHealth > 0 && encGuy.Count < roundData.maxEnemies)
         {
             List<EnemyData> affordableGuys = new List<EnemyData>();
             foreach (EnemyData enemy in ResourceManager.Instance.EnemyData)
@@ -244,6 +244,7 @@ public class EnemyManager : Singleton<EnemyManager>
         {
             spawnPoints.Add(spawnPointHolder.transform.GetChild(c));
         }
+
 
         for (int i = 0; i < nextEncounter.Count; i++)
         {
@@ -310,7 +311,7 @@ public class EnemyManager : Singleton<EnemyManager>
             EnemyDisplay displayComponent = enemyDisplays[i].GetComponent<EnemyDisplay>();
 
             if (displayComponent != null)
-                displayComponent.Setup(nextEncounter[i]);
+                displayComponent.Setup(nextEncounter[i], nextEncounter[i].GetScaledUpHealth(TotalMult));
         }
     }
 

@@ -22,7 +22,7 @@ MonoBehaviour:
   isBoss: 0
   ability: 2
   minDay: 0
-  maxDay: 0
+  maxDay: 3
   hasBonus: 0
   bonusStat: 0
   isMultiplier: 0

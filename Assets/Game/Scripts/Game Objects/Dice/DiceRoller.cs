@@ -27,8 +27,11 @@ public class DiceRoller : MonoBehaviour
         // WeightedDice: rolls above 10 become 50% more likely
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.WeightedDice))
         {
-            int second = UnityEngine.Random.Range(1, 21);
-            nat = Mathf.Max(nat, second);
+            if (nat <= 10 && Random.value < 0.3f)
+            {
+                int second = Random.Range(1, 21);
+                nat = Mathf.Max(nat, second);
+            }
         }
 
         // Natural20: doubles the chance of rolling a 20

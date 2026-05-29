@@ -155,8 +155,11 @@ public class ScoreManager : MonoBehaviour
             }
             if (UpgradeFightingManager.Instance.CanUseQuickSave())
             {
-                int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex);
-                AttackEnemy(item, totalDamage);
+                int quickSaveDamage = UpgradeFightingManager.Instance.GetQuickSaveDamage(item, slotIndex);
+                if (quickSaveDamage > 0)
+                    AttackEnemy(item, quickSaveDamage);
+                UpgradeFightingManager.Instance.SuccessfulAction(item, quickSaveDamage);
+                return;
             }
         }
 
