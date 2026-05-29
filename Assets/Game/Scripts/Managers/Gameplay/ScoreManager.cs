@@ -57,6 +57,8 @@ public class ScoreManager : MonoBehaviour
     /// <param name="items">List of Items to be scored</param>
     public async Task CalculateScore(List<ItemData> items)
     {
+        EventBus.Publish<ScoringStartedEvent>(new ScoringStartedEvent());
+
         pendingItems = items;
         curItem = -1;
         UpgradeFightingManager.Instance.StartRound();
@@ -222,6 +224,8 @@ public class ScoreManager : MonoBehaviour
             itemDisplay.SetActive(false);
         }
 
+        EventBus.Publish<ScoringEndedEvent>(new ScoringEndedEvent());
+
         // Check if we have hit the MaxRounds or all Enemies are dead
         if (!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive() || curRound == MaxRounds)
         {
@@ -259,3 +263,7 @@ public class ScoreManager : MonoBehaviour
         roller.ResetText();
     }
 }
+
+public struct ScoringStartedEvent { }
+
+public struct ScoringEndedEvent { }

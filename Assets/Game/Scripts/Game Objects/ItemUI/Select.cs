@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -6,6 +7,30 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
     private Image selection;
     public void SetImage(Sprite _selection) { selection.sprite = _selection; }
     private bool isSelected = false;
+
+    private bool SelectionEnabled = true;
+
+    private void OnEnable()
+    {
+        EventBus.Subscribe<ScoringStartedEvent>(DisableSelection);
+        EventBus.Subscribe<ScoringEndedEvent>(EnableSelection);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe<ScoringStartedEvent>(DisableSelection);
+        EventBus.Unsubscribe<ScoringEndedEvent>(EnableSelection);
+    }
+
+    private void EnableSelection(ScoringEndedEvent e)
+    {
+        SelectionEnabled = true;
+    }
+
+    private void DisableSelection(ScoringStartedEvent e)
+    {
+        SelectionEnabled = false;
+    }
 
     private void Awake()
     {
@@ -19,60 +44,65 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        //selection.color = Color.blue;
-        if (!isSelected)
+        if (SelectionEnabled)
         {
-            selection.sprite = null;
-            selection.color = new Color(0f, 0f, 256f, 0.5f);
+            //selection.color = Color.blue;
+            if (!isSelected)
+            {
+                selection.sprite = null;
+                selection.color = new Color(0f, 0f, 256f, 0.5f);
+            }
         }
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-
-        //destroy
-        if (ConsumableEffectManager.Instance.selectingItemToDestroy)
+        if (SelectionEnabled)
         {
-            ConsumableEffectManager.Instance.DestroyItem(GetComponent<ItemController>().itemData);
-
-            Destroy(gameObject);
-
-            return;
-        }
-
-        // clonin
-        if (ConsumableEffectManager.Instance.selectingItemToClone)
-        {
-            ConsumableEffectManager.Instance.CloneItem(GetComponent<ItemController>().itemData);
-
-            return;
-        }
-
-        // polymorphin
-        if (ConsumableEffectManager.Instance.selectingItemToPolymorph)
-        {
-            ItemData newItem = ConsumableEffectManager.Instance.PolymorphItem(GetComponent<ItemController>().itemData);
-
-            GetComponent<ItemController>().itemData = newItem;
-
-            GetComponent<ItemController>().Setup();
-
-            return;
-        }
-
-        if (!isSelected && GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().HasRoom())
-        {
-            selection.color = new Color(1f, 1f, 1f, 1f);
-            GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().SelectItem(gameObject, selection);
-            isSelected = true;
-        }
-        else
-        {
-            selection.color = new Color(0f, 0f, 256f, 0.5f);
-            if (GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsSelected.Contains(gameObject))
+            //destroy
+            if (ConsumableEffectManager.Instance.selectingItemToDestroy)
             {
-                GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().DeselectItem(gameObject, selection);
-                isSelected = false;
+                ConsumableEffectManager.Instance.DestroyItem(GetComponent<ItemController>().itemData);
+
+                Destroy(gameObject);
+
+                return;
+            }
+
+            // clonin
+            if (ConsumableEffectManager.Instance.selectingItemToClone)
+            {
+                ConsumableEffectManager.Instance.CloneItem(GetComponent<ItemController>().itemData);
+
+                return;
+            }
+
+            // polymorphin
+            if (ConsumableEffectManager.Instance.selectingItemToPolymorph)
+            {
+                ItemData newItem = ConsumableEffectManager.Instance.PolymorphItem(GetComponent<ItemController>().itemData);
+
+                GetComponent<ItemController>().itemData = newItem;
+
+                GetComponent<ItemController>().Setup();
+
+                return;
+            }
+
+            if (!isSelected && GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().HasRoom())
+            {
+                selection.color = new Color(1f, 1f, 1f, 1f);
+                GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().SelectItem(gameObject, selection);
+                isSelected = true;
+            }
+            else
+            {
+                selection.color = new Color(0f, 0f, 256f, 0.5f);
+                if (GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsSelected.Contains(gameObject))
+                {
+                    GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().DeselectItem(gameObject, selection);
+                    isSelected = false;
+                }
             }
         }
     }
@@ -90,10 +120,13 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (!isSelected)
+        if (SelectionEnabled)
         {
-            selection.sprite = null;
-            selection.color = new Color(1f, 1f, 1f, 0f);
+            if (!isSelected)
+            {
+                selection.sprite = null;
+                selection.color = new Color(1f, 1f, 1f, 0f);
+            }
         }
     }
 }
