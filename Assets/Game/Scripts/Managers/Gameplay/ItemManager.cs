@@ -16,6 +16,7 @@ public class ItemManager : MonoBehaviour
     [SerializeField] private List<Sprite> selectionBoxes;
     [SerializeField] private Transform lineupParent;
     [SerializeField] private float lineupMoveSpeed = 8f;
+    [SerializeField] private TMP_Text selectionCountText;
 
     private bool scoringCompleted = true;
     
@@ -45,6 +46,12 @@ public class ItemManager : MonoBehaviour
         return false;
     }
 
+    private void UpdateSelectionText()
+    {
+        if (selectionCountText != null)
+            selectionCountText.text = $"{ItemsSelected.Count}/{selectionLimit}";
+    }
+
     private void DeleteItem(ItemUsedEvent e)
     {
         GameObject toDelete = null;
@@ -70,7 +77,8 @@ public class ItemManager : MonoBehaviour
         {
             selectionLimit += 1;
         }
-            ItemsSelected = new List<GameObject>();
+        UpdateSelectionText();
+        ItemsSelected = new List<GameObject>();
         MAXDiscards = 3;
         discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard x" + MAXDiscards.ToString();
 # if UNITY_EDITOR
@@ -134,6 +142,7 @@ public class ItemManager : MonoBehaviour
                 }
             }
         }
+        UpdateSelectionText();
     }
 
     /// <summary>
@@ -161,6 +170,7 @@ public class ItemManager : MonoBehaviour
         {
             item.GetComponent<Select>().Deselect();
         }
+        UpdateSelectionText();
     }
 
     /// <summary>
@@ -218,6 +228,7 @@ public class ItemManager : MonoBehaviour
         {
             ItemsSelected.Add(item);
             selection.sprite = selectionBoxes[ItemsSelected.IndexOf(item)];
+            UpdateSelectionText();
         }
     }
 
@@ -229,5 +240,6 @@ public class ItemManager : MonoBehaviour
         {
             selectedItem.GetComponent<Select>().SetImage(selectionBoxes[ItemsSelected.IndexOf(selectedItem)]);
         }
+        UpdateSelectionText();
     }
 }

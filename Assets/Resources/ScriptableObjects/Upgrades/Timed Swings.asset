@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Timed Swings
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Timed Swings
-  UpgradeDescription: Odd slots gain +1, Even slots gain +2
-  cost: 11
+  UpgradeDescription: Even slots gain +2
+  cost: 12
   UpgradeType: 0
   Rarity: 1
   UpgradeID: 11

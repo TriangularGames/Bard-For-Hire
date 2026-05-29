@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Flow State
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Flow State
-  UpgradeDescription: Each attack does extra damage equal to 10% of previous round's
+  UpgradeDescription: Each attack does extra damage equal to 20% of previous round's
     damage
   cost: 26
   UpgradeType: 0

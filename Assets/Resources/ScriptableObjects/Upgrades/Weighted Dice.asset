@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Weighted Dice
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Weighted Dice
-  UpgradeDescription: Rolls above 10 are 50% more common
-  cost: 11
+  UpgradeDescription: Rolls above 10 are 30% more common
+  cost: 13
   UpgradeType: 1
   Rarity: 1
   UpgradeID: 20

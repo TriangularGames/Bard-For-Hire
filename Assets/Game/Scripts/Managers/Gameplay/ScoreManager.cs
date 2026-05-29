@@ -85,6 +85,11 @@ public class ScoreManager : MonoBehaviour
                 modifier += 2;
             }
 
+            if (UpgradeFightingManager.Instance.tempDCReduce > 0)
+            {
+                modifier += UpgradeFightingManager.Instance.tempDCReduce;
+            }
+
             if (UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage)&& UpgradeFightingManager.Instance.isFirstTurn && curItem == 0){
                 rollResult = await roller.RollWithAdvantage(modifier);
             }
