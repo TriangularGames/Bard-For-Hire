@@ -15,7 +15,7 @@ public abstract class ShopSlot : MonoBehaviour, IPointerDownHandler
     private void Start()
     {
         buy.onClick.AddListener(Purchase);
-        buy.gameObject.SetActive(false);
+        //buy.gameObject.SetActive(false);
         _Purchased = false;
     }
 
@@ -37,13 +37,13 @@ public abstract class ShopSlot : MonoBehaviour, IPointerDownHandler
 
     public virtual void SelectSlot(bool select)
     {
-        buy.gameObject.SetActive(select);
+        //buy.gameObject.SetActive(select);
         EventBus.Publish<ItemSelectedEvent>(new ItemSelectedEvent(gameObject.GetEntityId()));
     }
 
     public void Deselect()
     {
         _isSelected = false;
-        buy.gameObject.SetActive(_isSelected);
+        //buy.gameObject.SetActive(_isSelected);
     }
 }

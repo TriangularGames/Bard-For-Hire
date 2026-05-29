@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UpgradeShopSlot : ShopSlot
 {
@@ -18,6 +17,7 @@ public class UpgradeShopSlot : ShopSlot
         value.text = _data.cost.ToString();
         icon.sprite = _data.icon;
         icon.color = new Color(0f, 0f, 0f, 1f);
+        buy.gameObject.SetActive(true);
     }
 
     public override void ClearInfo()

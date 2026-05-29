@@ -17,6 +17,7 @@ public class ConsumableShopSlot : ShopSlot
         value.text = _data.cost.ToString();
         icon.sprite = _data.icon;
         icon.color = new Color(0.5f, 0.4f, 0.06f, 1f);
+        buy.gameObject.SetActive(true);
     }
 
     public override void ClearInfo()
