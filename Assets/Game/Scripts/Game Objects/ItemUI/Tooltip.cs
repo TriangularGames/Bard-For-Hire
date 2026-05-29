@@ -6,7 +6,7 @@ public class Tooltip : MonoBehaviour
 {
     public TMP_Text headerTxt;
     public TMP_Text rarityTxt;
-    public TMP_Text attackTxt;
+    public TMP_Text damageTxt;
     public TMP_Text rollTxt;
     public TMP_Text typeTxt;
     public TMP_Text contentTxt;
@@ -15,7 +15,7 @@ public class Tooltip : MonoBehaviour
 
     public int characterWrapLimit;
 
-    public void SetText(string content, string header, string rarity = "", string type = "", bool isWeakness = false, string attack = "", string roll = "")
+    public void SetText(string content, string header, string rarity = "", string type = "", bool isWeakness = false, string damage = "", string roll = "")
     {
         // Header Text
         headerTxt.text = header;
@@ -55,8 +55,8 @@ public class Tooltip : MonoBehaviour
             typeTxt.text = type;
         }
 
-        // Attack / Roll OR Weakness
-        if (string.IsNullOrEmpty(attack))
+        // Damage / Roll OR Weakness
+        if (string.IsNullOrEmpty(damage))
         {
             transform.GetChild(1).gameObject.SetActive(false);
         }
@@ -66,24 +66,24 @@ public class Tooltip : MonoBehaviour
             transform.GetChild(1).gameObject.SetActive(true);
             if (isWeakness)
             {
-                switch (attack)
+                switch (damage)
                 {
                     case "Magical":
-                        attackTxt.color = Color.purple;
+                        damageTxt.color = Color.purple;
                         break;
                     case "Piercing":
-                        attackTxt.color = Color.darkCyan;
+                        damageTxt.color = Color.darkCyan;
                         break;
                     case "Slashing":
-                        attackTxt.color = Color.darkGreen;
+                        damageTxt.color = Color.darkGreen;
                         break;
                 }
-                attackTxt.text = "Weakness: " + attack;
+                damageTxt.text = "Weakness: " + damage;
             }
             else
             {
-                attackTxt.color = Color.red;
-                attackTxt.text = "Attack: " + attack;
+                damageTxt.color = Color.darkRed;
+                damageTxt.text = "Damage: " + damage;
             }
 
             if (string.IsNullOrEmpty(roll))
