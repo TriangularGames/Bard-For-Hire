@@ -51,6 +51,7 @@ public class EnemyManager : Singleton<EnemyManager>
         currentDay = 0;
         enemies.Clear();
         roundData = DEFAULTRoundData;
+        isBossDay = false;
     }
 
     private void OnEnable()
