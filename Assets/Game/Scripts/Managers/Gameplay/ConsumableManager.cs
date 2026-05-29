@@ -61,7 +61,7 @@ public class ConsumableManager : MonoBehaviour
     /// <summary>
     /// Remove Consumable on use and add to Display
     /// </summary>
-    /// <param name="consumable"></param>
+    /// <param name="consumable">Consumable to be removed</param>
     public void RemoveConsumable(ConsumableData consumable)
     {
         consumables.Remove(consumable);
@@ -74,6 +74,8 @@ public class ConsumableManager : MonoBehaviour
                 controller.consumableData = consumable;
                 controller.Setup();
                 display.SetActive(true);
+                // TODO: change this to an event call instead
+                PlayerManager.Instance.consumableInventory.Remove(consumable);
                 return;
             }
         }
