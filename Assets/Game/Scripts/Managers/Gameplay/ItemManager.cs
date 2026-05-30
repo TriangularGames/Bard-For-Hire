@@ -25,7 +25,7 @@ public class ItemManager : MonoBehaviour
     private int itemsDiscarded = 0;
 
     // Max discards a player can make
-    public int MAXDiscards = 3;
+    public int MAXDiscards = 2;
 
     public ItemPool itemPool;
 
@@ -88,7 +88,7 @@ public class ItemManager : MonoBehaviour
         }
         UpdateSelectionText();
         ItemsSelected = new List<GameObject>();
-        MAXDiscards = 3;
+        MAXDiscards = 2;
         discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard x" + MAXDiscards.ToString();
 # if UNITY_EDITOR
         Debug.Assert(itemPool = GameObject.FindWithTag("ItemPool").GetComponent<ItemPool>(), "ItemManager requires ItemPool");
@@ -128,27 +128,27 @@ public class ItemManager : MonoBehaviour
         {
             if (ItemsSelected.Count > 0)
             {
-                if (PlayerManager.Instance.itemsNotUsed.Count != 0)
+                // If unused Weapons is less than the amount needed to be refilled
+                // Refresh Weapons before drawing
+                if (PlayerManager.Instance.itemsNotUsed.Count < ItemsSelected.Count)
                 {
-                    for (int i = 0; i < ItemsSelected.Count; i++)
+                    PlayerManager.Instance.RefreshItems();
+                }
+
+                for (int i = 0; i < ItemsSelected.Count; i++)
+                {
+                    if (itemPool.GetItems().Contains(ItemsSelected[i]))
                     {
-                        if (itemPool.GetItems().Contains(ItemsSelected[i]))
-                        {
-                            Destroy(ItemsSelected[i]);
-                            EventBus.Publish(new ItemDiscardedEvent(ItemsSelected[i].GetComponent<ItemController>().itemData));
-                            itemsDiscarded++;
-                        }
+                        Destroy(ItemsSelected[i]);
+                        EventBus.Publish(new ItemDiscardedEvent(ItemsSelected[i].GetComponent<ItemController>().itemData));
+                        itemsDiscarded++;
                     }
-                    itemPool.RemoveAll(ItemsSelected);
-                    ItemsSelected.Clear();
-                    GrabNewItems(itemsDiscarded);
-                    MAXDiscards--;
-                    discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard x" + MAXDiscards.ToString();
                 }
-                else
-                {
-                    Debug.Log("Item Inventory is Empty! Cannot Discard.");
-                }
+                itemPool.RemoveAll(ItemsSelected);
+                ItemsSelected.Clear();
+                GrabNewItems(itemsDiscarded);
+                MAXDiscards--;
+                discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard x" + MAXDiscards.ToString();
             }
         }
         UpdateSelectionText();
@@ -162,10 +162,16 @@ public class ItemManager : MonoBehaviour
         Debug.Log("Getting new items!");
         if (itemPool.GetItems().Count != itemPool.GetMaxSlots())
         {
+            // Checking if unused weapons count is more than what needs to be grabbed to fill the space
+            if (PlayerManager.Instance.itemsNotUsed.Count < amount)
+            {
+                PlayerManager.Instance.RefreshItems(); 
+            }
             for (int i = 0; i < amount; i++)
             {
                 itemPool.InstantiateItem(PlayerManager.Instance.GetRandomItem());
             }
+
         }
     }
 
