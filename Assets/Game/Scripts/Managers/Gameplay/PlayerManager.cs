@@ -9,8 +9,8 @@ public class PlayerManager : Singleton<PlayerManager>
     public List<UpgradeData> upgradeInventory;
     public List<ConsumableData> consumableInventory;
 
-    // For Gameplay, what Notes are still available to be grabbed from Inventory,
-    // what Notes are active, and what Notes aren't
+    // For Gameplay, what Weapons are still available to be grabbed from Inventory,
+    // what Weapons are active, and what Weapons aren't
     public List<ItemData> itemsUsed;
     public List<ItemData> itemsHeld;
     public List<ItemData> itemsNotUsed;
@@ -22,7 +22,7 @@ public class PlayerManager : Singleton<PlayerManager>
     public int Coins;
 
     [Tooltip("Max amount of Upgrades player can hold")]
-    public int MAXUpgrades = 3;
+    public int MAXUpgrades = 4;
 
     [Tooltip("Max amount of Consumables player can hold")]
     public int MAXConsumables = 2;
@@ -161,6 +161,12 @@ public class PlayerManager : Singleton<PlayerManager>
     public void SetCoinText()
     {
         GameObject.FindWithTag("Coins").GetComponent<TMP_Text>().text = Coins.ToString();
+    }
+
+    public void RefreshItems()
+    {
+        itemsNotUsed.AddRange(itemsUsed);
+        itemsNotUsed.Clear();
     }
 
     /// <summary>
