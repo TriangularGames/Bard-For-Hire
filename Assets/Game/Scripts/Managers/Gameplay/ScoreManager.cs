@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
@@ -22,6 +23,23 @@ public class ScoreManager : MonoBehaviour
     public DiceRoller roller;
     private List<ItemData> pendingItems;
     private int curItem = -1;
+
+    private string rewardDisplayText;
+
+    private void OnEnable()
+    {
+        EventBus.Subscribe<MoneyEarnedEvent>(MakeRewardText);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe<MoneyEarnedEvent>(MakeRewardText);
+    }
+
+    private void MakeRewardText(MoneyEarnedEvent e)
+    {
+        rewardDisplayText += e.reason + " : " + e.coinAmount + "\n";
+    }
 
     private void Start()
     {
@@ -249,11 +267,11 @@ public class ScoreManager : MonoBehaviour
                 if (remainingRounds > 0)
                 {
                     int bonusCoins = remainingRounds * 5;
-                    PlayerManager.Instance.Coins += bonusCoins;
-                    PlayerManager.Instance.SetCoinText();
+                    EventBus.Publish(new MoneyEarnedEvent(bonusCoins, "Early Completion"));
                 }
                 Debug.Log("Combat Completed!");
                 MenuManager.Instance.SwitchState(new VictoryMenuState());
+                EventBus.Publish(new VictoryEvent(rewardDisplayText));
             }
             else
             {
@@ -278,3 +296,13 @@ public class ScoreManager : MonoBehaviour
 public struct ScoringStartedEvent { }
 
 public struct ScoringEndedEvent { }
+
+public struct VictoryEvent
+{
+    public string textContent;
+
+    public VictoryEvent (string _textContent)
+    {
+        textContent = _textContent;
+    }
+}

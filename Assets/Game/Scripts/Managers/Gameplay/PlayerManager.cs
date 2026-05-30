@@ -56,6 +56,7 @@ public class PlayerManager : Singleton<PlayerManager>
         EventBus.Subscribe<ConsumableBoughtEvent>(OnConsumableBought);
         EventBus.Subscribe<EnterShopEvent>(EnterShop);
         EventBus.Subscribe<EnterCombatEvent>(EnterCombat);
+        EventBus.Subscribe<MoneyEarnedEvent>(AddMoney);
     }
 
     private void OnDisable()
@@ -68,6 +69,13 @@ public class PlayerManager : Singleton<PlayerManager>
         EventBus.Unsubscribe<ConsumableBoughtEvent>(OnConsumableBought);
         EventBus.Unsubscribe<EnterShopEvent>(EnterShop);
         EventBus.Unsubscribe<EnterCombatEvent>(EnterCombat);
+        EventBus.Unsubscribe<MoneyEarnedEvent>(AddMoney);
+    }
+
+    private void AddMoney(MoneyEarnedEvent e)
+    {
+        Coins += e.coinAmount;
+        SetCoinText();
     }
 
     private void EnterCombat(EnterCombatEvent e)
