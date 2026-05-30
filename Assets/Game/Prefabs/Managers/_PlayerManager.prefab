@@ -93,5 +93,5 @@ MonoBehaviour:
   itemsNotUsed: []
   selectedCharacter: {fileID: 0}
   Coins: 0
-  MAXUpgrades: 3
+  MAXUpgrades: 4
   MAXConsumables: 2

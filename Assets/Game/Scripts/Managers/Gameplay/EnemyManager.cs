@@ -101,8 +101,8 @@ public class EnemyManager : Singleton<EnemyManager>
     {
         int index = -1;
         EnemyController enemyC = e.enemy.GetComponent<EnemyController>();
-        PlayerManager.Instance.Coins += enemyC.enemyData.coinReward;
-        PlayerManager.Instance.SetCoinText();
+
+        EventBus.Publish<MoneyEarnedEvent>(new MoneyEarnedEvent(enemyC.enemyData.coinReward, enemyC.enemyData.Name));
 
         if (enemies.Contains(e.enemy))
         {
@@ -262,24 +262,6 @@ public class EnemyManager : Singleton<EnemyManager>
             {
                enemies[0].GetComponent<EnemyController>().SetIndicator();
             }
-            //    int memberType = Random.Range(0, memberTypes.Count);
-            //    for (int a = 0; a < ResourceManager.Instance.EnemyData.Length; a++)
-            //    {
-            //        if (ResourceManager.Instance.EnemyData[a].name == memberTypes[memberType])
-            //        {
-            //            GameObject enemySpawned = AssetManager.Instance.Spawn("Enemy", spawnPoints[i]);
-            //            EnemyData data = ResourceManager.Instance.EnemyData[a];
-            //            enemySpawned.GetComponent<EnemyController>().enemyData = data;
-
-            //            enemySpawned.GetComponent<EnemyController>().Setup();
-            //            enemySpawned.name = data.name + " " + enemySpawned.GetEntityId();
-
-            //            enemies.Add(enemySpawned);
-            //        }
-            //    }
-            //}
-
-            //// Set indicator of First enemy On
 
         }
     }
@@ -315,4 +297,17 @@ public class EnemyManager : Singleton<EnemyManager>
         }
     }
 
+}
+
+public struct MoneyEarnedEvent
+{
+    public int coinAmount;
+    // Reason being either Early Completion/Enemy Name
+    public string reason;
+
+    public MoneyEarnedEvent(int _coinAmount, string _reason)
+    {
+        coinAmount = _coinAmount;
+        reason = _reason;
+    }
 }
