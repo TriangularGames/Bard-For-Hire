@@ -27,6 +27,7 @@ public class ShopManager : MonoBehaviour
 
     [Header("Upgrade Showcase Window")]
     [SerializeField] private UpgradePool upgradeDisplayPool;
+    [SerializeField] private TMP_Text upgradeLimit;
 
     [Header("Consumable Showcase Window")]
     [SerializeField] private Transform consumableWindow;
@@ -189,6 +190,7 @@ public class ShopManager : MonoBehaviour
             foreach (UpgradeData upgrade in PlayerManager.Instance.upgradeInventory)
                 upgradeDisplayPool.BringEmIn(upgrade, SetupUpgradeDisplay);
         }
+        upgradeLimit.text = PlayerManager.Instance.upgradeInventory.Count + "/" + PlayerManager.Instance.MAXUpgrades;
     }
 
     private void SetupConsumableDisplay()
