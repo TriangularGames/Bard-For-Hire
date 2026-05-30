@@ -65,6 +65,7 @@ public class EnemyController : MonoBehaviour
         if (e.id == gameObject.GetEntityId())
         {
             flashTimes = e.damage;
+            AudioManager.Instance.PlayClip("Hit");
             if (e.weakness)
             {
                 StartCoroutine("WeakFlash");

@@ -116,6 +116,7 @@ public class ScoreManager : MonoBehaviour
         if (item.Playable <= finalroll)
         {
             Debug.Log($"{item.name} was played!");
+            AudioManager.Instance.PlayClip("Success");
             itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 1f, 0f, 1f);
             
             await Task.Delay(300 * GameSpeed);
@@ -147,6 +148,8 @@ public class ScoreManager : MonoBehaviour
         }
         else
         {
+            // Attack Missed
+            AudioManager.Instance.PlayClip("Fail");
             itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(1f, 0f, 0f, 1f);
             UpgradeFightingManager.Instance.FailedAction();
             EventBus.Publish<MissEvent>(new MissEvent());

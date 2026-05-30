@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class ItemManager : MonoBehaviour
 {
     public Button discardBtn;
+    public Button clearBtn;
     public Button attackBtn;
 
     [HideInInspector] public List<GameObject> ItemsSelected;
@@ -32,12 +33,20 @@ public class ItemManager : MonoBehaviour
     {
         EventBus.Subscribe<ItemUsedEvent>(DeleteItem);
         EventBus.Subscribe<ScoringCompletedEvent>(PrepNewRound);
+
+        discardBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
+        clearBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
+        attackBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<ItemUsedEvent>(DeleteItem);
         EventBus.Unsubscribe<ScoringCompletedEvent>(PrepNewRound);
+
+        discardBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
+        clearBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
+        attackBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
     }
 
     public bool HasRoom()

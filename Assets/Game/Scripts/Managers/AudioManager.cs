@@ -16,11 +16,15 @@ public class AudioManager : Singleton<AudioManager>
     [SerializeField] private AudioSource _musicAudioSource;
     [SerializeField] private AudioSource _sfxAudioSource;
 
+    [Header("AudioMixerGroup")]
+    [SerializeField] private AudioMixerGroup[] _groups;
+
     // Funcs to control Audio
     private void Start()
     {
         PlayClip(0, _musicClips[0]);
     }
+
     public void PlayClip(int audioType, int clipVal)
     {
         AudioSource source = new AudioSource();
@@ -42,6 +46,28 @@ public class AudioManager : Singleton<AudioManager>
 
         source.clip = _sfxClips[clipVal];
         source.Play();
+    }
+
+    /// <summary>
+    /// Play SFX by AudioClip Name
+    /// </summary>
+    /// <param name="clipName">Name of AudioClip</param>
+    public void PlayClip(string clipName)
+    {
+        AudioClip clipToPlay = null;
+        foreach (AudioClip clip in _sfxClips)
+        {
+            Debug.Log(clip.name);
+            if (clip.name == clipName)
+            {
+                clipToPlay = clip;
+            }
+        }
+
+        if (clipToPlay != null)
+        {
+            _sfxAudioSource.PlayOneShot(clipToPlay);
+        }
     }
 
     public void PlayClip(int audioType, AudioClip clip)
@@ -78,6 +104,28 @@ public class AudioManager : Singleton<AudioManager>
         }
 
         source.Stop();
+    }
+
+    // Funcs to play specific Button SFX
+
+    public void Confirm()
+    {
+        PlayClip("Confirm");
+    }
+
+    public void Back()
+    {
+        PlayClip("Back");
+    }
+
+    public void OnMouseOver()
+    {
+        PlayClip("MouseOver");
+    }
+
+    public void Error()
+    {
+        PlayClip("Error");
     }
 
     //Volume adjustment for Volume Sliders for Options Menu
