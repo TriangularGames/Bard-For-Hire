@@ -57,7 +57,6 @@ public class AudioManager : Singleton<AudioManager>
         AudioClip clipToPlay = null;
         foreach (AudioClip clip in _sfxClips)
         {
-            Debug.Log(clip.name);
             if (clip.name == clipName)
             {
                 clipToPlay = clip;
