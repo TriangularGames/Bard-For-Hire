@@ -61,6 +61,9 @@ public class DiceRoller : MonoBehaviour
 
         while (timed < changeyDuration)
         {
+            // Suspend the shuffle animation loop while paused
+            await PauseManager.Instance.WaitWhilePausedAsync();
+
             target.text = UnityEngine.Random.Range(1, 21).ToString();
             await Task.Delay(Mathf.RoundToInt(interval * 1000));
             timed += interval;
@@ -88,7 +91,8 @@ public class DiceRoller : MonoBehaviour
         Task bShuffle = ShuffleDice(displayAdvantage, b);
         await Task.WhenAll(aShuffle, bShuffle);
 
-        await Task.Delay(Mathf.RoundToInt(revealPause * 1000));
+        // Pause-aware delay after both dice land
+        await PauseExtensions.DelayRespectingPause(Mathf.RoundToInt(revealPause * 1000));
 
         int lower = a <= b ? a : b;
         int higher = a >= b ? a : b;
@@ -97,7 +101,7 @@ public class DiceRoller : MonoBehaviour
 
         loserDisplay.text = $"<color=red>{lower}";
 
-        await Task.Delay(600);
+        await PauseExtensions.DelayRespectingPause(600);
         loserDisplay.gameObject.SetActive(false);
 
         if (modifier != 0 && displayModifer != null)
@@ -114,7 +118,7 @@ public class DiceRoller : MonoBehaviour
         if (modifier != 0)
         {
             modDisplay.text = $"+ {modifier}";
-            await Task.Delay(Mathf.RoundToInt(revealPause * 400));
+            await PauseExtensions.DelayRespectingPause(Mathf.RoundToInt(revealPause * 400));
         }
 
         if (nat == 20)
@@ -134,7 +138,7 @@ public class DiceRoller : MonoBehaviour
             main.color = Color.black;
             displayCrit.text = "";
         }
-        await Task.Delay(Mathf.RoundToInt(revealPause * 800));
+        await PauseExtensions.DelayRespectingPause(Mathf.RoundToInt(revealPause * 800));
         main.text = final.ToString();
         main.color = Color.black;
         displayCrit.text = "";

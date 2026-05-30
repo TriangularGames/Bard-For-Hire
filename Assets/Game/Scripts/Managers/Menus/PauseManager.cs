@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class PauseManager : Singleton<PauseManager>
@@ -9,6 +11,16 @@ public class PauseManager : Singleton<PauseManager>
     /// Variable to keep track if the game is currently Paused
     /// </summary>
     public bool IsPaused = false;
+
+    // Renewed each time the game unpauses — awaiting this suspends tasks while paused
+    private TaskCompletionSource<bool> _pauseTCS = new TaskCompletionSource<bool>();
+
+    public override void Awake()
+    {
+        base.Awake();
+
+        _pauseTCS.TrySetResult(true);  // Start in a "completed" state so tasks don't block before first pause
+    }
 
     private void OnEnable()
     {
@@ -32,6 +44,9 @@ public class PauseManager : Singleton<PauseManager>
         // Game is paused!
         Time.timeScale = 0;
         IsPaused = true;
+
+        // Replace with a fresh incomplete TCS — tasks awaiting this will now suspend
+        _pauseTCS = new TaskCompletionSource<bool>();
     }
 
     /// <summary>
@@ -46,7 +61,14 @@ public class PauseManager : Singleton<PauseManager>
         // Game is unpaused!
         Time.timeScale = 1;
         IsPaused = false;
+
+        _pauseTCS.TrySetResult(true);
     }
+    /// <summary>
+    /// Await this in any async task to suspend execution while the game is paused.
+    /// </summary>
+    public Task WaitWhilePausedAsync() => _pauseTCS.Task;
+
     /// <summary>
     /// Subscribes to necessary events on the event bus.
     /// </summary>
@@ -84,3 +106,27 @@ public struct ShowPauseMenuEvent { }
 /// Event struct for hiding the pause menu.
 /// </summary>
 public struct HidePauseMenuEvent { }
+
+/// <summary>
+/// Helper class used for pausing async tasks
+/// </summary>
+public static class PauseExtensions
+{
+    /// <summary>
+    /// Yields until the game is unpaused. Safe to call even when not paused.
+    /// </summary>
+    public static Task WaitWhilePausedAsync(this CancellationToken ct)
+    {
+        return PauseManager.Instance.WaitWhilePausedAsync();
+    }
+
+    /// <summary>
+    /// Waits for the given duration in milliseconds, suspending the timer while paused.
+    /// </summary>
+    public static async Task DelayRespectingPause(int milliseconds, CancellationToken ct = default)
+    {
+        // Suspend here for the entire duration of any pause before starting the delay
+        await PauseManager.Instance.WaitWhilePausedAsync();
+        await Task.Delay(milliseconds, ct);
+    }
+}

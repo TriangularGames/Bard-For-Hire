@@ -26,6 +26,14 @@ public class UpgradeShopSlot : ShopSlot
         _data = null;
     }
 
+    private void Update()
+    {
+        if (_data != null && PlayerManager.Instance.GetCoinAmount() < _data.cost)
+        {
+            buy.interactable = false;
+        }
+    }
+
     public override void SelectSlot(bool select)
     {
         if (_data != null)
