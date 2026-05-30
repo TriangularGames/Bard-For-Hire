@@ -32,6 +32,10 @@ public class ItemShopSlot : ShopSlot
         {
             buy.interactable = false;
         }
+        else
+        {
+            buy.interactable = true;
+        }
     }
 
     public override void SelectSlot(bool select)
