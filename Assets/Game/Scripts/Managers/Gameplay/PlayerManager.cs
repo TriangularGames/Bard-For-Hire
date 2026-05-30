@@ -174,7 +174,7 @@ public class PlayerManager : Singleton<PlayerManager>
     public void RefreshItems()
     {
         itemsNotUsed.AddRange(itemsUsed);
-        itemsNotUsed.Clear();
+        itemsUsed.Clear();
     }
 
     /// <summary>
