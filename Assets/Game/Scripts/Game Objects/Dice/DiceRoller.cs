@@ -42,6 +42,7 @@ public class DiceRoller : MonoBehaviour
         }
 
         display.text = "Rolling die...";
+        AudioManager.Instance.PlayClip("DieRoll");
         await ShuffleDice(displayRoll, nat);
 
         if (modifier != 0 || nat == 20 || nat == 1)

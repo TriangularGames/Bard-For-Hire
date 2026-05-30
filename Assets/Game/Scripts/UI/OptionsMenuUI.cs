@@ -48,7 +48,13 @@ public class OptionsMenuUI : MonoBehaviour
     private void OnEnable()
     {
         Debug.Log("OptionsMenuUI enabled, updating UI with current settings.");
+        backButton.onClick.AddListener(() => AudioManager.Instance.Back());
         UpdateUIWithCurrentSettings();
+    }
+
+    private void OnDisable()
+    {
+        backButton.onClick.RemoveListener(() => AudioManager.Instance.Back());
     }
 
     /// <summary>

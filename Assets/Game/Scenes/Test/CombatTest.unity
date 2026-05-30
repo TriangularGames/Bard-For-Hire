@@ -4155,6 +4155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoteManager
   discardBtn: {fileID: 1451013656}
+  clearBtn: {fileID: 1770819332}
   attackBtn: {fileID: 133154867}
   ItemsSelected: []
   selectionLimit: 4
