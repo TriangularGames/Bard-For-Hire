@@ -25,7 +25,8 @@ public class ItemManager : MonoBehaviour
     private int itemsDiscarded = 0;
 
     // Max discards a player can make
-    public int MAXDiscards = 2;
+    public static int MAXDiscards = 2;
+    private int discardsLeft = MAXDiscards;
 
     public ItemPool itemPool;
 
@@ -88,8 +89,8 @@ public class ItemManager : MonoBehaviour
         }
         UpdateSelectionText();
         ItemsSelected = new List<GameObject>();
-        MAXDiscards = 2;
-        discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard x" + MAXDiscards.ToString();
+        discardsLeft = MAXDiscards;
+        discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard x" + discardsLeft.ToString();
 # if UNITY_EDITOR
         Debug.Assert(itemPool = GameObject.FindWithTag("ItemPool").GetComponent<ItemPool>(), "ItemManager requires ItemPool");
 #else
@@ -99,7 +100,7 @@ public class ItemManager : MonoBehaviour
 
     private void Update()
     {
-        if (MAXDiscards != 0)
+        if (discardsLeft != 0)
         {
             discardBtn.interactable = true;
         }
@@ -124,7 +125,7 @@ public class ItemManager : MonoBehaviour
     public void DiscardItems()
     {
         itemsDiscarded = 0;
-        if (MAXDiscards != 0)
+        if (discardsLeft != 0)
         {
             if (ItemsSelected.Count > 0)
             {
@@ -147,8 +148,8 @@ public class ItemManager : MonoBehaviour
                 itemPool.RemoveAll(ItemsSelected);
                 ItemsSelected.Clear();
                 GrabNewItems(itemsDiscarded);
-                MAXDiscards--;
-                discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard x" + MAXDiscards.ToString();
+                discardsLeft--;
+                discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard x" + discardsLeft.ToString();
             }
         }
         UpdateSelectionText();
