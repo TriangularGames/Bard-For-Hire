@@ -136,7 +136,7 @@ public class DiceRoller : MonoBehaviour
         }
         else
         {
-            main.color = Color.black;
+            main.color = Color.white;
             displayCrit.text = "";
         }
         await PauseExtensions.DelayRespectingPause(Mathf.RoundToInt(revealPause * 800));

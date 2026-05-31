@@ -194,6 +194,19 @@ public class UpgradeFightingManager : MonoBehaviour
                 bonuses.Add(new DamageBonus { source = "Shining Star", amount = 2 });
             }
         }
+        //this is for the upgrade "Timed Swings" (Odd slots gain +1, Even slots gain +2)
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.TimedSwings))
+        {
+            if (slotIndex % 2 == 0)
+            {
+                damage += 0;
+            }
+            else
+            {
+                damage += 2;
+                bonuses.Add(new DamageBonus { source = "Timed Swings", amount = 2 });
+            }
+        }
         //this is for the upgrade "Flow State" (Each action does extra damage equal to 10% of previous round's damage)
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.FlowState))
         {
@@ -205,21 +218,9 @@ public class UpgradeFightingManager : MonoBehaviour
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.PerfectBattle))
         {
             float mult = 1f + (successStreak * 0.1f);
-            damage += Mathf.RoundToInt(item.Damage * (mult - 1f));
-            bonuses.Add(new DamageBonus { source = "Perfect Battle", amount = Mathf.RoundToInt(item.Damage * (mult - 1f)) });
-        }
-        //this is for the upgrade "Timed Swings" (Odd slots gain +1, Even slots gain +2)
-        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.TimedSwings))
-        {
-            if(slotIndex % 2 == 0)
-            {
-                damage += 0;
-            }
-            else
-            {
-                damage += 2;
-                bonuses.Add(new DamageBonus { source = "Timed Swings", amount = 2 });
-            }
+            int before = damage;
+            damage = Mathf.RoundToInt(damage * mult);
+            bonuses.Add(new DamageBonus { source = "Perfect Battle", amount = damage - before });
         }
         //this is for the upgrade "Consistency" (Whenever the first 3 actions played is the same as the last turn, those notes gain 50% damage)
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.Consistency))
@@ -230,8 +231,9 @@ public class UpgradeFightingManager : MonoBehaviour
                 {
                     if (previousActions[slotIndex] == item.ItemType)
                     {
-                        damage += Mathf.RoundToInt(item.Damage * 0.5f);
-                        bonuses.Add(new DamageBonus { source = "Consistency", amount = Mathf.RoundToInt(item.Damage * 0.5f) });
+                        int before = damage;
+                        damage = Mathf.RoundToInt(damage * 1.5f);
+                        bonuses.Add(new DamageBonus { source = "Consistency", amount = damage - before });
                     }
                 }
             }
@@ -240,8 +242,9 @@ public class UpgradeFightingManager : MonoBehaviour
          {
              if(slotIndex == luckySlot)
              {
-                 damage += Mathf.RoundToInt(item.Damage * 0.25f);
-                 bonuses.Add(new DamageBonus { source = "Lucky Strike", amount = Mathf.RoundToInt(item.Damage * 0.25f) });
+                    int before = damage;
+                    damage = Mathf.RoundToInt(damage * 1.25f);
+                    bonuses.Add(new DamageBonus { source = "Lucky Strike", amount = damage - before });
                 }
          }
         }
