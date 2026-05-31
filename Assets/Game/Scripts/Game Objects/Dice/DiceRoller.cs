@@ -66,7 +66,7 @@ public class DiceRoller : MonoBehaviour
             await PauseManager.Instance.WaitWhilePausedAsync();
 
             target.text = UnityEngine.Random.Range(1, 21).ToString();
-            await Task.Delay(Mathf.RoundToInt(interval * 1000));
+            await PauseExtensions.DelayRespectingPause(Mathf.RoundToInt(interval * 1000));
             timed += interval;
 
             if (timed > changeyDuration * 0.5f) {

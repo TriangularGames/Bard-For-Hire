@@ -227,7 +227,7 @@ public class ItemManager : MonoBehaviour
             await Task.Yield();
         }
 
-        await Task.Delay(300);
+        await PauseExtensions.DelayRespectingPause(300);
 
         await GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().CalculateScore(itemData);
     }
