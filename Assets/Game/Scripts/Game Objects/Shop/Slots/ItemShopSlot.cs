@@ -59,3 +59,16 @@ public class ItemShopSlot : ShopSlot
         ClearInfo();
     }
 }
+
+/// <summary>
+/// Event for when an Item is purchased
+/// </summary>
+public struct ItemBoughtEvent
+{
+    public ItemData data;
+
+    public ItemBoughtEvent(ItemData _data)
+    {
+        data = _data;
+    }
+}

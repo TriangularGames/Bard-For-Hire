@@ -274,3 +274,8 @@ public class PlayerManager : Singleton<PlayerManager>
         return itemInventory[Random.Range(0, itemInventory.Count)];
     }
 }
+
+/// <summary>
+/// Event for when Item is added to Inventory
+/// </summary>
+public struct RefreshInventoryDisplayEvent { }

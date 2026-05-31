@@ -15,7 +15,6 @@ public abstract class ShopSlot : MonoBehaviour, IPointerDownHandler
     private void Start()
     {
         buy.onClick.AddListener(Purchase);
-        //buy.gameObject.SetActive(false);
         _Purchased = false;
     }
 
@@ -44,6 +43,18 @@ public abstract class ShopSlot : MonoBehaviour, IPointerDownHandler
     public void Deselect()
     {
         _isSelected = false;
-        //buy.gameObject.SetActive(_isSelected);
+    }
+}
+
+/// <summary>
+/// Event for when an Item in the shop is Selected
+/// </summary>
+public struct ItemSelectedEvent
+{
+    public EntityId id;
+
+    public ItemSelectedEvent(EntityId _id)
+    {
+        id = _id;
     }
 }

@@ -58,7 +58,18 @@ public class ConsumableShopSlot : ShopSlot
         EventBus.Publish(new ConsumableBoughtEvent(_data));
         _Purchased = true;
         ClearInfo();
-    }
+    } 
+}
 
-    
+/// <summary>
+/// Event for when a Consumable is purchased
+/// </summary>
+public struct ConsumableBoughtEvent
+{
+    public ConsumableData data;
+
+    public ConsumableBoughtEvent(ConsumableData _data)
+    {
+        data = _data;
+    }
 }

@@ -68,3 +68,16 @@ public class UpgradeShopSlot : ShopSlot
         }
     }
 }
+
+/// <summary>
+/// Event for when an Upgrade is purchased
+/// </summary>
+public struct UpgradeBoughtEvent
+{
+    public UpgradeData data;
+
+    public UpgradeBoughtEvent(UpgradeData _data)
+    {
+        data = _data;
+    }
+}

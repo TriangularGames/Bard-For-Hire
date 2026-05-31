@@ -319,3 +319,16 @@ public class ShopManager : MonoBehaviour
         MenuManager.Instance.SwitchState(new OptionsMenuState());
     }
 }
+
+/// <summary>
+/// Event for when a Purchase is made
+/// </summary>
+public struct PurchaseEvent
+{
+    public int _amount;
+
+    public PurchaseEvent(int amount)
+    {
+        _amount = amount;
+    }
+}

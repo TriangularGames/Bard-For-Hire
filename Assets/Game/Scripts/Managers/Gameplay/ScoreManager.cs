@@ -293,8 +293,27 @@ public class ScoreManager : MonoBehaviour
     }
 }
 
+/// <summary>
+/// When Scoring has started
+/// </summary>
 public struct ScoringStartedEvent { }
 
+/// <summary>
+/// Event for when Scoring is fully Completed, and transitioning to next Round
+/// </summary>
+public struct ScoringCompletedEvent
+{
+    public int count;
+
+    public ScoringCompletedEvent(int _count)
+    {
+        count = _count;
+    }
+}
+
+/// <summary>
+/// When Scoring has ended, prior to the Round or Victory/GameOver transitions
+/// </summary>
 public struct ScoringEndedEvent { }
 
 public struct VictoryEvent
@@ -306,3 +325,26 @@ public struct VictoryEvent
         textContent = _textContent;
     }
 }
+
+/// <summary>
+/// Event for when an Item is used either Successfully or not
+/// </summary>
+public struct ItemUsedEvent
+{
+    public ItemData item;
+
+    public ItemUsedEvent(ItemData _item)
+    {
+        item = _item;
+    }
+}
+
+/// <summary>
+/// Event for when an Attack Hits
+/// </summary>
+public struct HitEvent { }
+
+/// <summary>
+/// Event for when an Attack Misses
+/// </summary>
+public struct MissEvent { }

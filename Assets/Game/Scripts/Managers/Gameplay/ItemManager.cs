@@ -259,3 +259,16 @@ public class ItemManager : MonoBehaviour
         UpdateSelectionText();
     }
 }
+
+/// <summary>
+/// Event for when an Item is Discarded
+/// </summary>
+public struct ItemDiscardedEvent
+{
+    public ItemData item;
+
+    public ItemDiscardedEvent(ItemData _item)
+    {
+        item = _item;
+    }
+}
