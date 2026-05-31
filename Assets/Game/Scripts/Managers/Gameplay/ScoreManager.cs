@@ -136,10 +136,10 @@ public class ScoreManager : MonoBehaviour
             Debug.Log($"{item.name} was played!");
             AudioManager.Instance.PlayClip("Success");
             itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 1f, 0f, 1f);
-            
-            await Task.Delay(300 * GameSpeed);
+
+            await PauseExtensions.DelayRespectingPause(300 * GameSpeed);
             EventBus.Publish<HitEvent>(new HitEvent());
-            await Task.Delay(100 * GameSpeed);
+            await PauseExtensions.DelayRespectingPause(100 * GameSpeed);
             int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex, out var bonuses);
             await itemDisplay.GetComponent<ItemController>().ShowDamageBonuses(bonuses, item.Damage);
             UpgradeFightingManager.Instance.SuccessfulAction(item, totalDamage);
@@ -171,7 +171,7 @@ public class ScoreManager : MonoBehaviour
             itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(1f, 0f, 0f, 1f);
             UpgradeFightingManager.Instance.FailedAction();
             EventBus.Publish<MissEvent>(new MissEvent());
-            await Task.Delay(100 * GameSpeed);
+            await PauseExtensions.DelayRespectingPause(100 * GameSpeed);
 
             if (UpgradeFightingManager.Instance.CanUseSecondChance())
             {
@@ -190,7 +190,7 @@ public class ScoreManager : MonoBehaviour
         }
 
         // Wait for possible animations
-        await Task.Delay(800 * GameSpeed);
+        await PauseExtensions.DelayRespectingPause(800 * GameSpeed);
         if ((curItem + 1) == pendingItems.Count)
         {
             FinalizeScore();

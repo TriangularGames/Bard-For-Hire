@@ -1,4 +1,4 @@
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -12,7 +12,7 @@ public class PauseManager : Singleton<PauseManager>
     /// </summary>
     public bool IsPaused = false;
 
-    // Renewed each time the game unpauses � awaiting this suspends tasks while paused
+    // Renewed each time the game unpauses — awaiting this suspends tasks while paused
     private TaskCompletionSource<bool> _pauseTCS = new TaskCompletionSource<bool>();
 
     public override void Awake()
@@ -45,7 +45,7 @@ public class PauseManager : Singleton<PauseManager>
         Time.timeScale = 0;
         IsPaused = true;
 
-        // Replace with a fresh incomplete TCS � tasks awaiting this will now suspend
+        // Replace with a fresh incomplete TCS — tasks awaiting this will now suspend
         _pauseTCS = new TaskCompletionSource<bool>();
     }
 
@@ -55,14 +55,16 @@ public class PauseManager : Singleton<PauseManager>
     /// <param name="eventData">The event data associated with hiding the pause menu. Currently unused but can be extended for future use.</param>
     private void OnHidePauseMenu(HidePauseMenuEvent eventData)
     {
-        // Code to hide the Pause Menu
         TogglePauseMenuVisibility(false);
-
-        // Game is unpaused!
         Time.timeScale = 1;
         IsPaused = false;
 
+        var tcs = _pauseTCS;
+        // ✅ Create a new completed TCS BEFORE resolving the old one
+        // so the next pause gets a fresh incomplete TCS to block on
+        _pauseTCS = new TaskCompletionSource<bool>();
         _pauseTCS.TrySetResult(true);
+        tcs.TrySetResult(true); // resume any currently waiting tasks
     }
     /// <summary>
     /// Await this in any async task to suspend execution while the game is paused.
@@ -125,8 +127,16 @@ public static class PauseExtensions
     /// </summary>
     public static async Task DelayRespectingPause(int milliseconds, CancellationToken ct = default)
     {
-        // Suspend here for the entire duration of any pause before starting the delay
         await PauseManager.Instance.WaitWhilePausedAsync();
-        await Task.Delay(milliseconds, ct);
+
+        // ✅ Changed: breaks delay into 50ms chunks so pause can interrupt mid-delay
+        int elapsed = 0;
+        const int step = 50;
+        while (elapsed < milliseconds)
+        {
+            await Task.Delay(Mathf.Min(step, milliseconds - elapsed), ct);
+            elapsed += step;
+            await PauseManager.Instance.WaitWhilePausedAsync();
+        }
     }
 }

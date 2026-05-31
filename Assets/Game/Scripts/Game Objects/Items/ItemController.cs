@@ -27,9 +27,9 @@ public class ItemController : MonoBehaviour
         {
             if (bonus.amount <= 0) continue;
 
-            await Task.Delay(400);
+            await PauseExtensions.DelayRespectingPause(400);
             damageTxt.text = ("Dmg ") + baseD + $"  <color=yellow>+ {bonus.amount} {bonus.source}</color>";
-            await Task.Delay(700);
+            await PauseExtensions.DelayRespectingPause(700);
             baseD += bonus.amount;
             SetDamageTxtRaw(baseD);
         }
