@@ -1,5 +1,50 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1424688150850236987
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2317323156817108445}
+  - component: {fileID: 1780633172400774760}
+  m_Layer: 0
+  m_Name: DmgTxtPool
+  m_TagString: DmgTxtPool
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2317323156817108445
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424688150850236987}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6205999567791345837}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1780633172400774760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1424688150850236987}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab616c879b47d534e99ff4307e66ef1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectPool
+  Prefab: {fileID: 4620715596389784687, guid: 5109dd767d9c08f4ebf5a5e6773dedff, type: 3}
 --- !u!1 &3994112051088334818
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,6 +352,7 @@ Transform:
   - {fileID: 7582600041672163372}
   - {fileID: 64141736750236527}
   - {fileID: 2752547418243406191}
+  - {fileID: 2317323156817108445}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6256493060430515717
@@ -324,6 +370,7 @@ MonoBehaviour:
   enemyData: {fileID: 0}
   delayTime: 0.1
   healthTxt: {fileID: 7191427598482177889}
+  dmgTxtPool: {fileID: 1780633172400774760}
   EnemySprite: {fileID: 1508635442209555901}
   anim: {fileID: 660011063593563699}
   indicator: {fileID: 4472811083910983945}

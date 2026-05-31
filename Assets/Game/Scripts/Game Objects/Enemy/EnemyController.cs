@@ -12,6 +12,7 @@ public class EnemyController : MonoBehaviour
     private int scaledHealth = -1;
     private int health;
     [SerializeField] private TMP_Text healthTxt;
+    [SerializeField] private ObjectPool dmgTxtPool;
 
     [SerializeField] private SpriteRenderer EnemySprite;
     [SerializeField] private Animator anim;
@@ -88,11 +89,18 @@ public class EnemyController : MonoBehaviour
             EnemySprite.material.color = Color.white;
             yield return new WaitForSeconds(delayTime);
 
-            // TODO: object pool or change to particle effect perhaps?
-            var txt = Instantiate(AssetManager.Instance.GetPrefab("DmgTxt"), transform.position, Quaternion.identity, transform);
-            txt.GetComponent<TMP_Text>().text = "-1";
+            // Spawn Damage Text via ObjectPool
+            GameObject text = dmgTxtPool.GetObject();
+            if (text.transform.parent != transform)
+            {
+                text.transform.SetParent(transform);
+            }
+            text.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
+            text.GetComponent<DestroyText>().Setup(dmgTxtPool);
+
             health -= 1;
             SetDamageTxt();
+
             if (health <= 0)
             {
                 Debug.Log("Enemy killed.");
@@ -127,12 +135,14 @@ public class EnemyController : MonoBehaviour
                 resistTxt.GetComponent<TMP_Text>().text = "Weak";
             }
 
-            // TODO: object pool or change to particle effect perhaps?
-            var txt = Instantiate(AssetManager.Instance.GetPrefab("DmgTxt"), transform.position, Quaternion.identity, transform);
-            txt.GetComponent<TMP_Text>().color = Color.orange;
-            txt.GetComponent<TMP_Text>().text = "-1";
+            // Spawn Damage Text via ObjectPool
+            var text = dmgTxtPool.GetObject();
+            text.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
+            text.GetComponent<DestroyText>().Setup(dmgTxtPool);
+
             health -= 1;
             SetDamageTxt();
+
             if (health <= 0)
             {
                 Debug.Log("Enemy killed.");
@@ -166,12 +176,14 @@ public class EnemyController : MonoBehaviour
                 resistTxt.GetComponent<TMP_Text>().text = "Resist";
             }
 
-            // TODO: object pool or change to particle effect perhaps?
-            var txt = Instantiate(AssetManager.Instance.GetPrefab("DmgTxt"), transform.position, Quaternion.identity, transform);
-            txt.GetComponent<TMP_Text>().color = Color.grey;
-            txt.GetComponent<TMP_Text>().text = "-1";
+            // Spawn Damage Text via ObjectPool
+            var text = dmgTxtPool.GetObject();
+            text.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
+            text.GetComponent<DestroyText>().Setup(dmgTxtPool);
+
             health -= 1;
             SetDamageTxt();
+
             if (health <= 0)
             {
                 Debug.Log("Enemy killed.");

@@ -2,15 +2,27 @@ using UnityEngine;
 
 public class DestroyText : MonoBehaviour
 {
-    public float DestroyTime = 1.0f;
-    public Vector2 Offset = new Vector2(0, 1.5f);
-    public Vector2 RandomizeIntensity = new Vector2(1f, 0);
+    private ObjectPool _pool;
 
-    void Start()
+    public Vector3 Offset = new Vector3(0f, 0f, 0f);
+    public Vector3 Slide = new Vector3(0, 0.01f, 0);
+
+    public void Setup(ObjectPool pool)
     {
-        Destroy(gameObject, DestroyTime);
-        GetComponent<RectTransform>().anchoredPosition += Offset;
-        GetComponent<RectTransform>().anchoredPosition += new Vector2(Random.Range(-RandomizeIntensity.x, RandomizeIntensity.x),
-            Random.Range(-RandomizeIntensity.y, RandomizeIntensity.y));
+        _pool = pool;
+        // TODO: fix the position to actually be near the health
+        //transform.localPosition = Offset;
+    }
+
+    private void Update()
+    {
+        // TODO: actually get the text to slide
+        // worked before adding pooling, now refuses to work
+        //transform.localPosition += Slide;
+    }
+
+    public void ReturnToPool()
+    {
+        _pool.ReturnObject(gameObject);
     }
 }
