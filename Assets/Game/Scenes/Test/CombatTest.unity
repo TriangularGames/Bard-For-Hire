@@ -12035,6 +12035,10 @@ PrefabInstance:
       propertyPath: 'memberTypes.Array.data[4]'
       value: Toddler
       objectReference: {fileID: 0}
+    - target: {fileID: 6210061080180698499, guid: 1da358517fa78d649a6456ded77d3dd8, type: 3}
+      propertyPath: roundData.dailyHealthMultiplier
+      value: 1.15
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

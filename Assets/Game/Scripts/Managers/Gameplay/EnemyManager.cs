@@ -138,7 +138,6 @@ public class EnemyManager : Singleton<EnemyManager>
         }
         currentDay++;
         isBossDay = (currentDay % daysTilBoss == 0 && currentDay != 0);
-        dailyMult = Mathf.Pow(roundData.dailyHealthMultiplier, currentDay);
         GenerateRound();
         LookAhead();
     }
