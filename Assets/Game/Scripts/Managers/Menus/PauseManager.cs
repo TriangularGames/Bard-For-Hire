@@ -60,8 +60,7 @@ public class PauseManager : Singleton<PauseManager>
         IsPaused = false;
 
         var tcs = _pauseTCS;
-        // ✅ Create a new completed TCS BEFORE resolving the old one
-        // so the next pause gets a fresh incomplete TCS to block on
+        // Create a new completed TCS BEFORE resolving the old one so the next pause gets a fresh incomplete TCS to block on
         _pauseTCS = new TaskCompletionSource<bool>();
         _pauseTCS.TrySetResult(true);
         tcs.TrySetResult(true); // resume any currently waiting tasks
@@ -129,7 +128,7 @@ public static class PauseExtensions
     {
         await PauseManager.Instance.WaitWhilePausedAsync();
 
-        // ✅ Changed: breaks delay into 50ms chunks so pause can interrupt mid-delay
+        // Breaks delay into 50ms chunks so pause can interrupt mid-delay instead of pre-delay
         int elapsed = 0;
         const int step = 50;
         while (elapsed < milliseconds)
