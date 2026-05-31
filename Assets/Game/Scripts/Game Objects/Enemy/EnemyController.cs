@@ -13,10 +13,15 @@ public class EnemyController : MonoBehaviour
     private int health;
     [SerializeField] private TMP_Text healthTxt;
     [SerializeField] private ObjectPool dmgTxtPool;
+    [SerializeField] private ObjectPool dmgDisplayPool;
 
     [SerializeField] private SpriteRenderer EnemySprite;
     [SerializeField] private Animator anim;
     [SerializeField] private GameObject indicator;
+
+    [Header("Flash Flags")]
+    private bool Weak = false;
+    private bool Resist = false;
 
     public int GetHealth() {  return health; }
 
@@ -67,27 +72,64 @@ public class EnemyController : MonoBehaviour
         {
             flashTimes = e.damage;
             AudioManager.Instance.PlayClip("Hit");
-            if (e.weakness)
-            {
-                StartCoroutine("WeakFlash");
-            }
-            else if (e.resistance)
-            {
-                StartCoroutine("ResistFlash");
-            }
-            else
-            {
-                StartCoroutine("Flash");
-            }
+
+            Weak = e.weakness;
+            Resist = e.resistance;
+            
+            StartCoroutine("Flash");
         }
     }
 
     private IEnumerator Flash()
     {
+        // Set flashColor based on if Weak, Resist, or Normal
+        if (Weak)
+        {
+            flashColor = Color.orange;
+        }
+        if (Resist)
+        {
+            flashColor = Color.gray;
+        }
+        if (!Weak && !Resist)
+        {
+            flashColor = Color.red;
+        }
+
         for (int i = 0; i < flashTimes; i++)
         {
             EnemySprite.material.color = Color.white;
             yield return new WaitForSeconds(delayTime);
+
+            // If this is the first instance
+            if (i == 0)
+            {
+                // Check if damage taken is a Weakness or a Resistance
+                if (Weak)
+                {
+                    GameObject weak = dmgDisplayPool.GetObject();
+                    if (weak.transform.parent != transform)
+                    {
+                        weak.transform.SetParent(transform);
+                    }
+                    weak.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
+                    weak.GetComponent<DestroyText>().Setup(dmgDisplayPool);
+                    weak.GetComponent<TMP_Text>().color = flashColor;
+                    weak.GetComponent<TMP_Text>().text = "Weak";
+                }
+                if (Resist)
+                {
+                    GameObject resist = dmgDisplayPool.GetObject();
+                    if (resist.transform.parent != transform)
+                    {
+                        resist.transform.SetParent(transform);
+                    }
+                    resist.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
+                    resist.GetComponent<DestroyText>().Setup(dmgDisplayPool);
+                    resist.GetComponent<TMP_Text>().color = flashColor;
+                    resist.GetComponent<TMP_Text>().text = "Resist";
+                }
+            }
 
             // Spawn Damage Text via ObjectPool
             GameObject text = dmgTxtPool.GetObject();
@@ -97,6 +139,7 @@ public class EnemyController : MonoBehaviour
             }
             text.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
             text.GetComponent<DestroyText>().Setup(dmgTxtPool);
+            text.GetComponent<TMP_Text>().color = flashColor;
 
             health -= 1;
             SetDamageTxt();
@@ -112,89 +155,6 @@ public class EnemyController : MonoBehaviour
             }
 
             EnemySprite.material.color = flashColor;
-            yield return new WaitForSeconds(delayTime);
-        }
-        EnemySprite.material.color = Color.white;
-        yield return null;
-    }
-
-    // Flash but wth ORANGE text and flash
-    private IEnumerator WeakFlash()
-    {
-        for (int i = 0; i < flashTimes; i++)
-        {
-            EnemySprite.material.color = Color.white;
-            yield return new WaitForSeconds(delayTime);
-
-            // If this is the first instance, showcase this damage is due to Weakness
-            if (i == 0)
-            {
-                // TODO: adjust position of spawned text
-                var resistTxt = Instantiate(AssetManager.Instance.GetPrefab("DmgTxt"), transform.position, Quaternion.identity, transform);
-                resistTxt.GetComponent<TMP_Text>().color = Color.orange;
-                resistTxt.GetComponent<TMP_Text>().text = "Weak";
-            }
-
-            // Spawn Damage Text via ObjectPool
-            var text = dmgTxtPool.GetObject();
-            text.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
-            text.GetComponent<DestroyText>().Setup(dmgTxtPool);
-
-            health -= 1;
-            SetDamageTxt();
-
-            if (health <= 0)
-            {
-                Debug.Log("Enemy killed.");
-                EventBus.Publish(new EnemyDefeatedEvent(gameObject));
-            }
-            else
-            {
-                anim.SetTrigger("Hit");
-            }
-
-            EnemySprite.material.color = Color.orange;
-            yield return new WaitForSeconds(delayTime);
-        }
-        EnemySprite.material.color = Color.white;
-        yield return null;
-    }
-
-    private IEnumerator ResistFlash()
-    {
-        for (int i = 0; i < flashTimes; i++)
-        {
-            EnemySprite.material.color = Color.white;
-            yield return new WaitForSeconds(delayTime);
-
-            // If this is the first instance, showcase this is being Resisted
-            if (i == 0)
-            {
-                // TODO: adjust position of spawned text
-                var resistTxt = Instantiate(AssetManager.Instance.GetPrefab("DmgTxt"), transform.position, Quaternion.identity, transform);
-                resistTxt.GetComponent<TMP_Text>().color = Color.grey;
-                resistTxt.GetComponent<TMP_Text>().text = "Resist";
-            }
-
-            // Spawn Damage Text via ObjectPool
-            var text = dmgTxtPool.GetObject();
-            text.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
-            text.GetComponent<DestroyText>().Setup(dmgTxtPool);
-
-            health -= 1;
-            SetDamageTxt();
-
-            if (health <= 0)
-            {
-                Debug.Log("Enemy killed.");
-                EventBus.Publish(new EnemyDefeatedEvent(gameObject));
-            }
-            else
-            {
-                anim.SetTrigger("Hit");
-            }
-
-            EnemySprite.material.color = Color.grey;
             yield return new WaitForSeconds(delayTime);
         }
         EnemySprite.material.color = Color.white;

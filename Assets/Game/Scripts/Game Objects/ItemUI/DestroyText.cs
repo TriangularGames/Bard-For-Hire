@@ -4,21 +4,18 @@ public class DestroyText : MonoBehaviour
 {
     private ObjectPool _pool;
 
-    public Vector3 Offset = new Vector3(0f, 0f, 0f);
-    public Vector3 Slide = new Vector3(0, 0.01f, 0);
+    public Vector3 Offset = new Vector3(0.6f, 1f, 0);
+    public Vector3 Slide = new Vector3(0, 0.09f, 0);
 
     public void Setup(ObjectPool pool)
     {
         _pool = pool;
-        // TODO: fix the position to actually be near the health
-        //transform.localPosition = Offset;
+        transform.localPosition = Offset;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        // TODO: actually get the text to slide
-        // worked before adding pooling, now refuses to work
-        //transform.localPosition += Slide;
+        transform.localPosition += Slide;
     }
 
     public void ReturnToPool()
