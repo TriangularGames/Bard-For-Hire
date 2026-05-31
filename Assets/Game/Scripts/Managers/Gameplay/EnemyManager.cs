@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 public class EnemyManager : Singleton<EnemyManager>
 {
@@ -8,22 +9,30 @@ public class EnemyManager : Singleton<EnemyManager>
     /// Enemy types available for this Performance
     /// </summary>
     [SerializeField] List<string> memberTypes;
-    [SerializeField] public int roundsTilBoss = 3;
-    public bool isBossRound;
+    [SerializeField] public int daysTilBoss = 3;
+    public bool isBossDay;
+    public bool isBossGone;
     public EnemyData bossData;
     public ItemType disabledItem;
     public bool hasDisabled;
+    public float amountOff = 0.15f;
+    private float healthMult = 1f;
+    private float dailyMult = 1f;
+    private float TotalMult => healthMult * dailyMult;
+
+    /// <summary>
+    /// Default Starting Round Data
+    /// </summary>
+    [SerializeField] private RoundData DEFAULTRoundData;
 
     /// <summary>
     /// Number of Enemies for the encounter
     /// </summary>
-    /// 
-
     [SerializeField] private RoundData roundData;
-
+      
     private List<EnemyData> nextEncounter = new List<EnemyData>();
-
-    public int currentRound = 0;
+    private int bossesKilled;
+    public int currentDay = 0;
 
     /// <summary>
     /// Current active Enemies
@@ -39,6 +48,21 @@ public class EnemyManager : Singleton<EnemyManager>
     /// Enemy Display Objects
     /// </summary>
     public List<GameObject> enemyDisplays;
+
+    /// <summary>
+    /// Reset EnemyManager on Game End
+    /// </summary>
+    public void Reset()
+    {
+        currentDay = 0;
+        bossesKilled = 0;
+        healthMult = 1f;
+        dailyMult = 1f;
+        enemies.Clear();
+        roundData = DEFAULTRoundData;
+        isBossDay = false;
+        isBossGone = false;
+}
 
     private void OnEnable()
     {
@@ -63,7 +87,7 @@ public class EnemyManager : Singleton<EnemyManager>
     private void CombatSetup(EnterCombatEvent @event)
     {
         hasDisabled = false;
-
+        isBossGone = isBossDay;
         // generate encounter first
         if (nextEncounter.Count == 0)
         {
@@ -77,8 +101,8 @@ public class EnemyManager : Singleton<EnemyManager>
     {
         int index = -1;
         EnemyController enemyC = e.enemy.GetComponent<EnemyController>();
-        PlayerManager.Instance.Coins += enemyC.enemyData.coinReward;
-        PlayerManager.Instance.SetCoinText();
+
+        EventBus.Publish<MoneyEarnedEvent>(new MoneyEarnedEvent(enemyC.enemyData.coinReward, enemyC.enemyData.Name));
 
         if (enemies.Contains(e.enemy))
         {
@@ -102,8 +126,15 @@ public class EnemyManager : Singleton<EnemyManager>
 
     private void ShopSetup(EnterShopEvent @event)
     {
-        currentRound++;
-        isBossRound = (currentRound % roundsTilBoss == 0 && currentRound != 0);
+
+        if (isBossGone)
+        {
+            bossesKilled++;
+            healthMult *= roundData.bossVictoryMultiplier;
+        }
+        currentDay++;
+        isBossDay = (currentDay % daysTilBoss == 0 && currentDay != 0);
+        dailyMult = Mathf.Pow(roundData.dailyHealthMultiplier, currentDay);
         GenerateRound();
         LookAhead();
     }
@@ -118,12 +149,12 @@ public class EnemyManager : Singleton<EnemyManager>
         nextEncounter.Clear();
         bossData = null;
 
-        if (isBossRound)
+        if (isBossDay)
         {
             List<EnemyData> list = new List<EnemyData>();
             foreach (EnemyData enemy in ResourceManager.Instance.EnemyData)
             {
-                if (enemy.isBoss)
+                if (enemy.isBoss & enemy.ShowUpThisDay(currentDay))
                 {
                     list.Add(enemy);
                 }
@@ -132,18 +163,48 @@ public class EnemyManager : Singleton<EnemyManager>
             nextEncounter.Add(bossData);
             return;
         }
+        float scaleHealth = Mathf.Pow(roundData.dailyHealthMultiplier, currentDay);
+        int minHealth = Mathf.RoundToInt(roundData.startMinTotalHealth * scaleHealth);
+        int maxHealth = Mathf.RoundToInt(roundData.startMaxTotalHealth * scaleHealth);
+        int attempts = 0;
+        int maxAttempts = 20;
 
-        int minHealth = roundData.startMinTotalHealth + (currentRound * roundData.startMinTotalHealth);
-        int maxHealth = roundData.startMaxTotalHealth + (currentRound * roundData.startMaxTotalHealth);
-        int targetHealth = Random.Range(minHealth, maxHealth + 1);
-        int remainingHealth = targetHealth;
+        while (attempts < maxAttempts)
+        {
+            attempts++;
+            List<EnemyData> attemptedGuys = MakeEncounter(minHealth, maxHealth);
+            if (attemptedGuys == null)
+            {
+                continue;
+            }
+            int totaScaledHealth = 0;
+            foreach (EnemyData enemyData in attemptedGuys)
+            {
+                totaScaledHealth += enemyData.GetScaledUpHealth(TotalMult);
+            }
+            int target = (minHealth + maxHealth) / 2;
+            float deviation = Mathf.Abs(totaScaledHealth - target) / (float)target;
 
-        while (remainingHealth > 0 && nextEncounter.Count < roundData.maxEnemies)
+            if (deviation <= amountOff)
+            {
+                nextEncounter = attemptedGuys;
+                return;
+            }
+        }
+
+    }
+
+    private List<EnemyData> MakeEncounter(int minBudget, int maxBudget) { 
+
+        List<EnemyData> encGuy = new List<EnemyData>();
+        int remainingHealth = Random.Range(minBudget, maxBudget + 1);
+
+        while (remainingHealth > 0 && encGuy.Count < roundData.maxEnemies)
         {
             List<EnemyData> affordableGuys = new List<EnemyData>();
             foreach (EnemyData enemy in ResourceManager.Instance.EnemyData)
             {
-                if (!enemy.isBoss & enemy.health <= remainingHealth)
+                if (!enemy.isBoss && enemy.ShowUpThisDay(currentDay) && enemy.GetScaledUpHealth(TotalMult) <= remainingHealth)
                     affordableGuys.Add(enemy);
             }
 
@@ -152,17 +213,21 @@ public class EnemyManager : Singleton<EnemyManager>
                 EnemyData cheapest = ResourceManager.Instance.EnemyData[0];
                 foreach (EnemyData enemy in ResourceManager.Instance.EnemyData)
                 {
-                    if (!enemy.isBoss & enemy.health < cheapest.health)
-                        cheapest = enemy;
+                    if (!enemy.isBoss & enemy.ShowUpThisDay(currentDay))
+                    {
+                        if (cheapest == null || enemy.GetScaledUpHealth(TotalMult) < cheapest.GetScaledUpHealth(TotalMult)) 
+                            cheapest = enemy;
+                    }
                 }
-                nextEncounter.Add(cheapest);
+                if (cheapest != null) encGuy.Add(cheapest);
                 break;
             }
 
             EnemyData chosen = affordableGuys[Random.Range(0, affordableGuys.Count)];
-            nextEncounter.Add(chosen);
-            remainingHealth -= chosen.health;
+            encGuy.Add(chosen);
+            remainingHealth -= chosen.GetScaledUpHealth(TotalMult);
         }
+        return encGuy.Count > 0 ? encGuy : null;
     }
 
     /// <summary>
@@ -180,13 +245,15 @@ public class EnemyManager : Singleton<EnemyManager>
             spawnPoints.Add(spawnPointHolder.transform.GetChild(c));
         }
 
+
         for (int i = 0; i < nextEncounter.Count; i++)
         {
             EnemyData data = nextEncounter[i];
             GameObject enemySpawned = AssetManager.Instance.Spawn("Enemy", spawnPoints[i]);
-            enemySpawned.GetComponent<EnemyController>().enemyData = data;
-
-            enemySpawned.GetComponent<EnemyController>().Setup();
+            EnemyController controller = enemySpawned.GetComponent<EnemyController>();
+            controller.enemyData = data;
+            controller.SetScaledHealth(data.GetScaledUpHealth(TotalMult));
+            controller.Setup();
             enemySpawned.name = data.name + " " + enemySpawned.GetEntityId();
 
             enemies.Add(enemySpawned);
@@ -195,24 +262,6 @@ public class EnemyManager : Singleton<EnemyManager>
             {
                enemies[0].GetComponent<EnemyController>().SetIndicator();
             }
-            //    int memberType = Random.Range(0, memberTypes.Count);
-            //    for (int a = 0; a < ResourceManager.Instance.EnemyData.Length; a++)
-            //    {
-            //        if (ResourceManager.Instance.EnemyData[a].name == memberTypes[memberType])
-            //        {
-            //            GameObject enemySpawned = AssetManager.Instance.Spawn("Enemy", spawnPoints[i]);
-            //            EnemyData data = ResourceManager.Instance.EnemyData[a];
-            //            enemySpawned.GetComponent<EnemyController>().enemyData = data;
-
-            //            enemySpawned.GetComponent<EnemyController>().Setup();
-            //            enemySpawned.name = data.name + " " + enemySpawned.GetEntityId();
-
-            //            enemies.Add(enemySpawned);
-            //        }
-            //    }
-            //}
-
-            //// Set indicator of First enemy On
 
         }
     }
@@ -244,8 +293,21 @@ public class EnemyManager : Singleton<EnemyManager>
             EnemyDisplay displayComponent = enemyDisplays[i].GetComponent<EnemyDisplay>();
 
             if (displayComponent != null)
-                displayComponent.Setup(nextEncounter[i]);
+                displayComponent.Setup(nextEncounter[i], nextEncounter[i].GetScaledUpHealth(TotalMult));
         }
     }
 
+}
+
+public struct MoneyEarnedEvent
+{
+    public int coinAmount;
+    // Reason being either Early Completion/Enemy Name
+    public string reason;
+
+    public MoneyEarnedEvent(int _coinAmount, string _reason)
+    {
+        coinAmount = _coinAmount;
+        reason = _reason;
+    }
 }

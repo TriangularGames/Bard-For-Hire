@@ -47,7 +47,6 @@ public class OptionsManager : Singleton<OptionsManager>
         base.Awake();
         if (audioMixer == null)
         {
-            //audioMixer = Resources.Load<AudioMixer>("Audio/AudioMixer");
             audioMixer = AudioManager.Instance.Master;
         }
         if (optionsMenuUI == null)
@@ -86,7 +85,7 @@ public class OptionsManager : Singleton<OptionsManager>
     /// </summary>
     private void LoadAudioSettings()
     {
-        MasterVolume = PlayerPrefs.GetFloat("masterVolume", 1.0f);
+        MasterVolume = PlayerPrefs.GetFloat("masterVolume", 0.5f);
         MusicVolume = PlayerPrefs.GetFloat("musicVolume", 1.0f);
         SfxVolume = PlayerPrefs.GetFloat("sfxVolume", 1.0f);
     }
@@ -155,7 +154,7 @@ public class OptionsManager : Singleton<OptionsManager>
 
     private void LoadGameplaySettings()
     {
-        gameSpeed = PlayerPrefs.GetInt("GameSpeed", 1);
+        gameSpeed = PlayerPrefs.GetInt("GameSpeed", 0);
     }
 
     public void SaveGameplaySettings(int GameSpeed)

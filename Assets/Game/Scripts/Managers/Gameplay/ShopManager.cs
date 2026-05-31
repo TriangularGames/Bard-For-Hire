@@ -7,6 +7,7 @@ public class ShopManager : MonoBehaviour
 {
     [Header("Shop Specific")]
     [SerializeField] Button rerollBtn;
+    [SerializeField] TMP_Text dayDisplay;
 
     [Header("Shop Loadout Limits")]
     private static int MAXItems = 4;
@@ -26,6 +27,7 @@ public class ShopManager : MonoBehaviour
 
     [Header("Upgrade Showcase Window")]
     [SerializeField] private UpgradePool upgradeDisplayPool;
+    [SerializeField] private TMP_Text upgradeLimit;
 
     [Header("Consumable Showcase Window")]
     [SerializeField] private Transform consumableWindow;
@@ -51,6 +53,7 @@ public class ShopManager : MonoBehaviour
     private void Start()
     {
         EventBus.Publish<EnterShopEvent>(new EnterShopEvent());
+        SetDayText();
         SetupShop();
         SetupUpgradeDisplay();
         SetupConsumableDisplay();
@@ -67,6 +70,11 @@ public class ShopManager : MonoBehaviour
         {
            rerollBtn.interactable= true;
         }
+    }
+
+    private void SetDayText()
+    {
+        dayDisplay.text = "Day " + GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().currentDay.ToString();
     }
 
     private ObjectRarity RollRarity()
@@ -182,6 +190,7 @@ public class ShopManager : MonoBehaviour
             foreach (UpgradeData upgrade in PlayerManager.Instance.upgradeInventory)
                 upgradeDisplayPool.BringEmIn(upgrade, SetupUpgradeDisplay);
         }
+        upgradeLimit.text = PlayerManager.Instance.upgradeInventory.Count + "/" + PlayerManager.Instance.MAXUpgrades;
     }
 
     private void SetupConsumableDisplay()
@@ -195,6 +204,7 @@ public class ShopManager : MonoBehaviour
                 GameObject obj = AssetManager.Instance.Spawn("Consumable", consumableWindow);
                 obj.GetComponent<ConsumableController>().consumableData = consumable;
                 obj.GetComponent<ConsumableController>().Setup();
+                obj.GetComponent<ConsumableController>().SetTextColor(Color.white);
                 Destroy(obj.GetComponent<ConsumableSelect>());
             }
         }
@@ -307,5 +317,18 @@ public class ShopManager : MonoBehaviour
     public void Options()
     {
         MenuManager.Instance.SwitchState(new OptionsMenuState());
+    }
+}
+
+/// <summary>
+/// Event for when a Purchase is made
+/// </summary>
+public struct PurchaseEvent
+{
+    public int _amount;
+
+    public PurchaseEvent(int amount)
+    {
+        _amount = amount;
     }
 }

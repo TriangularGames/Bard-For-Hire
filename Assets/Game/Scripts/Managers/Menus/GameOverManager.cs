@@ -23,6 +23,7 @@ public class GameOverManager : Singleton<GameOverManager>
     {
         // Code to show the Pause Menu
         ToggleGameOverMenuVisibility(true);
+        gameOverUI.SetDayText();
 
         // Game is paused!
         Time.timeScale = 0;

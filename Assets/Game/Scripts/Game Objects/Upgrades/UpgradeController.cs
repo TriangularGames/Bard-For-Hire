@@ -22,6 +22,11 @@ public class UpgradeController : MonoBehaviour
         SetName();
     }
 
+    public void SetTextColor(Color color)
+    {
+        nameTxt.color = color;
+    }
+
     public void SetSelected(bool selected)
     {
         isSelected = selected;

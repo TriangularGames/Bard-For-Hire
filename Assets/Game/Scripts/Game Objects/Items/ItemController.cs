@@ -27,9 +27,9 @@ public class ItemController : MonoBehaviour
         {
             if (bonus.amount <= 0) continue;
 
-            await Task.Delay(400);
-            damageTxt.text = ("ATk ") + baseD + $"  <color=yellow>+ {bonus.amount} {bonus.source}</color>";
-            await Task.Delay(700);
+            await PauseExtensions.DelayRespectingPause(400);
+            damageTxt.text = ("Dmg ") + baseD + $"  <color=yellow>+ {bonus.amount} {bonus.source}</color>";
+            await PauseExtensions.DelayRespectingPause(700);
             baseD += bonus.amount;
             SetDamageTxtRaw(baseD);
         }
@@ -37,7 +37,7 @@ public class ItemController : MonoBehaviour
 
     private void SetDamageTxtRaw(int value)
     {
-        damageTxt.text = ("ATk ") + value.ToString();
+        damageTxt.text = ("Dmg ") + value.ToString();
     }
 
     private void SetSprite()
@@ -61,13 +61,13 @@ public class ItemController : MonoBehaviour
         }
         else
         {
-            damageTxt.text = "ATk " + itemData.Damage.ToString();
+            damageTxt.text = "Dmg " + itemData.Damage.ToString();
         }
         
     }
 
     private void SetPlayableTxt()
     {
-        playableText.text = "D (" + itemData.Playable.ToString() + ")";
+        playableText.text = "Roll (" + itemData.Playable.ToString() + ")";
     }
 }

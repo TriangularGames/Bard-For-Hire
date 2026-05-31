@@ -17,9 +17,27 @@ public class EnemyData : ScriptableObject
     [SerializeField] public string Description;
     [SerializeField] public bool isBoss;
     [SerializeField] public BossAbilities ability;
+    [SerializeField] public int minDay = 0;
+    [SerializeField] public int maxDay = 0;
 
     [Header("Additional Bonus")]
     [SerializeField] bool hasBonus;
     [SerializeField] int bonusStat;
     [SerializeField] bool isMultiplier;
+
+    public int GetScaledUpHealth(float healthMult)
+    {
+        return Mathf.RoundToInt(health * healthMult);
+    }
+
+    public bool ShowUpThisDay(int day)
+    {
+        if (day < minDay) {
+            return false;
+        }
+        if (maxDay > 0 && day > maxDay) { 
+            return false;
+        }
+        return true;
+    }
 }

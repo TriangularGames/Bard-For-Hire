@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class ItemManager : MonoBehaviour
 {
     public Button discardBtn;
+    public Button clearBtn;
     public Button attackBtn;
 
     [HideInInspector] public List<GameObject> ItemsSelected;
@@ -16,6 +17,7 @@ public class ItemManager : MonoBehaviour
     [SerializeField] private List<Sprite> selectionBoxes;
     [SerializeField] private Transform lineupParent;
     [SerializeField] private float lineupMoveSpeed = 8f;
+    [SerializeField] private TMP_Text selectionCountText;
 
     private bool scoringCompleted = true;
     
@@ -23,7 +25,8 @@ public class ItemManager : MonoBehaviour
     private int itemsDiscarded = 0;
 
     // Max discards a player can make
-    public int MAXDiscards = 3;
+    public static int MAXDiscards = 2;
+    private int discardsLeft = MAXDiscards;
 
     public ItemPool itemPool;
 
@@ -31,18 +34,32 @@ public class ItemManager : MonoBehaviour
     {
         EventBus.Subscribe<ItemUsedEvent>(DeleteItem);
         EventBus.Subscribe<ScoringCompletedEvent>(PrepNewRound);
+
+        discardBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
+        clearBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
+        attackBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<ItemUsedEvent>(DeleteItem);
         EventBus.Unsubscribe<ScoringCompletedEvent>(PrepNewRound);
+
+        discardBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
+        clearBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
+        attackBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
     }
 
     public bool HasRoom()
     {
         if (ItemsSelected.Count < selectionLimit) return true;
         return false;
+    }
+
+    private void UpdateSelectionText()
+    {
+        if (selectionCountText != null)
+            selectionCountText.text = $"{ItemsSelected.Count}/{selectionLimit}";
     }
 
     private void DeleteItem(ItemUsedEvent e)
@@ -70,9 +87,10 @@ public class ItemManager : MonoBehaviour
         {
             selectionLimit += 1;
         }
-            ItemsSelected = new List<GameObject>();
-        MAXDiscards = 3;
-        discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard x" + MAXDiscards.ToString();
+        UpdateSelectionText();
+        ItemsSelected = new List<GameObject>();
+        discardsLeft = MAXDiscards;
+        discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard x" + discardsLeft.ToString();
 # if UNITY_EDITOR
         Debug.Assert(itemPool = GameObject.FindWithTag("ItemPool").GetComponent<ItemPool>(), "ItemManager requires ItemPool");
 #else
@@ -82,7 +100,7 @@ public class ItemManager : MonoBehaviour
 
     private void Update()
     {
-        if (MAXDiscards != 0)
+        if (discardsLeft != 0)
         {
             discardBtn.interactable = true;
         }
@@ -107,33 +125,34 @@ public class ItemManager : MonoBehaviour
     public void DiscardItems()
     {
         itemsDiscarded = 0;
-        if (MAXDiscards != 0)
+        if (discardsLeft != 0)
         {
             if (ItemsSelected.Count > 0)
             {
-                if (PlayerManager.Instance.itemsNotUsed.Count != 0)
+                // If unused Weapons is less than the amount needed to be refilled
+                // Refresh Weapons before drawing
+                if (PlayerManager.Instance.itemsNotUsed.Count < ItemsSelected.Count)
                 {
-                    for (int i = 0; i < ItemsSelected.Count; i++)
+                    PlayerManager.Instance.RefreshItems();
+                }
+
+                for (int i = 0; i < ItemsSelected.Count; i++)
+                {
+                    if (itemPool.GetItems().Contains(ItemsSelected[i]))
                     {
-                        if (itemPool.GetItems().Contains(ItemsSelected[i]))
-                        {
-                            Destroy(ItemsSelected[i]);
-                            EventBus.Publish(new ItemDiscardedEvent(ItemsSelected[i].GetComponent<ItemController>().itemData));
-                            itemsDiscarded++;
-                        }
+                        Destroy(ItemsSelected[i]);
+                        EventBus.Publish(new ItemDiscardedEvent(ItemsSelected[i].GetComponent<ItemController>().itemData));
+                        itemsDiscarded++;
                     }
-                    itemPool.RemoveAll(ItemsSelected);
-                    ItemsSelected.Clear();
-                    GrabNewItems(itemsDiscarded);
-                    MAXDiscards--;
-                    discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard x" + MAXDiscards.ToString();
                 }
-                else
-                {
-                    Debug.Log("Item Inventory is Empty! Cannot Discard.");
-                }
+                itemPool.RemoveAll(ItemsSelected);
+                ItemsSelected.Clear();
+                GrabNewItems(itemsDiscarded);
+                discardsLeft--;
+                discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard x" + discardsLeft.ToString();
             }
         }
+        UpdateSelectionText();
     }
 
     /// <summary>
@@ -144,10 +163,16 @@ public class ItemManager : MonoBehaviour
         Debug.Log("Getting new items!");
         if (itemPool.GetItems().Count != itemPool.GetMaxSlots())
         {
+            // Checking if unused weapons count is more than what needs to be grabbed to fill the space
+            if (PlayerManager.Instance.itemsNotUsed.Count < amount)
+            {
+                PlayerManager.Instance.RefreshItems(); 
+            }
             for (int i = 0; i < amount; i++)
             {
                 itemPool.InstantiateItem(PlayerManager.Instance.GetRandomItem());
             }
+
         }
     }
 
@@ -161,6 +186,7 @@ public class ItemManager : MonoBehaviour
         {
             item.GetComponent<Select>().Deselect();
         }
+        UpdateSelectionText();
     }
 
     /// <summary>
@@ -201,7 +227,7 @@ public class ItemManager : MonoBehaviour
             await Task.Yield();
         }
 
-        await Task.Delay(300);
+        await PauseExtensions.DelayRespectingPause(300);
 
         await GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().CalculateScore(itemData);
     }
@@ -218,6 +244,7 @@ public class ItemManager : MonoBehaviour
         {
             ItemsSelected.Add(item);
             selection.sprite = selectionBoxes[ItemsSelected.IndexOf(item)];
+            UpdateSelectionText();
         }
     }
 
@@ -229,5 +256,19 @@ public class ItemManager : MonoBehaviour
         {
             selectedItem.GetComponent<Select>().SetImage(selectionBoxes[ItemsSelected.IndexOf(selectedItem)]);
         }
+        UpdateSelectionText();
+    }
+}
+
+/// <summary>
+/// Event for when an Item is Discarded
+/// </summary>
+public struct ItemDiscardedEvent
+{
+    public ItemData item;
+
+    public ItemDiscardedEvent(ItemData _item)
+    {
+        item = _item;
     }
 }

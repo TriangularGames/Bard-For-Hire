@@ -9,7 +9,7 @@ public class EnemyController : MonoBehaviour
     private Color flashColor = new Color(1f,1f,1f,0.5f);
     [SerializeField] private float delayTime = 0.1f;
     private int flashTimes = 0;
-
+    private int scaledHealth = -1;
     private int health;
     [SerializeField] private TMP_Text healthTxt;
 
@@ -31,9 +31,15 @@ public class EnemyController : MonoBehaviour
         EventBus.Unsubscribe<DamageTakenEvent>(TakeDamage);
     }
 
+    public void SetScaledHealth(int health)
+    {
+        scaledHealth = health;
+    }
+
     public void Setup()
     {
-        health = enemyData.health;
+        int startingHealth = scaledHealth > 0 ? scaledHealth : enemyData.health;
+        health = startingHealth;
         SetSprite();
         SetAnimation();
         SetDamageTxt();
@@ -59,6 +65,7 @@ public class EnemyController : MonoBehaviour
         if (e.id == gameObject.GetEntityId())
         {
             flashTimes = e.damage;
+            AudioManager.Instance.PlayClip("Hit");
             if (e.weakness)
             {
                 StartCoroutine("WeakFlash");

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UpgradeShopSlot : ShopSlot
 {
@@ -18,6 +17,7 @@ public class UpgradeShopSlot : ShopSlot
         value.text = _data.cost.ToString();
         icon.sprite = _data.icon;
         icon.color = new Color(0f, 0f, 0f, 1f);
+        buy.gameObject.SetActive(true);
     }
 
     public override void ClearInfo()
@@ -26,13 +26,29 @@ public class UpgradeShopSlot : ShopSlot
         _data = null;
     }
 
-    public override void SelectSlot(bool select)
+    private void Update()
     {
-        if (PlayerManager.Instance.GetCoinAmount() < _data.cost && PlayerManager.Instance.upgradeInventory.Count != PlayerManager.Instance.MAXUpgrades)
+        if (_data != null && PlayerManager.Instance.GetCoinAmount() < _data.cost)
         {
             buy.interactable = false;
         }
-        base.SelectSlot(select);        
+        else
+        {
+            buy.interactable = true;
+        }
+    }
+
+    public override void SelectSlot(bool select)
+    {
+        if (_data != null)
+        {
+            if (PlayerManager.Instance.GetCoinAmount() < _data.cost
+                || PlayerManager.Instance.upgradeInventory.Count == PlayerManager.Instance.MAXUpgrades)
+            {
+                buy.interactable = false;
+            }
+            base.SelectSlot(select);
+        }
     }
 
     public override void Purchase()
@@ -50,5 +66,18 @@ public class UpgradeShopSlot : ShopSlot
             // Indicate to player their upgrade inventory is full. or perhaps we prompt them for
             // removing one?
         }
+    }
+}
+
+/// <summary>
+/// Event for when an Upgrade is purchased
+/// </summary>
+public struct UpgradeBoughtEvent
+{
+    public UpgradeData data;
+
+    public UpgradeBoughtEvent(UpgradeData _data)
+    {
+        data = _data;
     }
 }

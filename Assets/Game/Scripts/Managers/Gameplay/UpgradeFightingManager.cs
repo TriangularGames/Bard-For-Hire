@@ -34,8 +34,7 @@ public class UpgradeFightingManager : MonoBehaviour
     {
         currentActions.Clear();
         quickSaveUsed = false;
-        successStreak = 0;
-        luckySlot = Random.Range(0, 6);
+        luckySlot = Random.Range(0, 3);
         isFirstTurn = true;
     }
 
@@ -57,7 +56,7 @@ public class UpgradeFightingManager : MonoBehaviour
         isFirstTurn = false;
         rollAbove10 = false;
 
-        if (EnemyManager.Instance.isBossRound)
+        if (EnemyManager.Instance.isBossDay)
         {
             if(EnemyManager.Instance.bossData.ability == BossAbilities.DisableAction)
             {
@@ -81,8 +80,9 @@ public class UpgradeFightingManager : MonoBehaviour
     public void EndCombat()
     {
         secondChanceUsed = false;
-        EnemyManager.Instance.currentRound++;
+        EnemyManager.Instance.currentDay++;
         EnemyManager.Instance.GenerateNext();
+        successStreak = 0;
     }
 
     public void SuccessfulAction(ItemData item, int damage)
@@ -148,6 +148,7 @@ public class UpgradeFightingManager : MonoBehaviour
                     break;
                 }
             }
+            combo = Mathf.Min(combo, 2);
             damage += combo;
             bonuses.Add(new DamageBonus { source = "Rhythmic Attacks", amount = combo });
         }
@@ -159,6 +160,7 @@ public class UpgradeFightingManager : MonoBehaviour
                 damage += currentActions.Count - 1;
                 bonuses.Add(new DamageBonus { source = "Overwhelming Blows", amount = currentActions.Count - 1 });
         }
+
 
         // this is for the upgrade "Adaptive Combat" (1 bonus damage for each different action used in a row)
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.AdaptiveCombat))
@@ -195,8 +197,8 @@ public class UpgradeFightingManager : MonoBehaviour
         //this is for the upgrade "Flow State" (Each action does extra damage equal to 10% of previous round's damage)
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.FlowState))
         {
-            damage += Mathf.RoundToInt(previousRoundDamage * 0.1f);
-            bonuses.Add(new DamageBonus { source = "Flow State", amount = Mathf.RoundToInt(previousRoundDamage * 0.1f) });
+            damage += Mathf.RoundToInt(previousRoundDamage * 0.20f);
+            bonuses.Add(new DamageBonus { source = "Flow State", amount = Mathf.RoundToInt(previousRoundDamage * 0.20f) });
         }
 
         //this is for the upgrade "Perfect Battle" (Each consecutive action played without failing a DC gives 10% bonus damage)
@@ -211,8 +213,7 @@ public class UpgradeFightingManager : MonoBehaviour
         {
             if(slotIndex % 2 == 0)
             {
-                damage += 1;
-                bonuses.Add(new DamageBonus { source = "Timed Swings", amount = 1});
+                damage += 0;
             }
             else
             {
@@ -289,5 +290,9 @@ public class UpgradeFightingManager : MonoBehaviour
 
         return false;
     }
-
+    public int GetQuickSaveDamage(ItemData item, int slotIndex)
+    {
+        int full = GetBonusDamage(item, slotIndex);
+        return Mathf.Max(0, full - item.Damage);
+    }
 }

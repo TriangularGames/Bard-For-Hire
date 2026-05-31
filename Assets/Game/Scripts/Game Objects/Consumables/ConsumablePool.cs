@@ -12,6 +12,8 @@ public class ConsumablePool : BaseItemContainer
 
         consumableSpawned.GetComponent<ConsumableController>().Setup();
 
+        consumableSpawned.GetComponent<ConsumableController>().SetTextColor(Color.white);
+
         AddItem(consumableSpawned);
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
@@ -22,6 +23,23 @@ public class ScoreManager : MonoBehaviour
     public DiceRoller roller;
     private List<ItemData> pendingItems;
     private int curItem = -1;
+
+    private string rewardDisplayText;
+
+    private void OnEnable()
+    {
+        EventBus.Subscribe<MoneyEarnedEvent>(MakeRewardText);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe<MoneyEarnedEvent>(MakeRewardText);
+    }
+
+    private void MakeRewardText(MoneyEarnedEvent e)
+    {
+        rewardDisplayText += e.reason + " : " + e.coinAmount + "\n";
+    }
 
     private void Start()
     {
@@ -57,6 +75,8 @@ public class ScoreManager : MonoBehaviour
     /// <param name="items">List of Items to be scored</param>
     public async Task CalculateScore(List<ItemData> items)
     {
+        EventBus.Publish<ScoringStartedEvent>(new ScoringStartedEvent());
+
         pendingItems = items;
         curItem = -1;
         UpgradeFightingManager.Instance.StartRound();
@@ -81,6 +101,11 @@ public class ScoreManager : MonoBehaviour
             if (UpgradeManager.Instance.HasUpgrade(UpgradeID.SkillProficiency))
             {
                 modifier += 2;
+            }
+
+            if (UpgradeFightingManager.Instance.tempDCReduce > 0)
+            {
+                modifier += UpgradeFightingManager.Instance.tempDCReduce;
             }
 
             if (UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage)&& UpgradeFightingManager.Instance.isFirstTurn && curItem == 0){
@@ -109,11 +134,12 @@ public class ScoreManager : MonoBehaviour
         if (item.Playable <= finalroll)
         {
             Debug.Log($"{item.name} was played!");
+            AudioManager.Instance.PlayClip("Success");
             itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 1f, 0f, 1f);
-            
-            await Task.Delay(300 * GameSpeed);
+
+            await PauseExtensions.DelayRespectingPause(300 * GameSpeed);
             EventBus.Publish<HitEvent>(new HitEvent());
-            await Task.Delay(100 * GameSpeed);
+            await PauseExtensions.DelayRespectingPause(100 * GameSpeed);
             int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex, out var bonuses);
             await itemDisplay.GetComponent<ItemController>().ShowDamageBonuses(bonuses, item.Damage);
             UpgradeFightingManager.Instance.SuccessfulAction(item, totalDamage);
@@ -140,10 +166,12 @@ public class ScoreManager : MonoBehaviour
         }
         else
         {
+            // Attack Missed
+            AudioManager.Instance.PlayClip("Fail");
             itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(1f, 0f, 0f, 1f);
             UpgradeFightingManager.Instance.FailedAction();
             EventBus.Publish<MissEvent>(new MissEvent());
-            await Task.Delay(100 * GameSpeed);
+            await PauseExtensions.DelayRespectingPause(100 * GameSpeed);
 
             if (UpgradeFightingManager.Instance.CanUseSecondChance())
             {
@@ -153,13 +181,16 @@ public class ScoreManager : MonoBehaviour
             }
             if (UpgradeFightingManager.Instance.CanUseQuickSave())
             {
-                int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex);
-                AttackEnemy(item, totalDamage);
+                int quickSaveDamage = UpgradeFightingManager.Instance.GetQuickSaveDamage(item, slotIndex);
+                if (quickSaveDamage > 0)
+                    AttackEnemy(item, quickSaveDamage);
+                UpgradeFightingManager.Instance.SuccessfulAction(item, quickSaveDamage);
+                return;
             }
         }
 
         // Wait for possible animations
-        await Task.Delay(800 * GameSpeed);
+        await PauseExtensions.DelayRespectingPause(800 * GameSpeed);
         if ((curItem + 1) == pendingItems.Count)
         {
             FinalizeScore();
@@ -168,7 +199,8 @@ public class ScoreManager : MonoBehaviour
 
     private void AttackEnemy(ItemData item, int damage)
     {
-        if(EnemyManager.Instance.isBossRound && EnemyManager.Instance.hasDisabled && EnemyManager.Instance.disabledItem == item.ItemType) {
+        if(EnemyManager.Instance.isBossDay && EnemyManager.Instance.hasDisabled
+            && EnemyManager.Instance.disabledItem == item.ItemType) {
             return;
         }
 
@@ -188,7 +220,8 @@ public class ScoreManager : MonoBehaviour
                     weakness = true;
                 }
 
-                if(EnemyManager.Instance.isBossRound && EnemyManager.Instance.bossData.ability == BossAbilities.EvenNumberReduce && damage % 2 == 0)
+                if(EnemyManager.Instance.isBossDay && EnemyManager.Instance.bossData.ability == BossAbilities.EvenNumberReduce
+                    && damage % 2 == 0)
                 {
                     damage = Mathf.RoundToInt(damage * 0.5f);
                     resistance = true;
@@ -220,6 +253,8 @@ public class ScoreManager : MonoBehaviour
             itemDisplay.SetActive(false);
         }
 
+        EventBus.Publish<ScoringEndedEvent>(new ScoringEndedEvent());
+
         // Check if we have hit the MaxRounds or all Enemies are dead
         if (!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive() || curRound == MaxRounds)
         {
@@ -232,11 +267,11 @@ public class ScoreManager : MonoBehaviour
                 if (remainingRounds > 0)
                 {
                     int bonusCoins = remainingRounds * 5;
-                    PlayerManager.Instance.Coins += bonusCoins;
-                    PlayerManager.Instance.SetCoinText();
+                    EventBus.Publish(new MoneyEarnedEvent(bonusCoins, "Early Completion"));
                 }
                 Debug.Log("Combat Completed!");
                 MenuManager.Instance.SwitchState(new VictoryMenuState());
+                EventBus.Publish(new VictoryEvent(rewardDisplayText));
             }
             else
             {
@@ -257,3 +292,59 @@ public class ScoreManager : MonoBehaviour
         roller.ResetText();
     }
 }
+
+/// <summary>
+/// When Scoring has started
+/// </summary>
+public struct ScoringStartedEvent { }
+
+/// <summary>
+/// Event for when Scoring is fully Completed, and transitioning to next Round
+/// </summary>
+public struct ScoringCompletedEvent
+{
+    public int count;
+
+    public ScoringCompletedEvent(int _count)
+    {
+        count = _count;
+    }
+}
+
+/// <summary>
+/// When Scoring has ended, prior to the Round or Victory/GameOver transitions
+/// </summary>
+public struct ScoringEndedEvent { }
+
+public struct VictoryEvent
+{
+    public string textContent;
+
+    public VictoryEvent (string _textContent)
+    {
+        textContent = _textContent;
+    }
+}
+
+/// <summary>
+/// Event for when an Item is used either Successfully or not
+/// </summary>
+public struct ItemUsedEvent
+{
+    public ItemData item;
+
+    public ItemUsedEvent(ItemData _item)
+    {
+        item = _item;
+    }
+}
+
+/// <summary>
+/// Event for when an Attack Hits
+/// </summary>
+public struct HitEvent { }
+
+/// <summary>
+/// Event for when an Attack Misses
+/// </summary>
+public struct MissEvent { }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Early Advantage
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Early Advantage
-  UpgradeDescription: First roll of turn is given advantage
+  UpgradeDescription: First roll of round is given advantage
   cost: 9
   UpgradeType: 1
   Rarity: 0
