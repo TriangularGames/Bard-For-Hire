@@ -305,12 +305,6 @@ public class ShopManager : MonoBehaviour
         GameManager.Instance.SwitchState(new CombatState());
     }
 
-    public void ViewInventory()
-    {
-        // Show a pop-up view of the inventory
-        MenuManager.Instance.SwitchState(new InventoryMenuState());
-    }
-
     /// <summary>
     /// Access Options Menu from Shop
     /// </summary>
