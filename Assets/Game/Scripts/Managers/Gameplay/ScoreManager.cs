@@ -108,7 +108,7 @@ public class ScoreManager : MonoBehaviour
                 modifier += UpgradeFightingManager.Instance.tempDCReduce;
             }
 
-            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage)&& UpgradeFightingManager.Instance.isFirstTurn && curItem == 0){
+            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage) && curItem == 0){
                 rollResult = await roller.RollWithAdvantage(modifier);
             }
             else
@@ -287,6 +287,14 @@ public class ScoreManager : MonoBehaviour
             Debug.Log("Round " + curRound.ToString() + " Completed!");
             curRound++;
             roundText.text = "Round " + curRound + "/3";
+            List<ItemData> currentHand = new List<ItemData>();
+            ItemManager itemManager = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
+            foreach (GameObject obj in itemManager.itemPool.GetItems())
+            {
+                ItemController ic = obj.GetComponent<ItemController>();
+                if (ic != null) currentHand.Add(ic.itemData);
+            }
+            UpgradeFightingManager.Instance.EndRound(currentHand);
             EventBus.Publish(new ScoringCompletedEvent(count));
         }
         roller.ResetText();

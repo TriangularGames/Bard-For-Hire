@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Timed Swings
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Timed Swings
-  UpgradeDescription: Even slots gain +2
+  UpgradeDescription: 2nd and 4th attack get +2 damage
   cost: 12
   UpgradeType: 0
   Rarity: 1

@@ -126,10 +126,10 @@ public class UpgradeFightingManager : MonoBehaviour
         // this is for the upgrade "Battle Tactics" (1 bonus damage for actions in middle slots)
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.BattleTactics))
         {
-            if (slotIndex == 2 || slotIndex == 3)
+            if (slotIndex == 1 || slotIndex == 2)
             {
-                damage += 2;
-                bonuses.Add(new DamageBonus { source = "Battle Tactics", amount = 2});
+                damage += 1;
+                bonuses.Add(new DamageBonus { source = "Battle Tactics", amount = 1});
             }
         }
 
@@ -197,8 +197,8 @@ public class UpgradeFightingManager : MonoBehaviour
         //this is for the upgrade "Flow State" (Each action does extra damage equal to 10% of previous round's damage)
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.FlowState))
         {
-            damage += Mathf.RoundToInt(previousRoundDamage * 0.20f);
-            bonuses.Add(new DamageBonus { source = "Flow State", amount = Mathf.RoundToInt(previousRoundDamage * 0.20f) });
+            damage += Mathf.RoundToInt(previousRoundDamage * 0.15f);
+            bonuses.Add(new DamageBonus { source = "Flow State", amount = Mathf.RoundToInt(previousRoundDamage * 0.15f) });
         }
 
         //this is for the upgrade "Perfect Battle" (Each consecutive action played without failing a DC gives 10% bonus damage)
@@ -235,7 +235,7 @@ public class UpgradeFightingManager : MonoBehaviour
                     }
                 }
             }
-            //this is for the upgrade "Lucky Strike" (1.25x bonus score for random slot (changes every turn))
+        //this is for the upgrade "Lucky Strike" (1.25x bonus score for random slot (changes every turn))
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.LuckyStrike))
          {
              if(slotIndex == luckySlot)
