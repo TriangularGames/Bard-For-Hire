@@ -110,7 +110,11 @@ public class EnemyManager : Singleton<EnemyManager>
             Destroy(e.enemy);
         }
 
-        enemies.RemoveAt(index);
+        if (index != -1)
+        {
+            enemies.RemoveAt(index);
+        }
+
         // Set new first enemy in list to active target (as list is ordered)
         if (enemies.Count > 0)
         {

@@ -109,6 +109,17 @@ public class ItemManager : MonoBehaviour
             discardBtn.interactable = false;
         }
 
+        if (!scoringCompleted)
+        {
+            discardBtn.interactable = false;
+            clearBtn.interactable = false;
+        }
+        else
+        {
+            discardBtn.interactable = true;
+            clearBtn.interactable = true;
+        }
+
         if (ItemsSelected.Count == 0 || !scoringCompleted)
         {
             attackBtn.interactable = false;
@@ -201,7 +212,8 @@ public class ItemManager : MonoBehaviour
         {
             itemData.Add(itemObj.GetComponent<ItemController>().itemData);
         }
-        await Lineup(orderedUp, itemData);
+        //await Lineup(orderedUp, itemData);
+        await GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().CalculateScore(itemData);
     }
 
     private async Task Lineup(List<GameObject> itemObjects, List<ItemData> itemData)
