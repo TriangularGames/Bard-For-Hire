@@ -38,14 +38,12 @@ public class ShopManager : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus.Subscribe<ItemSelectedEvent>(CheckItemSelection);
         EventBus.Subscribe<UpgradeBoughtEvent>(UpdateUpgradeDisplay);
         EventBus.Subscribe<ConsumableBoughtEvent>(UpdateConsumableDisplay);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<ItemSelectedEvent>(CheckItemSelection);
         EventBus.Unsubscribe<UpgradeBoughtEvent>(UpdateUpgradeDisplay);
         EventBus.Unsubscribe<ConsumableBoughtEvent>(UpdateConsumableDisplay);
     }
@@ -68,7 +66,7 @@ public class ShopManager : MonoBehaviour
         }
         else
         {
-           rerollBtn.interactable= true;
+           rerollBtn.interactable = true;
         }
     }
 
@@ -77,6 +75,10 @@ public class ShopManager : MonoBehaviour
         dayDisplay.text = "Day " + GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().currentDay.ToString();
     }
 
+    /// <summary>
+    /// Generate Rarity for Item being Obtained
+    /// </summary>
+    /// <returns>Rarity of the Object</returns>
     private ObjectRarity RollRarity()
     {
         int total = commonWeight + uncommonWeight + rareWeight + legendaryWeight;
@@ -88,6 +90,11 @@ public class ShopManager : MonoBehaviour
         return ObjectRarity.Legendary;
     }
 
+    /// <summary>
+    /// Generate a Weapon (Item) for the shop from the total list of Weapons available
+    /// given a generated ObjectRarity
+    /// </summary>
+    /// <returns>ItemData of generated Weapon</returns>
     private ItemData GetRandomItem()
     {
         ObjectRarity targetRarity = RollRarity();
@@ -105,6 +112,11 @@ public class ShopManager : MonoBehaviour
         return pool[Random.Range(0, pool.Count)];
     }
 
+    /// <summary>
+    /// Generate an Upgrade for the shop from the total list of Upgrades available
+    /// given a generated ObjectRarity
+    /// </summary>
+    /// <returns>UpgradeData of generated Upgrade</returns>
     private UpgradeData GetRandomUpgrade()
     {
         ObjectRarity targetRarity = RollRarity();
@@ -122,6 +134,11 @@ public class ShopManager : MonoBehaviour
         return pool[Random.Range(0, pool.Count)];
     }
 
+    /// <summary>
+    /// Generate a Consumable for the shop from the total list of Consumables available
+    /// given a generated ObjectRarity
+    /// </summary>
+    /// <returns>ConsumableData of generated Consumable</returns>
     private ConsumableData GetRandomConsumable()
     {
         ObjectRarity targetRarity = RollRarity();
@@ -144,6 +161,10 @@ public class ShopManager : MonoBehaviour
         rerollBtn.transform.GetChild(0).GetComponent<TMP_Text>().text = "Reroll\n$" + rerollCost;
     }
 
+    /// <summary>
+    /// Initial function to setup all items available in the Shop
+    /// when switching into the Shop Scene
+    /// </summary>
     public void SetupShop()
     {
         // Setup the Weapons
@@ -215,44 +236,6 @@ public class ShopManager : MonoBehaviour
         _items.ClearSlots();
         _upgrades.ClearSlots();
         _consumables.ClearSlots();
-    }
-
-
-    private void CheckItemSelection(ItemSelectedEvent e)
-    {
-        // Check all Upgrade slots, if one is selected- disable and return
-        foreach (GameObject slot in _upgrades.GetSlots())
-        {
-            UpgradeShopSlot upgradeSlot = slot.GetComponent<UpgradeShopSlot>();
-            if (slot.GetEntityId() != e.id && upgradeSlot._isSelected)
-            {
-                upgradeSlot.Deselect();
-                return;
-            }
-        }
-
-        // Check all Consumable slots, if one is selected- disable and return
-        foreach (GameObject slot in _consumables.GetSlots())
-        {
-            ConsumableShopSlot consumableSlot = slot.GetComponent<ConsumableShopSlot>();
-            if (slot.GetEntityId() != e.id && consumableSlot._isSelected)
-            {
-                consumableSlot.Deselect();
-                return;
-            }
-        }
-
-        // Check all Item slots, if one is selected- disable and return
-        foreach (GameObject slot in _items.GetSlots())
-        {
-            ItemShopSlot itemSlot = slot.GetComponent<ItemShopSlot>();
-            if (slot.GetEntityId() != e.id && itemSlot._isSelected)
-            {
-                itemSlot.Deselect();
-                return;
-            }
-        }
-        return;
     }
 
     private void UpdateUpgradeDisplay(UpgradeBoughtEvent e)
