@@ -388,15 +388,15 @@ PrefabInstance:
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: d83c16ab2c1a5e242a7d8787a9660fb6, type: 2}
+      objectReference: {fileID: 11400000, guid: 91c86d55d54da2d4cb2477df5dd87424, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: 89518d5ec8b76694fa9943615b5fa5ec, type: 2}
+      objectReference: {fileID: 11400000, guid: d0a462c819ec3d941bf9e39d9b643585, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[2]'
       value: 
-      objectReference: {fileID: 11400000, guid: 91c86d55d54da2d4cb2477df5dd87424, type: 2}
+      objectReference: {fileID: 11400000, guid: c73bfd9aff9f204428b4ec8dd7ba21d6, type: 2}
     - target: {fileID: 8025483659626453430, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: m_Name
       value: _PlayerManager
@@ -2854,7 +2854,7 @@ Transform:
   m_GameObject: {fileID: 442691667}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.8019528, y: 0.8, z: -0.5}
+  m_LocalPosition: {x: -0.8, y: 0.81, z: -0.4}
   m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -12198,6 +12198,10 @@ PrefabInstance:
     - target: {fileID: 2338348622536006590, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
       propertyPath: m_Name
       value: ItemDisplay
+      objectReference: {fileID: 0}
+    - target: {fileID: 2338348622536006590, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2409952213380443163, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
       propertyPath: m_Pivot.x
