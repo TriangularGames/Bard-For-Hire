@@ -143,11 +143,13 @@ public class ScoreManager : MonoBehaviour
             itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 1f, 0f, 1f);
 
             await PauseExtensions.DelayRespectingPause(300 * GameSpeed);
-            EventBus.Publish<HitEvent>(new HitEvent());
-            await PauseExtensions.DelayRespectingPause(100 * GameSpeed);
             int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex, out var bonuses);
             await itemDisplay.GetComponent<ItemController>().ShowDamageBonuses(bonuses, item.Damage);
             UpgradeFightingManager.Instance.SuccessfulAction(item, totalDamage);
+
+            // Tell the Player Controller to play the Attack Animation
+            EventBus.Publish<HitEvent>(new HitEvent());
+            await PauseExtensions.DelayRespectingPause(100 * GameSpeed);
 
             AttackEnemy(item, totalDamage);
 
