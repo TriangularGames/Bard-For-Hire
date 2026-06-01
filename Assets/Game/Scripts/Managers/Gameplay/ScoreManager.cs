@@ -81,6 +81,11 @@ public class ScoreManager : MonoBehaviour
         curItem = -1;
         UpgradeFightingManager.Instance.StartRound();
 
+        if (pendingItems == null || pendingItems.Count <= 0)
+        {
+            return;
+        }
+
         foreach (ItemData item in pendingItems)
         {
             if(!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive()) { FinalizeScore(); break; }
