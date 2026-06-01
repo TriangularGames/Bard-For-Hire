@@ -4,19 +4,22 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    [Header("Enemy Data")]
     [SerializeField] public EnemyData enemyData;
 
-    private Color flashColor = new Color(1f,1f,1f,0.5f);
+    [Header("Health/Damage Related")]
+    private Color flashColor = new Color(1f, 1f, 1f, 0.5f);
     [SerializeField] private float delayTime = 0.1f;
     private int flashTimes = 0;
-    private int scaledHealth = -1;
-    private int health;
+    protected int scaledHealth = -1;
+    protected int health;
     [SerializeField] private TMP_Text healthTxt;
     [SerializeField] private ObjectPool dmgTxtPool;
     [SerializeField] private ObjectPool dmgDisplayPool;
 
-    [SerializeField] private SpriteRenderer EnemySprite;
-    [SerializeField] private Animator anim;
+    [Header("Enemy Display")]
+    [SerializeField] protected SpriteRenderer EnemySprite;
+    [SerializeField] protected Animator anim;
     [SerializeField] private GameObject indicator;
 
     [Header("Flash Flags")]
@@ -42,7 +45,7 @@ public class EnemyController : MonoBehaviour
         scaledHealth = health;
     }
 
-    public void Setup()
+    public virtual void Setup()
     {
         int startingHealth = scaledHealth > 0 ? scaledHealth : enemyData.health;
         health = startingHealth;
@@ -51,22 +54,22 @@ public class EnemyController : MonoBehaviour
         SetDamageTxt();
     }
 
-    private void SetSprite()
+    protected void SetSprite()
     {
         EnemySprite.sprite = enemyData.icon;
     }
 
-    private void SetAnimation()
+    protected void SetAnimation()
     {
         anim.runtimeAnimatorController = enemyData.animator;
     }
 
-    private void SetDamageTxt()
+    protected void SetDamageTxt()
     {
         healthTxt.text = health.ToString();
     }
 
-    private void TakeDamage(DamageTakenEvent e)
+    protected virtual void TakeDamage(DamageTakenEvent e)
     {
         if (e.id == gameObject.GetEntityId())
         {
