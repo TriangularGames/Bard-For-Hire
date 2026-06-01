@@ -1,2 +1,2 @@
-# Bard For Hire
-A roguelite bard game
+# Bard For Hire?????
+A roguelike dungeon questing adventure!
