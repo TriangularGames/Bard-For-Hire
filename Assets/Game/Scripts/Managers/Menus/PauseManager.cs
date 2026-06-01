@@ -22,6 +22,13 @@ public class PauseManager : Singleton<PauseManager>
         _pauseTCS.TrySetResult(true);  // Start in a "completed" state so tasks don't block before first pause
     }
 
+    public override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        GameLifetime.Cancel(); // Cancels ALL async tasks across every class
+    }
+
     private void OnEnable()
     {
         SubscribeToEvents();
@@ -126,6 +133,8 @@ public static class PauseExtensions
     /// </summary>
     public static async Task DelayRespectingPause(int milliseconds, CancellationToken ct = default)
     {
+        using var linked = CancellationTokenSource.CreateLinkedTokenSource(ct, GameLifetime.Token);
+
         await PauseManager.Instance.WaitWhilePausedAsync();
 
         // Breaks delay into 50ms chunks so pause can interrupt mid-delay instead of pre-delay
@@ -133,7 +142,7 @@ public static class PauseExtensions
         const int step = 50;
         while (elapsed < milliseconds)
         {
-            await Task.Delay(Mathf.Min(step, milliseconds - elapsed), ct);
+            await Task.Delay(Mathf.Min(step, milliseconds - elapsed), linked.Token);
             elapsed += step;
             await PauseManager.Instance.WaitWhilePausedAsync();
         }
