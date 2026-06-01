@@ -10,7 +10,7 @@ public class DiceRoller : MonoBehaviour
     [SerializeField] private TMP_Text displayAdvantage;
     [SerializeField] private TMP_Text displayModifer;
     [SerializeField] private TMP_Text displayCrit;
-
+    [SerializeField] private TMP_Text upgradeNotifText;
 
     [Header("Timing")]
     [SerializeField] private float numberChangeyInterval = 0.005f;
@@ -53,6 +53,14 @@ public class DiceRoller : MonoBehaviour
         }
         return nat;
 
+    }
+
+    public async Task ShowUpgradeNotif(string message)
+    {
+        if (upgradeNotifText == null) return;
+        upgradeNotifText.text = message;
+        await Task.Delay(800);
+        upgradeNotifText.text = "";
     }
 
     private async Task ShuffleDice(TMP_Text target, int landOn)
@@ -153,5 +161,6 @@ public class DiceRoller : MonoBehaviour
         if (displayAdvantage != null) displayAdvantage.text = "";
         if (displayModifer != null) displayModifer.text = "";
         if (displayCrit != null) displayCrit.text = "";
+        if (upgradeNotifText != null) upgradeNotifText.text = "";
     }
 }
