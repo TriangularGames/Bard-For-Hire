@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ConsumableData
   ConsumableName: Potion of Cloning
   ConsumableDescription: Duplicate a selected weapon
-  cost: 6
+  cost: 7
   Type: 7
-  Rarity: 0
+  Rarity: 1
   icon: {fileID: 21300000, guid: 5d61e3c2291cd44409311b72ede8aff6, type: 3}

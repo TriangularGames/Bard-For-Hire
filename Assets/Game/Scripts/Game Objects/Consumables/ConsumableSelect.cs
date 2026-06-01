@@ -33,6 +33,8 @@ public class ConsumableSelect : MonoBehaviour, IPointerEnterHandler, IPointerDow
 
         ConsumableManager.Instance.RemoveConsumable(consumableController.consumableData);
 
+        PlayerManager.Instance.consumableInventory.Remove(consumableController.consumableData);
+
         Destroy(gameObject);
     }
 }

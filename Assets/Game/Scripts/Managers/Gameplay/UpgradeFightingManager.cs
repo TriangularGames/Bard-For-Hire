@@ -34,8 +34,7 @@ public class UpgradeFightingManager : MonoBehaviour
     {
         currentActions.Clear();
         quickSaveUsed = false;
-        successStreak = 0;
-        luckySlot = Random.Range(0, 6);
+        luckySlot = Random.Range(0, 3);
         isFirstTurn = true;
     }
 
@@ -83,6 +82,7 @@ public class UpgradeFightingManager : MonoBehaviour
         secondChanceUsed = false;
         EnemyManager.Instance.currentDay++;
         EnemyManager.Instance.GenerateNext();
+        successStreak = 0;
     }
 
     public void SuccessfulAction(ItemData item, int damage)
@@ -126,10 +126,10 @@ public class UpgradeFightingManager : MonoBehaviour
         // this is for the upgrade "Battle Tactics" (1 bonus damage for actions in middle slots)
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.BattleTactics))
         {
-            if (slotIndex == 2 || slotIndex == 3)
+            if (slotIndex == 1 || slotIndex == 2)
             {
-                damage += 2;
-                bonuses.Add(new DamageBonus { source = "Battle Tactics", amount = 2});
+                damage += 1;
+                bonuses.Add(new DamageBonus { source = "Battle Tactics", amount = 1});
             }
         }
 
@@ -148,6 +148,7 @@ public class UpgradeFightingManager : MonoBehaviour
                     break;
                 }
             }
+            combo = Mathf.Min(combo, 2);
             damage += combo;
             bonuses.Add(new DamageBonus { source = "Rhythmic Attacks", amount = combo });
         }
@@ -159,6 +160,7 @@ public class UpgradeFightingManager : MonoBehaviour
                 damage += currentActions.Count - 1;
                 bonuses.Add(new DamageBonus { source = "Overwhelming Blows", amount = currentActions.Count - 1 });
         }
+
 
         // this is for the upgrade "Adaptive Combat" (1 bonus damage for each different action used in a row)
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.AdaptiveCombat))
@@ -192,33 +194,33 @@ public class UpgradeFightingManager : MonoBehaviour
                 bonuses.Add(new DamageBonus { source = "Shining Star", amount = 2 });
             }
         }
-        //this is for the upgrade "Flow State" (Each action does extra damage equal to 10% of previous round's damage)
-        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.FlowState))
-        {
-            damage += Mathf.RoundToInt(previousRoundDamage * 0.1f);
-            bonuses.Add(new DamageBonus { source = "Flow State", amount = Mathf.RoundToInt(previousRoundDamage * 0.1f) });
-        }
-
-        //this is for the upgrade "Perfect Battle" (Each consecutive action played without failing a DC gives 10% bonus damage)
-        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.PerfectBattle))
-        {
-            float mult = 1f + (successStreak * 0.1f);
-            damage += Mathf.RoundToInt(item.Damage * (mult - 1f));
-            bonuses.Add(new DamageBonus { source = "Perfect Battle", amount = Mathf.RoundToInt(item.Damage * (mult - 1f)) });
-        }
         //this is for the upgrade "Timed Swings" (Odd slots gain +1, Even slots gain +2)
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.TimedSwings))
         {
-            if(slotIndex % 2 == 0)
+            if (slotIndex % 2 == 0)
             {
-                damage += 1;
-                bonuses.Add(new DamageBonus { source = "Timed Swings", amount = 1});
+                damage += 0;
             }
             else
             {
                 damage += 2;
                 bonuses.Add(new DamageBonus { source = "Timed Swings", amount = 2 });
             }
+        }
+        //this is for the upgrade "Flow State" (Each action does extra damage equal to 10% of previous round's damage)
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.FlowState))
+        {
+            damage += Mathf.RoundToInt(previousRoundDamage * 0.15f);
+            bonuses.Add(new DamageBonus { source = "Flow State", amount = Mathf.RoundToInt(previousRoundDamage * 0.15f) });
+        }
+
+        //this is for the upgrade "Perfect Battle" (Each consecutive action played without failing a DC gives 10% bonus damage)
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.PerfectBattle))
+        {
+            float mult = 1f + (successStreak * 0.1f);
+            int before = damage;
+            damage = Mathf.RoundToInt(damage * mult);
+            bonuses.Add(new DamageBonus { source = "Perfect Battle", amount = damage - before });
         }
         //this is for the upgrade "Consistency" (Whenever the first 3 actions played is the same as the last turn, those notes gain 50% damage)
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.Consistency))
@@ -229,18 +231,20 @@ public class UpgradeFightingManager : MonoBehaviour
                 {
                     if (previousActions[slotIndex] == item.ItemType)
                     {
-                        damage += Mathf.RoundToInt(item.Damage * 0.5f);
-                        bonuses.Add(new DamageBonus { source = "Consistency", amount = Mathf.RoundToInt(item.Damage * 0.5f) });
+                        int before = damage;
+                        damage = Mathf.RoundToInt(damage * 1.5f);
+                        bonuses.Add(new DamageBonus { source = "Consistency", amount = damage - before });
                     }
                 }
             }
-            //this is for the upgrade "Lucky Strike" (1.25x bonus score for random slot (changes every turn))
+        //this is for the upgrade "Lucky Strike" (1.25x bonus score for random slot (changes every turn))
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.LuckyStrike))
          {
              if(slotIndex == luckySlot)
              {
-                 damage += Mathf.RoundToInt(item.Damage * 0.25f);
-                 bonuses.Add(new DamageBonus { source = "Lucky Strike", amount = Mathf.RoundToInt(item.Damage * 0.25f) });
+                    int before = damage;
+                    damage = Mathf.RoundToInt(damage * 1.25f);
+                    bonuses.Add(new DamageBonus { source = "Lucky Strike", amount = damage - before });
                 }
          }
         }
@@ -289,5 +293,9 @@ public class UpgradeFightingManager : MonoBehaviour
 
         return false;
     }
-
+    public int GetQuickSaveDamage(ItemData item, int slotIndex)
+    {
+        int full = GetBonusDamage(item, slotIndex);
+        return Mathf.Max(0, full - item.Damage);
+    }
 }

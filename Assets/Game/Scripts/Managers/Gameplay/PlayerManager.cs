@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class PlayerManager : Singleton<PlayerManager>
 {
+    [SerializeField] private List<ItemData> _defaultInventory;
     public List<ItemData> itemInventory;
     public List<UpgradeData> upgradeInventory;
     public List<ConsumableData> consumableInventory;
 
-    // For Gameplay, what Notes are still available to be grabbed from Inventory,
-    // what Notes are active, and what Notes aren't
+    // For Gameplay, what Weapons are still available to be grabbed from Inventory,
+    // what Weapons are active, and what Weapons aren't
     public List<ItemData> itemsUsed;
     public List<ItemData> itemsHeld;
     public List<ItemData> itemsNotUsed;
@@ -21,7 +22,7 @@ public class PlayerManager : Singleton<PlayerManager>
     public int Coins;
 
     [Tooltip("Max amount of Upgrades player can hold")]
-    public int MAXUpgrades = 3;
+    public int MAXUpgrades = 4;
 
     [Tooltip("Max amount of Consumables player can hold")]
     public int MAXConsumables = 2;
@@ -31,6 +32,18 @@ public class PlayerManager : Singleton<PlayerManager>
         itemsUsed = new List<ItemData>();
         itemsHeld = new List<ItemData>();
         itemsNotUsed = new List<ItemData>();
+    }
+
+    // Reset Item Lists on Game End
+    public void Reset()
+    {
+        upgradeInventory.Clear();
+        consumableInventory.Clear();
+        itemsUsed.Clear();
+        itemsHeld.Clear();
+        itemsNotUsed.Clear();
+        itemInventory.Clear();
+        itemInventory.AddRange(_defaultInventory);
     }
 
     private void OnEnable()
@@ -43,6 +56,7 @@ public class PlayerManager : Singleton<PlayerManager>
         EventBus.Subscribe<ConsumableBoughtEvent>(OnConsumableBought);
         EventBus.Subscribe<EnterShopEvent>(EnterShop);
         EventBus.Subscribe<EnterCombatEvent>(EnterCombat);
+        EventBus.Subscribe<MoneyEarnedEvent>(AddMoney);
     }
 
     private void OnDisable()
@@ -55,6 +69,13 @@ public class PlayerManager : Singleton<PlayerManager>
         EventBus.Unsubscribe<ConsumableBoughtEvent>(OnConsumableBought);
         EventBus.Unsubscribe<EnterShopEvent>(EnterShop);
         EventBus.Unsubscribe<EnterCombatEvent>(EnterCombat);
+        EventBus.Unsubscribe<MoneyEarnedEvent>(AddMoney);
+    }
+
+    private void AddMoney(MoneyEarnedEvent e)
+    {
+        Coins += e.coinAmount;
+        SetCoinText();
     }
 
     private void EnterCombat(EnterCombatEvent e)
@@ -148,6 +169,12 @@ public class PlayerManager : Singleton<PlayerManager>
     public void SetCoinText()
     {
         GameObject.FindWithTag("Coins").GetComponent<TMP_Text>().text = Coins.ToString();
+    }
+
+    public void RefreshItems()
+    {
+        itemsNotUsed.AddRange(itemsUsed);
+        itemsUsed.Clear();
     }
 
     /// <summary>
@@ -247,3 +274,8 @@ public class PlayerManager : Singleton<PlayerManager>
         return itemInventory[Random.Range(0, itemInventory.Count)];
     }
 }
+
+/// <summary>
+/// Event for when Item is added to Inventory
+/// </summary>
+public struct RefreshInventoryDisplayEvent { }

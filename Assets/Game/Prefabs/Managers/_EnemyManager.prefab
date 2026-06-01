@@ -49,17 +49,23 @@ MonoBehaviour:
   - Goblin
   - Skeleton
   - Toddler
-  roundsTilBoss: 3
-  isBossRound: 0
+  daysTilBoss: 3
+  isBossDay: 0
   bossData: {fileID: 0}
   disabledItem: 0
   hasDisabled: 0
+  DEFAULTRoundData:
+    startMinTotalHealth: 20
+    startMaxTotalHealth: 30
+    minIncrease: 8
+    maxIncrease: 10
+    maxEnemies: 3
   roundData:
     startMinTotalHealth: 20
     startMaxTotalHealth: 30
     minIncrease: 8
     maxIncrease: 10
     maxEnemies: 3
-  currentRound: 0
+  currentDay: 0
   spawnPoints: []
   enemyDisplays: []

@@ -17,12 +17,25 @@ public class ConsumableShopSlot : ShopSlot
         value.text = _data.cost.ToString();
         icon.sprite = _data.icon;
         icon.color = new Color(0.5f, 0.4f, 0.06f, 1f);
+        buy.gameObject.SetActive(true);
     }
 
     public override void ClearInfo()
     {
         base.ClearInfo();
         _data = null;
+    }
+
+    private void Update()
+    {
+        if (_data != null && PlayerManager.Instance.GetCoinAmount() < _data.cost)
+        {
+            buy.interactable = false;
+        }
+        else
+        {
+            buy.interactable = true;
+        }
     }
 
     public override void SelectSlot(bool select)
@@ -45,7 +58,18 @@ public class ConsumableShopSlot : ShopSlot
         EventBus.Publish(new ConsumableBoughtEvent(_data));
         _Purchased = true;
         ClearInfo();
-    }
+    } 
+}
 
-    
+/// <summary>
+/// Event for when a Consumable is purchased
+/// </summary>
+public struct ConsumableBoughtEvent
+{
+    public ConsumableData data;
+
+    public ConsumableBoughtEvent(ConsumableData _data)
+    {
+        data = _data;
+    }
 }

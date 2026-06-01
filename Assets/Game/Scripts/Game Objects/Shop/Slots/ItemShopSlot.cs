@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ItemShopSlot : ShopSlot
 {
@@ -18,12 +17,25 @@ public class ItemShopSlot : ShopSlot
         value.text = _data.cost.ToString();
         icon.sprite = _data.icon;
         icon.color = new Color(1f, 1f, 1f, 1f);
+        buy.gameObject.SetActive(true);
     }
 
     public override void ClearInfo()
     {
         base.ClearInfo();
         _data = null;
+    }
+
+    private void Update()
+    {
+        if (_data != null && PlayerManager.Instance.GetCoinAmount() < _data.cost)
+        {
+            buy.interactable = false;
+        }
+        else
+        {
+            buy.interactable = true;
+        }
     }
 
     public override void SelectSlot(bool select)
@@ -45,5 +57,18 @@ public class ItemShopSlot : ShopSlot
         EventBus.Publish(new ItemBoughtEvent(_data));
         _Purchased = true;
         ClearInfo();
+    }
+}
+
+/// <summary>
+/// Event for when an Item is purchased
+/// </summary>
+public struct ItemBoughtEvent
+{
+    public ItemData data;
+
+    public ItemBoughtEvent(ItemData _data)
+    {
+        data = _data;
     }
 }

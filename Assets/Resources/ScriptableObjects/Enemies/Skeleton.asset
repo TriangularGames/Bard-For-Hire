@@ -21,6 +21,8 @@ MonoBehaviour:
   Description: Spooky scary- may send shivers down your spine
   isBoss: 0
   ability: 2
+  minDay: 1
+  maxDay: 0
   hasBonus: 0
   bonusStat: 0
   isMultiplier: 0

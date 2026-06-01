@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Skill Proficiency
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Skill Proficiency
-  UpgradeDescription: Flat +2 to All Rolls
+  UpgradeDescription: +2 to all rolls
   cost: 13
   UpgradeType: 1
   Rarity: 1

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Echo Strike
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Echo Strike
-  UpgradeDescription: Final action of turn is activated twice
+  UpgradeDescription: Final attack of round is activated twice
   cost: 18
   UpgradeType: 0
   Rarity: 2

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Adaptive Combat
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Adaptive Combat
-  UpgradeDescription: 1 bonus damage for each different action used in a row
+  UpgradeDescription: 1 bonus damage for each different attack used in a row
   cost: 15
   UpgradeType: 0
   Rarity: 1
