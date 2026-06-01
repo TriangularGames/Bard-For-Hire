@@ -169,25 +169,31 @@ public class ScoreManager : MonoBehaviour
             // Attack Missed
             AudioManager.Instance.PlayClip("Fail");
             itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(1f, 0f, 0f, 1f);
-            UpgradeFightingManager.Instance.FailedAction();
             EventBus.Publish<MissEvent>(new MissEvent());
             await PauseExtensions.DelayRespectingPause(100 * GameSpeed);
 
+            bool savedBySecondChance = false;
+            bool savedByQuickSave = false;
+
             if (UpgradeFightingManager.Instance.CanUseSecondChance())
             {
-                rollValue = await roller.RollDie(GameSpeed);
+                await roller.ShowUpgradeNotif("Second Chance");
+                rollValue = await roller.RollDie(0);
                 await OnRollComplete(rollValue);
+                savedBySecondChance = true;
                 return;
             }
-            if (UpgradeFightingManager.Instance.CanUseQuickSave())
+            if (!savedBySecondChance && UpgradeFightingManager.Instance.CanUseQuickSave())
             {
+                await roller.ShowUpgradeNotif("Quick Save");
                 int quickSaveDamage = UpgradeFightingManager.Instance.GetQuickSaveDamage(item, slotIndex);
-                if (quickSaveDamage > 0)
-                    AttackEnemy(item, quickSaveDamage);
+                if (quickSaveDamage > 0) AttackEnemy(item, quickSaveDamage);
                 UpgradeFightingManager.Instance.SuccessfulAction(item, quickSaveDamage);
-                return;
+                savedByQuickSave = true;
             }
-        }
+            if (!savedByQuickSave)
+                UpgradeFightingManager.Instance.FailedAction();
+    }
 
         // Wait for possible animations
         await PauseExtensions.DelayRespectingPause(800 * GameSpeed);
