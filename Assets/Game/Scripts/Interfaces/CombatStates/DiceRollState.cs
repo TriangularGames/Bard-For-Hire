@@ -29,23 +29,8 @@ public class DiceRollState : ICombatState
 
     public void UpdateState(CombatManager cm) { }
 
-    private async void ExecuteRoll(CombatManager cm, CancellationToken ct)
+    private void ExecuteRoll(CombatManager cm, CancellationToken ct)
     {
-        try
-        {
-            // Get the ScoreManager to run the full scoring pipeline
-            await GameObject.FindWithTag("ScoreManager")
-                .GetComponent<ScoreManager>()
-                .CalculateScore(_items);
-
-            if (ct.IsCancellationRequested) return;
-
-            // Scoring done — transition to the next state
-            //cm.SwitchState(new SomeNextState());
-        }
-        catch (TaskCanceledException)
-        {
-            // Exited early, nothing to do
-        }
+        Debug.Log("Rolling dice");
     }
 }
