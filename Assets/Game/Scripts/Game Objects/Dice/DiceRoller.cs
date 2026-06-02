@@ -19,6 +19,7 @@ public class DiceRoller : MonoBehaviour
 
     public async Task<int> RollDie(int modifier = 0)
     {
+        CombatManager.Instance.SwitchState(new DiceRollState());
         int nat = UnityEngine.Random.Range(1, 21);
         display.gameObject.SetActive(true);
         displayRoll.gameObject.SetActive(true);

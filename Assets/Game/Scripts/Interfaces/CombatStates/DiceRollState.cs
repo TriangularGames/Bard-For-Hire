@@ -9,9 +9,9 @@ public class DiceRollState : ICombatState
     private CancellationTokenSource _cts;
 
     // Pass the items to roll for when creating the state
-    public DiceRollState(List<ItemData> items)
+    public DiceRollState()
     {
-        _items = items;
+
     }
 
     public void EnterState(CombatManager cm)
