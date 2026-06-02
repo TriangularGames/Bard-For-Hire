@@ -99,23 +99,13 @@ public class UpgradeFightingManager : MonoBehaviour
 
     public int GetBonusRoll(int roll)
     {
-        if(rollAbove10 == true)
-        {
-            if (roll < 10)
-            {
-                roll = 10;
-            }
-        }
-
-        //if (UpgradeManager.Instance.HasUpgrade(UpgradeID.SkillProficiency)) {
-        //    roll += 2;
-        //}
-        //    roll += tempDCReduce;
+        if (rollAbove10 && roll < 10)
+            roll = 10;
 
         if (roll > 20) roll = 20;
-        rolledNat20 = (roll == 20);
-        if (roll < 1) roll = 1;
-        return roll;
+            if (roll < 1) roll = 1;
+            return roll;
+        
     }
 
     public int GetBonusDamage(ItemData item, int slotIndex, out List<DamageBonus> bonuses)

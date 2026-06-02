@@ -120,6 +120,7 @@ public class ScoreManager : MonoBehaviour
             {
                 rollResult = await roller.RollDie(modifier);
             }
+            UpgradeFightingManager.Instance.rolledNat20 = (roller.natRoll == 20);
             await OnRollComplete(rollResult);
         }
     }
@@ -186,6 +187,7 @@ public class ScoreManager : MonoBehaviour
             {
                 await roller.ShowUpgradeNotif("Second Chance");
                 rollValue = await roller.RollDie(0);
+                UpgradeFightingManager.Instance.rolledNat20 = (roller.natRoll == 20);
                 await OnRollComplete(rollValue);
                 savedBySecondChance = true;
                 return;
@@ -212,18 +214,49 @@ public class ScoreManager : MonoBehaviour
 
     private void AttackEnemy(ItemData item, int damage)
     {
-        if(EnemyManager.Instance.isBossDay && EnemyManager.Instance.hasDisabled
-            && EnemyManager.Instance.disabledItem == item.ItemType) {
+        if (EnemyManager.Instance.isBossDay && EnemyManager.Instance.hasDisabled && EnemyManager.Instance.disabledItem == item.ItemType)
             return;
-        }
 
-        foreach (Transform enemyLocation in GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().spawnPoints)
+        switch (item.target)
         {
+            case 1:
+                AttackFirstEnemy(item, damage);
+                break;
+            case 2:
+                int hits = 0;
+                foreach (Transform enemyLocation in EnemyManager.Instance.spawnPoints)
+                {
+                    if (hits >= 2) break;
+                    if (TryAttackAt(enemyLocation, item, damage))
+                        hits++;
+                }
+                break;
+            case 3:
+                foreach (Transform enemyLocation in EnemyManager.Instance.spawnPoints)
+                    TryAttackAt(enemyLocation, item, damage);
+                break;
+
+        }
+    }
+
+    private void AttackFirstEnemy(ItemData item, int damage)
+    {
+        foreach (Transform enemyLocation in EnemyManager.Instance.spawnPoints)
+            if (TryAttackAt(enemyLocation, item, damage)) break;
+    }
+
+
+
+    private bool TryAttackAt(Transform enemyLocation, ItemData item, int damage)
+    {
             // Check if the location has an enemy in it
-            if (enemyLocation.transform.childCount > 0)
-            {
+            if (enemyLocation.childCount == 0) return false;
+            
                 // Get the enemy at this location
                 GameObject enemy = enemyLocation.transform.GetChild(0).gameObject;
+
+                if (enemy.GetComponent<EnemyController>().GetHealth() <= 0) return false;
+
                 bool weakness = false;
                 bool resistance = false;
 
@@ -233,22 +266,32 @@ public class ScoreManager : MonoBehaviour
                     weakness = true;
                 }
 
-                if(EnemyManager.Instance.isBossDay && EnemyManager.Instance.bossData.ability == BossAbilities.EvenNumberReduce
+                if (EnemyManager.Instance.isBossDay && EnemyManager.Instance.bossData.ability == BossAbilities.EvenNumberReduce
                     && damage % 2 == 0)
                 {
                     damage = Mathf.RoundToInt(damage * 0.5f);
                     resistance = true;
                 }
 
-                if (enemy.GetComponent<EnemyController>().GetHealth() > 0)
+                if (item.weaponBonus == WeaponBonus.PercentHealth)
                 {
-                    EventBus.Publish<DamageTakenEvent>(
-                            new DamageTakenEvent(enemyLocation.transform.GetChild(0).gameObject.GetEntityId(), damage, weakness, resistance));
-                    break;
+                   int percentDamage = Mathf.RoundToInt(enemy.GetComponent<EnemyController>().GetHealth() * 0.1f);
+                   damage += percentDamage;
                 }
-            }
-        }
+
+                if (item.weaponBonus == WeaponBonus.GrowingDamage)
+                {
+                   damage += item.bonusDamageStacks;
+                   item.bonusDamageStacks++;
+                }
+
+        EventBus.Publish(new DamageTakenEvent(enemy.GetEntityId(), damage, weakness, resistance));
+        return true;    
+
     }
+    
+        
+    
 
     /// <summary>
     /// Finalize the Score calculation for display.

@@ -15,8 +15,11 @@ MonoBehaviour:
   ItemName: Dagger
   ItemDescription: Short swift blade
   cost: 2
+  target: 1
   ItemType: 0
   Rarity: 0
+  weaponBonus: 0
+  bonusDamageStacks: 0
   Damage: 2
   Mult: 0
   Playable: 2

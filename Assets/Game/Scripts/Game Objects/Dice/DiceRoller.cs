@@ -17,6 +17,7 @@ public class DiceRoller : MonoBehaviour
     [SerializeField] private float changeyDuration = 1.4f;
     [SerializeField] private float revealPause = 2f;
 
+    public int natRoll;
     public async Task<int> RollDie(int modifier = 0)
     {
         int nat = UnityEngine.Random.Range(1, 21);
@@ -40,14 +41,21 @@ public class DiceRoller : MonoBehaviour
             int second = UnityEngine.Random.Range(1, 21);
             if (second == 20) nat = 20;
         }
-
+        natRoll = nat;
         display.text = "Rolling die...";
         AudioManager.Instance.PlayClip("DieRoll");
         await ShuffleDice(displayRoll, nat);
 
+        if (nat == 20 || nat == 1)
+        {
+            await ShowModifier(displayRoll, displayModifer, nat, 0, nat);
+            return nat;
+        }
+
+
         if (modifier != 0 || nat == 20 || nat == 1)
         {
-            int final = Mathf.Clamp(nat + modifier, 1, 20);
+            int final = modifier != 0 ? nat + modifier : nat;
             await ShowModifier(displayRoll, displayModifer, nat, modifier, final);
             return final;
         }
@@ -112,10 +120,18 @@ public class DiceRoller : MonoBehaviour
 
         await PauseExtensions.DelayRespectingPause(600);
         loserDisplay.gameObject.SetActive(false);
+        natRoll = higher;
+
+        if (higher == 20 || higher == 1)
+        {
+            await ShowModifier(displayRoll, displayModifer, higher, 0, higher);
+            return higher;
+        }
+
 
         if (modifier != 0 && displayModifer != null)
         {
-            int final = Mathf.Clamp(higher + modifier, 1, 20);
+            int final = modifier != 0 ? higher + modifier : higher;
             await ShowModifier(winnerDisplay, displayModifer, higher, modifier, final);
             return final;
         }
@@ -130,13 +146,13 @@ public class DiceRoller : MonoBehaviour
             await PauseExtensions.DelayRespectingPause(Mathf.RoundToInt(revealPause * 400));
         }
 
-        if (nat == 20)
+        if (nat == 20 && modifier == 0)
         {
             main.color = Color.yellow;
             displayCrit.text = "CRITICAL HIT!";
             displayCrit.color = Color.yellow;
         }
-        else if (nat == 1)
+        else if (nat == 1 && modifier == 0)
         {
             main.color = Color.red;
             displayCrit.text = "CRITICAL MISS!";
@@ -149,7 +165,7 @@ public class DiceRoller : MonoBehaviour
         }
         await PauseExtensions.DelayRespectingPause(Mathf.RoundToInt(revealPause * 800));
         main.text = final.ToString();
-        main.color = Color.black;
+        main.color = Color.white;
         displayCrit.text = "";
         modDisplay.text = "";
     }
