@@ -5,32 +5,53 @@ using UnityEngine;
 
 public class DiceRollState : ICombatState
 {
-    private readonly List<ItemData> _items;
+     private readonly DiceRoller _roller;
+    private readonly int _modifier;
+    private readonly bool _withAdvantage;
     private CancellationTokenSource _cts;
 
-    // Pass the items to roll for when creating the state
-    public DiceRollState()
-    {
+    // ScoreManager awaits this to get the roll result
+    public Task<int> RollTask => _rollTCS.Task;
+    private readonly TaskCompletionSource<int> _rollTCS = new TaskCompletionSource<int>();
 
+    public DiceRollState(DiceRoller roller, int modifier, bool withAdvantage)
+    {
+        _roller = roller;
+        _modifier = modifier;
+        _withAdvantage = withAdvantage;
     }
 
     public void EnterState(CombatManager cm)
     {
         _cts = new CancellationTokenSource();
-        ExecuteRoll(cm, _cts.Token);
+        ExecuteRoll(_cts.Token);
     }
 
     public void ExitState(CombatManager cm)
     {
-        // Cancel if we leave early e.g. enemy dies mid-roll
         _cts?.Cancel();
         _cts?.Dispose();
     }
 
     public void UpdateState(CombatManager cm) { }
 
-    private void ExecuteRoll(CombatManager cm, CancellationToken ct)
+    private async void ExecuteRoll(CancellationToken ct)
     {
-        Debug.Log("Rolling dice");
+        try
+        {
+            int result = _withAdvantage
+                ? await _roller.ExecuteRollWithAdvantage(_modifier)
+                : await _roller.ExecuteRollDie(_modifier);
+
+            if (ct.IsCancellationRequested) return;
+
+            // Resolve the task so whoever is awaiting RollDie() gets the result
+            _rollTCS.TrySetResult(result);
+            CombatManager.Instance.ResumePreviousState();
+        }
+        catch (TaskCanceledException)
+        {
+            _rollTCS.TrySetCanceled();
+        }
     }
 }

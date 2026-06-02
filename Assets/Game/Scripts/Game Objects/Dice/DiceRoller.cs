@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using static UnityEngine.ProBuilder.AutoUnwrapSettings;
 
 public class DiceRoller : MonoBehaviour
 {
@@ -17,9 +18,35 @@ public class DiceRoller : MonoBehaviour
     [SerializeField] private float changeyDuration = 1.4f;
     [SerializeField] private float revealPause = 2f;
 
-    public async Task<int> RollDie(int modifier = 0)
+    public Task<int> RollDie(int modifier = 0)
     {
-        CombatManager.Instance.SwitchState(new DiceRollState());
+        var state = new DiceRollState(this, modifier, false);
+        CombatManager.Instance.SwitchState(state);
+        return state.RollTask;
+    }
+
+    // EarlyAdvantage: rolls 2 dice and takes the higher (advantage)
+    public Task<int> RollWithAdvantage(int modifier = 0)
+    {
+        var state = new DiceRollState(this, modifier, true);
+        CombatManager.Instance.SwitchState(state);
+        return state.RollTask;
+    }
+
+    public void ResetText()
+    {
+        display.text = "";
+        displayRoll.text = "";
+        if (displayAdvantage != null) displayAdvantage.text = "";
+        if (displayModifer != null) displayModifer.text = "";
+        if (displayCrit != null) displayCrit.text = "";
+        if (upgradeNotifText != null) upgradeNotifText.text = "";
+    }
+
+    #region DiceRollStates
+    // All the actual roll methods move to internal — only DiceRollState calls them
+    internal async Task<int> ExecuteRollDie(int modifier)
+    {
         int nat = UnityEngine.Random.Range(1, 21);
         display.gameObject.SetActive(true);
         displayRoll.gameObject.SetActive(true);
@@ -44,64 +71,28 @@ public class DiceRoller : MonoBehaviour
 
         display.text = "Rolling die...";
         AudioManager.Instance.PlayClip("DieRoll");
-        await ShuffleDice(displayRoll, nat);
+        await ExecuteShuffleDice(displayRoll, nat);
 
         if (modifier != 0 || nat == 20 || nat == 1)
         {
             int final = Mathf.Clamp(nat + modifier, 1, 20);
-            await ShowModifier(displayRoll, displayModifer, nat, modifier, final);
+            await ExecuteShowModifier(displayRoll, displayModifer, nat, modifier, final);
             return final;
         }
         return nat;
-
     }
-
-    public async Task ShowUpgradeNotif(string message)
-    {
-        if (upgradeNotifText == null) return;
-        upgradeNotifText.text = message;
-        await Task.Delay(800);
-        upgradeNotifText.text = "";
-    }
-
-    private async Task ShuffleDice(TMP_Text target, int landOn)
-    {
-        float timed = 0f;
-        float interval = numberChangeyInterval;
-
-        while (timed < changeyDuration)
-        {
-            // Suspend the shuffle animation loop while paused
-            await PauseManager.Instance.WaitWhilePausedAsync();
-
-            target.text = UnityEngine.Random.Range(1, 21).ToString();
-            await PauseExtensions.DelayRespectingPause(Mathf.RoundToInt(interval * 1000));
-            timed += interval;
-
-            if (timed > changeyDuration * 0.5f) {
-
-                interval = Mathf.Lerp(numberChangeyInterval, numberChangeyInterval * 16f , (timed-changeyDuration * 0.6f) / (changeyDuration * 0.4f));
-            }
-        }
-        display.text = "You rolled:";
-        target.text = landOn.ToString();
-    }
-
-    // EarlyAdvantage: rolls 2 dice and takes the higher (advantage)
-    public async Task<int> RollWithAdvantage(int modifier = 0)
+    internal async Task<int> ExecuteRollWithAdvantage(int modifier)
     {
         displayRoll.gameObject.SetActive(true);
         displayAdvantage.gameObject.SetActive(true);
 
         int a = UnityEngine.Random.Range(1, 21);
         int b = UnityEngine.Random.Range(1, 21);
-        if (displayAdvantage != null) displayAdvantage.gameObject.SetActive(true);
 
-        Task aShuffle = ShuffleDice(displayRoll, a);
-        Task bShuffle = ShuffleDice(displayAdvantage, b);
+        Task aShuffle = ExecuteShuffleDice(displayRoll, a);
+        Task bShuffle = ExecuteShuffleDice(displayAdvantage, b);
         await Task.WhenAll(aShuffle, bShuffle);
 
-        // Pause-aware delay after both dice land
         await PauseExtensions.DelayRespectingPause(Mathf.RoundToInt(revealPause * 1000));
 
         int lower = a <= b ? a : b;
@@ -117,13 +108,35 @@ public class DiceRoller : MonoBehaviour
         if (modifier != 0 && displayModifer != null)
         {
             int final = Mathf.Clamp(higher + modifier, 1, 20);
-            await ShowModifier(winnerDisplay, displayModifer, higher, modifier, final);
+            await ExecuteShowModifier(winnerDisplay, displayModifer, higher, modifier, final);
             return final;
         }
-
         return higher;
     }
-    private async Task ShowModifier(TMP_Text main, TMP_Text modDisplay, int nat, int modifier, int final)
+    internal async Task ExecuteShuffleDice(TMP_Text target, int landOn)
+    {
+        float timed = 0f;
+        float interval = numberChangeyInterval;
+
+        while (timed < changeyDuration)
+        {
+            // Suspend the shuffle animation loop while paused
+            await PauseManager.Instance.WaitWhilePausedAsync();
+
+            target.text = UnityEngine.Random.Range(1, 21).ToString();
+            await PauseExtensions.DelayRespectingPause(Mathf.RoundToInt(interval * 1000));
+            timed += interval;
+
+            if (timed > changeyDuration * 0.5f)
+            {
+
+                interval = Mathf.Lerp(numberChangeyInterval, numberChangeyInterval * 16f, (timed - changeyDuration * 0.6f) / (changeyDuration * 0.4f));
+            }
+        }
+        display.text = "You rolled:";
+        target.text = landOn.ToString();
+    }
+    internal async Task ExecuteShowModifier(TMP_Text main, TMP_Text modDisplay, int nat, int modifier, int final)
     {
         if (modifier != 0)
         {
@@ -154,14 +167,12 @@ public class DiceRoller : MonoBehaviour
         displayCrit.text = "";
         modDisplay.text = "";
     }
-
-    public void ResetText()
+    internal async Task ShowUpgradeNotif(string message)
     {
-        display.text = "";
-        displayRoll.text = "";
-        if (displayAdvantage != null) displayAdvantage.text = "";
-        if (displayModifer != null) displayModifer.text = "";
-        if (displayCrit != null) displayCrit.text = "";
-        if (upgradeNotifText != null) upgradeNotifText.text = "";
+        if (upgradeNotifText == null) return;
+        upgradeNotifText.text = message;
+        await PauseExtensions.DelayRespectingPause(Mathf.RoundToInt(800));
+        upgradeNotifText.text = "";
     }
+    #endregion
 }
