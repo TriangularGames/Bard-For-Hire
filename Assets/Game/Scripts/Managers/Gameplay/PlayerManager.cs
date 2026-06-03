@@ -158,6 +158,13 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         consumableInventory.Add(e.data);
     }
+    public int CountItemsOfType(ItemType type)
+    {
+        int count = 0;
+        foreach (ItemData item in itemInventory)
+            if (item.ItemType == type) count++;
+        return count;
+    }
 
     public override void Awake()
     {

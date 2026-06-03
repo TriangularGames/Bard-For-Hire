@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -142,7 +142,6 @@ public class ScoreManager : MonoBehaviour
                 {
                     EventBus.Publish(new MoneyEarnedEvent(remainingRounds * 5, "Early Completion"));
                 }
-
                 Debug.Log("Combat Completed!");
                 MenuManager.Instance.SwitchState(new VictoryMenuState());
                 EventBus.Publish(new VictoryEvent(rewardDisplayText));

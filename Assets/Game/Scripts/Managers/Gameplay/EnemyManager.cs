@@ -1,13 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
 
 public class EnemyManager : Singleton<EnemyManager>
 {
     [Header("Enemy Data")]
-    /// <summary>
-    /// Enemy types available for this Performance
-    /// </summary>
     [SerializeField] List<string> memberTypes;
     [SerializeField] public int daysTilBoss = 3;
     [SerializeField] private int bossesKilledBeforePooling = 3;
@@ -63,7 +59,7 @@ public class EnemyManager : Singleton<EnemyManager>
         roundData = DEFAULTRoundData;
         isBossDay = false;
         isBossGone = false;
-}
+    }
 
     private void OnEnable()
     {
@@ -103,7 +99,9 @@ public class EnemyManager : Singleton<EnemyManager>
         int index = -1;
         EnemyController enemyC = e.enemy.GetComponent<EnemyController>();
 
-        EventBus.Publish<MoneyEarnedEvent>(new MoneyEarnedEvent(enemyC.enemyData.coinReward, enemyC.enemyData.Name));
+        int coins = enemyC.enemyData.coinReward;
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.MercenaryContract)) coins = Mathf.RoundToInt(coins * 1.3f);
+        EventBus.Publish(new MoneyEarnedEvent(coins, enemyC.enemyData.Name));
 
         if (enemies.Contains(e.enemy))
         {

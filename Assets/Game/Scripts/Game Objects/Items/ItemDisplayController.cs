@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class ItemDisplayController : ItemController
@@ -82,6 +81,5 @@ public class ItemDisplayController : ItemController
             _material.SetFloat(_dissolveAmount, lerpedDissolve);
             yield return null;
         }
-        Debug.Log("Dissolve Complete");
     }
 }
