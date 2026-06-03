@@ -54,7 +54,7 @@ public class DiceRoller : MonoBehaviour
         if (upgradeNotifText != null) upgradeNotifText.text = "";
     }
 
-    // In DiceRoller — replace the old Task<int> versions
+    // Replaced all async functions
     public void RollDie(int modifier, System.Action<int> onDone)
     {
         CombatManager.Instance.SwitchState(new DiceRollState(this, modifier, false, onDone));

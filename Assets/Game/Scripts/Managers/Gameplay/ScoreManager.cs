@@ -86,13 +86,19 @@ public class ScoreManager : MonoBehaviour
         AttackEnemy(item, totalDamage);
 
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.ComboChain))
+        {
             AttackEnemy(item, Mathf.RoundToInt(totalDamage * 0.5f));
+        }
 
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.DoubleCrit) && finalRoll == 20)
+        {
             AttackEnemy(item, totalDamage);
+        }
 
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.EchoStrike) && index == pendingItems.Count - 1)
+        {
             AttackEnemy(item, totalDamage);
+        }
     }
 
     public void ApplyQuickSave(int index, ItemData item)
@@ -105,7 +111,9 @@ public class ScoreManager : MonoBehaviour
     public void HideItemDisplay()
     {
         if (itemDisplay.activeSelf)
+        {
             itemDisplay.SetActive(false);
+        }
     }
 
     public void FinalizeScore()
@@ -120,7 +128,9 @@ public class ScoreManager : MonoBehaviour
             {
                 int remainingRounds = MaxRounds - curRound;
                 if (remainingRounds > 0)
+                {
                     EventBus.Publish(new MoneyEarnedEvent(remainingRounds * 5, "Early Completion"));
+                }
 
                 Debug.Log("Combat Completed!");
                 MenuManager.Instance.SwitchState(new VictoryMenuState());
@@ -159,7 +169,8 @@ public class ScoreManager : MonoBehaviour
 
         switch (item.target)
         {
-            case 1: AttackFirstEnemy(item, damage); break;
+            case 1: 
+                AttackFirstEnemy(item, damage); break;
             case 2:
                 int hits = 0;
                 foreach (Transform loc in EnemyManager.Instance.spawnPoints)
@@ -178,7 +189,9 @@ public class ScoreManager : MonoBehaviour
     private void AttackFirstEnemy(ItemData item, int damage)
     {
         foreach (Transform loc in EnemyManager.Instance.spawnPoints)
+        {
             if (TryAttackAt(loc, item, damage)) break;
+        }
     }
 
     private bool TryAttackAt(Transform enemyLocation, ItemData item, int damage)
@@ -218,6 +231,7 @@ public class ScoreManager : MonoBehaviour
     }
 }
 
+// Event structs for ScoreManager to publish
 public struct ScoringStartedEvent { }
 
 public struct ScoringCompletedEvent
