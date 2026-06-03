@@ -69,6 +69,13 @@ public enum ConsumableID
     PotionOfCloning
 }
 
+public enum WeaponBonus 
+{ 
+    None, 
+    PercentHealth, 
+    GrowingDamage
+}
+
 public enum BossAbilities
 {
     EvenNumberReduce,

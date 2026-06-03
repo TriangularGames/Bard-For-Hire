@@ -44,6 +44,8 @@ public class PlayerManager : Singleton<PlayerManager>
         itemsNotUsed.Clear();
         itemInventory.Clear();
         itemInventory.AddRange(_defaultInventory);
+        foreach (ItemData item in itemInventory)
+         item.bonusDamageStacks = 0;
     }
 
     private void OnEnable()

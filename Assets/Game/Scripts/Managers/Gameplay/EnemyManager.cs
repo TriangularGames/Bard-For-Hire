@@ -10,6 +10,7 @@ public class EnemyManager : Singleton<EnemyManager>
     /// </summary>
     [SerializeField] List<string> memberTypes;
     [SerializeField] public int daysTilBoss = 3;
+    [SerializeField] private int bossesKilledBeforePooling = 3;
     public bool isBossDay;
     public bool isBossGone;
     public EnemyData bossData;
@@ -171,6 +172,8 @@ public class EnemyManager : Singleton<EnemyManager>
         int maxHealth = Mathf.RoundToInt(roundData.startMaxTotalHealth * scaleHealth);
         int attempts = 0;
         int maxAttempts = 20;
+        List<EnemyData> bestAttempt = null;
+        float bestDeviation = float.MaxValue;
 
         while (attempts < maxAttempts)
         {
@@ -188,11 +191,21 @@ public class EnemyManager : Singleton<EnemyManager>
             int target = (minHealth + maxHealth) / 2;
             float deviation = Mathf.Abs(totaScaledHealth - target) / (float)target;
 
+            if (deviation < bestDeviation)
+            {
+                bestDeviation = deviation;
+                bestAttempt = attemptedGuys;
+            }
+
             if (deviation <= amountOff)
             {
                 nextEncounter = attemptedGuys;
                 return;
             }
+        }
+        if (bestAttempt != null)
+        {
+            nextEncounter = bestAttempt;
         }
 
     }
@@ -207,20 +220,24 @@ public class EnemyManager : Singleton<EnemyManager>
             List<EnemyData> affordableGuys = new List<EnemyData>();
             foreach (EnemyData enemy in ResourceManager.Instance.EnemyData)
             {
-                if (!enemy.isBoss && enemy.ShowUpThisDay(currentDay) && enemy.GetScaledUpHealth(TotalMult) <= remainingHealth)
+                if (!enemy.ShowUpThisDay(currentDay) || (enemy.GetScaledUpHealth(TotalMult) > remainingHealth)) continue;
+                bool isNormalEnemy = !enemy.isBoss;
+                bool isPoolableBoss = enemy.isBoss && enemy.canAppearInNormalEncounters && bossesKilled >= bossesKilledBeforePooling;
+
+                if (isNormalEnemy || isPoolableBoss)
                     affordableGuys.Add(enemy);
             }
 
             if (affordableGuys.Count == 0)
             {
-                EnemyData cheapest = ResourceManager.Instance.EnemyData[0];
+                EnemyData cheapest = null;
                 foreach (EnemyData enemy in ResourceManager.Instance.EnemyData)
                 {
-                    if (!enemy.isBoss & enemy.ShowUpThisDay(currentDay))
-                    {
-                        if (cheapest == null || enemy.GetScaledUpHealth(TotalMult) < cheapest.GetScaledUpHealth(TotalMult)) 
-                            cheapest = enemy;
-                    }
+                    if (!enemy.ShowUpThisDay(currentDay)) continue;
+                    bool isNormalEnemy = !enemy.isBoss;
+                    bool isPoolableBoss = enemy.isBoss && enemy.canAppearInNormalEncounters && bossesKilled >= bossesKilledBeforePooling;
+                    if ((isNormalEnemy || isPoolableBoss) && (cheapest == null || enemy.GetScaledUpHealth(TotalMult) < cheapest.GetScaledUpHealth(TotalMult)))
+                        cheapest = enemy;
                 }
                 if (cheapest != null) encGuy.Add(cheapest);
                 break;

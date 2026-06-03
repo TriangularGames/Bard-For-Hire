@@ -19,6 +19,7 @@ public class EnemyData : ScriptableObject
     [SerializeField] public BossAbilities ability;
     [SerializeField] public int minDay = 0;
     [SerializeField] public int maxDay = 0;
+    [SerializeField] public bool canAppearInNormalEncounters;
 
     [Header("Additional Bonus")]
     [SerializeField] bool hasBonus;

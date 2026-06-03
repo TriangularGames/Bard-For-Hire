@@ -61,7 +61,7 @@ public class ItemController : MonoBehaviour
         }
         else
         {
-            damageTxt.text = "Dmg " + itemData.Damage.ToString();
+            damageTxt.text = "Dmg " + ((itemData.Damage + itemData.bonusDamageStacks));
         }
         
     }
