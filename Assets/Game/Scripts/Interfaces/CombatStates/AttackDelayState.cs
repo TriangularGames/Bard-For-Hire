@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// State used for applying the attack damage after a hit, including timing for the attack animation and transitioning to the next state (between item or next item) after the attack is applied.
+/// State used for applying the attack damage after a hit, including timing for the attack animation and
+/// transitioning to the next state (between item or next item) after the attack is applied.
 /// </summary>
 public class AttackDelayState : ICombatState
 {
@@ -28,7 +29,7 @@ public class AttackDelayState : ICombatState
     public void UpdateState(CombatManager cm)
     {
         if (PauseManager.Instance.IsPaused) return;
-        _timer += Time.unscaledDeltaTime;
+        _timer += Time.deltaTime;
 
         if (_timer >= 0.1f * _sm.GameSpeed)
         {

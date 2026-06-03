@@ -2,7 +2,9 @@
 using UnityEngine;
 
 /// <summary>
-/// State used for calculating the score of an item attack after the dice roll result is shown. Determines if the attack hits or misses based on the item's requirements and the final roll result, and transitions to the appropriate next state (hit or miss delay) while also checking for end of combat conditions.
+/// State used for calculating the score of an item attack after the dice roll result is shown.
+/// Determines if the attack hits or misses based on the item's requirements and the final roll result,
+/// and transitions to the appropriate next state (hit or miss delay) while also checking for end of combat conditions.
 /// </summary>
 public class CalculateScoreState : ICombatState
 {
@@ -10,6 +12,8 @@ public class CalculateScoreState : ICombatState
     private readonly int _index;
     private readonly int _rollResult;
     private bool _initialized;
+
+    private ScoreManager sm;
 
     public CalculateScoreState(List<ItemData> items, int index, int rollResult)
     {
@@ -20,14 +24,8 @@ public class CalculateScoreState : ICombatState
 
     public void EnterState(CombatManager cm)
     {
-        ScoreManager sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
+        sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
 
-        if (_index == 0)
-        {
-            sm.InitializeRound(_items);
-        }
-
-        sm.SetupItemDisplay(_index);
         _initialized = true;
     }
 
@@ -35,8 +33,6 @@ public class CalculateScoreState : ICombatState
     public void UpdateState(CombatManager cm)
     {
         if (!_initialized) return;
-
-        ScoreManager sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
 
         if (!EnemyManager.Instance.AreEnemiesAlive())
         {

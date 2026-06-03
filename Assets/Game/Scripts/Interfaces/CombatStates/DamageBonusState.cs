@@ -2,7 +2,9 @@
 using UnityEngine;
 
 /// <summary>
-/// State used for applying and showing damage bonuses after an item attack hits, including timing for revealing each bonus and updating the displayed damage accordingly. Transitions to the next state (attack delay) after all bonuses have been processed.
+/// State used for applying and showing damage bonuses after an item attack hits,
+/// including timing for revealing each bonus and updating the displayed damage accordingly.
+/// Transitions to the next state (attack delay) after all bonuses have been processed.
 /// </summary>
 public class DamageBonusState : ICombatState
 {
@@ -18,7 +20,8 @@ public class DamageBonusState : ICombatState
     private float _timer;
     private bool _showingBonus;
 
-    public DamageBonusState(List<ItemData> items, int index, int finalRoll, int totalDamage, List<UpgradeFightingManager.DamageBonus> bonuses, int baseDamage, ScoreManager sm)
+    public DamageBonusState(List<ItemData> items, int index, int finalRoll, int totalDamage,
+        List<UpgradeFightingManager.DamageBonus> bonuses, int baseDamage, ScoreManager sm)
     {
         _items = items;
         _index = index;
@@ -36,7 +39,7 @@ public class DamageBonusState : ICombatState
         _showingBonus = false;
 
         // Set initial damage text
-        var ic = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().pendingItems[_index];
+        var ic = _sm.pendingItems[_index];
         SetDamageText(_baseDamage);
     }
 
@@ -57,12 +60,12 @@ public class DamageBonusState : ICombatState
         var bonus = _bonuses[_bonusIndex];
         if (bonus.amount <= 0) { _bonusIndex++; return; }
 
-        _timer += Time.unscaledDeltaTime;
+        _timer += Time.deltaTime;
 
         if (!_showingBonus && _timer >= 0.4f)
         {
             // Show bonus text
-            var itemDisplay = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().pendingItems[_index];
+            var itemDisplay = _sm.pendingItems[_index];
             SetBonusText(_baseDamage, bonus);
             _showingBonus = true;
             _timer = 0f;
@@ -85,8 +88,7 @@ public class DamageBonusState : ICombatState
     private void SetDamageText(int value)
     {
         // Access itemDisplay's damageTxt via ItemController
-        var sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
-        sm.pendingItems[_index].ToString();
+        _sm.pendingItems[_index].ToString();
     }
 
     private void SetBonusText(int baseD, UpgradeFightingManager.DamageBonus bonus)

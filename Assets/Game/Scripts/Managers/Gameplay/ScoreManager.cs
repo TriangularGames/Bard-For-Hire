@@ -41,10 +41,21 @@ public class ScoreManager : MonoBehaviour
         GameSpeed = PlayerPrefs.GetInt("GameSpeed");
         switch (GameSpeed)
         {
-            case 0: GameSpeed = 4; break;
-            case 1: GameSpeed = 3; break;
-            case 2: GameSpeed = 2; break;
-            case 3: GameSpeed = 1; break;
+            case 0:
+                GameSpeed = 4;
+                break;
+
+            case 1:
+                GameSpeed = 3;
+                break;
+
+            case 2:
+                GameSpeed = 2;
+                break;
+
+            case 3:
+                GameSpeed = 1;
+                break;
         }
     }
 

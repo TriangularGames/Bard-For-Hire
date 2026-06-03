@@ -2,7 +2,8 @@
 using UnityEngine;
 
 /// <summary>
-/// State used for the delay after an item attack hits but before the damage bonuses are shown, including timing for the hit animation and transitioning to the next state (damage bonus) after the hit is revealed.
+/// State used for the delay after an item attack hits but before the damage bonuses are shown,
+/// including timing for the hit animation and transitioning to the next state (damage bonus) after the hit is revealed.
 /// </summary>
 public class HitDelayState : ICombatState
 {
@@ -31,7 +32,7 @@ public class HitDelayState : ICombatState
     public void UpdateState(CombatManager cm)
     {
         if (PauseManager.Instance.IsPaused) return;
-        _timer += Time.unscaledDeltaTime;
+        _timer += Time.deltaTime;
 
         if (_timer >= 0.3f * _sm.GameSpeed)
         {

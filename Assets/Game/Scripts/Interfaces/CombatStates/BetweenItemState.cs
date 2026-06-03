@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// State used after an item attack to show the result before moving to the next item or ending the combat phase. Handles timing and checks for end of combat conditions.
+/// State used after an item attack to show the result before moving to the next item or ending the combat phase.
+/// Handles timing and checks for end of combat conditions.
 /// </summary>
 public class BetweenItemState : ICombatState
 {
@@ -24,7 +25,7 @@ public class BetweenItemState : ICombatState
     public void UpdateState(CombatManager cm)
     {
         if (PauseManager.Instance.IsPaused) return;
-        _timer += Time.unscaledDeltaTime;
+        _timer += Time.deltaTime;
 
         if (_timer >= 0.8f * _sm.GameSpeed)
         {

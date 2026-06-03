@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// State used for the delay after an item attack misses but before the next action is taken, including timing for the miss animation and transitioning to the next state (second chance, quick save, or between item) after the miss is revealed and any applicable upgrades are checked.
+/// State used for the delay after an item attack misses but before the next action is taken,
+/// including timing for the miss animation and transitioning to the next state (second chance, quick save, or between item)
+/// after the miss is revealed and any applicable upgrades are checked.
 /// </summary>
 public class MissDelayState : ICombatState
 {
@@ -29,14 +31,18 @@ public class MissDelayState : ICombatState
     public void UpdateState(CombatManager cm)
     {
         if (PauseManager.Instance.IsPaused) return;
-        _timer += Time.unscaledDeltaTime;
+        _timer += Time.deltaTime;
 
         if (_timer >= 0.1f * _sm.GameSpeed)
         {
             if (UpgradeFightingManager.Instance.CanUseSecondChance())
+            {
                 cm.SwitchState(new SecondChanceState(_items, _index, _sm));
+            }
             else if (UpgradeFightingManager.Instance.CanUseQuickSave())
+            {
                 cm.SwitchState(new QuickSaveState(_items, _index, _sm));
+            }
             else
             {
                 UpgradeFightingManager.Instance.FailedAction();

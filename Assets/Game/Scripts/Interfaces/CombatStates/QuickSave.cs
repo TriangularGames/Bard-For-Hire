@@ -30,7 +30,7 @@ public class QuickSaveState : ICombatState
     public void UpdateState(CombatManager cm)
     {
         if (PauseManager.Instance.IsPaused) return;
-        _timer += Time.unscaledDeltaTime;
+        _timer += Time.deltaTime;
 
         if (_timer >= 0.8f)
             cm.SwitchState(new BetweenItemState(_items, _index, _sm));

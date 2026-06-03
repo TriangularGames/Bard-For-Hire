@@ -75,12 +75,18 @@ public class DiceRollState : ICombatState
         _roller.displayAdvantage.gameObject.SetActive(false);
         _roller.display.text = "Rolling die...";
         AudioManager.Instance.PlayClip("DieRoll");
+
+        ScoreManager sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
+
+        if (_index == 0)
+        {
+            sm.InitializeRound(_items);
+        }
+
+        sm.SetupItemDisplay(_index);
     }
 
-    public void ExitState(CombatManager cm)
-    {
-        
-    }
+    public void ExitState(CombatManager cm) { }
 
     public void UpdateState(CombatManager cm)
     {
@@ -95,7 +101,7 @@ public class DiceRollState : ICombatState
 
     private void UpdateShuffle(CombatManager cm)
     {
-        _shuffleTimer += Time.unscaledDeltaTime;
+        _shuffleTimer += Time.deltaTime;
 
         if (_shuffleTimer >= _shuffleInterval)
         {

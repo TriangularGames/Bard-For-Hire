@@ -2,7 +2,9 @@
 using UnityEngine;
 
 /// <summary>
-/// State used for showing the result of a dice roll, including the natural roll, modifier, and final value. Handles timing for revealing the result and transitions to the next state based on whether it's a single roll or part of a multi-item attack sequence.
+/// State used for showing the result of a dice roll, including the natural roll, modifier, and final value.
+/// Handles timing for revealing the result and transitions to the next state based on whether
+/// it's a single roll or part of a multi-item attack sequence.
 /// </summary>
 public class ShowRollResultState : ICombatState
 {
@@ -65,7 +67,7 @@ public class ShowRollResultState : ICombatState
     {
         if (PauseManager.Instance.IsPaused) return;
 
-        _timer += Time.unscaledDeltaTime;
+        _timer += Time.deltaTime;
         if (_timer >= _duration)
         {
             // Show final value
