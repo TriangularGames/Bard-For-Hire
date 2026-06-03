@@ -94,9 +94,9 @@ public class ScoreManager : MonoBehaviour
             Debug.Log("Item " + curItem + " being rolled for.");
             // Display item being rolled for
             itemDisplay.GetComponent<ItemController>().itemData = item;
-            itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 0f, 0f, 0f);
             itemDisplay.GetComponent<ItemController>().Setup();
             itemDisplay.SetActive(true);
+            itemDisplay.GetComponent<ItemDisplayController>().Reset();
             // Remove item being checked from Hotbar
             EventBus.Publish<ItemUsedEvent>(new ItemUsedEvent(item));
 
@@ -140,7 +140,7 @@ public class ScoreManager : MonoBehaviour
         {
             Debug.Log($"{item.name} was played!");
             AudioManager.Instance.PlayClip("Success");
-            itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 1f, 0f, 1f);
+            itemDisplay.GetComponent<ItemDisplayController>().Success();
 
             await PauseExtensions.DelayRespectingPause(300 * GameSpeed);
             int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex, out var bonuses);
@@ -175,7 +175,7 @@ public class ScoreManager : MonoBehaviour
         {
             // Attack Missed
             AudioManager.Instance.PlayClip("Fail");
-            itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(1f, 0f, 0f, 1f);
+            itemDisplay.GetComponent<ItemDisplayController>().Fail();
             EventBus.Publish<MissEvent>(new MissEvent());
             await PauseExtensions.DelayRespectingPause(100 * GameSpeed);
 
