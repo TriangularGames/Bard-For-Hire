@@ -28,11 +28,6 @@ public class ScoreManager : MonoBehaviour
 
     private string rewardDisplayText;
 
-    bool archmageActive = false;
-    bool shadowThiefActive = false;
-    bool knightActive = false;
-    bool relicActive = false;
-
     private void OnEnable()
     {
         EventBus.Subscribe<MoneyEarnedEvent>(MakeRewardText);
@@ -93,22 +88,7 @@ public class ScoreManager : MonoBehaviour
             return;
         }
 
-        bool allMagic = true;
-        bool allPiercing = true;
-        bool allSlashing = true; 
-        bool noCommon = true;
-        foreach (ItemData i in pendingItems)
-        {
-            if (i.ItemType != ItemType.Magical) allMagic = false;
-            if (i.ItemType != ItemType.Piercing) allPiercing = false;
-            if (i.ItemType != ItemType.Slashing) allSlashing = false;
-            if (i.Rarity == ObjectRarity.Common) noCommon = false;
-        }
-
-        bool archmageActive = allMagic && UpgradeManager.Instance.HasUpgrade(UpgradeID.Archmage);
-        bool shadowThiefActive = allPiercing && UpgradeManager.Instance.HasUpgrade(UpgradeID.ShadowThief);
-        bool knightActive = allSlashing && UpgradeManager.Instance.HasUpgrade(UpgradeID.KnightCaptain);
-        bool relicActive = noCommon && UpgradeManager.Instance.HasUpgrade(UpgradeID.RelicKeeper);
+        UpgradeFightingManager.Instance.GetTheHandBonuses(pendingItems);
 
         foreach (ItemData item in pendingItems)
         {
@@ -143,12 +123,10 @@ public class ScoreManager : MonoBehaviour
                 modifier += UpgradeFightingManager.Instance.tempDCReduce;
             }
 
-            if ((shadowThiefActive))
-            {
+            if (UpgradeFightingManager.Instance.shadowThiefActive)
                 modifier -= 2;
-            }
 
-            bool useAdvantage = (UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage) && curItem == 0) || (shadowThiefActive) || (UpgradeFightingManager.Instance.UseComeback());
+            bool useAdvantage = (UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage) && curItem == 0) || UpgradeFightingManager.Instance.shadowThiefActive || UpgradeFightingManager.Instance.UseComeback();
             if (useAdvantage)
             {
                 if (UpgradeFightingManager.Instance.UseComeback())
@@ -171,7 +149,7 @@ public class ScoreManager : MonoBehaviour
     /// Called when the roll is complete, and the score is calculated
     /// </summary>
     /// <param name="rollValue">The value of the roll</param>
-    private async Task OnRollComplete(int rollValue, bool archmageActive = false, bool knightActive = false, bool relicActive = false)
+    private async Task OnRollComplete(int rollValue)
     {
         ItemData item = pendingItems[curItem];
         int slotIndex = curItem;
@@ -188,20 +166,6 @@ public class ScoreManager : MonoBehaviour
 
             await PauseExtensions.DelayRespectingPause(300 * GameSpeed);
             int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex, out var bonuses);
-
-            if (archmageActive)
-                totalDamage = Mathf.RoundToInt(totalDamage * 0.7f);
-
-            if (knightActive)
-            {
-                int hits = UpgradeFightingManager.Instance.currentActions.Count;
-                float knightMult = 1f + (hits * 0.25f);
-                totalDamage = Mathf.RoundToInt(totalDamage * knightMult);
-            }
-
-            if (relicActive)
-                totalDamage = Mathf.RoundToInt(totalDamage * 1.3f);
-
             await itemDisplay.GetComponent<ItemController>().ShowDamageBonuses(bonuses, item.Damage);
             UpgradeFightingManager.Instance.SuccessfulAction(item, totalDamage);
 
@@ -209,7 +173,7 @@ public class ScoreManager : MonoBehaviour
             EventBus.Publish<HitEvent>(new HitEvent());
             await PauseExtensions.DelayRespectingPause(100 * GameSpeed);
 
-            AttackEnemy(item, totalDamage, archmageActive);
+            AttackEnemy(item, totalDamage, UpgradeFightingManager.Instance.archmageActive);
 
             if (UpgradeManager.Instance.HasUpgrade(UpgradeID.ComboChain))
             {
@@ -245,7 +209,7 @@ public class ScoreManager : MonoBehaviour
                 await roller.ShowUpgradeNotif("Second Chance");
                 rollValue = await roller.RollDie(0);
                 UpgradeFightingManager.Instance.rolledNat20 = (roller.natRoll == 20);
-                await OnRollComplete(rollValue, archmageActive, knightActive, relicActive);
+                await OnRollComplete(rollValue);
                 savedBySecondChance = true;
                 return;
             }
@@ -289,11 +253,23 @@ public class ScoreManager : MonoBehaviour
                 else AttackFirstEnemy(item, damage);
                 break;
             case 2:
-                int h = 0;
-                foreach (Transform enemyLocation in EnemyManager.Instance.spawnPoints)
+                if (archmageHitExtra)
                 {
-                    if (h >= 2) break;
-                    if (TryAttackAt(enemyLocation, item, damage)) h++;
+                    int hits = 0;
+                    foreach (Transform enemyLocation in EnemyManager.Instance.spawnPoints)
+                    {
+                        if (hits >= 3) break;
+                        if (TryAttackAt(enemyLocation, item, damage)) hits++;
+                    }
+                }
+                else
+                {
+                    int h = 0;
+                    foreach (Transform enemyLocation in EnemyManager.Instance.spawnPoints)
+                    {
+                        if (h >= 2) break;
+                        if (TryAttackAt(enemyLocation, item, damage)) h++;
+                    }
                 }
                 break;
             case 3:

@@ -22,10 +22,35 @@ public class UpgradeFightingManager : MonoBehaviour
     public bool lastActionFail = false;
     public bool ragingRN = false;
     public bool comebackUsed = false;
+    public bool archmageActive = false;
+    public bool shadowThiefActive = false;
+    public bool knightActive = false;
+    public bool relicActive = false;
     private void Awake()
     {
         Instance = this;
     }
+    public void GetTheHandBonuses(List<ItemData> items)
+    {
+        bool allMagic = true;
+        bool allPiercing = true;
+        bool allSlashing = true;
+        bool noCommon = true;
+
+        foreach (ItemData i in items)
+        {
+            if (i.ItemType != ItemType.Magical) allMagic = false;
+            if (i.ItemType != ItemType.Piercing) allPiercing = false;
+            if (i.ItemType != ItemType.Slashing) allSlashing = false;
+            if (i.Rarity == ObjectRarity.Common) noCommon = false;
+        }
+
+        archmageActive = allMagic && UpgradeManager.Instance.HasUpgrade(UpgradeID.Archmage);
+        shadowThiefActive = allPiercing && UpgradeManager.Instance.HasUpgrade(UpgradeID.ShadowThief);
+        knightActive = allSlashing && UpgradeManager.Instance.HasUpgrade(UpgradeID.KnightCaptain);
+        relicActive = noCommon && UpgradeManager.Instance.HasUpgrade(UpgradeID.RelicKeeper);
+    }
+
 
     public struct DamageBonus
     {
@@ -103,7 +128,7 @@ public class UpgradeFightingManager : MonoBehaviour
     public void FailedAction()
     {
         successStreak = 0;
-        lastActionFail= false;
+        lastActionFail = true;
         ragingRN = UpgradeManager.Instance.HasUpgrade(UpgradeID.Rage);
     }
 
@@ -263,6 +288,27 @@ public class UpgradeFightingManager : MonoBehaviour
             int before = damage;
             damage = Mathf.RoundToInt(damage * 2f);
             bonuses.Add(new DamageBonus { source = "Rage", amount = damage - before });
+        }
+        if (knightActive)
+        {
+            int before = damage;
+            float knightMult = 1f + (currentActions.Count * 0.2f);
+            damage = Mathf.RoundToInt(damage * knightMult);
+            bonuses.Add(new DamageBonus { source = "Knight Commander", amount = damage - before });
+        }
+
+        if (relicActive)
+        {
+            int before = damage;
+            damage = Mathf.RoundToInt(damage * 1.3f);
+            bonuses.Add(new DamageBonus { source = "Relic Keeper", amount = damage - before });
+
+        }
+        if (archmageActive)
+        {
+            int before = damage;
+            damage = Mathf.RoundToInt(damage * 0.65f);
+            bonuses.Add(new DamageBonus { source = "Archmage", amount = damage - before });
         }
         damage = Mathf.RoundToInt(
         damage * tempDamgeIncrease);

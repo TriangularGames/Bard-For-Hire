@@ -10,13 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dac3702ff3d5d8c4583fb2a130044aea, type: 3}
-  m_Name: Weighted Dice 6
+  m_Name: Comeback
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  UpgradeName: Relic Keeper
-  UpgradeDescription: 'If no common weapons are left in hand after attack is pressed,
-    each attack gains 30% more damage '
-  cost: 12
-  UpgradeType: 0
-  Rarity: 1
-  UpgradeID: 31
-  icon: {fileID: 21300000, guid: d5dc0fa773d06734d96b274fe20b5b9e, type: 3}
+  UpgradeName: Comeback
+  UpgradeDescription: 'If the last attack failed then the next attack will have advantage '
+  cost: 6
+  UpgradeType: 1
+  Rarity: 0
+  UpgradeID: 23
+  icon: {fileID: 21300000, guid: ca8d598aed16d8544b97a43d14841e9b, type: 3}

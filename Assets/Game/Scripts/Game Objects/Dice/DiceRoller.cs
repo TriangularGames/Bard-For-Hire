@@ -44,7 +44,7 @@ public class DiceRoller : MonoBehaviour
 
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.Gambler))
         {
-            if (nat > 4 && nat < 17)
+            if (nat > 3 && nat < 18)
             {
                 int second = UnityEngine.Random.Range(1, 21);
                 int distA = Mathf.Min(nat, 21 - nat);
@@ -161,7 +161,10 @@ public class DiceRoller : MonoBehaviour
     {
         if (modifier != 0)
         {
-            modDisplay.text = $"+ {modifier}";
+            if(modifier > 0)
+             modDisplay.text = $"+ {modifier}";
+            if (modifier < 0)
+                modDisplay.text = $"{modifier}";
             await PauseExtensions.DelayRespectingPause(Mathf.RoundToInt(revealPause * 400));
         }
 

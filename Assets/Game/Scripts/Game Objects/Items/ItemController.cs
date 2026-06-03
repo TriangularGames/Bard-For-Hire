@@ -25,10 +25,16 @@ public class ItemController : MonoBehaviour
 
         foreach (var bonus in bonuses)
         {
-            if (bonus.amount <= 0) continue;
+            if (bonus.amount == 0) continue;
 
             await PauseExtensions.DelayRespectingPause(400);
-            damageTxt.text = ("Dmg ") + baseD + $"  <color=yellow>+ {bonus.amount} {bonus.source}</color>";
+            if (bonus.amount > 0) {
+                damageTxt.text = ("Dmg ") + baseD + $"  <color=yellow>+ {bonus.amount} {bonus.source}</color>";
+            }
+            if (bonus.amount < 0)
+            {
+                damageTxt.text = ("Dmg ") + baseD + $"  <color=red> {bonus.amount} {bonus.source}</color>";
+            }
             await PauseExtensions.DelayRespectingPause(700);
             baseD += bonus.amount;
             SetDamageTxtRaw(baseD);

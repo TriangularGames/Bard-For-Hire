@@ -10,13 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dac3702ff3d5d8c4583fb2a130044aea, type: 3}
-  m_Name: Weighted Dice 7
+  m_Name: Mercenary Contract
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  UpgradeName: Archmage
-  UpgradeDescription: 'If all attacks used are magic in a round they deal 30% less
-    damage but hit an additional foe '
-  cost: 16
+  UpgradeName: Mercenary Contract
+  UpgradeDescription: Enemies give 30% more gold on defeat
+  cost: 7
   UpgradeType: 0
-  Rarity: 2
-  UpgradeID: 28
-  icon: {fileID: 21300000, guid: d5dc0fa773d06734d96b274fe20b5b9e, type: 3}
+  Rarity: 0
+  UpgradeID: 18
+  icon: {fileID: 21300000, guid: db405f84c7a5d61438a50be58e105c1c, type: 3}

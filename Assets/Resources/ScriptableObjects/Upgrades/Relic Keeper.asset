@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dac3702ff3d5d8c4583fb2a130044aea, type: 3}
-  m_Name: Weighted Dice 10
+  m_Name: Relic Keeper
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  UpgradeName: Mercenary Contract
-  UpgradeDescription: Enemies give 30% more gold on defeat
-  cost: 7
+  UpgradeName: Relic Keeper
+  UpgradeDescription: 'If no common weapons are left in hand after attack is pressed,
+    each attack gains 30% more damage '
+  cost: 12
   UpgradeType: 0
-  Rarity: 0
-  UpgradeID: 18
-  icon: {fileID: 21300000, guid: d5dc0fa773d06734d96b274fe20b5b9e, type: 3}
+  Rarity: 1
+  UpgradeID: 31
+  icon: {fileID: 21300000, guid: 315e5562c43fdcd4280263396b576fce, type: 3}
