@@ -2,10 +2,19 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
+enum ENEMY_STATE
+{
+    IDLE,
+    DAMAGED,
+    DEAD,
+    DYING
+};
+
 public class EnemyController : MonoBehaviour
 {
     [Header("Enemy Data")]
     [SerializeField] public EnemyData enemyData;
+    private ENEMY_STATE state = ENEMY_STATE.IDLE;
 
     [Header("Health/Damage Related")]
     private Color flashColor = new Color(1f, 1f, 1f, 0.5f);
@@ -21,10 +30,15 @@ public class EnemyController : MonoBehaviour
     [SerializeField] protected SpriteRenderer EnemySprite;
     [SerializeField] protected Animator anim;
     [SerializeField] private GameObject indicator;
+    [SerializeField] private ParticleSystem hit;
+    [SerializeField] private ParticleSystem smoke;
 
     [Header("Flash Flags")]
     private bool Weak = false;
     private bool Resist = false;
+
+    private float delayTimer;
+    private int flashIndex = 0;
 
     public int GetHealth() {  return health; }
 
@@ -69,23 +83,9 @@ public class EnemyController : MonoBehaviour
         healthTxt.text = health.ToString();
     }
 
-    protected virtual void TakeDamage(DamageTakenEvent e)
+    private void SetFlashColor()
     {
-        if (e.id == gameObject.GetEntityId())
-        {
-            flashTimes = e.damage;
-            AudioManager.Instance.PlayClip("Hit");
-
-            Weak = e.weakness;
-            Resist = e.resistance;
-            
-            StartCoroutine("Flash");
-        }
-    }
-
-    private IEnumerator Flash()
-    {
-        // Set flashColor based on if Weak, Resist, or Normal
+        // Set flashColor
         if (Weak)
         {
             flashColor = Color.orange;
@@ -98,70 +98,155 @@ public class EnemyController : MonoBehaviour
         {
             flashColor = Color.red;
         }
+    }
 
-        for (int i = 0; i < flashTimes; i++)
+    private void DisplayWeakResistText()
+    {
+        // Check if damage taken is a Weakness or a Resistance
+        if (Weak)
         {
-            EnemySprite.material.color = Color.white;
-            yield return new WaitForSeconds(delayTime);
-
-            // If this is the first instance
-            if (i == 0)
+            GameObject weak = dmgDisplayPool.GetObject();
+            if (weak.transform.parent != transform)
             {
-                // Check if damage taken is a Weakness or a Resistance
-                if (Weak)
-                {
-                    GameObject weak = dmgDisplayPool.GetObject();
-                    if (weak.transform.parent != transform)
-                    {
-                        weak.transform.SetParent(transform);
-                    }
-                    weak.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
-                    weak.GetComponent<DestroyText>().Setup(dmgDisplayPool);
-                    weak.GetComponent<TMP_Text>().color = flashColor;
-                    weak.GetComponent<TMP_Text>().text = "Weak";
-                }
-                if (Resist)
-                {
-                    GameObject resist = dmgDisplayPool.GetObject();
-                    if (resist.transform.parent != transform)
-                    {
-                        resist.transform.SetParent(transform);
-                    }
-                    resist.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
-                    resist.GetComponent<DestroyText>().Setup(dmgDisplayPool);
-                    resist.GetComponent<TMP_Text>().color = flashColor;
-                    resist.GetComponent<TMP_Text>().text = "Resist";
-                }
+                weak.transform.SetParent(transform);
             }
-
-            // Spawn Damage Text via ObjectPool
-            GameObject text = dmgTxtPool.GetObject();
-            if (text.transform.parent != transform)
+            weak.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
+            weak.GetComponent<DestroyText>().Setup(dmgDisplayPool);
+            weak.GetComponent<TMP_Text>().color = flashColor;
+            weak.GetComponent<TMP_Text>().text = "Weak";
+        }
+        if (Resist)
+        {
+            GameObject resist = dmgDisplayPool.GetObject();
+            if (resist.transform.parent != transform)
             {
-                text.transform.SetParent(transform);
+                resist.transform.SetParent(transform);
             }
-            text.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
-            text.GetComponent<DestroyText>().Setup(dmgTxtPool);
-            text.GetComponent<TMP_Text>().color = flashColor;
+            resist.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
+            resist.GetComponent<DestroyText>().Setup(dmgDisplayPool);
+            resist.GetComponent<TMP_Text>().color = flashColor;
+            resist.GetComponent<TMP_Text>().text = "Resist";
+        }
+        // If both flags are active
+        if (Weak && Resist)
+        {
+            // TODO: fill in this
+            // Do something here
+        }
+    }
 
-            health -= 1;
-            SetDamageTxt();
+    private void SpawnDamageNum()
+    {
+        // Spawn Damage Text via ObjectPool
+        GameObject text = dmgTxtPool.GetObject();
+        if (text.transform.parent != transform)
+        {
+            text.transform.SetParent(transform);
+        }
+        text.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
+        text.GetComponent<DestroyText>().Setup(dmgTxtPool);
+        text.GetComponent<TMP_Text>().color = flashColor;
+    }
 
-            if (health <= 0)
+    protected virtual void TakeDamage(DamageTakenEvent e)
+    {
+        if (e.id == gameObject.GetEntityId())
+        {
+            flashTimes = e.damage;
+            AudioManager.Instance.PlayClip("Hit");
+
+            Weak = e.weakness;
+            Resist = e.resistance;
+
+            //StartCoroutine("Flash");
+            state = ENEMY_STATE.DAMAGED;
+        }
+    }
+
+    private void Update()
+    {
+        switch (state)
+        {
+            case ENEMY_STATE.IDLE:
+                delayTimer = delayTime;
+                flashIndex = 0;
+                break;
+
+            case ENEMY_STATE.DAMAGED:
+                Flash();
+                break;
+            case ENEMY_STATE.DEAD:
+                Die();
+                state = ENEMY_STATE.DYING;
+                break;
+            case ENEMY_STATE.DYING:
+                break;
+        }
+    }
+
+    private void Flash()
+    {
+        if (flashIndex < flashTimes)
+        {
+            SetFlashColor();
+
+            delayTimer -= Time.deltaTime;
+
+            if (delayTimer < 0)
             {
-                Debug.Log("Enemy killed.");
-                EventBus.Publish(new EnemyDefeatedEvent(gameObject));
+                if (flashIndex == 0)
+                {
+                    // On first hit, play the particle effect
+                    hit.Play();
+
+                    // Check if Weak/Resist text is to be displayed and display
+                    DisplayWeakResistText();
+                }
+                // Spawn the -1 health
+                SpawnDamageNum();
+
+                // Take -1 health
+                health -= 1;
+                SetDamageTxt();
+
+                Debug.Log("Hit number: " + flashIndex);
+
+                // If the enemy is dead or not
+                if (health <= 0)
+                {
+                    state = ENEMY_STATE.DEAD;
+                    Debug.Log("Enemy killed.");
+                    return;
+                }
+                else
+                {
+                    anim.SetTrigger("Hit");
+                }
+                EnemySprite.material.color = flashColor;
+                flashIndex++;
+                delayTimer = delayTime;
             }
             else
             {
-                anim.SetTrigger("Hit");
+                EnemySprite.material.color = Color.white;
             }
-
-            EnemySprite.material.color = flashColor;
-            yield return new WaitForSeconds(delayTime);
         }
-        EnemySprite.material.color = Color.white;
-        yield return null;
+        else
+        {
+            EnemySprite.material.color = Color.white;
+            state = ENEMY_STATE.IDLE;
+        }
+    }
+
+    private void Die()
+    {
+        anim.SetTrigger("Dead");
+        smoke.Play();
+    }
+
+    public void RemoveEnemy()
+    {
+        EventBus.Publish(new EnemyDefeatedEvent(gameObject));
     }
 }
 
