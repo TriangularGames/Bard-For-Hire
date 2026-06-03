@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
@@ -73,54 +73,28 @@ public class ScoreManager : MonoBehaviour
     /// Calculates the final score for a round using ItemData List
     /// </summary>
     /// <param name="items">List of Items to be scored</param>
-    public async Task CalculateScore(List<ItemData> items)
+    public async Task CalculateScore(List<ItemData> items, List<int> rollResults)
     {
         EventBus.Publish<ScoringStartedEvent>(new ScoringStartedEvent());
-
         pendingItems = items;
         curItem = -1;
         UpgradeFightingManager.Instance.StartRound();
 
-        if (pendingItems == null || pendingItems.Count <= 0)
-        {
-            return;
-        }
+        if (pendingItems == null || pendingItems.Count <= 0) return;
 
-        foreach (ItemData item in pendingItems)
+        for (int i = 0; i < pendingItems.Count; i++)
         {
-            if(!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive()) { FinalizeScore(); break; }
-            
-            curItem += 1;
-            Debug.Log("Item " + curItem + " being rolled for.");
-            // Display item being rolled for
-            itemDisplay.GetComponent<ItemController>().itemData = item;
+            if (!EnemyManager.Instance.AreEnemiesAlive()) { FinalizeScore(); break; }
+
+            curItem = i;
+            itemDisplay.GetComponent<ItemController>().itemData = pendingItems[i];
             itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 0f, 0f, 0f);
             itemDisplay.GetComponent<ItemController>().Setup();
             itemDisplay.SetActive(true);
-            // Remove item being checked from Hotbar
-            EventBus.Publish<ItemUsedEvent>(new ItemUsedEvent(item));
+            EventBus.Publish<ItemUsedEvent>(new ItemUsedEvent(pendingItems[i]));
 
-            int rollResult = -1;
-            int modifier = 0;
-
-            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.SkillProficiency))
-            {
-                modifier += 2;
-            }
-
-            if (UpgradeFightingManager.Instance.tempDCReduce > 0)
-            {
-                modifier += UpgradeFightingManager.Instance.tempDCReduce;
-            }
-
-            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage) && curItem == 0){
-                rollResult = await roller.RollWithAdvantage(modifier);
-            }
-            else
-            {
-                rollResult = await roller.RollDie(modifier);
-            }
-            await OnRollComplete(rollResult);
+            // ✅ No rolling here — just process the pre-rolled result
+            await OnRollComplete(rollResults[i]);
         }
     }
 
