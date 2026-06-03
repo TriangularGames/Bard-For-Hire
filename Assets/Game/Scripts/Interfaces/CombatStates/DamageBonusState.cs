@@ -86,12 +86,12 @@ public class DamageBonusState : ICombatState
     {
         // Access itemDisplay's damageTxt via ItemController
         var sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
-        sm.pendingItems[_index].ToString(); // just to reference — update to match your ItemController access
+        sm.pendingItems[_index].ToString();
     }
 
     private void SetBonusText(int baseD, UpgradeFightingManager.DamageBonus bonus)
     {
-        // Same as above — update to match your ItemController's damageTxt reference
+        // Will need to set text here at some point
     }
 
     private void FinishBonuses(CombatManager cm)
