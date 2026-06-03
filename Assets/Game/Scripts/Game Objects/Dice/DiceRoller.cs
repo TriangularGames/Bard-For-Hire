@@ -45,7 +45,7 @@ public class DiceRoller : MonoBehaviour
     }
 
     #region DiceRollStates
-    // All the actual roll methods move to internal � only DiceRollState calls them
+    // All the actual roll methods move to internal so only DiceRollState calls them
     internal async Task<int> ExecuteRollDie(int modifier, CancellationToken ct = default)
     {
         int nat = UnityEngine.Random.Range(1, 21);
@@ -69,17 +69,9 @@ public class DiceRoller : MonoBehaviour
             int second = UnityEngine.Random.Range(1, 21);
             if (second == 20) nat = 20;
         }
-        natRoll = nat;
         display.text = "Rolling die...";
         AudioManager.Instance.PlayClip("DieRoll");
         await ExecuteShuffleDice(displayRoll, nat, ct);
-
-        if (nat == 20 || nat == 1)
-        {
-            await ShowModifier(displayRoll, displayModifer, nat, 0, nat);
-            return nat;
-        }
-
 
         if (modifier != 0 || nat == 20 || nat == 1)
         {
