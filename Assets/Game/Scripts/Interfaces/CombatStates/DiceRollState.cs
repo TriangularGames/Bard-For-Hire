@@ -49,9 +49,13 @@ public class DiceRollState : ICombatState
         if (!_isSingleRoll)
         {
             if (UpgradeManager.Instance.HasUpgrade(UpgradeID.SkillProficiency))
+            {
                 _modifier += 2;
+            }
             if (UpgradeFightingManager.Instance.tempDCReduce > 0)
+            {
                 _modifier += UpgradeFightingManager.Instance.tempDCReduce;
+            }
         }
 
         // Roll the nat immediately
@@ -103,10 +107,12 @@ public class DiceRollState : ICombatState
 
             // Slow down over time
             if (_shuffleElapsed > _roller.changeyDuration * 0.5f)
+            {
                 _shuffleInterval = Mathf.Lerp(
                     _roller.numberChangeyInterval,
                     _roller.numberChangeyInterval * 16f,
                     (_shuffleElapsed - _roller.changeyDuration * 0.6f) / (_roller.changeyDuration * 0.4f));
+            }
 
             // Shuffle done
             if (_shuffleElapsed >= _roller.changeyDuration)

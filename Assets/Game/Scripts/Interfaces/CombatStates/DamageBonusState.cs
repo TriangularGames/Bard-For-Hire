@@ -38,12 +38,6 @@ public class DamageBonusState : ICombatState
         // Set initial damage text
         var ic = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().pendingItems[_index];
         SetDamageText(_baseDamage);
-
-        // Skip to next if no bonuses
-        if (_bonuses == null || _bonuses.Count == 0)
-        {
-            FinishBonuses(cm);
-        }
     }
 
     public void ExitState(CombatManager cm) { }
@@ -51,6 +45,13 @@ public class DamageBonusState : ICombatState
     public void UpdateState(CombatManager cm)
     {
         if (PauseManager.Instance.IsPaused) return;
+
+        if (_bonuses == null || _bonusIndex >= _bonuses.Count)
+        {
+            FinishBonuses(cm);
+            return;
+        }
+
         if (_bonusIndex >= _bonuses.Count) return;
 
         var bonus = _bonuses[_bonusIndex];
