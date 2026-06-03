@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 
+/// <summary>
+/// State used for calculating the score of an item attack after the dice roll result is shown. Determines if the attack hits or misses based on the item's requirements and the final roll result, and transitions to the appropriate next state (hit or miss delay) while also checking for end of combat conditions.
+/// </summary>
 public class CalculateScoreState : ICombatState
 {
     private readonly List<ItemData> _items;
     private readonly int _index;
     private readonly int _rollResult;
-    private CancellationTokenSource _cts;
+    private bool _initialized;
 
     public CalculateScoreState(List<ItemData> items, int index, int rollResult)
     {
@@ -19,38 +20,43 @@ public class CalculateScoreState : ICombatState
 
     public void EnterState(CombatManager cm)
     {
-        _cts = new CancellationTokenSource();
-        ExecuteScoring(cm, _cts.Token);
-    }
+        ScoreManager sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
 
-    public void ExitState(CombatManager cm)
-    {
-        _cts?.Cancel();
-        _cts?.Dispose();
-    }
-
-    public void UpdateState(CombatManager cm) { }
-
-    private async void ExecuteScoring(CombatManager cm, CancellationToken ct)
-    {
-        try
+        if (_index == 0)
         {
-            await GameObject.FindWithTag("ScoreManager")
-                .GetComponent<ScoreManager>()
-                .CalculateScore(_items, _index, _rollResult);
-
-            if (ct.IsCancellationRequested) return;
-
-            if (_index + 1 < _items.Count)
-            {
-                DiceRoller roller = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().roller;
-                cm.SwitchState(new DiceRollState(_items, roller, _index + 1)); // re-roll if more items are are played
-            }
-            else
-            {
-                cm.SwitchState(new DefaultCombatState());
-            }
+            sm.InitializeRound(_items);
         }
-        catch (TaskCanceledException) { }
+
+        sm.SetupItemDisplay(_index);
+        _initialized = true;
+    }
+
+    public void ExitState(CombatManager cm) { }
+    public void UpdateState(CombatManager cm)
+    {
+        if (!_initialized) return;
+
+        ScoreManager sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
+
+        if (!EnemyManager.Instance.AreEnemiesAlive())
+        {
+            sm.FinalizeScore();
+            cm.SwitchState(new DefaultCombatState());
+            return;
+        }
+
+        int finalRoll = UpgradeFightingManager.Instance.GetBonusRoll(_rollResult);
+        ItemData item = sm.pendingItems[_index];
+
+        if (item.Playable <= finalRoll)
+        {
+            cm.SwitchState(new HitDelayState(_items, _index, finalRoll, sm));
+        }
+        else
+        {
+            cm.SwitchState(new MissDelayState(_items, _index, sm));
+        }
+
+        _initialized = false;
     }
 }
