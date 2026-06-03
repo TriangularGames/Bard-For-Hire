@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// ScoreManager calculates the score based on the Items added to AttackHand
@@ -91,7 +89,7 @@ public class ScoreManager : MonoBehaviour
         foreach (ItemData item in pendingItems)
         {
             if (!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive()) { FinalizeScore(); break; }
-
+            
             curItem += 1;
             Debug.Log("Item " + curItem + " being rolled for.");
             // Display item being rolled for
@@ -108,6 +106,12 @@ public class ScoreManager : MonoBehaviour
             if (UpgradeManager.Instance.HasUpgrade(UpgradeID.SkillProficiency))
             {
                 modifier += 2;
+            }
+
+            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.GreatWeaponMaster))
+            {
+                int gwmBonus = Mathf.RoundToInt(item.Playable * 0.25f);
+                modifier += gwmBonus;
             }
 
             if (UpgradeFightingManager.Instance.tempDCReduce > 0)
@@ -155,6 +159,7 @@ public class ScoreManager : MonoBehaviour
             AudioManager.Instance.PlayClip("Success");
             itemDisplay.GetComponent<ItemDisplayController>().Success();
 
+
             await PauseExtensions.DelayRespectingPause(300 * GameSpeed);
             int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex, out var bonuses);
             await itemDisplay.GetComponent<ItemController>().ShowDamageBonuses(bonuses, item.Damage);
@@ -175,13 +180,13 @@ public class ScoreManager : MonoBehaviour
             if (UpgradeManager.Instance.HasUpgrade(UpgradeID.DoubleCrit))
             {
                 if (finalroll == 20)
-                    AttackEnemy(item, totalDamage);
+                AttackEnemy(item, totalDamage);
             }
 
             if (UpgradeManager.Instance.HasUpgrade(UpgradeID.EchoStrike))
             {
                 if (slotIndex == pendingItems.Count - 1)
-                    AttackEnemy(item, totalDamage);
+                AttackEnemy(item, totalDamage);
             }
         }
         else
@@ -214,7 +219,7 @@ public class ScoreManager : MonoBehaviour
             }
             if (!savedByQuickSave)
                 UpgradeFightingManager.Instance.FailedAction();
-        }
+    }
 
         // Wait for possible animations
         await PauseExtensions.DelayRespectingPause(800 * GameSpeed);
@@ -224,7 +229,7 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    private void AttackEnemy(ItemData item, int damage)
+    private void AttackEnemy(ItemData item, int damage, bool archmageHitExtra = false)
     {
         if (EnemyManager.Instance.isBossDay && EnemyManager.Instance.hasDisabled && EnemyManager.Instance.disabledItem == item.ItemType)
             return;
@@ -232,7 +237,16 @@ public class ScoreManager : MonoBehaviour
         switch (item.target)
         {
             case 1:
-                AttackFirstEnemy(item, damage);
+                if (archmageHitExtra)
+                {
+                    int hits = 0;
+                    foreach (Transform enemyLocation in EnemyManager.Instance.spawnPoints)
+                    {
+                        if (hits >= 2) break;
+                        if (TryAttackAt(enemyLocation, item, damage)) hits++;
+                    }
+                }
+                else AttackFirstEnemy(item, damage);
                 break;
             case 2:
                 if (archmageHitExtra)
@@ -258,7 +272,6 @@ public class ScoreManager : MonoBehaviour
                 foreach (Transform enemyLocation in EnemyManager.Instance.spawnPoints)
                     TryAttackAt(enemyLocation, item, damage);
                 break;
-
         }
     }
 
@@ -272,55 +285,49 @@ public class ScoreManager : MonoBehaviour
 
     private bool TryAttackAt(Transform enemyLocation, ItemData item, int damage)
     {
-        // Check if the location has an enemy in it
-        if (enemyLocation.childCount == 0) return false;
+            // Check if the location has an enemy in it
+            if (enemyLocation.childCount == 0) return false;
+            
+                // Get the enemy at this location
+                GameObject enemy = enemyLocation.transform.GetChild(0).gameObject;
 
-        GameObject enemy = null;
-        // Get the enemy at this location
-        for (int i = 0; i < enemyLocation.childCount; i++)
-        {
-            if (enemyLocation.transform.GetChild(i).GetComponent<EnemyController>() != null)
-            {
-                enemy = enemyLocation.transform.GetChild(i).gameObject;
-            }
-        }
+                if (enemy.GetComponent<EnemyController>().GetHealth() <= 0) return false;
 
-        if (enemy == null) return false;
+                bool weakness = false;
+                bool resistance = false;
 
-        if (enemy.GetComponent<EnemyController>().GetHealth() <= 0) return false;
+                if (enemy.GetComponent<EnemyController>().enemyData.weakness == item.ItemType)
+                {
+                    damage = Mathf.RoundToInt(damage * 1.55f);
+                    weakness = true;
+                }
 
-        bool weakness = false;
-        bool resistance = false;
+                if (EnemyManager.Instance.isBossDay && EnemyManager.Instance.bossData.ability == BossAbilities.EvenNumberReduce
+                    && damage % 2 == 0)
+                {
+                    damage = Mathf.RoundToInt(damage * 0.5f);
+                    resistance = true;
+                }
 
-        if (enemy.GetComponent<EnemyController>().enemyData.weakness == item.ItemType)
-        {
-            damage = Mathf.RoundToInt(damage * 1.55f);
-            weakness = true;
-        }
+                if (item.weaponBonus == WeaponBonus.PercentHealth)
+                {
+                   int percentDamage = Mathf.RoundToInt(enemy.GetComponent<EnemyController>().GetHealth() * 0.1f);
+                   damage += percentDamage;
+                }
 
-        if (EnemyManager.Instance.isBossDay && EnemyManager.Instance.bossData.ability == BossAbilities.EvenNumberReduce
-            && damage % 2 == 0)
-        {
-            damage = Mathf.RoundToInt(damage * 0.5f);
-            resistance = true;
-        }
-
-        if (item.weaponBonus == WeaponBonus.PercentHealth)
-        {
-            int percentDamage = Mathf.RoundToInt(enemy.GetComponent<EnemyController>().GetHealth() * 0.1f);
-            damage += percentDamage;
-        }
-
-        if (item.weaponBonus == WeaponBonus.GrowingDamage)
-        {
-            damage += item.bonusDamageStacks;
-            item.bonusDamageStacks++;
-        }
+                if (item.weaponBonus == WeaponBonus.GrowingDamage)
+                {
+                   damage += item.bonusDamageStacks;
+                   item.bonusDamageStacks++;
+                }
 
         EventBus.Publish(new DamageTakenEvent(enemy.GetEntityId(), damage, weakness, resistance));
-        return true;
+        return true;    
 
     }
+    
+        
+    
 
     /// <summary>
     /// Finalize the Score calculation for display.
@@ -353,6 +360,19 @@ public class ScoreManager : MonoBehaviour
                 {
                     int bonusCoins = remainingRounds * 5;
                     EventBus.Publish(new MoneyEarnedEvent(bonusCoins, "Early Completion"));
+                }
+                if (UpgradeManager.Instance.HasUpgrade(UpgradeID.StableInvestments))
+                {
+                    int bonus = Mathf.RoundToInt(PlayerManager.Instance.Coins * 0.08f);
+                    PlayerManager.Instance.Coins += bonus;
+                    PlayerManager.Instance.SetCoinText();
+                    EventBus.Publish(new MoneyEarnedEvent(bonus, "Stable Investments"));
+                }
+                if (UpgradeManager.Instance.HasUpgrade(UpgradeID.CoinFinder))
+                {
+                    PlayerManager.Instance.Coins += 5;
+                    PlayerManager.Instance.SetCoinText();
+                    EventBus.Publish(new MoneyEarnedEvent(5, "Coin Finder"));
                 }
                 Debug.Log("Combat Completed!");
                 MenuManager.Instance.SwitchState(new VictoryMenuState());
@@ -413,7 +433,7 @@ public struct VictoryEvent
 {
     public string textContent;
 
-    public VictoryEvent(string _textContent)
+    public VictoryEvent (string _textContent)
     {
         textContent = _textContent;
     }
