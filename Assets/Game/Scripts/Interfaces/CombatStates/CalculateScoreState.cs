@@ -9,6 +9,7 @@ public class CalculateScoreState : ICombatState
     private readonly List<ItemData> _items;
     private readonly int _index;
     private readonly int _rollResult;
+    private bool _initialized;
 
     public CalculateScoreState(List<ItemData> items, int index, int rollResult)
     {
@@ -26,14 +27,23 @@ public class CalculateScoreState : ICombatState
             sm.InitializeRound(_items);
         }
 
+        sm.SetupItemDisplay(_index);
+        _initialized = true;
+    }
+
+    public void ExitState(CombatManager cm) { }
+    public void UpdateState(CombatManager cm)
+    {
+        if (!_initialized) return;
+
+        ScoreManager sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
+
         if (!EnemyManager.Instance.AreEnemiesAlive())
         {
             sm.FinalizeScore();
             cm.SwitchState(new DefaultCombatState());
             return;
         }
-
-        sm.SetupItemDisplay(_index);
 
         int finalRoll = UpgradeFightingManager.Instance.GetBonusRoll(_rollResult);
         ItemData item = sm.pendingItems[_index];
@@ -46,8 +56,7 @@ public class CalculateScoreState : ICombatState
         {
             cm.SwitchState(new MissDelayState(_items, _index, sm));
         }
-    }
 
-    public void ExitState(CombatManager cm) { }
-    public void UpdateState(CombatManager cm) { }
+        _initialized = false;
+    }
 }
