@@ -15,9 +15,12 @@ MonoBehaviour:
   ItemName: Crossbow
   ItemDescription: A powerful ranged attack
   cost: 8
+  target: 1
   ItemType: 0
   Rarity: 2
+  weaponBonus: 0
+  bonusDamageStacks: 0
   Damage: 13
   Mult: 0
   Playable: 15
-  icon: {fileID: 21300000, guid: 73d2ef03464f946a78c0a90c3c53f962, type: 3}
+  icon: {fileID: 21300000, guid: 7fced4a8d1aca724c9f87ea3601345df, type: 3}

@@ -41,7 +41,26 @@ public class DiceRoller : MonoBehaviour
             int second = UnityEngine.Random.Range(1, 21);
             if (second == 20) nat = 20;
         }
+
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.Gambler))
+        {
+            if (nat > 4 && nat < 17)
+            {
+                int second = UnityEngine.Random.Range(1, 21);
+                int distA = Mathf.Min(nat, 21 - nat);
+                int distB = Mathf.Min(second, 21 - second);
+                if (distB < distA) nat = second;
+            }
+        }
+
         natRoll = nat;
+
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.Ace) && nat == 1)
+        {
+            nat = 20;
+            natRoll = 20;
+        }
+
         display.text = "Rolling die...";
         AudioManager.Instance.PlayClip("DieRoll");
         await ShuffleDice(displayRoll, nat);

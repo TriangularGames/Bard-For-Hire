@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dac3702ff3d5d8c4583fb2a130044aea, type: 3}
+  m_Name: Weighted Dice 10
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
+  UpgradeName: Mercenary Contract
+  UpgradeDescription: Enemies give 30% more gold on defeat
+  cost: 7
+  UpgradeType: 0
+  Rarity: 0
+  UpgradeID: 18
+  icon: {fileID: 21300000, guid: d5dc0fa773d06734d96b274fe20b5b9e, type: 3}
