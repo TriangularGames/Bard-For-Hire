@@ -10,13 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dac3702ff3d5d8c4583fb2a130044aea, type: 3}
-  m_Name: Weighted Dice 3
+  m_Name: Ace
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  UpgradeName: Gambler
-  UpgradeDescription: Dice is more likely to land on extreme numbers either high
-    or low
-  cost: 8
+  UpgradeName: Ace
+  UpgradeDescription: Critical Misses become Critical Hits
+  cost: 10
   UpgradeType: 1
   Rarity: 0
-  UpgradeID: 25
-  icon: {fileID: 21300000, guid: d5dc0fa773d06734d96b274fe20b5b9e, type: 3}
+  UpgradeID: 26
+  icon: {fileID: 21300000, guid: 0c31e1045b21c0b44ae9eda2fe114b7a, type: 3}

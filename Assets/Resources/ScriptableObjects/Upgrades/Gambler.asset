@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dac3702ff3d5d8c4583fb2a130044aea, type: 3}
-  m_Name: Weighted Dice 8
+  m_Name: Gambler
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  UpgradeName: Phantom Thief
-  UpgradeDescription: If all attacks used are piercing in a round then each attack
-    gains advantage but has a -2 modifer
-  cost: 16
+  UpgradeName: Gambler
+  UpgradeDescription: Dice is more likely to land on extreme numbers either high
+    or low
+  cost: 8
   UpgradeType: 1
-  Rarity: 2
-  UpgradeID: 29
-  icon: {fileID: 21300000, guid: d5dc0fa773d06734d96b274fe20b5b9e, type: 3}
+  Rarity: 0
+  UpgradeID: 25
+  icon: {fileID: 21300000, guid: 47b4645c9f3311e41b4bdb6d6ac0f632, type: 3}

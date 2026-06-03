@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dac3702ff3d5d8c4583fb2a130044aea, type: 3}
-  m_Name: Weighted Dice 11
+  m_Name: Archmage
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  UpgradeName: Stable Investments
-  UpgradeDescription: Gain 8% of your total gold as a bonus each completed round
-  cost: 12
+  UpgradeName: Archmage
+  UpgradeDescription: 'If all attacks used are magic in a round they deal 35% less
+    damage but hit an additional foe '
+  cost: 16
   UpgradeType: 0
-  Rarity: 1
-  UpgradeID: 32
-  icon: {fileID: 21300000, guid: d5dc0fa773d06734d96b274fe20b5b9e, type: 3}
+  Rarity: 2
+  UpgradeID: 28
+  icon: {fileID: 21300000, guid: cdd03836fd35aa34998543619a574746, type: 3}

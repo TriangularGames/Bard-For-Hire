@@ -86,6 +86,8 @@ public class ScoreManager : MonoBehaviour
             return;
         }
 
+        UpgradeFightingManager.Instance.GetTheHandBonuses(pendingItems);
+
         foreach (ItemData item in pendingItems)
         {
             if (!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive()) { FinalizeScore(); break; }
@@ -113,8 +115,17 @@ public class ScoreManager : MonoBehaviour
                 modifier += UpgradeFightingManager.Instance.tempDCReduce;
             }
 
-            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage) && curItem == 0)
+            if (UpgradeFightingManager.Instance.shadowThiefActive)
+                modifier -= 2;
+
+            bool useAdvantage = (UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage) && curItem == 0) || UpgradeFightingManager.Instance.shadowThiefActive || UpgradeFightingManager.Instance.UseComeback();
+            if (useAdvantage)
             {
+                if (UpgradeFightingManager.Instance.UseComeback())
+                {
+                    await roller.ShowUpgradeNotif("Comeback!");
+                    UpgradeFightingManager.Instance.UseComeback();
+                }
                 rollResult = await roller.RollWithAdvantage(modifier);
             }
             else
@@ -153,7 +164,7 @@ public class ScoreManager : MonoBehaviour
             EventBus.Publish<HitEvent>(new HitEvent());
             await PauseExtensions.DelayRespectingPause(100 * GameSpeed);
 
-            AttackEnemy(item, totalDamage);
+            AttackEnemy(item, totalDamage, UpgradeFightingManager.Instance.archmageActive);
 
             if (UpgradeManager.Instance.HasUpgrade(UpgradeID.ComboChain))
             {
@@ -224,12 +235,23 @@ public class ScoreManager : MonoBehaviour
                 AttackFirstEnemy(item, damage);
                 break;
             case 2:
-                int hits = 0;
-                foreach (Transform enemyLocation in EnemyManager.Instance.spawnPoints)
+                if (archmageHitExtra)
                 {
-                    if (hits >= 2) break;
-                    if (TryAttackAt(enemyLocation, item, damage))
-                        hits++;
+                    int hits = 0;
+                    foreach (Transform enemyLocation in EnemyManager.Instance.spawnPoints)
+                    {
+                        if (hits >= 3) break;
+                        if (TryAttackAt(enemyLocation, item, damage)) hits++;
+                    }
+                }
+                else
+                {
+                    int h = 0;
+                    foreach (Transform enemyLocation in EnemyManager.Instance.spawnPoints)
+                    {
+                        if (h >= 2) break;
+                        if (TryAttackAt(enemyLocation, item, damage)) h++;
+                    }
                 }
                 break;
             case 3:

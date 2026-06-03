@@ -70,6 +70,22 @@ public class ShopManager : MonoBehaviour
         }
     }
 
+    private bool UpgradeIsUnlocked(UpgradeData upgrade)
+    {
+        switch (upgrade.UpgradeID)
+        {
+            case UpgradeID.Archmage:
+                return PlayerManager.Instance.CountItemsOfType(ItemType.Magical) >= 15;
+            case UpgradeID.KnightCaptain:
+                return PlayerManager.Instance.CountItemsOfType(ItemType.Slashing) >= 15;
+            case UpgradeID.ShadowThief:
+                return PlayerManager.Instance.CountItemsOfType(ItemType.Piercing) >= 15;
+            default:
+                return true;
+        }
+    }
+
+
     private void SetDayText()
     {
         dayDisplay.text = "Day " + GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().currentDay.ToString();
@@ -190,12 +206,14 @@ public class ShopManager : MonoBehaviour
     private void GenerateUpgrades()
     {
         List<UpgradeData> upgrades = new List<UpgradeData>();
-        while (upgrades.Count != MAXUpgrades)
+        int tryThisManyTimesPleaseOkay = 1000;
+        while (upgrades.Count != MAXUpgrades && tryThisManyTimesPleaseOkay-- > 0)
         {
             UpgradeData option = GetRandomUpgrade();
             bool alreadyThere = upgrades.Contains(option);
             bool alreadyGotThatOne = PlayerManager.Instance.upgradeInventory.Contains(option);
-           if (!alreadyThere && !alreadyGotThatOne)
+            bool unlocked = UpgradeIsUnlocked(option);
+            if (!alreadyThere && !alreadyGotThatOne && unlocked)
                 upgrades.Add(option);
         }
         _upgrades.SetupSlots(upgrades);
