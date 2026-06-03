@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using UnityEngine;
 
 public class DiceRollState : ICombatState
 {
     private readonly DiceRoller _roller;
     private readonly List<ItemData> _items;
+    private readonly int _index;
     private readonly int _modifier;
     private readonly bool _withAdvantage;
     private CancellationTokenSource _cts;
 
-    // ✅ Used by DiceRoller.RollDie / RollWithAdvantage — single roll
     public Task<int> RollTask => _rollTCS.Task;
     private readonly TaskCompletionSource<int> _rollTCS = new TaskCompletionSource<int>();
+
+    // Single roll
     public DiceRollState(DiceRoller roller, int modifier, bool withAdvantage)
     {
         _roller = roller;
@@ -22,21 +23,25 @@ public class DiceRollState : ICombatState
         _items = null;
     }
 
-    // ✅ Used by ItemManager — rolls for all items then transitions to CalculateScoreState
-    public DiceRollState(List<ItemData> items, DiceRoller roller)
+    // Multi-item roll
+    public DiceRollState(List<ItemData> items, DiceRoller roller, int index = 0)
     {
         _items = items;
         _roller = roller;
+        _index = index;
     }
 
     public void EnterState(CombatManager cm)
     {
         _cts = new CancellationTokenSource();
-
         if (_items != null)
-            ExecuteAllRolls(cm, _cts.Token);
+        {
+            ExecuteItemRoll(cm, _cts.Token);
+        }
         else
+        {
             ExecuteRoll(_cts.Token);
+        }
     }
 
     public void ExitState(CombatManager cm)
@@ -47,7 +52,7 @@ public class DiceRollState : ICombatState
 
     public void UpdateState(CombatManager cm) { }
 
-    // Single roll — used by DiceRoller.RollDie/RollWithAdvantage
+    // Single roll for DiceRoller
     private async void ExecuteRoll(CancellationToken ct)
     {
         try
@@ -57,7 +62,6 @@ public class DiceRollState : ICombatState
                 : await _roller.ExecuteRollDie(_modifier, ct);
 
             if (ct.IsCancellationRequested) return;
-
             _rollTCS.TrySetResult(result);
             CombatManager.Instance.ResumePreviousState();
         }
@@ -67,38 +71,34 @@ public class DiceRollState : ICombatState
         }
     }
 
-    // Multi-item roll — used by ItemManager, handles all modifier/advantage logic
-    private async void ExecuteAllRolls(CombatManager cm, CancellationToken ct)
+    // Rolls one item then hands off to CalculateScoreState
+    private async void ExecuteItemRoll(CombatManager cm, CancellationToken ct)
     {
         try
         {
-            List<int> rollResults = new List<int>();
-
-            for (int i = 0; i < _items.Count; i++)
+            int modifier = 0;
+            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.SkillProficiency))
             {
-                if (ct.IsCancellationRequested) return;
+                modifier += 2;
+            }
+            if (UpgradeFightingManager.Instance.tempDCReduce > 0)
+            {
+                modifier += UpgradeFightingManager.Instance.tempDCReduce;
+            }
 
-                // ✅ Modifier logic lives here now, not in ScoreManager
-                int modifier = 0;
-                if (UpgradeManager.Instance.HasUpgrade(UpgradeID.SkillProficiency))
-                    modifier += 2;
-                if (UpgradeFightingManager.Instance.tempDCReduce > 0)
-                    modifier += UpgradeFightingManager.Instance.tempDCReduce;
-
-                // ✅ Advantage logic lives here now, not in ScoreManager
-                int result;
-                if (UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage) && i == 0)
-                    result = await _roller.ExecuteRollWithAdvantage(modifier, ct);
-                else
-                    result = await _roller.ExecuteRollDie(modifier, ct);
-
-                rollResults.Add(result);
+            int result;
+            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage) && _index == 0)
+            {
+                result = await _roller.ExecuteRollWithAdvantage(modifier, ct);
+            }
+            else
+            {
+                result = await _roller.ExecuteRollDie(modifier, ct);
             }
 
             if (ct.IsCancellationRequested) return;
 
-            // ✅ All rolls done — hand off to CalculateScoreState with results
-            cm.SwitchState(new CalculateScoreState(_items, rollResults));
+            cm.SwitchState(new CalculateScoreState(_items, _index, result)); // Calculate score once roll is complete
         }
         catch (TaskCanceledException) { }
     }

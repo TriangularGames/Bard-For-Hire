@@ -73,29 +73,31 @@ public class ScoreManager : MonoBehaviour
     /// Calculates the final score for a round using ItemData List
     /// </summary>
     /// <param name="items">List of Items to be scored</param>
-    public async Task CalculateScore(List<ItemData> items, List<int> rollResults)
+    public async Task CalculateScore(List<ItemData> items, int index, int rollResult)
     {
-        EventBus.Publish<ScoringStartedEvent>(new ScoringStartedEvent());
-        pendingItems = items;
-        curItem = -1;
-        UpgradeFightingManager.Instance.StartRound();
-
-        if (pendingItems == null || pendingItems.Count <= 0) return;
-
-        for (int i = 0; i < pendingItems.Count; i++)
+        // First item — initialize
+        if (index == 0)
         {
-            if (!EnemyManager.Instance.AreEnemiesAlive()) { FinalizeScore(); break; }
-
-            curItem = i;
-            itemDisplay.GetComponent<ItemController>().itemData = pendingItems[i];
-            itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 0f, 0f, 0f);
-            itemDisplay.GetComponent<ItemController>().Setup();
-            itemDisplay.SetActive(true);
-            EventBus.Publish<ItemUsedEvent>(new ItemUsedEvent(pendingItems[i]));
-
-            // ✅ No rolling here — just process the pre-rolled result
-            await OnRollComplete(rollResults[i]);
+            EventBus.Publish<ScoringStartedEvent>(new ScoringStartedEvent());
+            pendingItems = items;
+            curItem = -1;
+            UpgradeFightingManager.Instance.StartRound();
         }
+
+        if (!EnemyManager.Instance.AreEnemiesAlive()) { FinalizeScore(); return; }
+
+        curItem = index;
+        itemDisplay.GetComponent<ItemController>().itemData = pendingItems[curItem];
+        itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 0f, 0f, 0f);
+        itemDisplay.GetComponent<ItemController>().Setup();
+        itemDisplay.SetActive(true);
+        EventBus.Publish<ItemUsedEvent>(new ItemUsedEvent(pendingItems[curItem]));
+
+        await OnRollComplete(rollResult);
+
+        // Last item — finalize
+        if (index == items.Count - 1)
+            FinalizeScore();
     }
 
     /// <summary>

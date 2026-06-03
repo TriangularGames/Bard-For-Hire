@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -6,13 +6,15 @@ using UnityEngine;
 public class CalculateScoreState : ICombatState
 {
     private readonly List<ItemData> _items;
-    private readonly List<int> _rollResults;
+    private readonly int _index;
+    private readonly int _rollResult;
     private CancellationTokenSource _cts;
 
-    public CalculateScoreState(List<ItemData> items, List<int> rollResults)
+    public CalculateScoreState(List<ItemData> items, int index, int rollResult)
     {
         _items = items;
-        _rollResults = rollResults;
+        _index = index;
+        _rollResult = rollResult;
     }
 
     public void EnterState(CombatManager cm)
@@ -35,12 +37,19 @@ public class CalculateScoreState : ICombatState
         {
             await GameObject.FindWithTag("ScoreManager")
                 .GetComponent<ScoreManager>()
-                .CalculateScore(_items, _rollResults);
+                .CalculateScore(_items, _index, _rollResult);
 
             if (ct.IsCancellationRequested) return;
 
-            // ? Scoring done — transition to AttackState
-            cm.SwitchState(new AttackState());
+            if (_index + 1 < _items.Count)
+            {
+                DiceRoller roller = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().roller;
+                cm.SwitchState(new DiceRollState(_items, roller, _index + 1));
+            }
+            else
+            {
+                cm.SwitchState(new AttackState());
+            }
         }
         catch (TaskCanceledException) { }
     }
