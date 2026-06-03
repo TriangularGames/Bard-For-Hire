@@ -85,9 +85,9 @@ public class OptionsManager : Singleton<OptionsManager>
     /// </summary>
     private void LoadAudioSettings()
     {
-        MasterVolume = PlayerPrefs.GetFloat("masterVolume", 0.5f);
-        MusicVolume = PlayerPrefs.GetFloat("musicVolume", 1.0f);
-        SfxVolume = PlayerPrefs.GetFloat("sfxVolume", 1.0f);
+        MasterVolume = PlayerPrefs.GetFloat("masterVolume");
+        MusicVolume = PlayerPrefs.GetFloat("musicVolume");
+        SfxVolume = PlayerPrefs.GetFloat("sfxVolume");
     }
 
     /// <summary>
@@ -169,12 +169,12 @@ public class OptionsManager : Singleton<OptionsManager>
     /// </summary>
     public void ApplySettings()
     {
-        AudioListener.volume = MasterVolume;
+        //AudioListener.volume = MasterVolume;
         if (audioMixer != null)
         {
-            audioMixer.SetFloat("MasterVolume", LinearToDecibel(MasterVolume));
-            audioMixer.SetFloat("MusicVolume", LinearToDecibel(MusicVolume));
-            audioMixer.SetFloat("SFXVolume", LinearToDecibel(SfxVolume));
+            audioMixer.SetFloat("masterVolume", LinearToDecibel(MasterVolume));
+            audioMixer.SetFloat("musicVolume", LinearToDecibel(MusicVolume));
+            audioMixer.SetFloat("sfxVolume", LinearToDecibel(SfxVolume));
         }
         Screen.SetResolution(GameResolution.width, GameResolution.height, IsFullScreen);
         QualitySettings.SetQualityLevel(QualityLevel);

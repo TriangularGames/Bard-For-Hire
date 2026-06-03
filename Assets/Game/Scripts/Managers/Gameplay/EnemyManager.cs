@@ -4,9 +4,6 @@ using UnityEngine;
 public class EnemyManager : Singleton<EnemyManager>
 {
     [Header("Enemy Data")]
-    /// <summary>
-    /// Enemy types available for this Performance
-    /// </summary>
     [SerializeField] List<string> memberTypes;
     [SerializeField] public int daysTilBoss = 3;
     [SerializeField] private int bossesKilledBeforePooling = 3;
@@ -62,7 +59,7 @@ public class EnemyManager : Singleton<EnemyManager>
         roundData = DEFAULTRoundData;
         isBossDay = false;
         isBossGone = false;
-}
+    }
 
     private void OnEnable()
     {
