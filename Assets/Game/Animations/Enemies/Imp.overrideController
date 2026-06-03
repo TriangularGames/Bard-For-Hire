@@ -6,12 +6,12 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Goblin
+  m_Name: Imp
   m_Controller: {fileID: 9100000, guid: 1b31f47ce90ae684d81bc3e2952f9ba5, type: 2}
   m_Clips:
-  - m_OriginalClip: {fileID: 7400000, guid: a69ea8caac602cf4b9cb10fd86116f48, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: addff09ea5a094fb6b7c313f34240ed7, type: 2}
-  - m_OriginalClip: {fileID: 7400000, guid: 101ea385e11f70d4dbdc1046faf8c11f, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 101ea385e11f70d4dbdc1046faf8c11f, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 1489c5968892f044d9b68b4ebded261a, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: 1489c5968892f044d9b68b4ebded261a, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: a69ea8caac602cf4b9cb10fd86116f48, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: a69ea8caac602cf4b9cb10fd86116f48, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 101ea385e11f70d4dbdc1046faf8c11f, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 101ea385e11f70d4dbdc1046faf8c11f, type: 2}

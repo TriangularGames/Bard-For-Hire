@@ -82,6 +82,5 @@ public class ItemDisplayController : ItemController
             _material.SetFloat(_dissolveAmount, lerpedDissolve);
             yield return null;
         }
-        Debug.Log("Dissolve Complete");
     }
 }

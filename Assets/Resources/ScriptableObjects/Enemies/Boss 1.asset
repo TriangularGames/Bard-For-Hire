@@ -16,13 +16,14 @@ MonoBehaviour:
   coinReward: 12
   weakness: 1
   icon: {fileID: 21300000, guid: f224f40deee269f449df7ba44d0a3e65, type: 3}
-  animator: {fileID: 0}
+  animator: {fileID: 22100000, guid: 567325e27f599a2449349c30ec67d66e, type: 2}
   Name: Reducer Boss
   Description: Attacks that deal even numbered damage do 50% less damage
   isBoss: 1
   ability: 0
   minDay: 0
   maxDay: 0
+  canAppearInNormalEncounters: 0
   hasBonus: 0
   bonusStat: 0
   isMultiplier: 0

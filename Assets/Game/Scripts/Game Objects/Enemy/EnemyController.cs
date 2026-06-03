@@ -1,4 +1,3 @@
-using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -18,7 +17,7 @@ public class EnemyController : MonoBehaviour
 
     [Header("Health/Damage Related")]
     private Color flashColor = new Color(1f, 1f, 1f, 0.5f);
-    [SerializeField] private float delayTime = 0.1f;
+    [SerializeField] private float delayTime = 0.5f;
     private int flashTimes = 0;
     protected int scaledHealth = -1;
     protected int health;
@@ -66,6 +65,7 @@ public class EnemyController : MonoBehaviour
         SetSprite();
         SetAnimation();
         SetDamageTxt();
+        smoke = transform.parent.GetChild(0).GetComponent<ParticleSystem>();
     }
 
     protected void SetSprite()
@@ -192,12 +192,14 @@ public class EnemyController : MonoBehaviour
 
             delayTimer -= Time.deltaTime;
 
-            if (delayTimer < 0)
+            if (delayTimer < 0 || flashIndex == 0)
             {
                 if (flashIndex == 0)
                 {
                     // On first hit, play the particle effect
                     hit.Play();
+
+                    anim.SetTrigger("Hit");
 
                     // Check if Weak/Resist text is to be displayed and display
                     DisplayWeakResistText();
@@ -209,31 +211,24 @@ public class EnemyController : MonoBehaviour
                 health -= 1;
                 SetDamageTxt();
 
-                Debug.Log("Hit number: " + flashIndex);
-
                 // If the enemy is dead or not
                 if (health <= 0)
                 {
                     state = ENEMY_STATE.DEAD;
-                    Debug.Log("Enemy killed.");
                     return;
                 }
-                else
-                {
-                    anim.SetTrigger("Hit");
-                }
-                EnemySprite.material.color = flashColor;
+
                 flashIndex++;
                 delayTimer = delayTime;
             }
             else
             {
-                EnemySprite.material.color = Color.white;
+                // set to white
             }
         }
         else
         {
-            EnemySprite.material.color = Color.white;
+            // set to white
             state = ENEMY_STATE.IDLE;
         }
     }
@@ -241,11 +236,11 @@ public class EnemyController : MonoBehaviour
     private void Die()
     {
         anim.SetTrigger("Dead");
-        smoke.Play();
     }
 
     public void RemoveEnemy()
     {
+        smoke.Play();
         EventBus.Publish(new EnemyDefeatedEvent(gameObject));
     }
 }

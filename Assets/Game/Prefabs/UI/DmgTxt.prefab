@@ -196,7 +196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DestroyText
   Offset: {x: 0.6, y: 1, z: 0}
-  Slide: {x: 0, y: 0.09, z: 0}
+  Slide: {x: 0, y: 0.05, z: 0}
 --- !u!95 &3784163203264537929
 Animator:
   serializedVersion: 7

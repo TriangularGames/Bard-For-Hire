@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
-using Unity.Burst.Intrinsics;
 using UnityEngine;
 using UnityEngine.UI;
-using static UpgradeFightingManager;
 
 /// <summary>
 /// ScoreManager calculates the score based on the Items added to AttackHand
@@ -27,11 +25,6 @@ public class ScoreManager : MonoBehaviour
     private int curItem = -1;
 
     private string rewardDisplayText;
-
-    bool archmageActive = false;
-    bool shadowThiefActive = false;
-    bool knightActive = false;
-    bool relicActive = false;
 
     private void OnEnable()
     {
@@ -93,27 +86,10 @@ public class ScoreManager : MonoBehaviour
             return;
         }
 
-        bool allMagic = true;
-        bool allPiercing = true;
-        bool allSlashing = true; 
-        bool noCommon = true;
-        foreach (ItemData i in pendingItems)
-        {
-            if (i.ItemType != ItemType.Magical) allMagic = false;
-            if (i.ItemType != ItemType.Piercing) allPiercing = false;
-            if (i.ItemType != ItemType.Slashing) allSlashing = false;
-            if (i.Rarity == ObjectRarity.Common) noCommon = false;
-        }
-
-        bool archmageActive = allMagic && UpgradeManager.Instance.HasUpgrade(UpgradeID.Archmage);
-        bool shadowThiefActive = allPiercing && UpgradeManager.Instance.HasUpgrade(UpgradeID.ShadowThief);
-        bool knightActive = allSlashing && UpgradeManager.Instance.HasUpgrade(UpgradeID.KnightCaptain);
-        bool relicActive = noCommon && UpgradeManager.Instance.HasUpgrade(UpgradeID.RelicKeeper);
-
         foreach (ItemData item in pendingItems)
         {
-            if(!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive()) { FinalizeScore(); break; }
-            
+            if (!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive()) { FinalizeScore(); break; }
+
             curItem += 1;
             Debug.Log("Item " + curItem + " being rolled for.");
             // Display item being rolled for
@@ -132,30 +108,13 @@ public class ScoreManager : MonoBehaviour
                 modifier += 2;
             }
 
-            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.GreatWeaponMaster))
-            {
-                int gwmBonus = Mathf.RoundToInt(item.Playable * 0.25f);
-                modifier += gwmBonus;
-            }
-
             if (UpgradeFightingManager.Instance.tempDCReduce > 0)
             {
                 modifier += UpgradeFightingManager.Instance.tempDCReduce;
             }
 
-            if ((shadowThiefActive))
+            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage) && curItem == 0)
             {
-                modifier -= 2;
-            }
-
-            bool useAdvantage = (UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage) && curItem == 0) || (shadowThiefActive) || (UpgradeFightingManager.Instance.UseComeback());
-            if (useAdvantage)
-            {
-                if (UpgradeFightingManager.Instance.UseComeback())
-                {
-                    await roller.ShowUpgradeNotif("Comeback!");
-                    UpgradeFightingManager.Instance.UseComeback();
-                }
                 rollResult = await roller.RollWithAdvantage(modifier);
             }
             else
@@ -171,7 +130,7 @@ public class ScoreManager : MonoBehaviour
     /// Called when the roll is complete, and the score is calculated
     /// </summary>
     /// <param name="rollValue">The value of the roll</param>
-    private async Task OnRollComplete(int rollValue, bool archmageActive = false, bool knightActive = false, bool relicActive = false)
+    private async Task OnRollComplete(int rollValue)
     {
         ItemData item = pendingItems[curItem];
         int slotIndex = curItem;
@@ -185,23 +144,8 @@ public class ScoreManager : MonoBehaviour
             AudioManager.Instance.PlayClip("Success");
             itemDisplay.GetComponent<ItemDisplayController>().Success();
 
-
             await PauseExtensions.DelayRespectingPause(300 * GameSpeed);
             int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex, out var bonuses);
-
-            if (archmageActive)
-                totalDamage = Mathf.RoundToInt(totalDamage * 0.7f);
-
-            if (knightActive)
-            {
-                int hits = UpgradeFightingManager.Instance.currentActions.Count;
-                float knightMult = 1f + (hits * 0.25f);
-                totalDamage = Mathf.RoundToInt(totalDamage * knightMult);
-            }
-
-            if (relicActive)
-                totalDamage = Mathf.RoundToInt(totalDamage * 1.3f);
-
             await itemDisplay.GetComponent<ItemController>().ShowDamageBonuses(bonuses, item.Damage);
             UpgradeFightingManager.Instance.SuccessfulAction(item, totalDamage);
 
@@ -209,7 +153,7 @@ public class ScoreManager : MonoBehaviour
             EventBus.Publish<HitEvent>(new HitEvent());
             await PauseExtensions.DelayRespectingPause(100 * GameSpeed);
 
-            AttackEnemy(item, totalDamage, archmageActive);
+            AttackEnemy(item, totalDamage);
 
             if (UpgradeManager.Instance.HasUpgrade(UpgradeID.ComboChain))
             {
@@ -219,14 +163,14 @@ public class ScoreManager : MonoBehaviour
 
             if (UpgradeManager.Instance.HasUpgrade(UpgradeID.DoubleCrit))
             {
-                if(finalroll == 20)
-                AttackEnemy(item, totalDamage);
+                if (finalroll == 20)
+                    AttackEnemy(item, totalDamage);
             }
 
             if (UpgradeManager.Instance.HasUpgrade(UpgradeID.EchoStrike))
             {
-                if(slotIndex == pendingItems.Count - 1)
-                AttackEnemy(item, totalDamage);
+                if (slotIndex == pendingItems.Count - 1)
+                    AttackEnemy(item, totalDamage);
             }
         }
         else
@@ -245,7 +189,7 @@ public class ScoreManager : MonoBehaviour
                 await roller.ShowUpgradeNotif("Second Chance");
                 rollValue = await roller.RollDie(0);
                 UpgradeFightingManager.Instance.rolledNat20 = (roller.natRoll == 20);
-                await OnRollComplete(rollValue, archmageActive, knightActive, relicActive);
+                await OnRollComplete(rollValue);
                 savedBySecondChance = true;
                 return;
             }
@@ -259,7 +203,7 @@ public class ScoreManager : MonoBehaviour
             }
             if (!savedByQuickSave)
                 UpgradeFightingManager.Instance.FailedAction();
-    }
+        }
 
         // Wait for possible animations
         await PauseExtensions.DelayRespectingPause(800 * GameSpeed);
@@ -269,7 +213,7 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    private void AttackEnemy(ItemData item, int damage, bool archmageHitExtra = false)
+    private void AttackEnemy(ItemData item, int damage)
     {
         if (EnemyManager.Instance.isBossDay && EnemyManager.Instance.hasDisabled && EnemyManager.Instance.disabledItem == item.ItemType)
             return;
@@ -277,29 +221,22 @@ public class ScoreManager : MonoBehaviour
         switch (item.target)
         {
             case 1:
-                if (archmageHitExtra)
-                {
-                    int hits = 0;
-                    foreach (Transform enemyLocation in EnemyManager.Instance.spawnPoints)
-                    {
-                        if (hits >= 2) break;
-                        if (TryAttackAt(enemyLocation, item, damage)) hits++;
-                    }
-                }
-                else AttackFirstEnemy(item, damage);
+                AttackFirstEnemy(item, damage);
                 break;
             case 2:
-                int h = 0;
+                int hits = 0;
                 foreach (Transform enemyLocation in EnemyManager.Instance.spawnPoints)
                 {
-                    if (h >= 2) break;
-                    if (TryAttackAt(enemyLocation, item, damage)) h++;
+                    if (hits >= 2) break;
+                    if (TryAttackAt(enemyLocation, item, damage))
+                        hits++;
                 }
                 break;
             case 3:
                 foreach (Transform enemyLocation in EnemyManager.Instance.spawnPoints)
                     TryAttackAt(enemyLocation, item, damage);
                 break;
+
         }
     }
 
@@ -313,49 +250,55 @@ public class ScoreManager : MonoBehaviour
 
     private bool TryAttackAt(Transform enemyLocation, ItemData item, int damage)
     {
-            // Check if the location has an enemy in it
-            if (enemyLocation.childCount == 0) return false;
-            
-                // Get the enemy at this location
-                GameObject enemy = enemyLocation.transform.GetChild(0).gameObject;
+        // Check if the location has an enemy in it
+        if (enemyLocation.childCount == 0) return false;
 
-                if (enemy.GetComponent<EnemyController>().GetHealth() <= 0) return false;
+        GameObject enemy = null;
+        // Get the enemy at this location
+        for (int i = 0; i < enemyLocation.childCount; i++)
+        {
+            if (enemyLocation.transform.GetChild(i).GetComponent<EnemyController>() != null)
+            {
+                enemy = enemyLocation.transform.GetChild(i).gameObject;
+            }
+        }
 
-                bool weakness = false;
-                bool resistance = false;
+        if (enemy == null) return false;
 
-                if (enemy.GetComponent<EnemyController>().enemyData.weakness == item.ItemType)
-                {
-                    damage = Mathf.RoundToInt(damage * 1.55f);
-                    weakness = true;
-                }
+        if (enemy.GetComponent<EnemyController>().GetHealth() <= 0) return false;
 
-                if (EnemyManager.Instance.isBossDay && EnemyManager.Instance.bossData.ability == BossAbilities.EvenNumberReduce
-                    && damage % 2 == 0)
-                {
-                    damage = Mathf.RoundToInt(damage * 0.5f);
-                    resistance = true;
-                }
+        bool weakness = false;
+        bool resistance = false;
 
-                if (item.weaponBonus == WeaponBonus.PercentHealth)
-                {
-                   int percentDamage = Mathf.RoundToInt(enemy.GetComponent<EnemyController>().GetHealth() * 0.1f);
-                   damage += percentDamage;
-                }
+        if (enemy.GetComponent<EnemyController>().enemyData.weakness == item.ItemType)
+        {
+            damage = Mathf.RoundToInt(damage * 1.55f);
+            weakness = true;
+        }
 
-                if (item.weaponBonus == WeaponBonus.GrowingDamage)
-                {
-                   damage += item.bonusDamageStacks;
-                   item.bonusDamageStacks++;
-                }
+        if (EnemyManager.Instance.isBossDay && EnemyManager.Instance.bossData.ability == BossAbilities.EvenNumberReduce
+            && damage % 2 == 0)
+        {
+            damage = Mathf.RoundToInt(damage * 0.5f);
+            resistance = true;
+        }
+
+        if (item.weaponBonus == WeaponBonus.PercentHealth)
+        {
+            int percentDamage = Mathf.RoundToInt(enemy.GetComponent<EnemyController>().GetHealth() * 0.1f);
+            damage += percentDamage;
+        }
+
+        if (item.weaponBonus == WeaponBonus.GrowingDamage)
+        {
+            damage += item.bonusDamageStacks;
+            item.bonusDamageStacks++;
+        }
 
         EventBus.Publish(new DamageTakenEvent(enemy.GetEntityId(), damage, weakness, resistance));
-        return true;    
+        return true;
 
     }
-    
-        
-    
 
     /// <summary>
     /// Finalize the Score calculation for display.
@@ -388,19 +331,6 @@ public class ScoreManager : MonoBehaviour
                 {
                     int bonusCoins = remainingRounds * 5;
                     EventBus.Publish(new MoneyEarnedEvent(bonusCoins, "Early Completion"));
-                }
-                if (UpgradeManager.Instance.HasUpgrade(UpgradeID.StableInvestments))
-                {
-                    int bonus = Mathf.RoundToInt(PlayerManager.Instance.Coins * 0.08f);
-                    PlayerManager.Instance.Coins += bonus;
-                    PlayerManager.Instance.SetCoinText();
-                    EventBus.Publish(new MoneyEarnedEvent(bonus, "Stable Investments"));
-                }
-                if (UpgradeManager.Instance.HasUpgrade(UpgradeID.CoinFinder))
-                {
-                    PlayerManager.Instance.Coins += 5;
-                    PlayerManager.Instance.SetCoinText();
-                    EventBus.Publish(new MoneyEarnedEvent(5, "Coin Finder"));
                 }
                 Debug.Log("Combat Completed!");
                 MenuManager.Instance.SwitchState(new VictoryMenuState());
@@ -461,7 +391,7 @@ public struct VictoryEvent
 {
     public string textContent;
 
-    public VictoryEvent (string _textContent)
+    public VictoryEvent(string _textContent)
     {
         textContent = _textContent;
     }
