@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -73,63 +74,34 @@ public class ScoreManager : MonoBehaviour
     /// Calculates the final score for a round using ItemData List
     /// </summary>
     /// <param name="items">List of Items to be scored</param>
-    public async Task CalculateScore(List<ItemData> items)
+    public async Task CalculateScore(List<ItemData> items, int index, int rollResult)
     {
-        EventBus.Publish<ScoringStartedEvent>(new ScoringStartedEvent());
-
-        pendingItems = items;
-        curItem = -1;
-        UpgradeFightingManager.Instance.StartRound();
-
-        if (pendingItems == null || pendingItems.Count <= 0)
+        // First item — initialize
+        if (index == 0)
         {
-            return;
+            EventBus.Publish<ScoringStartedEvent>(new ScoringStartedEvent());
+            pendingItems = items;
+            curItem = -1;
+            UpgradeFightingManager.Instance.StartRound();
         }
 
-        foreach (ItemData item in pendingItems)
-        {
-            if(!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive()) { FinalizeScore(); break; }
-            
-            curItem += 1;
-            Debug.Log("Item " + curItem + " being rolled for.");
-            // Display item being rolled for
-            itemDisplay.GetComponent<ItemController>().itemData = item;
-            itemDisplay.GetComponent<ItemController>().Setup();
-            itemDisplay.SetActive(true);
-            itemDisplay.GetComponent<ItemDisplayController>().Reset();
-            // Remove item being checked from Hotbar
-            EventBus.Publish<ItemUsedEvent>(new ItemUsedEvent(item));
+        if (!EnemyManager.Instance.AreEnemiesAlive()) { FinalizeScore(); return; }
 
-            int rollResult = -1;
-            int modifier = 0;
+        curItem = index;
+        itemDisplay.GetComponent<ItemController>().itemData = pendingItems[curItem];
+        itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 0f, 0f, 0f);
+        itemDisplay.GetComponent<ItemController>().Setup();
+        itemDisplay.SetActive(true);
+        EventBus.Publish<ItemUsedEvent>(new ItemUsedEvent(pendingItems[curItem]));
 
-            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.SkillProficiency))
-            {
-                modifier += 2;
-            }
-
-            if (UpgradeFightingManager.Instance.tempDCReduce > 0)
-            {
-                modifier += UpgradeFightingManager.Instance.tempDCReduce;
-            }
-
-            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage) && curItem == 0){
-                rollResult = await roller.RollWithAdvantage(modifier);
-            }
-            else
-            {
-                rollResult = await roller.RollDie(modifier);
-            }
-            UpgradeFightingManager.Instance.rolledNat20 = (roller.natRoll == 20);
-            await OnRollComplete(rollResult);
-        }
+        await OnRollComplete(rollResult);
     }
 
     /// <summary>
     /// Called when the roll is complete, and the score is calculated
     /// </summary>
     /// <param name="rollValue">The value of the roll</param>
-    private async Task OnRollComplete(int rollValue)
+    private async Task OnRollComplete(int rollValue, CancellationToken ct = default)
     {
         ItemData item = pendingItems[curItem];
         int slotIndex = curItem;
@@ -187,8 +159,7 @@ public class ScoreManager : MonoBehaviour
             {
                 await roller.ShowUpgradeNotif("Second Chance");
                 rollValue = await roller.RollDie(0);
-                UpgradeFightingManager.Instance.rolledNat20 = (roller.natRoll == 20);
-                await OnRollComplete(rollValue);
+                await OnRollComplete(rollValue, ct);
                 savedBySecondChance = true;
                 return;
             }
@@ -202,7 +173,7 @@ public class ScoreManager : MonoBehaviour
             }
             if (!savedByQuickSave)
                 UpgradeFightingManager.Instance.FailedAction();
-    }
+        }
 
         // Wait for possible animations
         await PauseExtensions.DelayRespectingPause(800 * GameSpeed);
