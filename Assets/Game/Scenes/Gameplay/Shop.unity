@@ -3171,10 +3171,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopManager
   rerollBtn: {fileID: 54071545}
   dayDisplay: {fileID: 1235457406}
-  commonWeight: 52
-  uncommonWeight: 31
-  rareWeight: 13
-  legendaryWeight: 4
+  commonWeight: 60
+  uncommonWeight: 29
+  rareWeight: 10
+  legendaryWeight: 1
   _items: {fileID: 1516798803}
   _upgrades: {fileID: 2018655132}
   _consumables: {fileID: 368741273}

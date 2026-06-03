@@ -103,7 +103,9 @@ public class EnemyManager : Singleton<EnemyManager>
         int index = -1;
         EnemyController enemyC = e.enemy.GetComponent<EnemyController>();
 
-        EventBus.Publish<MoneyEarnedEvent>(new MoneyEarnedEvent(enemyC.enemyData.coinReward, enemyC.enemyData.Name));
+        int coins = enemyC.enemyData.coinReward;
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.MercenaryContract)) coins = Mathf.RoundToInt(coins * 1.3f);
+        EventBus.Publish(new MoneyEarnedEvent(coins, enemyC.enemyData.Name));
 
         if (enemies.Contains(e.enemy))
         {

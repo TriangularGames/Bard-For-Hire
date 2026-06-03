@@ -19,6 +19,9 @@ public class UpgradeFightingManager : MonoBehaviour
     public bool reroll;
     public bool isFirstTurn;
     public bool rolledNat20;
+    public bool lastActionFail = false;
+    public bool ragingRN = false;
+    public bool comebackUsed = false;
     private void Awake()
     {
         Instance = this;
@@ -36,6 +39,9 @@ public class UpgradeFightingManager : MonoBehaviour
         quickSaveUsed = false;
         luckySlot = Random.Range(0, 3);
         isFirstTurn = true;
+        lastActionFail = false;
+        ragingRN = false;
+        comebackUsed = false;
     }
 
     public void EndRound(List<ItemData> currentHand)
@@ -90,11 +96,25 @@ public class UpgradeFightingManager : MonoBehaviour
         currentActions.Add(item.ItemType);
         roundDamage+=damage;
         successStreak++;
+        lastActionFail = false;
+        ragingRN = false;
     }
 
     public void FailedAction()
     {
         successStreak = 0;
+        lastActionFail= false;
+        ragingRN = UpgradeManager.Instance.HasUpgrade(UpgradeID.Rage);
+    }
+
+    public bool UseComeback()
+    {
+        return UpgradeManager.Instance.HasUpgrade(UpgradeID.Comeback) && lastActionFail && !comebackUsed; 
+    }
+
+    public void UsingComeback()
+    {
+        comebackUsed = true;
     }
 
     public int GetBonusRoll(int roll)
@@ -237,6 +257,12 @@ public class UpgradeFightingManager : MonoBehaviour
                     bonuses.Add(new DamageBonus { source = "Lucky Strike", amount = damage - before });
                 }
          }
+        }
+        if (ragingRN)
+        {
+            int before = damage;
+            damage = Mathf.RoundToInt(damage * 2f);
+            bonuses.Add(new DamageBonus { source = "Rage", amount = damage - before });
         }
         damage = Mathf.RoundToInt(
         damage * tempDamgeIncrease);
