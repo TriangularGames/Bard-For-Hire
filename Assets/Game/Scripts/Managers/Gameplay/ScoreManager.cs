@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -94,17 +95,13 @@ public class ScoreManager : MonoBehaviour
         EventBus.Publish<ItemUsedEvent>(new ItemUsedEvent(pendingItems[curItem]));
 
         await OnRollComplete(rollResult);
-
-        // Last item — finalize
-        if (index == items.Count - 1)
-            FinalizeScore();
     }
 
     /// <summary>
     /// Called when the roll is complete, and the score is calculated
     /// </summary>
     /// <param name="rollValue">The value of the roll</param>
-    private async Task OnRollComplete(int rollValue)
+    private async Task OnRollComplete(int rollValue, CancellationToken ct = default)
     {
         ItemData item = pendingItems[curItem];
         int slotIndex = curItem;
@@ -162,7 +159,7 @@ public class ScoreManager : MonoBehaviour
             {
                 await roller.ShowUpgradeNotif("Second Chance");
                 rollValue = await roller.RollDie(0);
-                await OnRollComplete(rollValue);
+                await OnRollComplete(rollValue, ct);
                 savedBySecondChance = true;
                 return;
             }
@@ -176,7 +173,7 @@ public class ScoreManager : MonoBehaviour
             }
             if (!savedByQuickSave)
                 UpgradeFightingManager.Instance.FailedAction();
-    }
+        }
 
         // Wait for possible animations
         await PauseExtensions.DelayRespectingPause(800 * GameSpeed);

@@ -77,7 +77,7 @@ public class DiceRoller : MonoBehaviour
         if (modifier != 0 || nat == 20 || nat == 1)
         {
             int final = Mathf.Clamp(nat + modifier, 1, 20);
-            await ExecuteShowModifier(displayRoll, displayModifer, nat, modifier, final);
+            await ExecuteShowModifier(displayRoll, displayModifer, nat, modifier, final, ct);
             return final;
         }
         return nat;
@@ -109,7 +109,7 @@ public class DiceRoller : MonoBehaviour
         if (modifier != 0 && displayModifer != null)
         {
             int final = Mathf.Clamp(higher + modifier, 1, 20);
-            await ExecuteShowModifier(winnerDisplay, displayModifer, higher, modifier, final);
+            await ExecuteShowModifier(winnerDisplay, displayModifer, higher, modifier, final, ct);
             return final;
         }
         return higher;

@@ -44,11 +44,11 @@ public class CalculateScoreState : ICombatState
             if (_index + 1 < _items.Count)
             {
                 DiceRoller roller = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().roller;
-                cm.SwitchState(new DiceRollState(_items, roller, _index + 1));
+                cm.SwitchState(new DiceRollState(_items, roller, _index + 1)); // re-roll if more items are are played
             }
             else
             {
-                cm.SwitchState(new AttackState());
+                cm.SwitchState(new DefaultCombatState());
             }
         }
         catch (TaskCanceledException) { }

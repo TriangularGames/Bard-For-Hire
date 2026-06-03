@@ -9,7 +9,7 @@ public class DiceRollState : ICombatState
     private readonly int _index;
     private readonly int _modifier;
     private readonly bool _withAdvantage;
-    private CancellationTokenSource _cts;
+    private CancellationTokenSource _cts; // used to cancel async tasks when exiting state
 
     public Task<int> RollTask => _rollTCS.Task;
     private readonly TaskCompletionSource<int> _rollTCS = new TaskCompletionSource<int>();
