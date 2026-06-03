@@ -40,12 +40,10 @@ public class DiceRollState : ICombatState
         try
         {
             int result = _withAdvantage
-                ? await _roller.ExecuteRollWithAdvantage(_modifier)
-                : await _roller.ExecuteRollDie(_modifier);
+                ? await _roller.ExecuteRollWithAdvantage(_modifier, ct) 
+                : await _roller.ExecuteRollDie(_modifier, ct);         
 
             if (ct.IsCancellationRequested) return;
-
-            // Resolve the task so whoever is awaiting RollDie() gets the result
             _rollTCS.TrySetResult(result);
             CombatManager.Instance.ResumePreviousState();
         }
