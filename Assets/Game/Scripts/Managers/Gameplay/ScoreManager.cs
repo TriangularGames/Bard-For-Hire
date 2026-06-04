@@ -83,12 +83,6 @@ public class ScoreManager : MonoBehaviour
         itemDisplay.GetComponent<ItemDisplayController>().Success();
     }
 
-    // For use with second chance
-    public void Reveal()
-    {
-        itemDisplay.GetComponent<ItemDisplayController>().Reset();
-    }
-
     public void ShowMiss()
     {
         AudioManager.Instance.PlayClip("Fail");

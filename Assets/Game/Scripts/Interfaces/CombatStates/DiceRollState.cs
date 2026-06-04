@@ -82,7 +82,7 @@ public class DiceRollState : ICombatState
         {
             sm.InitializeRound(_items);
         }
-
+        
         sm.SetupItemDisplay(_index);
     }
 

@@ -22,7 +22,6 @@ public class SecondChanceState : ICombatState
     {
         _timer = 0f;
         _sm.roller.upgradeNotifText.text = "Second Chance";
-        _sm.Reveal();
     }
 
     public void ExitState(CombatManager cm)
