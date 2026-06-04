@@ -71,9 +71,9 @@ public class ScoreManager : MonoBehaviour
     public void SetupItemDisplay(int index)
     {
         itemDisplay.GetComponent<ItemController>().itemData = pendingItems[index];
-        itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 0f, 0f, 0f);
         itemDisplay.GetComponent<ItemController>().Setup();
         itemDisplay.SetActive(true);
+        itemDisplay.GetComponent<ItemDisplayController>().Reset();
         EventBus.Publish<ItemUsedEvent>(new ItemUsedEvent(pendingItems[index]));
     }
 
@@ -81,6 +81,12 @@ public class ScoreManager : MonoBehaviour
     {
         AudioManager.Instance.PlayClip("Success");
         itemDisplay.GetComponent<ItemDisplayController>().Success();
+    }
+
+    // For use with second chance
+    public void Reveal()
+    {
+        itemDisplay.GetComponent<ItemDisplayController>().Reset();
     }
 
     public void ShowMiss()
@@ -207,7 +213,17 @@ public class ScoreManager : MonoBehaviour
     private bool TryAttackAt(Transform enemyLocation, ItemData item, int damage)
     {
         if (enemyLocation.childCount == 0) return false;
-        GameObject enemy = enemyLocation.GetChild(0).gameObject;
+
+        GameObject enemy = null;
+        for (int i = 0; i < enemyLocation.transform.childCount; i++)
+        {
+            if (enemyLocation.transform.GetChild(i).GetComponent<EnemyController>() != null)
+            {
+                enemy = enemyLocation.transform.GetChild(i).gameObject;
+            }
+        }
+
+        if (enemy == null) return false;
         if (enemy.GetComponent<EnemyController>().GetHealth() <= 0) return false;
 
         bool weakness = false;

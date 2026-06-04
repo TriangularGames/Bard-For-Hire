@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class ItemDisplayController : ItemController
 {
     [SerializeField] private ParticleSystem confetti;
-    private Animator anim;
+    [SerializeField] private Animator anim;
     private Image _Image;
     private Material _material;
 
@@ -18,7 +18,6 @@ public class ItemDisplayController : ItemController
         _Image = transform.GetChild(1).GetComponent<Image>();
         _material = _Image.material;
         _material.SetFloat(_dissolveAmount, 0f);
-        anim = GetComponent<Animator>();
     }
 
     public void Reset()
@@ -28,6 +27,10 @@ public class ItemDisplayController : ItemController
             _material.SetFloat(_dissolveAmount, 0f);
         }
         transform.GetChild(1).gameObject.SetActive(true);
+        if (anim.GetCurrentAnimatorClipInfo(0)[0].clip.name != "Default")
+        {
+            anim.Play("Default");
+        }
     }
 
     /// <summary>
