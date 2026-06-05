@@ -79,7 +79,6 @@ public class ShowRollResultState : ICombatState
             if (_isSingleRoll)
             {
                 _onSingleRollDone?.Invoke(_final);
-                CombatManager.Instance.ResumePreviousState();
             }
             else
             {

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -10,6 +10,7 @@ public class SecondChanceState : ICombatState
     private readonly int _index;
     private readonly ScoreManager _sm;
     private float _timer;
+    private bool _rolled;
 
     public SecondChanceState(List<ItemData> items, int index, ScoreManager sm)
     {
@@ -32,12 +33,15 @@ public class SecondChanceState : ICombatState
     public void UpdateState(CombatManager cm)
     {
         if (PauseManager.Instance.IsPaused) return;
-        _timer += Time.deltaTime;
+        _timer += Time.unscaledDeltaTime;
 
-        if (_timer >= 0.8f)
+        if (_timer >= 0.8f && !_rolled)
         {
-            // Re-roll for same item index
-            cm.SwitchState(new DiceRollState(_items, _sm.roller, _index));
+            _rolled = true;
+            _sm.roller.RollDie(0, result =>
+            {
+                CombatManager.Instance.SwitchState(new CalculateScoreState(_items, _index, result));
+            });
         }
     }
 }
