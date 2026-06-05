@@ -74,7 +74,7 @@ public class ScoreManager : MonoBehaviour
         itemDisplay.GetComponent<ItemController>().Setup();
         itemDisplay.SetActive(true);
         itemDisplay.GetComponent<ItemDisplayController>().Reset();
-        EventBus.Publish<ItemUsedEvent>(new ItemUsedEvent(pendingItems[index]));
+        EventBus.Publish<ItemUsedEvent>(new ItemUsedEvent(pendingItems[index], index));
     }
 
     public void ShowHit(int index)
@@ -271,7 +271,12 @@ public struct VictoryEvent
 public struct ItemUsedEvent
 {
     public ItemData item;
-    public ItemUsedEvent(ItemData _item) { item = _item; }
+    public int attackIndex;
+    public ItemUsedEvent(ItemData _item, int _attackIndex)
+    {
+        item = _item;
+        attackIndex = _attackIndex;
+    }
 }
 
 public struct HitEvent { }

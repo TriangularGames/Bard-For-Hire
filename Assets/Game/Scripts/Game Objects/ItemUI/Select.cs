@@ -129,4 +129,11 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
             }
         }
     }
+
+    public void ClearSelectionVisual()
+    {
+        isSelected = false;
+        selection.sprite = null;
+        selection.color = new Color(1f, 1f, 1f, 0f);
+    }
 }

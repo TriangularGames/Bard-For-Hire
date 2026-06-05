@@ -27,6 +27,8 @@ public class ItemManager : MonoBehaviour
 
     public ItemPool itemPool;
 
+    private List<GameObject> _attackItems;
+
     private void OnEnable()
     {
         EventBus.Subscribe<ItemUsedEvent>(DeleteItem);
@@ -61,21 +63,14 @@ public class ItemManager : MonoBehaviour
 
     private void DeleteItem(ItemUsedEvent e)
     {
-        GameObject toDelete = null;
-        foreach (GameObject item in ItemsSelected)
-        {
-            if (item.GetComponent<ItemController>().itemData == e.item)
-            {
-                toDelete = item;
-            }
-        }
+        if (_attackItems == null || e.attackIndex < 0 || e.attackIndex >= _attackItems.Count) return;
 
-        if (toDelete != null)
-        {
-            ItemsSelected.Remove(toDelete);
-            itemPool.RemoveItem(toDelete);
-            Destroy(toDelete);
-        }
+        GameObject toDelete = _attackItems[e.attackIndex];
+        if (toDelete == null) return;
+
+        _attackItems[e.attackIndex] = null;
+        itemPool.RemoveItem(toDelete);
+        Destroy(toDelete);
     }
 
     private void Start()
@@ -210,12 +205,15 @@ public class ItemManager : MonoBehaviour
             itemData.Add(itemObj.GetComponent<ItemController>().itemData);
         }
 
+        BeginAttack(itemObjects);
+
         DiceRoller roller = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().roller;
         CombatManager.Instance.SwitchState(new StackedItemsState(itemData, roller, itemObjects));
     }
 
     private void PrepNewRound(ScoringCompletedEvent e)
     {
+        _attackItems?.Clear();
         scoringCompleted = true;
     }
 
@@ -237,6 +235,14 @@ public class ItemManager : MonoBehaviour
         {
             selectedItem.GetComponent<Select>().SetImage(selectionBoxes[ItemsSelected.IndexOf(selectedItem)]);
         }
+        UpdateSelectionText();
+    }
+
+    public void BeginAttack(List<GameObject> attackItems)
+    {
+        _attackItems = new List<GameObject>(attackItems);
+        // Hand selection is done — only attack snapshot matters now
+        ItemsSelected.Clear();
         UpdateSelectionText();
     }
 }
