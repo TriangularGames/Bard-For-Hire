@@ -65,6 +65,7 @@ public class ScoreManager : MonoBehaviour
         EventBus.Publish<ScoringStartedEvent>(new ScoringStartedEvent());
         pendingItems = items;
         UpgradeFightingManager.Instance.StartRound();
+        UpgradeFightingManager.Instance.GetTheHandBonuses(items);
     }
 
     // Called by CalculateScoreState to set up item display
