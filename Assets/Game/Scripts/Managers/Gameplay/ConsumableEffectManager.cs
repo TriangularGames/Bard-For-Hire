@@ -39,14 +39,11 @@ public class ConsumableEffectManager : MonoBehaviour
                 }
                 break;
 
-            case ConsumableID.SharpeningStone:
-                UpgradeFightingManager.Instance.tempDamgeIncrease = 1.3f; break;
+            //case ConsumableID.SharpeningStone:
+            //    UpgradeFightingManager.Instance.tempDamgeIncrease = 1.3f; break;
 
             case ConsumableID.LuckPotion:
                     UpgradeFightingManager.Instance.rollAbove10 = true; break;
-
-            case ConsumableID.RerollPotion:
-                UpgradeFightingManager.Instance.reroll = true; break;
 
             case ConsumableID.PotionOfMelting:
                 selectingItemToDestroy = true;

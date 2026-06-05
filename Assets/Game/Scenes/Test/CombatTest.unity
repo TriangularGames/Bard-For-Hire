@@ -343,7 +343,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: upgradeInventory.Array.size
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[10]'
@@ -388,15 +388,19 @@ PrefabInstance:
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 91c86d55d54da2d4cb2477df5dd87424, type: 2}
+      objectReference: {fileID: 11400000, guid: 1d6b1bff6aaa63b499cee15897e54ed8, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: d0a462c819ec3d941bf9e39d9b643585, type: 2}
+      objectReference: {fileID: 11400000, guid: 6ecf1f8c9ef652b49acb2d91d28b0629, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[2]'
       value: 
-      objectReference: {fileID: 11400000, guid: c73bfd9aff9f204428b4ec8dd7ba21d6, type: 2}
+      objectReference: {fileID: 11400000, guid: dbce602f78b007841b92dfc4fc6f370e, type: 2}
+    - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
+      propertyPath: 'upgradeInventory.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: e3cb333e5da20b84b8e5f75044ffef61, type: 2}
     - target: {fileID: 8025483659626453430, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: m_Name
       value: _PlayerManager
@@ -17006,17 +17010,20 @@ MonoBehaviour:
   previousActions: 
   roundDamage: 0
   previousRoundDamage: 0
+  isFirstTurn: 0
+  successStreak: 0
+  lastActionFail: 0
   secondChanceUsed: 0
   quickSaveUsed: 0
-  luckySlot: 0
-  successStreak: 0
   tempDCReduce: 0
   tempDamgeIncrease: 1
   rollAbove10: 0
-  reroll: 0
-  isFirstTurn: 0
+  archmageActive: 0
+  shadowThiefActive: 0
+  knightActive: 0
+  relicActive: 0
   rolledNat20: 0
-  lastActionFail: 0
+  luckySlot: 0
   ragingRN: 0
   comebackUsed: 0
 --- !u!114 &1050412171
@@ -18735,8 +18742,8 @@ MonoBehaviour:
   itemDisplay: {fileID: 1247202534}
   roundText: {fileID: 422085961}
   curRound: 1
-  waitForRoll: 2
   GameSpeed: 4
+  waitForRoll: 2
   roller: {fileID: 1344256443}
 --- !u!4 &1344256445
 Transform:

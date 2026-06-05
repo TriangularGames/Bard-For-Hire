@@ -18,30 +18,19 @@ public class ItemController : MonoBehaviour
         SetPlayableTxt();
     }
 
-    public async Task ShowDamageBonuses(List<UpgradeFightingManager.DamageBonus> bonuses, int baseDamage)
+    public void ShowBonusLabel(int currentBase, int amount, string source)
     {
-        int baseD = baseDamage;
-        SetDamageTxtRaw(baseD);
-
-        foreach (var bonus in bonuses)
+        if (amount >= 0)
         {
-            if (bonus.amount == 0) continue;
-
-            await PauseExtensions.DelayRespectingPause(400);
-            if (bonus.amount > 0) {
-                damageTxt.text = ("Dmg ") + baseD + $"  <color=yellow>+ {bonus.amount} {bonus.source}</color>";
-            }
-            if (bonus.amount < 0)
-            {
-                damageTxt.text = ("Dmg ") + baseD + $"  <color=red> {bonus.amount} {bonus.source}</color>";
-            }
-            await PauseExtensions.DelayRespectingPause(700);
-            baseD += bonus.amount;
-            SetDamageTxtRaw(baseD);
+            damageTxt.text = $"Dmg {currentBase}  <color=yellow>+{amount} {source}</color>";
+        }
+        else
+        {
+            damageTxt.text = $"Dmg {currentBase}  <color=red>{amount} {source}</color>"; ;
         }
     }
 
-    private void SetDamageTxtRaw(int value)
+    public void SetDamageTxtRaw(int value)
     {
         damageTxt.text = ("Dmg ") + value.ToString();
     }

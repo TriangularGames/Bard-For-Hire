@@ -5,58 +5,49 @@ public class UpgradeFightingManager : MonoBehaviour
 {
     public static UpgradeFightingManager Instance;
 
+    [Header("Round Tracking")]
     public List<ItemType> currentActions = new List<ItemType>();
     public List<ItemType> previousActions = new List<ItemType>();
     public int roundDamage;
     public int previousRoundDamage;
+    public bool isFirstTurn;
+    public int successStreak;
+    public bool lastActionFail = false;
+
+    [Header("One-Time Events")]
     public bool secondChanceUsed;
     public bool quickSaveUsed;
-    public int luckySlot;
-    public int successStreak;
+
+    [Header("Temporary Modifications")]
     public int tempDCReduce;
     public float tempDamgeIncrease = 1f;
     public bool rollAbove10;
-    public bool reroll;
-    public bool isFirstTurn;
-    public bool rolledNat20;
-    public bool lastActionFail = false;
-    public bool ragingRN = false;
-    public bool comebackUsed = false;
+
+    [Header("Hand Bonus Upgrades")]
     public bool archmageActive = false;
     public bool shadowThiefActive = false;
     public bool knightActive = false;
     public bool relicActive = false;
+
+    public bool rolledNat20;
+    public int luckySlot;
+    public bool ragingRN = false;
+    public bool comebackUsed = false;
+
+    
+
     private void Awake()
     {
         Instance = this;
     }
-    public void GetTheHandBonuses(List<ItemData> items)
-    {
-        bool allMagic = true;
-        bool allPiercing = true;
-        bool allSlashing = true;
-        bool noCommon = true;
-
-        foreach (ItemData i in items)
-        {
-            if (i.ItemType != ItemType.Magical) allMagic = false;
-            if (i.ItemType != ItemType.Piercing) allPiercing = false;
-            if (i.ItemType != ItemType.Slashing) allSlashing = false;
-            if (i.Rarity == ObjectRarity.Common) noCommon = false;
-        }
-
-        archmageActive = allMagic && UpgradeManager.Instance.HasUpgrade(UpgradeID.Archmage);
-        shadowThiefActive = allPiercing && UpgradeManager.Instance.HasUpgrade(UpgradeID.ShadowThief);
-        knightActive = allSlashing && UpgradeManager.Instance.HasUpgrade(UpgradeID.KnightCaptain);
-        relicActive = noCommon && UpgradeManager.Instance.HasUpgrade(UpgradeID.RelicKeeper);
-    }
-
 
     public struct DamageBonus
     {
         public string source;
         public int amount;
     }
+
+   
 
     public void StartRound()
     {
@@ -142,6 +133,11 @@ public class UpgradeFightingManager : MonoBehaviour
         comebackUsed = true;
     }
 
+    public void ConsumeSecondChance()
+    {
+        secondChanceUsed = true;
+    }
+
     public int GetBonusRoll(int roll)
     {
         if (rollAbove10 && roll < 10)
@@ -151,6 +147,44 @@ public class UpgradeFightingManager : MonoBehaviour
             if (roll < 1) roll = 1;
             return roll;
         
+    }
+
+    public void GetTheHandBonuses(List<ItemData> items)
+    {
+        bool allMagic = true;
+        bool allPiercing = true;
+        bool allSlashing = true;
+        bool noCommon = true;
+
+        foreach (ItemData i in items)
+        {
+            if (i.ItemType != ItemType.Magical) allMagic = false;
+            if (i.ItemType != ItemType.Piercing) allPiercing = false;
+            if (i.ItemType != ItemType.Slashing) allSlashing = false;
+            if (i.Rarity == ObjectRarity.Common) noCommon = false;
+        }
+
+        archmageActive = allMagic && UpgradeManager.Instance.HasUpgrade(UpgradeID.Archmage);
+        shadowThiefActive = allPiercing && UpgradeManager.Instance.HasUpgrade(UpgradeID.ShadowThief);
+        knightActive = allSlashing && UpgradeManager.Instance.HasUpgrade(UpgradeID.KnightCaptain);
+        relicActive = noCommon && UpgradeManager.Instance.HasUpgrade(UpgradeID.RelicKeeper);
+    }
+
+    public int ApplyHandBonuses(int damage)
+    {
+        if (archmageActive)
+            damage = Mathf.RoundToInt(damage * 0.7f);
+
+        if (knightActive)
+        {
+            float mult = 1f + currentActions.Count * 0.25f;
+            damage = Mathf.RoundToInt(damage * mult);
+        }
+
+        if (relicActive)
+            damage = Mathf.RoundToInt(damage * 1.3f);
+
+        return damage;
     }
 
     public int GetBonusDamage(ItemData item, int slotIndex, out List<DamageBonus> bonuses)
@@ -192,8 +226,10 @@ public class UpgradeFightingManager : MonoBehaviour
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.OverwhelmingBlows))
         {
             if (currentActions.Count >= 2)
+            {
                 damage += currentActions.Count - 1;
                 bonuses.Add(new DamageBonus { source = "Overwhelming Blows", amount = currentActions.Count - 1 });
+            }
         }
 
 
@@ -274,14 +310,14 @@ public class UpgradeFightingManager : MonoBehaviour
             }
         //this is for the upgrade "Lucky Strike" (1.25x bonus score for random slot (changes every turn))
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.LuckyStrike))
-         {
+        {
              if(slotIndex == luckySlot)
              {
                     int before = damage;
                     damage = Mathf.RoundToInt(damage * 1.25f);
                     bonuses.Add(new DamageBonus { source = "Lucky Strike", amount = damage - before });
                 }
-         }
+        }
         }
         if (ragingRN)
         {
@@ -327,18 +363,9 @@ public class UpgradeFightingManager : MonoBehaviour
     }
 
     //this is for the upgrade "Second Chance" (Once per combat you may reroll a failed check)
-    public bool CanUseSecondChance(){
-        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.SecondChance))
-        {
-            if (!secondChanceUsed)
-            {
-                secondChanceUsed = true;
-
-                return true;
-            }
-        }
-
-        return false;
+    public bool CanUseSecondChance()
+    {
+        return UpgradeManager.Instance.HasUpgrade(UpgradeID.SecondChance) && !secondChanceUsed;
     }
     //this is for the upgrade "Quick Save" (First failed DC of each round still activates upgrade ability.)
     public bool CanUseQuickSave()
