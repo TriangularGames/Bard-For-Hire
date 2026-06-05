@@ -238,9 +238,13 @@ public class EnemyController : MonoBehaviour
         anim.SetTrigger("Dead");
     }
 
-    public void RemoveEnemy()
+    public void Smoke()
     {
         smoke.Play();
+    }
+
+    public void RemoveEnemy()
+    {
         EventBus.Publish(new EnemyDefeatedEvent(gameObject));
     }
 }
