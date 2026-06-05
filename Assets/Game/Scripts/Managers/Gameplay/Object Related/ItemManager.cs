@@ -168,19 +168,18 @@ public class ItemManager : MonoBehaviour
     /// </summary>
     public void GrabNewItems(int amount)
     {
-        Debug.Log("Getting new items!");
-        if (itemPool.GetItems().Count != itemPool.GetMaxSlots())
-        {
-            // Checking if unused weapons count is more than what needs to be grabbed to fill the space
-            if (PlayerManager.Instance.itemsNotUsed.Count < amount)
-            {
-                PlayerManager.Instance.RefreshItems(); 
-            }
-            for (int i = 0; i < amount; i++)
-            {
-                itemPool.InstantiateItem(PlayerManager.Instance.GetRandomItem());
-            }
+        int emptySlots = itemPool.GetMaxSlots() - itemPool.GetItems().Count;
+        int toGrab = Mathf.Min(amount, emptySlots);
+        if (toGrab <= 0) return;
 
+        if (PlayerManager.Instance.itemsNotUsed.Count < toGrab)
+        {
+            PlayerManager.Instance.RefreshItems();
+        }
+
+        for (int i = 0; i < toGrab; i++)
+        {
+            itemPool.InstantiateItem(PlayerManager.Instance.GetRandomItem());
         }
     }
 
@@ -217,7 +216,6 @@ public class ItemManager : MonoBehaviour
 
     private void PrepNewRound(ScoringCompletedEvent e)
     {
-        GrabNewItems(e.count);
         scoringCompleted = true;
     }
 

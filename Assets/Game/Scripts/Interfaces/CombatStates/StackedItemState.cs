@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// State for stacking all selected items under the attack display area, then transitioning to RedrawItemsState after a brief hold.
+/// </summary>
 public class StackedItemsState : ICombatState
 {
     private readonly List<ItemData> _items;
@@ -10,6 +13,7 @@ public class StackedItemsState : ICombatState
     private List<RectTransform> _rectTransforms;
     private List<Vector3> _startPositions;
     private Vector3 _displayWorldPos;
+    private Transform _stackParent;
 
     private Vector3 _stackOffset = new Vector3(-0.05f, 0f, -0.01f);
     private float _lerpDuration = 0.5f;
@@ -34,15 +38,15 @@ public class StackedItemsState : ICombatState
         _holdTimer = 0f;
         _allLerpsDone = false;
         _transitioned = false;
-        _currentItemIndex = 0; // start with first item
+        _currentItemIndex = 0;
 
         ScoreManager sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
         sm.InitializeRound(_items);
 
-        // Get itemDisplay world position as the target
         _displayWorldPos = sm.itemDisplay.GetComponent<RectTransform>().position;
+        // Stack items under the attack display area, NOT under Hand's GridLayoutGroup
+        _stackParent = sm.itemDisplay.transform.parent;
 
-        // Store start positions and rect transforms
         _rectTransforms = new List<RectTransform>();
         _startPositions = new List<Vector3>();
 
@@ -53,14 +57,11 @@ public class StackedItemsState : ICombatState
             _startPositions.Add(rect.position);
         }
 
-        // First item gets the highest order, subsequent items get lower orders
         for (int i = 0; i < _itemObjects.Count; i++)
         {
             Canvas itemCanvas = _itemObjects[i].GetComponent<Canvas>();
             if (itemCanvas != null)
-            {
                 itemCanvas.sortingOrder = 100 - i;
-            }
         }
     }
 
@@ -72,16 +73,14 @@ public class StackedItemsState : ICombatState
         if (_transitioned) return;
 
         if (!_allLerpsDone)
-        {
             UpdateSequentialLerp(cm);
-        }
         else
         {
             _holdTimer += Time.unscaledDeltaTime;
             if (_holdTimer >= _holdDuration)
             {
                 _transitioned = true;
-                cm.SwitchState(new DiceRollState(_items, _roller));
+                cm.SwitchState(new RedrawItemsState(_items, _roller, _itemObjects));
             }
         }
     }
@@ -94,12 +93,15 @@ public class StackedItemsState : ICombatState
             return;
         }
 
+        if (_lerpTimer == 0f)
+        {
+            DetachFromHand(_itemObjects[_currentItemIndex]);
+        }
+
         _lerpTimer += Time.unscaledDeltaTime;
         float t = Mathf.Clamp01(_lerpTimer / _lerpDuration);
         float smoothT = Mathf.SmoothStep(0f, 1f, t);
 
-        // first item goes to display position
-        // each subsequent item goes to display position + offset * index
         Vector3 target = _displayWorldPos + _stackOffset * _currentItemIndex;
 
         _rectTransforms[_currentItemIndex].position = Vector3.Lerp(
@@ -115,13 +117,33 @@ public class StackedItemsState : ICombatState
 
             if (_currentItemIndex >= _itemObjects.Count)
             {
-                // Fill slots now that all items have visually moved away
-                GameObject.FindWithTag("ItemManager")
-                    .GetComponent<ItemManager>()
-                    .GrabNewItems(_itemObjects.Count);
-
                 _allLerpsDone = true;
             }
+        }
+    }
+
+    // Detach the item from the Hand's tracking and reparent it to the stack parent, while keeping its world position
+    private void DetachFromHand(GameObject item)
+    {
+        ItemManager itemManager = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
+
+        // Remove from pool tracking lists only — don't destroy yet
+        itemManager.itemPool.RemoveItem(item);
+
+        ItemSlot slot = itemManager.itemPool.GetComponent<ItemSlot>();
+        if (slot != null)
+        {
+            slot.RemoveObject(item);
+        }
+
+        // Reparent away from Hand grid, keep world position
+        item.transform.SetParent(_stackParent, true);
+
+        // Prevent dragging stacked cards during combat
+        Drag drag = item.GetComponent<Drag>();
+        if (drag != null)
+        {
+            drag.enabled = false;
         }
     }
 }
