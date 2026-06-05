@@ -245,6 +245,16 @@ public class ItemManager : MonoBehaviour
         ItemsSelected.Clear();
         UpdateSelectionText();
     }
+
+    public GameObject GetAttackItem(int index)
+    {
+        if (_attackItems == null || index < 0 || index >= _attackItems.Count) return null;
+        return _attackItems[index];
+    }
+    public int GetAttackItemCount()
+    {
+        return _attackItems?.Count ?? 0;
+    }
 }
 
 /// <summary>
