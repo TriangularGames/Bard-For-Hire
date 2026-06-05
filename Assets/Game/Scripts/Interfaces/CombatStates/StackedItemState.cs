@@ -65,16 +65,6 @@ public class StackedItemsState : ICombatState
                 itemCanvas.sortingOrder = 100 - i;
             }
         }
-
-        ItemManager itemManager = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
-        // Clear any leftover selection UI on hand items that aren't attacking
-        foreach (GameObject handItem in itemManager.itemPool.GetItems())
-        {
-            if (!_itemObjects.Contains(handItem))
-            {
-                handItem.GetComponent<Select>().ClearSelectionVisual();
-            }
-        }
     }
 
     public void ExitState(CombatManager cm) { }
@@ -161,6 +151,10 @@ public class StackedItemsState : ICombatState
             drag.enabled = false;
         }
 
-        item.GetComponent<Select>().ClearSelectionVisual();
+        Select select = item.GetComponent<Select>();
+        if (select != null && select.IsSelected)
+        {
+            item.GetComponent<Select>().ClearSelectionVisual();
+        }
     }
 }

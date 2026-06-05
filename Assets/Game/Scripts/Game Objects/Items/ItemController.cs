@@ -76,4 +76,16 @@ public class ItemController : MonoBehaviour
     {
         playableText.text = "Roll (" + itemData.Playable.ToString() + ")";
     }
+
+    public void HideDisplayText()
+    {
+        if (damageTxt != null)
+        {
+            damageTxt.gameObject.SetActive(false);
+        }
+        if (playableText != null)
+        {
+            playableText.gameObject.SetActive(false);
+        }
+    }
 }

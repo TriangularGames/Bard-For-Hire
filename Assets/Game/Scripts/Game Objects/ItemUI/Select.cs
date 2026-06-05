@@ -7,6 +7,7 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
     private Image selection;
     public void SetImage(Sprite _selection) { selection.sprite = _selection; }
     private bool isSelected = false;
+    public bool IsSelected => isSelected;
 
     private bool SelectionEnabled = true;
 
@@ -135,5 +136,11 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
         isSelected = false;
         selection.sprite = null;
         selection.color = new Color(1f, 1f, 1f, 0f);
+
+        ItemController item = GetComponent<ItemController>();
+        if (item != null)
+        {
+            item.HideDisplayText();
+        }
     }
 }
