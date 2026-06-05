@@ -245,6 +245,14 @@ public class ShopManager : MonoBehaviour
                 obj.GetComponent<ConsumableController>().Setup();
                 obj.GetComponent<ConsumableController>().SetTextColor(Color.white);
                 Destroy(obj.GetComponent<ConsumableSelect>());
+                for (int i = 0; i < obj.transform.childCount; i++)
+                {
+                    if (obj.transform.GetChild(i).GetComponent<TMP_Text>())
+                    {
+                        Destroy(obj.transform.GetChild(i).gameObject);
+                        break;
+                    }
+                }
             }
         }
     }

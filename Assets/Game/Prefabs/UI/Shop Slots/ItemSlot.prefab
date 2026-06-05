@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 150, y: 150}
+  m_SizeDelta: {x: 150, y: 170}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4189051446852760906
 CanvasRenderer:
@@ -186,7 +186,6 @@ MonoBehaviour:
   value: {fileID: 1682140586031248960}
   icon: {fileID: 13276238650067321}
   buy: {fileID: 829672875276406145}
-  _isSelected: 0
   _Purchased: 0
 --- !u!114 &1885617746749218953
 MonoBehaviour:

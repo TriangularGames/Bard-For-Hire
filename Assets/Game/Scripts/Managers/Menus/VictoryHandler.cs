@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class GameOverManager : Singleton<GameOverManager>
+public class VictoryHandler : MonoBehaviour
 {
-    [Tooltip("Game over menu UI.")]
-    [SerializeField] private GameOverUI gameOverUI;
+    [Tooltip("Victory menu UI.")]
+    [SerializeField] private VictoryUI victoryUI;
 
     private void OnEnable()
     {
@@ -19,11 +19,10 @@ public class GameOverManager : Singleton<GameOverManager>
     /// Handles the event to show the Pause Menu.
     /// </summary>
     /// <param name="eventData">The event data associated with showing the options menu. Currently unused but can be extended for future use.</param>
-    private void OnShowGameOverMenu(ShowGameOverMenuEvent eventData)
+    private void OnShowVictoryMenu(ShowVictoryMenuEvent eventData)
     {
         // Code to show the Pause Menu
-        ToggleGameOverMenuVisibility(true);
-        gameOverUI.SetDayText();
+        ToggleVictoryMenuVisibility(true);
 
         // Game is paused!
         Time.timeScale = 0;
@@ -33,10 +32,10 @@ public class GameOverManager : Singleton<GameOverManager>
     /// Handles the event to hide the Pause Menu.
     /// </summary>
     /// <param name="eventData">The event data associated with hiding the pause menu. Currently unused but can be extended for future use.</param>
-    private void OnHideGameOverMenu(HideGameOverMenuEvent eventData)
+    private void OnHideVictoryMenu(HideVictoryMenuEvent eventData)
     {
         // Code to hide the Pause Menu
-        ToggleGameOverMenuVisibility(false);
+        ToggleVictoryMenuVisibility(false);
 
         // Game is unpaused!
         Time.timeScale = 1;
@@ -46,8 +45,8 @@ public class GameOverManager : Singleton<GameOverManager>
     /// </summary>
     private void SubscribeToEvents()
     {
-        EventBus.Subscribe<ShowGameOverMenuEvent>(OnShowGameOverMenu);
-        EventBus.Subscribe<HideGameOverMenuEvent>(OnHideGameOverMenu);
+        EventBus.Subscribe<ShowVictoryMenuEvent>(OnShowVictoryMenu);
+        EventBus.Subscribe<HideVictoryMenuEvent>(OnHideVictoryMenu);
     }
 
     /// <summary>
@@ -55,20 +54,26 @@ public class GameOverManager : Singleton<GameOverManager>
     /// </summary>
     private void UnsubscribeFromEvents()
     {
-        EventBus.Unsubscribe<ShowGameOverMenuEvent>(OnShowGameOverMenu);
-        EventBus.Unsubscribe<HideGameOverMenuEvent>(OnHideGameOverMenu);
+        EventBus.Unsubscribe<ShowVictoryMenuEvent>(OnShowVictoryMenu);
+        EventBus.Unsubscribe<HideVictoryMenuEvent>(OnHideVictoryMenu);
     }
 
     /// <summary>
     /// Toggles the visibility of the victory menu UI.
     /// </summary>
     /// <param name="isVisible">Whether the victory menu should be visible.</param>
-    public void ToggleGameOverMenuVisibility(bool isVisible)
+    public void ToggleVictoryMenuVisibility(bool isVisible)
     {
-        gameOverUI?.gameObject.SetActive(isVisible);
+        victoryUI?.gameObject.SetActive(isVisible);
     }
 }
 
-public struct ShowGameOverMenuEvent { }
+/// <summary>
+/// Event struct for showing the pause menu.
+/// </summary>
+public struct ShowVictoryMenuEvent { }
 
-public struct HideGameOverMenuEvent { }
+/// <summary>
+/// Event struct for hiding the pause menu.
+/// </summary>
+public struct HideVictoryMenuEvent { }
