@@ -53,11 +53,7 @@ public class EnemyController : MonoBehaviour
         EventBus.Unsubscribe<DamageTakenEvent>(TakeDamage);
     }
 
-    public void SetScaledHealth(int health)
-    {
-        scaledHealth = health;
-    }
-
+    #region Setup Funcs
     public virtual void Setup()
     {
         int startingHealth = scaledHealth > 0 ? scaledHealth : enemyData.health;
@@ -83,6 +79,13 @@ public class EnemyController : MonoBehaviour
         healthTxt.text = health.ToString();
     }
 
+    public void SetScaledHealth(int health)
+    {
+        scaledHealth = health;
+    }
+    #endregion
+
+    #region State Funcs
     private void SetFlashColor()
     {
         // Set flashColor
@@ -147,6 +150,7 @@ public class EnemyController : MonoBehaviour
         text.GetComponent<DestroyText>().Setup(dmgTxtPool);
         text.GetComponent<TMP_Text>().color = flashColor;
     }
+    #endregion
 
     protected virtual void TakeDamage(DamageTakenEvent e)
     {
@@ -214,8 +218,13 @@ public class EnemyController : MonoBehaviour
                 // If the enemy is dead or not
                 if (health <= 0)
                 {
-                    state = ENEMY_STATE.DEAD;
-                    return;
+                    health = 0;
+                    // Enemy dies once flashes are completed
+                    if (flashIndex == flashTimes - 1)
+                    {
+                        state = ENEMY_STATE.DEAD;
+                        return;
+                    }
                 }
 
                 flashIndex++;
