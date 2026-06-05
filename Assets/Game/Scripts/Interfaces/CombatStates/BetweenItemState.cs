@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class BetweenItemState : ICombatState
@@ -8,6 +9,7 @@ public class BetweenItemState : ICombatState
     private readonly List<ItemData> _items;
     private readonly int _index;
     private readonly ScoreManager _sm;
+    private readonly bool _skipWait;
 
     private static readonly Vector3 StackOffset = new Vector3(-0.05f, 0f, 0.01f);
     private const float WaitDuration = 0.8f;
@@ -23,11 +25,12 @@ public class BetweenItemState : ICombatState
     private RectTransform _movingRect;
     private bool _transitioned;
 
-    public BetweenItemState(List<ItemData> items, int index, ScoreManager sm)
+    public BetweenItemState(List<ItemData> items, int index, ScoreManager sm, bool skipWait = false)
     {
         _items = items;
         _index = index;
         _sm = sm;
+        _skipWait = skipWait;
     }
 
     public void EnterState(CombatManager cm)
@@ -38,6 +41,23 @@ public class BetweenItemState : ICombatState
         _lerpTimer = 0f;
         _movingRect = null;
         _transitioned = false;
+
+        if (_skipWait)
+        {
+            if (HasRemainingStackItems())
+            {
+                _phase = Phase.Collapse;
+                BeginCollapseStep();
+            }
+            else
+            {
+                _phase = Phase.Done;
+            }
+        }
+        else
+        {
+            _phase = Phase.Wait;
+        }
     }
 
     public void ExitState(CombatManager cm) { }

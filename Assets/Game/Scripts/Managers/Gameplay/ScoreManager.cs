@@ -74,7 +74,7 @@ public class ScoreManager : MonoBehaviour
         itemDisplay.GetComponent<ItemController>().Setup();
         itemDisplay.SetActive(true);
         itemDisplay.GetComponent<ItemDisplayController>().Reset();
-        EventBus.Publish<ItemUsedEvent>(new ItemUsedEvent(pendingItems[index], index));
+        //EventBus.Publish<ItemUsedEvent>(new ItemUsedEvent(pendingItems[index], index));
     }
 
     public void ShowHit(int index)
