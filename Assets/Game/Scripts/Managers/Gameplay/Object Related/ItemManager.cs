@@ -90,7 +90,7 @@ public class ItemManager : MonoBehaviour
         UpdateSelectionText();
         ItemsSelected = new List<GameObject>();
         discardsLeft = MAXDiscards;
-        discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard x" + discardsLeft.ToString();
+        discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard " + discardsLeft.ToString() + "/" + MAXDiscards;
 # if UNITY_EDITOR
         Debug.Assert(itemPool = GameObject.FindWithTag("ItemPool").GetComponent<ItemPool>(), "ItemManager requires ItemPool");
 #else
@@ -160,7 +160,7 @@ public class ItemManager : MonoBehaviour
                 ItemsSelected.Clear();
                 GrabNewItems(itemsDiscarded);
                 discardsLeft--;
-                discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard x" + discardsLeft.ToString();
+                discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard " + discardsLeft.ToString() + "/" + MAXDiscards;
             }
         }
         UpdateSelectionText();
