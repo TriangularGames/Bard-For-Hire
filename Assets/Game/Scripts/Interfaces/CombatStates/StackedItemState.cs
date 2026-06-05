@@ -15,7 +15,7 @@ public class StackedItemsState : ICombatState
     private Vector3 _displayWorldPos;
     private Transform _stackParent;
 
-    private Vector3 _stackOffset = new Vector3(-0.05f, 0f, -0.01f);
+    private Vector3 _stackOffset = new Vector3(-0.05f, 0f, 0.01f);
     private float _lerpDuration = 0.5f;
     private float _holdDuration = 0.5f;
 
@@ -61,7 +61,9 @@ public class StackedItemsState : ICombatState
         {
             Canvas itemCanvas = _itemObjects[i].GetComponent<Canvas>();
             if (itemCanvas != null)
+            {
                 itemCanvas.sortingOrder = 100 - i;
+            }
         }
     }
 
@@ -73,7 +75,9 @@ public class StackedItemsState : ICombatState
         if (_transitioned) return;
 
         if (!_allLerpsDone)
+        {
             UpdateSequentialLerp(cm);
+        }
         else
         {
             _holdTimer += Time.unscaledDeltaTime;
@@ -138,12 +142,19 @@ public class StackedItemsState : ICombatState
 
         // Reparent away from Hand grid, keep world position
         item.transform.SetParent(_stackParent, true);
+        item.transform.SetSiblingIndex(0);
 
         // Prevent dragging stacked cards during combat
         Drag drag = item.GetComponent<Drag>();
         if (drag != null)
         {
             drag.enabled = false;
+        }
+
+        Select itemSelect = item.GetComponent<Select>();
+        if (itemSelect != null)
+        {
+            itemSelect.Deselect();
         }
     }
 }
