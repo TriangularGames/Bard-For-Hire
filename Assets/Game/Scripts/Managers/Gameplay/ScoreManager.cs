@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
-    [SerializeField] GameObject itemDisplay;
+    public GameObject itemDisplay;
     [SerializeField] private TMP_Text roundText;
     public int curRound = 1;
     private int MaxRounds = 3;

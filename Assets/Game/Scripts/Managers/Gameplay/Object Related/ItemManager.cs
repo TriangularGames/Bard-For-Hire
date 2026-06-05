@@ -204,13 +204,15 @@ public class ItemManager : MonoBehaviour
     {
         scoringCompleted = false;
         List<ItemData> itemData = new List<ItemData>();
+        List<GameObject> itemObjects = new List<GameObject>(ItemsSelected);
+
         foreach (GameObject itemObj in ItemsSelected)
         {
             itemData.Add(itemObj.GetComponent<ItemController>().itemData);
         }
 
         DiceRoller roller = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().roller;
-        CombatManager.Instance.SwitchState(new DiceRollState(itemData, roller));
+        CombatManager.Instance.SwitchState(new StackedItemsState(itemData, roller, itemObjects));
     }
 
     private void PrepNewRound(ScoringCompletedEvent e)
