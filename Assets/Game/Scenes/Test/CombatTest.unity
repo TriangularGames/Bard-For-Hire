@@ -343,7 +343,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: upgradeInventory.Array.size
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[10]'
