@@ -33,7 +33,7 @@ public class SecondChanceState : ICombatState
     public void UpdateState(CombatManager cm)
     {
         if (PauseManager.Instance.IsPaused) return;
-        _timer += Time.unscaledDeltaTime;
+        _timer += Time.deltaTime;
 
         if (_timer >= 0.8f && !_rolled)
         {

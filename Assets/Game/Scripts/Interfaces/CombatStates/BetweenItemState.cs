@@ -105,7 +105,7 @@ public class BetweenItemState : ICombatState
             return;
         }
 
-        _lerpTimer += Time.unscaledDeltaTime;
+        _lerpTimer += Time.deltaTime;
         float t = Mathf.Clamp01(_lerpTimer / CollapseDuration);
         float smoothT = Mathf.SmoothStep(0f, 1f, t);
 
