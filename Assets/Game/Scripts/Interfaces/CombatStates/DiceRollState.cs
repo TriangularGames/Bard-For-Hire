@@ -78,12 +78,12 @@ public class DiceRollState : ICombatState
 
         ScoreManager sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
 
-        if (_index == 0)
-        {
-            sm.InitializeRound(_items);
-        }
+        //if (_index == 0)
+        //{
+        //    sm.InitializeRound(_items);
+        //}
         
-        sm.SetupItemDisplay(_index);
+        //sm.SetupItemDisplay(_index);
     }
 
     public void ExitState(CombatManager cm) { }

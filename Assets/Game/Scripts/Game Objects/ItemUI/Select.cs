@@ -8,6 +8,7 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
     [SerializeField] private GameObject icon;
 
     private bool isSelected = false;
+    public bool IsSelected => isSelected;
 
     private bool SelectionEnabled = true;
 
@@ -127,6 +128,19 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
                 selectionNum.text = "";
                 icon.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
             }
+        }
+    }
+
+    public void ClearSelectionVisual()
+    {
+        isSelected = false;
+        selection.sprite = null;
+        selection.color = new Color(1f, 1f, 1f, 0f);
+
+        ItemController item = GetComponent<ItemController>();
+        if (item != null)
+        {
+            item.HideDisplayText();
         }
     }
 }

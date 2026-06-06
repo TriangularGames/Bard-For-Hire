@@ -287,7 +287,8 @@ public class UpgradeFightingManager : MonoBehaviour
         //this is for the upgrade "Lucky Strike" (1.25x bonus score for random slot (changes every turn))
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.LuckyStrike))
          {
-             if(slotIndex == luckySlot)
+            Debug.LogWarning("Lucky Strike Slot: " + luckySlot);
+             if (slotIndex == luckySlot)
              {
                     int before = damage;
                     damage = Mathf.RoundToInt(damage * 1.25f);
@@ -297,6 +298,7 @@ public class UpgradeFightingManager : MonoBehaviour
         }
         if (ragingRN)
         {
+            Debug.LogWarning("Raging!!");
             int before = damage;
             damage = Mathf.RoundToInt(damage * 2f);
             bonuses.Add(new DamageBonus { source = "Rage", amount = damage - before });

@@ -26,6 +26,7 @@ public class CalculateScoreState : ICombatState
     {
         sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
 
+        sm.SetupItemDisplay(_index);
         _initialized = true;
     }
 
