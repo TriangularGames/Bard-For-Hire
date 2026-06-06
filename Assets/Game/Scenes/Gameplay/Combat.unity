@@ -17963,13 +17963,12 @@ MonoBehaviour:
   display: {fileID: 407369666}
   displayRoll: {fileID: 1005074377}
   displayAdvantage: {fileID: 534110311}
-  displayModifer: {fileID: 1757187092}
+  displayModifier: {fileID: 1757187092}
   displayCrit: {fileID: 1780548632}
   upgradeNotifText: {fileID: 1840874415}
   numberChangeyInterval: 0.005
   changeyDuration: 1.4
   revealPause: 2
-  natRoll: 0
 --- !u!114 &1344256444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17985,9 +17984,9 @@ MonoBehaviour:
   itemDisplay: {fileID: 1247202534}
   roundText: {fileID: 422085961}
   curRound: 1
-  waitForRoll: 2
   GameSpeed: 4
   roller: {fileID: 1344256443}
+  pendingItems: []
 --- !u!4 &1344256445
 Transform:
   m_ObjectHideFlags: 0

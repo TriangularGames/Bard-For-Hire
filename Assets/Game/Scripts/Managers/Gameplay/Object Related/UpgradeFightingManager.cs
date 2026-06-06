@@ -26,10 +26,13 @@ public class UpgradeFightingManager : MonoBehaviour
     public bool shadowThiefActive = false;
     public bool knightActive = false;
     public bool relicActive = false;
+
     private void Awake()
     {
         Instance = this;
     }
+
+    // Checking if hand is all of 1 type
     public void GetTheHandBonuses(List<ItemData> items)
     {
         bool allMagic = true;
@@ -51,13 +54,14 @@ public class UpgradeFightingManager : MonoBehaviour
         relicActive = noCommon && UpgradeManager.Instance.HasUpgrade(UpgradeID.RelicKeeper);
     }
 
-
+    // Damage bonus info passed
     public struct DamageBonus
     {
         public string source;
         public int amount;
     }
 
+    // Reset variables
     public void StartRound()
     {
         currentActions.Clear();
@@ -69,6 +73,7 @@ public class UpgradeFightingManager : MonoBehaviour
         comebackUsed = false;
     }
 
+    // Tracking between rounds
     public void EndRound(List<ItemData> currentHand)
     {
         previousActions.Clear();
@@ -108,6 +113,7 @@ public class UpgradeFightingManager : MonoBehaviour
         }
     }
 
+    // End combat cleanup
     public void EndCombat()
     {
         secondChanceUsed = false;
@@ -116,6 +122,7 @@ public class UpgradeFightingManager : MonoBehaviour
         successStreak = 0;
     }
 
+    // success streak check
     public void SuccessfulAction(ItemData item, int damage)
     {
         currentActions.Add(item.ItemType);
@@ -125,6 +132,7 @@ public class UpgradeFightingManager : MonoBehaviour
         ragingRN = false;
     }
 
+    // action failed
     public void FailedAction()
     {
         successStreak = 0;
@@ -132,16 +140,19 @@ public class UpgradeFightingManager : MonoBehaviour
         ragingRN = UpgradeManager.Instance.HasUpgrade(UpgradeID.Rage);
     }
 
+    // if you can use comeback
     public bool UseComeback()
     {
         return UpgradeManager.Instance.HasUpgrade(UpgradeID.Comeback) && lastActionFail && !comebackUsed; 
     }
 
+    // when comeback is being used
     public void UsingComeback()
     {
         comebackUsed = true;
     }
 
+    // only roll above 10 check
     public int GetBonusRoll(int roll)
     {
         if (rollAbove10 && roll < 10)
@@ -152,6 +163,7 @@ public class UpgradeFightingManager : MonoBehaviour
             return roll;
         
     }
+
 
     public int GetBonusDamage(ItemData item, int slotIndex, out List<DamageBonus> bonuses)
     {
@@ -223,7 +235,7 @@ public class UpgradeFightingManager : MonoBehaviour
         // this is for the upgrade "Shining Star" (2 bonus damage for each rare weapon played)
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.ShiningStar))
         {
-            if(item.Rarity == ObjectRarity.Uncommon)
+            if(item.Rarity == ObjectRarity.Rare)
             {
                 damage += 2;
                 bonuses.Add(new DamageBonus { source = "Shining Star", amount = 2 });
