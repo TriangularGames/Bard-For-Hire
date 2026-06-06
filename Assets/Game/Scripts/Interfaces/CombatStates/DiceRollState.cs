@@ -22,22 +22,10 @@ public class DiceRollState : ICombatState
     private bool _isSingleRoll;
     private System.Action<int> _onSingleRollDone;
 
-    // advantage rolls (for display purposes only, not used in calculation since the final roll is determined at the start of the state)
+    // advantage rolls
     private int _advantageRollA;
     private int _advantageRollB;
 
-    // Single roll constructor
-    public DiceRollState(DiceRoller roller, int modifier, bool withAdvantage, System.Action<int> onDone)
-    {
-        _roller = roller;
-        _modifier = modifier;
-        _withAdvantage = withAdvantage;
-        _isSingleRoll = true;
-        _onSingleRollDone = onDone;
-        _items = null;
-    }
-
-    // Multi-item roll constructor
     public DiceRollState(List<ItemData> items, DiceRoller roller, int index, bool withAdvantage)
     {
         _items = items;
