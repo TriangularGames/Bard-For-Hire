@@ -1,12 +1,12 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
+
 public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IPointerExitHandler
 {
-    private Image selection;
     [SerializeField] private TMP_Text selectionNum;
-    public void SetImage(Sprite _selection) { selection.sprite = _selection; }
+    [SerializeField] private GameObject icon;
+
     private bool isSelected = false;
 
     private bool SelectionEnabled = true;
@@ -35,16 +35,6 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
         SelectionEnabled = false;
     }
 
-    private void Awake()
-    {
-# if UNITY_EDITOR
-        Debug.Assert(selection = transform.GetChild(0).GetComponent<Image>(), "GameObject requires an Image component");
-#else
-        selection = transform.GetChild(0).GetComponent<Image>();
-#endif
-        selection.color = new Color(selection.color.r, selection.color.g, selection.color.b, 0f);
-    }
-
     private void Start()
     {
         if (GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>())
@@ -60,9 +50,8 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
             //selection.color = Color.blue;
             if (!isSelected)
             {
-                selection.sprite = null;
                 selectionNum.text = "";
-                selection.color = new Color(0f, 0f, 256f, 0.5f);
+                icon.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             }
         }
     }
@@ -103,16 +92,16 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
 
             if (!isSelected && _itemManager.HasRoom())
             {
-                selection.color = new Color(1f, 1f, 1f, 1f);
-                _itemManager.SelectItem(gameObject, selection, selectionNum);
+                _itemManager.SelectItem(gameObject, selectionNum);
+                icon.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
                 isSelected = true;
             }
             else
             {
-                selection.color = new Color(0f, 0f, 256f, 0.5f);
                 if (_itemManager.ItemsSelected.Contains(gameObject))
                 {
-                    _itemManager.DeselectItem(gameObject, selection, selectionNum);
+                    _itemManager.DeselectItem(gameObject, selectionNum);
+                    icon.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
                     isSelected = false;
                 }
             }
@@ -122,10 +111,9 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
     public void Deselect()
     {
         isSelected = false;
-        selection.color = new Color(1f, 1f, 1f, 0f);
         if (_itemManager.ItemsSelected.Contains(gameObject))
         {
-            _itemManager.DeselectItem(gameObject, selection, selectionNum);
+            _itemManager.DeselectItem(gameObject, selectionNum);
             isSelected = false;
         }
     }
@@ -136,8 +124,8 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
         {
             if (!isSelected)
             {
-                selection.sprite = null;
-                selection.color = new Color(1f, 1f, 1f, 0f);
+                selectionNum.text = "";
+                icon.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
             }
         }
     }

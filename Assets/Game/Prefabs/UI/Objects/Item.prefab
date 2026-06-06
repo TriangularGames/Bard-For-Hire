@@ -75,7 +75,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+  m_fontColor: {r: 0.85882354, g: 0.6039216, b: 0.02745098, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -382,7 +382,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3564227111511411694
 RectTransform:
   m_ObjectHideFlags: 0
@@ -520,6 +520,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Select
   selectionNum: {fileID: 2644927222667936996}
+  icon: {fileID: 8669958310284737485}
 --- !u!114 &3097701679339145156
 MonoBehaviour:
   m_ObjectHideFlags: 0

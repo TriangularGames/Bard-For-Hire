@@ -251,22 +251,21 @@ public class ItemManager : MonoBehaviour
         scoringCompleted = true;
     }
 
-    public void SelectItem(GameObject item, Image selection, TMP_Text num)
+    public void SelectItem(GameObject item, TMP_Text num)
     {
         if (HasRoom())
         {
             ItemsSelected.Add(item);
-            selection.sprite = selectionImg;
+            // TODO: this mislabels sometimes
             num.text = ItemsSelected.Count.ToString();
             UpdateSelectionText();
         }
     }
 
-    public void DeselectItem(GameObject item, Image selection, TMP_Text num)
+    public void DeselectItem(GameObject item, TMP_Text num)
     {
         ItemsSelected.Remove(item);
         num.text = "";
-        selection.color = new Color(selection.color.r, selection.color.g, selection.color.b, 0f);
         UpdateSelectionText();
     }
 }
