@@ -22,23 +22,16 @@ public class DiceRollState : ICombatState
     private bool _isSingleRoll;
     private System.Action<int> _onSingleRollDone;
 
-    // Single roll constructor
-    public DiceRollState(DiceRoller roller, int modifier, bool withAdvantage, System.Action<int> onDone)
-    {
-        _roller = roller;
-        _modifier = modifier;
-        _withAdvantage = withAdvantage;
-        _isSingleRoll = true;
-        _onSingleRollDone = onDone;
-        _items = null;
-    }
+    // advantage rolls
+    private int _advantageRollA;
+    private int _advantageRollB;
 
-    // Multi-item roll constructor
-    public DiceRollState(List<ItemData> items, DiceRoller roller, int index = 0)
+    public DiceRollState(List<ItemData> items, DiceRoller roller, int index, bool withAdvantage)
     {
         _items = items;
         _roller = roller;
         _index = index;
+        _withAdvantage = withAdvantage;
         _isSingleRoll = false;
     }
 
@@ -58,11 +51,27 @@ public class DiceRollState : ICombatState
             }
         }
 
-        // Roll the nat immediately
-        bool useAdvantage = _withAdvantage ||
-            (!_isSingleRoll && UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage) && _index == 0);
+        // Reset per-roll crit flag before each roll
+        UpgradeFightingManager.Instance.rolledNat20 = false;
 
-        _natRoll = useAdvantage ? _roller.RollAdvantage() : _roller.RollNat();
+        if (_withAdvantage)
+        {
+            var (a, b, chosen) = _roller.RollAdvantage();
+            _advantageRollA = a;
+            _advantageRollB = b;
+            _natRoll = chosen;
+
+            _roller.displayAdvantage.gameObject.SetActive(true);
+        }
+        else
+        {
+            _natRoll = _roller.RollNat();
+            _roller.displayAdvantage.gameObject.SetActive(false);
+        }
+
+        // Chosen natural 20 (after upgrades, before +modifier)
+        if (_natRoll == 20)
+            UpgradeFightingManager.Instance.rolledNat20 = true;
 
         // Setup shuffle animation
         _shuffleTimer = 0f;
@@ -72,8 +81,14 @@ public class DiceRollState : ICombatState
 
         _roller.display.gameObject.SetActive(true);
         _roller.displayRoll.gameObject.SetActive(true);
-        _roller.displayAdvantage.gameObject.SetActive(false);
+        if (_withAdvantage)
+        {
+            _roller.displayAdvantage.gameObject.SetActive(true);
+        }
         _roller.display.text = "Rolling die...";
+
+        int final = Mathf.Clamp(_natRoll + _modifier, 1, 20);
+
         AudioManager.Instance.PlayClip("DieRoll");
 
         ScoreManager sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
@@ -110,6 +125,9 @@ public class DiceRollState : ICombatState
 
             // Show random number
             _roller.displayRoll.text = Random.Range(1, 21).ToString();
+            _roller.displayRoll.text = Random.Range(1, 21).ToString();
+            if (_withAdvantage)
+                _roller.displayAdvantage.text = Random.Range(1, 21).ToString();
 
             // Slow down over time
             if (_shuffleElapsed > _roller.changeyDuration * 0.5f)
@@ -125,8 +143,15 @@ public class DiceRollState : ICombatState
             {
                 _shuffleDone = true;
                 _roller.display.text = "You rolled:";
-                _roller.displayRoll.text = _natRoll.ToString();
-
+                if (_withAdvantage)
+                {
+                    _roller.displayRoll.text = _advantageRollA.ToString();
+                    _roller.displayAdvantage.text = _advantageRollB.ToString();
+                }
+                else
+                {
+                    _roller.displayRoll.text = _natRoll.ToString();
+                }
                 int final = Mathf.Clamp(_natRoll + _modifier, 1, 20);
 
                 // Transition to show modifier/crit state, pass result forward

@@ -58,6 +58,7 @@ public class RedrawItemsState : ICombatState
         if (_transitioned) return;
 
         _transitioned = true;
-        cm.SwitchState(new DiceRollState(_items, _roller));
+        // RedrawItemsState
+        _roller.StartCombatRoll(_items, 0);
     }
 }

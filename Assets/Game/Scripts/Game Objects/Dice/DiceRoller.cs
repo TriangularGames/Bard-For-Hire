@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -37,11 +38,11 @@ public class DiceRoller : MonoBehaviour
         return nat;
     }
 
-    public int RollAdvantage()
+    public (int a, int b, int chosen) RollAdvantage()
     {
         int a = Random.Range(1, 21);
         int b = Random.Range(1, 21);
-        return Mathf.Max(a, b);
+        return (a, b, Mathf.Max(a, b));
     }
 
     public void ResetText()
@@ -54,14 +55,12 @@ public class DiceRoller : MonoBehaviour
         if (upgradeNotifText != null) upgradeNotifText.text = "";
     }
 
-    // Replaced all async functions
-    public void RollDie(int modifier, System.Action<int> onDone)
+    // Determines if this is a normal roll or an early advantage roll, then starts the appropriate state
+    public void StartCombatRoll(List<ItemData> items, int index)
     {
-        CombatManager.Instance.SwitchState(new DiceRollState(this, modifier, false, onDone));
-    }
+        bool withAdvantage = index == 0 
+            && UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage);
 
-    public void RollWithAdvantage(int modifier, System.Action<int> onDone)
-    {
-        CombatManager.Instance.SwitchState(new DiceRollState(this, modifier, true, onDone));
+        CombatManager.Instance.SwitchState(new DiceRollState(items, this, index, withAdvantage));
     }
 }

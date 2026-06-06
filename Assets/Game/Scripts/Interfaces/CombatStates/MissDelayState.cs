@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -38,11 +39,14 @@ public class MissDelayState : ICombatState
         {
             if (UpgradeFightingManager.Instance.CanUseSecondChance())
             {
-                cm.SwitchState(new SecondChanceState(_items, _index, _sm));
+                _sm.roller.upgradeNotifText.text = "Second Chance";
+                cm.SwitchState(new DiceRollState(_items, _sm.roller, _index, false));
             }
             else if (UpgradeFightingManager.Instance.CanUseQuickSave())
             {
-                cm.SwitchState(new QuickSaveState(_items, _index, _sm));
+                _sm.roller.upgradeNotifText.text = "Quick Save";
+                _sm.ApplyQuickSave(_index, _sm.pendingItems[_index]);
+                cm.SwitchState(new BetweenItemState(_items, _index, _sm));
             }
             else
             {

@@ -163,8 +163,13 @@ public class BetweenItemState : ICombatState
             return;
         }
 
+        if (_sm.roller.upgradeNotifText != null)
+            _sm.roller.upgradeNotifText.text = "";
+
         if (_index + 1 < _items.Count)
-            cm.SwitchState(new DiceRollState(_items, _sm.roller, _index + 1));
+        {
+            _sm.roller.StartCombatRoll(_items, _index + 1);
+        }
         else
         {
             _sm.FinalizeScore();
