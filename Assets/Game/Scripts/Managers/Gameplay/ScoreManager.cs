@@ -71,11 +71,18 @@ public class ScoreManager : MonoBehaviour
     // Called by CalculateScoreState to set up item display
     public void SetupItemDisplay(int index)
     {
+        ItemManager itemManager = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
+        GameObject stackedItem = itemManager.GetAttackItem(index);
+        if (stackedItem != null)
+        {
+            itemDisplay.transform.position = stackedItem.transform.position;
+            stackedItem.SetActive(false);
+        }
+
         itemDisplay.GetComponent<ItemController>().itemData = pendingItems[index];
         itemDisplay.GetComponent<ItemController>().Setup();
         itemDisplay.SetActive(true);
         itemDisplay.GetComponent<ItemDisplayController>().Reset();
-        //EventBus.Publish<ItemUsedEvent>(new ItemUsedEvent(pendingItems[index], index));
     }
 
     public void ShowHit(int index)

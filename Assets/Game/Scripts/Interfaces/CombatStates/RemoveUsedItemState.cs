@@ -27,6 +27,11 @@ public class RemoveUsedItemState : ICombatState
 
     public void EnterState(CombatManager cm)
     {
+        if (_stackedItem != null)
+        {
+            _stackedItem.SetActive(true);
+        }
+
         _timer = 0f;
 
         ItemManager itemManager = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
