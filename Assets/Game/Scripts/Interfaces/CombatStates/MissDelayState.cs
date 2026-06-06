@@ -44,7 +44,9 @@ public class MissDelayState : ICombatState
             }
             else if (UpgradeFightingManager.Instance.CanUseQuickSave())
             {
-                cm.SwitchState(new QuickSaveState(_items, _index, _sm));
+                _sm.roller.upgradeNotifText.text = "Quick Save";
+                _sm.ApplyQuickSave(_index, _sm.pendingItems[_index]);
+                cm.SwitchState(new BetweenItemState(_items, _index, _sm));
             }
             else
             {
