@@ -55,17 +55,7 @@ public class DiceRoller : MonoBehaviour
         if (upgradeNotifText != null) upgradeNotifText.text = "";
     }
 
-    // Replaced all async functions
-    public void RollDie(int modifier, System.Action<int> onDone)
-    {
-        CombatManager.Instance.SwitchState(new DiceRollState(this, modifier, false, onDone));
-    }
-
-    public void RollWithAdvantage(int modifier, System.Action<int> onDone)
-    {
-        CombatManager.Instance.SwitchState(new DiceRollState(this, modifier, true, onDone));
-    }
-
+    // Determines if this is a normal roll or an early advantage roll, then starts the appropriate state
     public void StartCombatRoll(List<ItemData> items, int index)
     {
         bool withAdvantage = index == 0 
