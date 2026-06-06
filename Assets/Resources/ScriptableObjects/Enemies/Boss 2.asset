@@ -15,7 +15,7 @@ MonoBehaviour:
   health: 45
   coinReward: 12
   weakness: 2
-  icon: {fileID: 21300000, guid: f224f40deee269f449df7ba44d0a3e65, type: 3}
+  icon: {fileID: 1857308957, guid: 91f59d439d0d04a2c9dfed0c8f7aba6f, type: 3}
   animator: {fileID: 22100000, guid: 7f40644e7d14b80469793a39aeba87ff, type: 2}
   Name: Disabler Boss
   Description: Big Scary Boss
@@ -24,6 +24,4 @@ MonoBehaviour:
   minDay: 0
   maxDay: 0
   canAppearInNormalEncounters: 0
-  hasBonus: 0
-  bonusStat: 0
-  isMultiplier: 0
+  yPos: 0.2
