@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
-    [SerializeField] GameObject itemDisplay;
+    public GameObject itemDisplay;
     [SerializeField] private TMP_Text roundText;
     public int curRound = 1;
     private int MaxRounds = 3;
@@ -65,16 +65,24 @@ public class ScoreManager : MonoBehaviour
         EventBus.Publish<ScoringStartedEvent>(new ScoringStartedEvent());
         pendingItems = items;
         UpgradeFightingManager.Instance.StartRound();
+        UpgradeFightingManager.Instance.GetTheHandBonuses(items);
     }
 
     // Called by CalculateScoreState to set up item display
     public void SetupItemDisplay(int index)
     {
+        ItemManager itemManager = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
+        GameObject stackedItem = itemManager.GetAttackItem(index);
+        if (stackedItem != null)
+        {
+            itemDisplay.transform.position = stackedItem.transform.position;
+            stackedItem.SetActive(false);
+        }
+
         itemDisplay.GetComponent<ItemController>().itemData = pendingItems[index];
         itemDisplay.GetComponent<ItemController>().Setup();
         itemDisplay.SetActive(true);
         itemDisplay.GetComponent<ItemDisplayController>().Reset();
-        EventBus.Publish<ItemUsedEvent>(new ItemUsedEvent(pendingItems[index]));
     }
 
     public void ShowHit(int index)
@@ -271,7 +279,12 @@ public struct VictoryEvent
 public struct ItemUsedEvent
 {
     public ItemData item;
-    public ItemUsedEvent(ItemData _item) { item = _item; }
+    public int attackIndex;
+    public ItemUsedEvent(ItemData _item, int _attackIndex)
+    {
+        item = _item;
+        attackIndex = _attackIndex;
+    }
 }
 
 public struct HitEvent { }

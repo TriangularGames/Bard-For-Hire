@@ -8,6 +8,8 @@ using UnityEngine;
 /// </summary>
 public class DamageBonusState : ICombatState
 {
+    private ItemController _itemController;
+
     private readonly List<ItemData> _items;
     private readonly int _index;
     private readonly int _finalRoll;
@@ -39,7 +41,7 @@ public class DamageBonusState : ICombatState
         _showingBonus = false;
 
         // Set initial damage text
-        var ic = _sm.pendingItems[_index];
+        _itemController = _sm.itemDisplay.GetComponent<ItemController>();
         SetDamageText(_baseDamage);
     }
 
@@ -87,13 +89,11 @@ public class DamageBonusState : ICombatState
 
     private void SetDamageText(int value)
     {
-        // Access itemDisplay's damageTxt via ItemController
-        _sm.pendingItems[_index].ToString();
+        _itemController.SetDamageDisplay(value);
     }
-
     private void SetBonusText(int baseD, UpgradeFightingManager.DamageBonus bonus)
     {
-        // Will need to set text here at some point
+        _itemController.SetDamageWithBonus(baseD, bonus);
     }
 
     private void FinishBonuses(CombatManager cm)

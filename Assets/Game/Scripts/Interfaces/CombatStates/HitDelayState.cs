@@ -12,6 +12,7 @@ public class HitDelayState : ICombatState
     private readonly int _finalRoll;
     private readonly ScoreManager _sm;
     private float _timer;
+    private float HitDelayDuration = 0.3f;
 
     public HitDelayState(List<ItemData> items, int index, int finalRoll, ScoreManager sm)
     {
@@ -34,7 +35,7 @@ public class HitDelayState : ICombatState
         if (PauseManager.Instance.IsPaused) return;
         _timer += Time.deltaTime;
 
-        if (_timer >= 0.3f * _sm.GameSpeed)
+        if (_timer >= HitDelayDuration * _sm.GameSpeed)
         {
             ItemData item = _sm.pendingItems[_index];
             int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, _index, out var bonuses);

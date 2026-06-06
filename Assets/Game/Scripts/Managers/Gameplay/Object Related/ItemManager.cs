@@ -27,6 +27,8 @@ public class ItemManager : MonoBehaviour
 
     public ItemPool itemPool;
 
+    private List<GameObject> _attackItems;
+
     private void OnEnable()
     {
         EventBus.Subscribe<ItemUsedEvent>(DeleteItem);
@@ -61,21 +63,14 @@ public class ItemManager : MonoBehaviour
 
     private void DeleteItem(ItemUsedEvent e)
     {
-        GameObject toDelete = null;
-        foreach (GameObject item in ItemsSelected)
-        {
-            if (item.GetComponent<ItemController>().itemData == e.item)
-            {
-                toDelete = item;
-            }
-        }
+        if (_attackItems == null || e.attackIndex < 0 || e.attackIndex >= _attackItems.Count) return;
 
-        if (toDelete != null)
-        {
-            ItemsSelected.Remove(toDelete);
-            itemPool.RemoveItem(toDelete);
-            Destroy(toDelete);
-        }
+        GameObject toDelete = _attackItems[e.attackIndex];
+        if (toDelete == null) return;
+
+        _attackItems[e.attackIndex] = null;
+        itemPool.RemoveItem(toDelete);
+        Destroy(toDelete);
     }
 
     private void Start()
@@ -168,19 +163,18 @@ public class ItemManager : MonoBehaviour
     /// </summary>
     public void GrabNewItems(int amount)
     {
-        Debug.Log("Getting new items!");
-        if (itemPool.GetItems().Count != itemPool.GetMaxSlots())
-        {
-            // Checking if unused weapons count is more than what needs to be grabbed to fill the space
-            if (PlayerManager.Instance.itemsNotUsed.Count < amount)
-            {
-                PlayerManager.Instance.RefreshItems(); 
-            }
-            for (int i = 0; i < amount; i++)
-            {
-                itemPool.InstantiateItem(PlayerManager.Instance.GetRandomItem());
-            }
+        int emptySlots = itemPool.GetMaxSlots() - itemPool.GetItems().Count;
+        int toGrab = Mathf.Min(amount, emptySlots);
+        if (toGrab <= 0) return;
 
+        if (PlayerManager.Instance.itemsNotUsed.Count < toGrab)
+        {
+            PlayerManager.Instance.RefreshItems();
+        }
+
+        for (int i = 0; i < toGrab; i++)
+        {
+            itemPool.InstantiateItem(PlayerManager.Instance.GetRandomItem());
         }
     }
 
@@ -204,18 +198,22 @@ public class ItemManager : MonoBehaviour
     {
         scoringCompleted = false;
         List<ItemData> itemData = new List<ItemData>();
+        List<GameObject> itemObjects = new List<GameObject>(ItemsSelected);
+
         foreach (GameObject itemObj in ItemsSelected)
         {
             itemData.Add(itemObj.GetComponent<ItemController>().itemData);
         }
 
+        BeginAttack(itemObjects);
+
         DiceRoller roller = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().roller;
-        CombatManager.Instance.SwitchState(new DiceRollState(itemData, roller));
+        CombatManager.Instance.SwitchState(new StackedItemsState(itemData, roller, itemObjects));
     }
 
     private void PrepNewRound(ScoringCompletedEvent e)
     {
-        GrabNewItems(e.count);
+        _attackItems?.Clear();
         scoringCompleted = true;
     }
 
@@ -238,6 +236,24 @@ public class ItemManager : MonoBehaviour
             selectedItem.GetComponent<Select>().SetImage(selectionBoxes[ItemsSelected.IndexOf(selectedItem)]);
         }
         UpdateSelectionText();
+    }
+
+    public void BeginAttack(List<GameObject> attackItems)
+    {
+        _attackItems = new List<GameObject>(attackItems);
+        // Hand selection is done — only attack snapshot matters now
+        ItemsSelected.Clear();
+        UpdateSelectionText();
+    }
+
+    public GameObject GetAttackItem(int index)
+    {
+        if (_attackItems == null || index < 0 || index >= _attackItems.Count) return null;
+        return _attackItems[index];
+    }
+    public int GetAttackItemCount()
+    {
+        return _attackItems?.Count ?? 0;
     }
 }
 

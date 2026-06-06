@@ -12,6 +12,7 @@ public class MissDelayState : ICombatState
     private readonly int _index;
     private readonly ScoreManager _sm;
     private float _timer;
+    private const float MissDelayDuration = 1.0f;
 
     public MissDelayState(List<ItemData> items, int index, ScoreManager sm)
     {
@@ -33,7 +34,7 @@ public class MissDelayState : ICombatState
         if (PauseManager.Instance.IsPaused) return;
         _timer += Time.deltaTime;
 
-        if (_timer >= 0.1f * _sm.GameSpeed)
+        if (_timer >= MissDelayDuration * _sm.GameSpeed)
         {
             if (UpgradeFightingManager.Instance.CanUseSecondChance())
             {
@@ -46,7 +47,7 @@ public class MissDelayState : ICombatState
             else
             {
                 UpgradeFightingManager.Instance.FailedAction();
-                cm.SwitchState(new BetweenItemState(_items, _index, _sm));
+                cm.SwitchState(new RemoveUsedItemState(_items, _index, _sm));
             }
         }
     }
