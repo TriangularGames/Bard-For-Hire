@@ -62,6 +62,10 @@ public class EnemyController : MonoBehaviour
         SetAnimation();
         SetDamageTxt();
         smoke = transform.parent.GetChild(0).GetComponent<ParticleSystem>();
+        if (enemyData.yPos != 0)
+        {
+            transform.localPosition = new Vector3(0f, enemyData.yPos, 0f);
+        }
     }
 
     protected void SetSprite()

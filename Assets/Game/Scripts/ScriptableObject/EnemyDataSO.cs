@@ -1,5 +1,3 @@
-using NUnit.Framework;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "EnemyData", menuName = "Scriptable Objects/EnemyData")]
@@ -17,14 +15,13 @@ public class EnemyData : ScriptableObject
     [SerializeField] public string Description;
     [SerializeField] public bool isBoss;
     [SerializeField] public BossAbilities ability;
+
+    [Header("Day Appearance")]
     [SerializeField] public int minDay = 0;
     [SerializeField] public int maxDay = 0;
     [SerializeField] public bool canAppearInNormalEncounters;
 
-    [Header("Additional Bonus")]
-    [SerializeField] bool hasBonus;
-    [SerializeField] int bonusStat;
-    [SerializeField] bool isMultiplier;
+    [SerializeField] public float yPos = 0;
 
     public int GetScaledUpHealth(float healthMult)
     {
