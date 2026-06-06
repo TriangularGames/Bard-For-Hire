@@ -38,12 +38,11 @@ public class DiceRoller : MonoBehaviour
         return nat;
     }
 
-    public int RollAdvantage()
+    public (int a, int b, int chosen) RollAdvantage()
     {
-        Debug.LogWarning("ROLLING WITH ADVANTAGE");
         int a = Random.Range(1, 21);
         int b = Random.Range(1, 21);
-        return Mathf.Max(a, b);
+        return (a, b, Mathf.Max(a, b));
     }
 
     public void ResetText()
