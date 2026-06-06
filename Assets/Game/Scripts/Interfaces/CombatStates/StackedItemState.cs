@@ -80,7 +80,7 @@ public class StackedItemsState : ICombatState
         }
         else
         {
-            _holdTimer += Time.unscaledDeltaTime;
+            _holdTimer += Time.deltaTime;
             if (_holdTimer >= _holdDuration)
             {
                 _transitioned = true;
@@ -102,7 +102,7 @@ public class StackedItemsState : ICombatState
             DetachFromHand(_itemObjects[_currentItemIndex]);
         }
 
-        _lerpTimer += Time.unscaledDeltaTime;
+        _lerpTimer += Time.deltaTime;
         float t = Mathf.Clamp01(_lerpTimer / _lerpDuration);
         float smoothT = Mathf.SmoothStep(0f, 1f, t);
 

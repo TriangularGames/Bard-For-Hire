@@ -48,7 +48,6 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
     {
         if (SelectionEnabled)
         {
-            //selection.color = Color.blue;
             if (!isSelected)
             {
                 selectionNum.text = "";
@@ -134,8 +133,6 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
     public void ClearSelectionVisual()
     {
         isSelected = false;
-        selection.sprite = null;
-        selection.color = new Color(1f, 1f, 1f, 0f);
 
         ItemController item = GetComponent<ItemController>();
         if (item != null)
