@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -39,6 +40,7 @@ public class DiceRoller : MonoBehaviour
 
     public int RollAdvantage()
     {
+        Debug.LogWarning("ROLLING WITH ADVANTAGE");
         int a = Random.Range(1, 21);
         int b = Random.Range(1, 21);
         return Mathf.Max(a, b);
@@ -63,5 +65,13 @@ public class DiceRoller : MonoBehaviour
     public void RollWithAdvantage(int modifier, System.Action<int> onDone)
     {
         CombatManager.Instance.SwitchState(new DiceRollState(this, modifier, true, onDone));
+    }
+
+    public void StartCombatRoll(List<ItemData> items, int index)
+    {
+        bool withAdvantage = index == 0 
+            && UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage);
+
+        CombatManager.Instance.SwitchState(new DiceRollState(items, this, index, withAdvantage));
     }
 }

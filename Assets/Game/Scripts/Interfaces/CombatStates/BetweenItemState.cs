@@ -164,7 +164,7 @@ public class BetweenItemState : ICombatState
         }
 
         if (_index + 1 < _items.Count)
-            cm.SwitchState(new DiceRollState(_items, _sm.roller, _index + 1));
+            _sm.roller.StartCombatRoll(_items, _index + 1);
         else
         {
             _sm.FinalizeScore();

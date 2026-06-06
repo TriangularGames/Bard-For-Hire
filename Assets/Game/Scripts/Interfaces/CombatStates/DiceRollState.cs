@@ -34,11 +34,12 @@ public class DiceRollState : ICombatState
     }
 
     // Multi-item roll constructor
-    public DiceRollState(List<ItemData> items, DiceRoller roller, int index = 0)
+    public DiceRollState(List<ItemData> items, DiceRoller roller, int index, bool withAdvantage)
     {
         _items = items;
         _roller = roller;
         _index = index;
+        _withAdvantage = withAdvantage;
         _isSingleRoll = false;
     }
 
@@ -59,10 +60,7 @@ public class DiceRollState : ICombatState
         }
 
         // Roll the nat immediately
-        bool useAdvantage = _withAdvantage ||
-            (!_isSingleRoll && UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage) && _index == 0);
-
-        _natRoll = useAdvantage ? _roller.RollAdvantage() : _roller.RollNat();
+        _natRoll = _withAdvantage ? _roller.RollAdvantage() : _roller.RollNat();
 
         // Setup shuffle animation
         _shuffleTimer = 0f;
