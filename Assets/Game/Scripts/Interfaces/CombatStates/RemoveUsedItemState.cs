@@ -53,7 +53,7 @@ public class RemoveUsedItemState : ICombatState
     {
         if (PauseManager.Instance.IsPaused) return;
 
-        _timer += Time.unscaledDeltaTime;
+        _timer += Time.deltaTime;
         float duration = LerpDuration / _sm.GameSpeed;
         float t = Mathf.Clamp01(_timer / duration);
         float smoothT = Mathf.SmoothStep(0f, 1f, t);
