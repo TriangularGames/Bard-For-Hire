@@ -15,9 +15,10 @@ MonoBehaviour:
   ItemName: Rapier
   ItemDescription: Thin piercing sword
   cost: 5
+  target: 1
   ItemType: 0
   Rarity: 1
-  Damage: 4
+  Damage: 7
   Mult: 0
-  Playable: 7
+  Playable: 11
   icon: {fileID: 21300000, guid: a15967ee949eb4604be353ea7216a7e7, type: 3}

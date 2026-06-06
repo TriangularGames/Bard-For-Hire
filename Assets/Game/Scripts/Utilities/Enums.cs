@@ -54,7 +54,18 @@ public enum UpgradeID
     Natural20,
     WeightedDice,
     FullHouse,
-    Comprehension
+    Comprehension,
+    Comeback,
+    GreatWeaponMaster,
+    Gambler,
+    Ace,
+    Rage,
+    Archmage,
+    ShadowThief,
+    KnightCaptain,
+    RelicKeeper,
+    StableInvestments,
+    CoinFinder
 }
 
 public enum ConsumableID
@@ -67,6 +78,13 @@ public enum ConsumableID
     PotionOfMelting,
     PotionOfPolymorph,
     PotionOfCloning
+}
+
+public enum WeaponBonus 
+{ 
+    None, 
+    PercentHealth, 
+    GrowingDamage
 }
 
 public enum BossAbilities

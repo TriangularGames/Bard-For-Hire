@@ -38,18 +38,6 @@ public class ItemShopSlot : ShopSlot
         }
     }
 
-    public override void SelectSlot(bool select)
-    {
-        if (_data != null)
-        {
-            if (PlayerManager.Instance.GetCoinAmount() < _data.cost)
-            {
-                buy.interactable = false;
-            }
-            base.SelectSlot(select);
-        }
-    }
-
     public override void Purchase()
     {
         // Subtract money from player

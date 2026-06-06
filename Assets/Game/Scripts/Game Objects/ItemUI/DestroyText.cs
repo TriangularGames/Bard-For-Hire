@@ -2,15 +2,24 @@ using UnityEngine;
 
 public class DestroyText : MonoBehaviour
 {
-    public float DestroyTime = 1.0f;
-    public Vector2 Offset = new Vector2(0, 1.5f);
-    public Vector2 RandomizeIntensity = new Vector2(1f, 0);
+    private ObjectPool _pool;
 
-    void Start()
+    public Vector3 Offset = new Vector3(0.6f, 1f, 0);
+    public Vector3 Slide = new Vector3(0, 0.09f, 0);
+
+    public void Setup(ObjectPool pool)
     {
-        Destroy(gameObject, DestroyTime);
-        GetComponent<RectTransform>().anchoredPosition += Offset;
-        GetComponent<RectTransform>().anchoredPosition += new Vector2(Random.Range(-RandomizeIntensity.x, RandomizeIntensity.x),
-            Random.Range(-RandomizeIntensity.y, RandomizeIntensity.y));
+        _pool = pool;
+        transform.localPosition = Offset;
+    }
+
+    private void FixedUpdate()
+    {
+        transform.localPosition += Slide;
+    }
+
+    public void ReturnToPool()
+    {
+        _pool.ReturnObject(gameObject);
     }
 }

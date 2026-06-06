@@ -43,13 +43,14 @@ public class OptionsMenuUI : MonoBehaviour
     private void Start()
     {
         Debug.Log(Equals(OptionsManager.Instance, null) ? "OptionsManager instance is null in OptionsMenuUI Start" : "OptionsManager instance found in OptionsMenuUI Start");
+        UpdateUIWithCurrentSettings();
     }
 
     private void OnEnable()
     {
         Debug.Log("OptionsMenuUI enabled, updating UI with current settings.");
-        backButton.onClick.AddListener(() => AudioManager.Instance.Back());
         UpdateUIWithCurrentSettings();
+        backButton.onClick.AddListener(() => AudioManager.Instance.Back());
     }
 
     private void OnDisable()

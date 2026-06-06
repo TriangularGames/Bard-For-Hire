@@ -53,10 +53,12 @@ public class InventoryUIHandler : MonoBehaviour
                 groupedItems[item] = 1;
         }
 
-        if (groupedItems.Count > 5)
+        if (groupedItems.Count >= 5)
         {
-            GetComponent<GridLayoutGroup>().cellSize = new Vector2(120, 120);
+            GetComponent<GridLayoutGroup>().cellSize = new Vector2(100, 100);
+            GetComponent<GridLayoutGroup>().spacing = new Vector2(40, 0);
         }
+
         // Spawn one slot per unique item, passing in the quantity
         foreach (KeyValuePair<ItemData, int> entry in groupedItems)
         {

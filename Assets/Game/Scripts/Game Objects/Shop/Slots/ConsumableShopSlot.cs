@@ -28,26 +28,13 @@ public class ConsumableShopSlot : ShopSlot
 
     private void Update()
     {
-        if (_data != null && PlayerManager.Instance.GetCoinAmount() < _data.cost)
+        if (_data != null && (PlayerManager.Instance.GetCoinAmount() < _data.cost || PlayerManager.Instance.consumableInventory.Count == PlayerManager.Instance.MAXConsumables))
         {
             buy.interactable = false;
         }
         else
         {
             buy.interactable = true;
-        }
-    }
-
-    public override void SelectSlot(bool select)
-    {
-        if (_data != null)
-        {
-            if (PlayerManager.Instance.GetCoinAmount() < _data.cost
-                || PlayerManager.Instance.consumableInventory.Count == PlayerManager.Instance.MAXConsumables)
-            {
-                buy.interactable = false;
-            }
-            base.SelectSlot(select);
         }
     }
 

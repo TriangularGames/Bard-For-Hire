@@ -189,7 +189,7 @@ public class SceneLoader : Singleton<SceneLoader>
             float progress = Mathf.Clamp01(operation.progress / 0.9f);
 
             // Optional: smooth fake progress after 90% (common UX trick)
-            // float displayedProgress = Mathf.MoveTowards(progressBar.value, progress, Time.unscaledDeltaTime * 1.5f);
+            // float displayedProgress = Mathf.MoveTowards(progressBar.value, progress, Time.deltaTime * 1.5f);
 
             progressBar.value = progress;
 

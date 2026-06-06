@@ -28,7 +28,7 @@ public class UpgradeShopSlot : ShopSlot
 
     private void Update()
     {
-        if (_data != null && PlayerManager.Instance.GetCoinAmount() < _data.cost)
+        if (_data != null && (PlayerManager.Instance.GetCoinAmount() < _data.cost || PlayerManager.Instance.upgradeInventory.Count == PlayerManager.Instance.MAXUpgrades))
         {
             buy.interactable = false;
         }
@@ -38,34 +38,13 @@ public class UpgradeShopSlot : ShopSlot
         }
     }
 
-    public override void SelectSlot(bool select)
-    {
-        if (_data != null)
-        {
-            if (PlayerManager.Instance.GetCoinAmount() < _data.cost
-                || PlayerManager.Instance.upgradeInventory.Count == PlayerManager.Instance.MAXUpgrades)
-            {
-                buy.interactable = false;
-            }
-            base.SelectSlot(select);
-        }
-    }
-
     public override void Purchase()
     {
-        if (PlayerManager.Instance.upgradeInventory.Count != PlayerManager.Instance.MAXUpgrades)
-        {
-            // Subtract money from player
-            EventBus.Publish(new PurchaseEvent(int.Parse(value.text)));
-            EventBus.Publish(new UpgradeBoughtEvent(_data));
-            _Purchased = true;
-            ClearInfo();
-        }
-        else
-        {
-            // Indicate to player their upgrade inventory is full. or perhaps we prompt them for
-            // removing one?
-        }
+        // Subtract money from player
+        EventBus.Publish(new PurchaseEvent(int.Parse(value.text)));
+        EventBus.Publish(new UpgradeBoughtEvent(_data));
+        _Purchased = true;
+        ClearInfo();
     }
 }
 

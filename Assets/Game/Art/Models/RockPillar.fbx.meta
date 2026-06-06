@@ -3,7 +3,12 @@ guid: a3592b0ca647f48979071c5e6cff7477
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rock_Pillar
+    second: {fileID: 2100000, guid: fbf6abc1441894fe29e0392b931ad7e1, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -91,11 +96,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-<<<<<<< Updated upstream
-    globalScale: 0.04
-=======
-    globalScale: 0.07
->>>>>>> Stashed changes
+    globalScale: 7
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

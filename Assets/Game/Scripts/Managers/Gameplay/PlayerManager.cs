@@ -44,6 +44,8 @@ public class PlayerManager : Singleton<PlayerManager>
         itemsNotUsed.Clear();
         itemInventory.Clear();
         itemInventory.AddRange(_defaultInventory);
+        foreach (ItemData item in itemInventory)
+         item.bonusDamageStacks = 0;
     }
 
     private void OnEnable()
@@ -155,6 +157,13 @@ public class PlayerManager : Singleton<PlayerManager>
     private void OnConsumableBought(ConsumableBoughtEvent e)
     {
         consumableInventory.Add(e.data);
+    }
+    public int CountItemsOfType(ItemType type)
+    {
+        int count = 0;
+        foreach (ItemData item in itemInventory)
+            if (item.ItemType == type) count++;
+        return count;
     }
 
     public override void Awake()
