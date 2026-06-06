@@ -14,7 +14,7 @@ public class ItemManager : MonoBehaviour
 
     [HideInInspector] public List<GameObject> ItemsSelected;
     [SerializeField] private int selectionLimit = 4;
-    [SerializeField] private List<Sprite> selectionBoxes;
+    [SerializeField] private Sprite selectionImg;
     [SerializeField] private Transform lineupParent;
     [SerializeField] private float lineupMoveSpeed = 8f;
     [SerializeField] private TMP_Text selectionCountText;
@@ -100,6 +100,7 @@ public class ItemManager : MonoBehaviour
 
     private void Update()
     {
+        // Update button interactability
         if (discardsLeft != 0)
         {
             discardBtn.interactable = true;
@@ -250,24 +251,22 @@ public class ItemManager : MonoBehaviour
         scoringCompleted = true;
     }
 
-    public void SelectItem(GameObject item, Image selection)
+    public void SelectItem(GameObject item, Image selection, TMP_Text num)
     {
         if (HasRoom())
         {
             ItemsSelected.Add(item);
-            selection.sprite = selectionBoxes[ItemsSelected.IndexOf(item)];
+            selection.sprite = selectionImg;
+            num.text = ItemsSelected.Count.ToString();
             UpdateSelectionText();
         }
     }
 
-    public void DeselectItem(GameObject item, Image selection)
+    public void DeselectItem(GameObject item, Image selection, TMP_Text num)
     {
         ItemsSelected.Remove(item);
-        selection.color = new Color(0f, 0f, 0f, 0f);
-        foreach (GameObject selectedItem in ItemsSelected)
-        {
-            selectedItem.GetComponent<Select>().SetImage(selectionBoxes[ItemsSelected.IndexOf(selectedItem)]);
-        }
+        num.text = "";
+        selection.color = new Color(selection.color.r, selection.color.g, selection.color.b, 0f);
         UpdateSelectionText();
     }
 }

@@ -11949,11 +11949,7 @@ MonoBehaviour:
   attackBtn: {fileID: 133154867}
   ItemsSelected: []
   selectionLimit: 4
-  selectionBoxes:
-  - {fileID: -438273147, guid: 7eb0f431427775e42b7da3637b5f56c5, type: 3}
-  - {fileID: 79728539, guid: 7eb0f431427775e42b7da3637b5f56c5, type: 3}
-  - {fileID: 228739827, guid: 7eb0f431427775e42b7da3637b5f56c5, type: 3}
-  - {fileID: 1296937366, guid: 7eb0f431427775e42b7da3637b5f56c5, type: 3}
+  selectionImg: {fileID: 492258888, guid: be417571c6a1b4646b403521955c56e2, type: 3}
   lineupParent: {fileID: 0}
   lineupMoveSpeed: 8
   selectionCountText: {fileID: 891930703}
@@ -20000,6 +19996,8 @@ GameObject:
   - component: {fileID: 1695713735}
   - component: {fileID: 1695713734}
   - component: {fileID: 1695713733}
+  - component: {fileID: 1695713738}
+  - component: {fileID: 1695713737}
   m_Layer: 5
   m_Name: WinLoseUI
   m_TagString: Untagged
@@ -20091,6 +20089,32 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1695713737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1695713732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b5a9338ed03e294b82f6021481cd7c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameOverHandler
+  gameOverUI: {fileID: 3576033335734016614}
+--- !u!114 &1695713738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1695713732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9ed1c62448ddef46b5fd567f1f21727, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VictoryHandler
+  victoryUI: {fileID: 4658258912028830612}
 --- !u!224 &1699271309 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3359377836613101899, guid: f6000ad2208531840942e148a2b17590, type: 3}
