@@ -54,7 +54,7 @@ public class ItemController : MonoBehaviour
         }
         else
         {
-            transform.GetChild(1).GetComponent<Image>().sprite = itemData.icon;
+            transform.GetChild(0).GetComponent<Image>().sprite = itemData.icon;
         }
         
     }

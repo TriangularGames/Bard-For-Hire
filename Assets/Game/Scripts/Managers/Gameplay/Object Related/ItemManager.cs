@@ -256,8 +256,7 @@ public class ItemManager : MonoBehaviour
         if (HasRoom())
         {
             ItemsSelected.Add(item);
-            // TODO: this mislabels sometimes
-            num.text = ItemsSelected.Count.ToString();
+            Relabel();
             UpdateSelectionText();
         }
     }
@@ -266,7 +265,18 @@ public class ItemManager : MonoBehaviour
     {
         ItemsSelected.Remove(item);
         num.text = "";
+        Relabel();
         UpdateSelectionText();
+    }
+
+    //
+    public void Relabel()
+    {
+        for (int i = 0; i <= ItemsSelected.Count - 1; i++)
+        {
+            GameObject text = ItemsSelected[i].transform.GetChild(1).gameObject;
+            text.GetComponent<TMP_Text>().text = (i + 1).ToString();
+        }
     }
 }
 
