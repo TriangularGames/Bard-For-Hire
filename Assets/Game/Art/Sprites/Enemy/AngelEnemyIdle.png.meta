@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0653829bf26ec468da7a8afb14e6b950
+guid: 91f59d439d0d04a2c9dfed0c8f7aba6f
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,13 +97,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: FrostAttack_0
+      name: AngelEnemyIdle_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 705
-        width: 1136
-        height: 705
+        y: 2106
+        width: 2906
+        height: 2106
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -112,20 +112,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cac1f63b10de546f59d280481792f41f
-      internalID: 831178605
+      spriteID: 137c4b689b90b4a71ba618b9c961a3de
+      internalID: 1857308957
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FrostAttack_1
+      name: AngelEnemyIdle_1
       rect:
         serializedVersion: 2
-        x: 1136
-        y: 705
-        width: 1136
-        height: 705
+        x: 2906
+        y: 2106
+        width: 2906
+        height: 2106
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -134,20 +134,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 200c47ac72da14ffda76da3f80020251
-      internalID: 431187884
+      spriteID: 8354a5bb06d5b4cc293951da77c4ce5d
+      internalID: -1679910603
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FrostAttack_2
+      name: AngelEnemyIdle_2
       rect:
         serializedVersion: 2
-        x: 2272
-        y: 705
-        width: 1136
-        height: 705
+        x: 5812
+        y: 2106
+        width: 2906
+        height: 2106
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -156,20 +156,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 23cb53dad23cb4cb7b70facaf6af2fd6
-      internalID: 1569380019
+      spriteID: 20f9ea287cf2c4d249c3c788a3e2c04c
+      internalID: 289083123
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FrostAttack_3
+      name: AngelEnemyIdle_3
       rect:
         serializedVersion: 2
-        x: 3408
-        y: 705
-        width: 1136
-        height: 705
+        x: 8718
+        y: 2106
+        width: 2906
+        height: 2106
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -178,20 +178,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d24deab663b0348a993a576bd7e46853
-      internalID: -166857057
+      spriteID: 0380e142656f24f60a5499888ce416ff
+      internalID: 36546878
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FrostAttack_4
+      name: AngelEnemyIdle_4
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1136
-        height: 705
+        width: 2906
+        height: 2106
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -200,20 +200,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0d1eb79912aea4b68b8da838fb175fc3
-      internalID: 1599467838
+      spriteID: afd7ca01ffe0b471a8af4118e27d24aa
+      internalID: 1000056873
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FrostAttack_5
+      name: AngelEnemyIdle_5
       rect:
         serializedVersion: 2
-        x: 1136
+        x: 2906
         y: 0
-        width: 1136
-        height: 705
+        width: 2906
+        height: 2106
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -222,20 +222,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a3ab53e59a0ea406d9dea7c43cbd62bb
-      internalID: 194657625
+      spriteID: df051758b75334b3db093571bb2a6668
+      internalID: 470757728
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FrostAttack_6
+      name: AngelEnemyIdle_6
       rect:
         serializedVersion: 2
-        x: 2272
+        x: 5812
         y: 0
-        width: 1136
-        height: 705
+        width: 2906
+        height: 2106
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -244,30 +244,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3c07643a8a9e24008860df449f257a2c
-      internalID: 1845791606
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: FrostAttack_7
-      rect:
-        serializedVersion: 2
-        x: 3408
-        y: 0
-        width: 1136
-        height: 705
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c7fb6f66221db4436abd09aebea27a7c
-      internalID: -153528421
+      spriteID: 02dde65debfc9421cb96acb085bd44e8
+      internalID: -1296966486
       vertices: []
       indices: 
       edges: []
@@ -276,7 +254,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 76d2d85cc7cde4ad299d47c10efcccf9
+    spriteID: 13f84e7bfd96b4e399b8a0fefdaf9448
     internalID: 0
     vertices: []
     indices: 
@@ -286,16 +264,15 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":1136.0,"y":705.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":2906.0,"y":2106.0},"gridSpriteSize":{"x":2906.0,"y":2106.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      FrostAttack_0: 831178605
-      FrostAttack_1: 431187884
-      FrostAttack_2: 1569380019
-      FrostAttack_3: -166857057
-      FrostAttack_4: 1599467838
-      FrostAttack_5: 194657625
-      FrostAttack_6: 1845791606
-      FrostAttack_7: -153528421
+      AngelEnemyIdle_0: 1857308957
+      AngelEnemyIdle_1: -1679910603
+      AngelEnemyIdle_2: 289083123
+      AngelEnemyIdle_3: 36546878
+      AngelEnemyIdle_4: 1000056873
+      AngelEnemyIdle_5: 470757728
+      AngelEnemyIdle_6: -1296966486
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
