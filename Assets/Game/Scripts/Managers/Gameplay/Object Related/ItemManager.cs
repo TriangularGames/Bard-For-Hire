@@ -262,6 +262,11 @@ public class ItemManager : MonoBehaviour
     {
         return _attackItems?.Count ?? 0;
     }
+
+    public void ShowItemInventory()
+    {
+        MenuManager.Instance.SwitchState(new InventoryMenuState());
+    }
 }
 
 /// <summary>
