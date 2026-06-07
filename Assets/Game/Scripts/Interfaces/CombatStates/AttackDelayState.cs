@@ -14,6 +14,7 @@ public class AttackDelayState : ICombatState
     private readonly ScoreManager _sm;
     private float _timer;
     private const float AttackDelayDuration = 1.0f;
+    private bool _attackApplied;
 
 
     public AttackDelayState(List<ItemData> items, int index, int finalRoll, int totalDamage, ScoreManager sm)
@@ -25,7 +26,12 @@ public class AttackDelayState : ICombatState
         _sm = sm;
     }
 
-    public void EnterState(CombatManager cm) => _timer = 0f;
+    public void EnterState(CombatManager cm)
+    {
+        _timer = 0f;
+        _attackApplied = false;
+    }
+
     public void ExitState(CombatManager cm) { }
 
     public void UpdateState(CombatManager cm)
@@ -33,18 +39,20 @@ public class AttackDelayState : ICombatState
         if (PauseManager.Instance.IsPaused) return;
         _timer += Time.deltaTime;
 
-        if (_timer >= AttackDelayDuration * _sm.GameSpeed)
+        if (!_attackApplied && _timer >= AttackDelayDuration / _sm.GameSpeed)
         {
+            _attackApplied = true;
             ItemData item = _sm.pendingItems[_index];
             _sm.ApplyAttack(_index, _totalDamage, item, _finalRoll);
-        }
 
-        if (_timer >= 1.0f * _sm.GameSpeed)
-        {
-            if (_sm.BonusAttackQueue.Count > 0 && _timer >= 1.0f)
+            if (_sm.BonusAttackQueue.Count > 0)
+            {
                 cm.SwitchState(new BonusAttackState(_items, _index, _sm));
+            }
             else
+            {
                 cm.SwitchState(new RemoveUsedItemState(_items, _index, _sm));
+            }
         }
     }
 }
