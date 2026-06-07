@@ -11966,8 +11966,6 @@ MonoBehaviour:
   ItemsSelected: []
   selectionLimit: 4
   selectionImg: {fileID: 492258888, guid: be417571c6a1b4646b403521955c56e2, type: 3}
-  lineupParent: {fileID: 0}
-  lineupMoveSpeed: 8
   selectionCountText: {fileID: 891930703}
   itemPool: {fileID: 1186631605}
 --- !u!4 &1016375506
@@ -17113,6 +17111,7 @@ MonoBehaviour:
   selectingItemToDestroy: 0
   selectingItemToClone: 0
   selectingItemToPolymorph: 0
+  isScoring: 0
 --- !u!1001 &1064005152
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17911,6 +17910,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1082438382}
     m_Modifications:
+    - target: {fileID: -7514263471939101069, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 1247202535}
     - target: {fileID: 2338348622536006590, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
       propertyPath: m_Name
       value: ItemDisplay
@@ -18168,7 +18171,8 @@ PrefabInstance:
       value: Dmg 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1957449139140924634, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
@@ -18180,6 +18184,11 @@ RectTransform:
 --- !u!1 &1247202534 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2338348622536006590, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
+  m_PrefabInstance: {fileID: 1247202532}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1247202535 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6147536252434017762, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
   m_PrefabInstance: {fileID: 1247202532}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1249043876
@@ -27730,11 +27739,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6210061080180698499, guid: 1da358517fa78d649a6456ded77d3dd8, type: 3}
       propertyPath: isBossDay
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6210061080180698499, guid: 1da358517fa78d649a6456ded77d3dd8, type: 3}
       propertyPath: currentDay
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6210061080180698499, guid: 1da358517fa78d649a6456ded77d3dd8, type: 3}
       propertyPath: memberTypes.Array.size
