@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class MoveLineupState : ICombatState
 {
-    private enum Phase { Wait, Collapse, Done, EndCombatDelay }
+    private enum Phase { Wait, Collapse, Done }
 
     private readonly List<ItemData> _items;
     private readonly int _index;
@@ -25,7 +25,9 @@ public class MoveLineupState : ICombatState
     private Vector3 _lerpStart;
     private RectTransform _movingRect;
     private bool _transitioned;
-    private const float EndCombatDuration = 4.0f;
+
+    private const float TransitionDelay = 1.5f;
+    private float _transitionTimer = 0f;
 
     public MoveLineupState(List<ItemData> items, int index, ScoreManager sm, bool skipWait = false)
     {
@@ -45,6 +47,7 @@ public class MoveLineupState : ICombatState
         _lerpTimer = 0f;
         _movingRect = null;
         _transitioned = false;
+        _transitionTimer = 0f;
 
         if (_skipWait)
         {
@@ -80,9 +83,6 @@ public class MoveLineupState : ICombatState
                 break;
             case Phase.Done:
                 TransitionNext(cm);
-                break;
-            case Phase.EndCombatDelay:
-                UpdateEndCombatDelay(cm);
                 break;
         }
     }
@@ -159,10 +159,13 @@ public class MoveLineupState : ICombatState
     private void TransitionNext(CombatManager cm)
     {
         if (_transitioned) return;
+        if (_transitionTimer < TransitionDelay) { _transitionTimer += Time.deltaTime; return; }
+
         if (!EnemyManager.Instance.AreEnemiesAlive())
         {
             _sm.FinalizeScore();
-            StartEndCombatDelay();
+            _transitioned = true;
+            cm.SwitchState(new RedrawItemsState());
             return;
         }
 
@@ -176,7 +179,8 @@ public class MoveLineupState : ICombatState
         else
         {
             _sm.FinalizeScore();
-            StartEndCombatDelay();
+            _transitioned = true;
+            cm.SwitchState(new RedrawItemsState());
         }
     }
 
@@ -200,18 +204,5 @@ public class MoveLineupState : ICombatState
     {
         Vector3 displayPos = _sm.itemDisplay.GetComponent<RectTransform>().position;
         return displayPos + StackOffset * slotIndex;
-    }
-
-    private void StartEndCombatDelay()
-    {
-        _phase = Phase.EndCombatDelay;
-        _timer = 0f;
-    }
-    private void UpdateEndCombatDelay(CombatManager cm)
-    {
-        _timer += Time.deltaTime;
-        if (_timer < EndCombatDuration / _sm.GameSpeed) return;
-        _transitioned = true;
-        cm.SwitchState(new DefaultCombatState());
     }
 }

@@ -8,8 +8,13 @@ public class RedrawItemsState : ICombatState
 {
     private bool _transitioned;
 
+    private const float EndCombatDuration = 1.5f;
+    private float _endCombatTimer = 0f;
+
     public void EnterState(CombatManager cm)
     {
+        _endCombatTimer = 0f;
+
         ItemManager itemManager = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
 
         // Safety: ensure stacked items are not still tracked in the hand
@@ -41,6 +46,7 @@ public class RedrawItemsState : ICombatState
     {
         if (PauseManager.Instance.IsPaused) return;
         if (_transitioned) return;
+        if (_endCombatTimer < EndCombatDuration) { _endCombatTimer += Time.deltaTime; return; }
 
         _transitioned = true;
         cm.SwitchState(new DefaultCombatState());
