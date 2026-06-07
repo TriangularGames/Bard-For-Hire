@@ -138,22 +138,9 @@ public class ItemLineUpState : ICombatState
         // Remove from pool tracking lists only — don't destroy yet
         itemManager.itemPool.RemoveItem(item);
 
-        ItemSlot slot = itemManager.itemPool.GetComponent<ItemSlot>();
-        if (slot != null)
-        {
-            slot.RemoveObject(item);
-        }
-
         // Reparent away from Hand grid, keep world position
         item.transform.SetParent(_stackParent, true);
         item.transform.SetSiblingIndex(0);
-
-        // Prevent dragging stacked cards during combat
-        Drag drag = item.GetComponent<Drag>();
-        if (drag != null)
-        {
-            drag.enabled = false;
-        }
 
         Select select = item.GetComponent<Select>();
         if (select != null && select.IsSelected)

@@ -20,12 +20,6 @@ public class RedrawItemsState : ICombatState
         // Safety: ensure stacked items are not still tracked in the hand
         itemManager.itemPool.RemoveAll(itemManager.ItemsSelected);
 
-        ItemSlot slot = itemManager.itemPool.GetComponent<ItemSlot>();
-        if (slot != null)
-        {
-            slot.storedObjects.RemoveAll(obj => itemManager.ItemsSelected.Contains(obj));
-        }
-
         // Only fill slots that are actually empty
         int emptySlots = itemManager.itemPool.GetMaxSlots() - itemManager.itemPool.GetItems().Count;
 
