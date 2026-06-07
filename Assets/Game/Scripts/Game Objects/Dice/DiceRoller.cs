@@ -77,6 +77,6 @@ public class DiceRoller : MonoBehaviour
     {
         bool withAdvantage = (index == 0 && UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage)) || UpgradeFightingManager.Instance.shadowThiefActive || UpgradeFightingManager.Instance.UseComeback();
 
-        CombatManager.Instance.SwitchState(new DiceRollState(items, this, index, withAdvantage));
+        CombatManager.Instance.SwitchState(new RollState(items, this, index, withAdvantage));
     }
 }

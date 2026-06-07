@@ -48,15 +48,7 @@ public class ItemController : MonoBehaviour
 
     private void SetSprite()
     {
-        if (transform.childCount == 3)
-        {
-            transform.GetChild(0).GetComponent<Image>().sprite = itemData.icon;
-        }
-        else
-        {
-            transform.GetChild(0).GetComponent<Image>().sprite = itemData.icon;
-        }
-        
+        transform.GetChild(0).GetComponent<Image>().sprite = itemData.icon;
     }
 
     private void SetDamageTxt()
@@ -76,6 +68,13 @@ public class ItemController : MonoBehaviour
     {
         damageTxt.text = "Dmg " + value;
     }
+
+    public void DisableText()
+    {
+        damageTxt.text = "";
+        playableText.text = "";
+    }
+
     public void SetDamageWithBonus(int baseD, UpgradeFightingManager.DamageBonus bonus)
     {
         if (bonus.amount > 0)

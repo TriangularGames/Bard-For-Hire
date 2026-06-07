@@ -26,7 +26,7 @@ public class CalculateScoreState : ICombatState
     {
         sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
 
-        sm.SetupItemDisplay(_index);
+        //sm.SetupItemDisplay(_index);
         _initialized = true;
     }
 
@@ -47,11 +47,11 @@ public class CalculateScoreState : ICombatState
 
         if (item.Playable <= finalRoll)
         {
-            cm.SwitchState(new HitDelayState(_items, _index, finalRoll, sm));
+            cm.SwitchState(new HitState(_items, _index, finalRoll, sm));
         }
         else
         {
-            cm.SwitchState(new MissDelayState(_items, _index, sm));
+            cm.SwitchState(new MissState(_items, _index, sm));
         }
 
         _initialized = false;

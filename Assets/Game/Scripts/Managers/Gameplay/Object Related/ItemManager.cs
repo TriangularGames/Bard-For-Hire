@@ -12,8 +12,6 @@ public class ItemManager : MonoBehaviour
     [HideInInspector] public List<GameObject> ItemsSelected;
     [SerializeField] private int selectionLimit = 4;
     [SerializeField] private Sprite selectionImg;
-    [SerializeField] private Transform lineupParent;
-    [SerializeField] private float lineupMoveSpeed = 8f;
     [SerializeField] private TMP_Text selectionCountText;
 
     private bool scoringCompleted = true;
@@ -209,7 +207,7 @@ public class ItemManager : MonoBehaviour
         BeginAttack(itemObjects);
 
         DiceRoller roller = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().roller;
-        CombatManager.Instance.SwitchState(new StackedItemsState(itemData, roller, itemObjects));
+        CombatManager.Instance.SwitchState(new ItemLineUpState(itemData, roller, itemObjects));
     }
 
     private void PrepNewRound(ScoringCompletedEvent e)
@@ -236,7 +234,7 @@ public class ItemManager : MonoBehaviour
         UpdateSelectionText();
     }
 
-    //
+    // Relabel selected items
     public void Relabel()
     {
         for (int i = 0; i <= ItemsSelected.Count - 1; i++)
@@ -245,6 +243,7 @@ public class ItemManager : MonoBehaviour
             text.GetComponent<TMP_Text>().text = (i + 1).ToString();
         }
     }
+
     public void BeginAttack(List<GameObject> attackItems)
     {
         _attackItems = new List<GameObject>(attackItems);

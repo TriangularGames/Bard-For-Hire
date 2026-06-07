@@ -75,7 +75,7 @@ public class RemoveUsedItemState : ICombatState
     private void FinishAndTransition(CombatManager cm)
     {
         EventBus.Publish(new ItemUsedEvent(_sm.pendingItems[_index], _index));
-        cm.SwitchState(new BetweenItemState(_items, _index, _sm, skipWait: true));
+        cm.SwitchState(new MoveLineupState(_items, _index, _sm, skipWait: true));
     }
 
     private Vector3 GetExitPosition(ItemManager itemManager)

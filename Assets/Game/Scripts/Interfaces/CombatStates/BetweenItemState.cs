@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BetweenItemState : ICombatState
+public class MoveLineupState : ICombatState
 {
     private enum Phase { Wait, Collapse, Done }
 
@@ -17,6 +17,8 @@ public class BetweenItemState : ICombatState
     private Phase _phase;
     private float _timer;
 
+    private ItemManager _im;
+
     // Sequential collapse: which shift we're currently animating (0 = first move after used item)
     private int _collapseStep;
     private float _lerpTimer;
@@ -24,7 +26,7 @@ public class BetweenItemState : ICombatState
     private RectTransform _movingRect;
     private bool _transitioned;
 
-    public BetweenItemState(List<ItemData> items, int index, ScoreManager sm, bool skipWait = false)
+    public MoveLineupState(List<ItemData> items, int index, ScoreManager sm, bool skipWait = false)
     {
         _items = items;
         _index = index;
@@ -34,6 +36,8 @@ public class BetweenItemState : ICombatState
 
     public void EnterState(CombatManager cm)
     {
+        _im = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
+
         _timer = 0f;
         _phase = Phase.Wait;
         _collapseStep = 0;
@@ -125,12 +129,10 @@ public class BetweenItemState : ICombatState
     }
 
     private void BeginCollapseStep()
-    {
-        ItemManager itemManager = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
-
+    { 
         // Item that was just used is gone; item (_index + 1) moves to slot _index, etc.
         int attackIndex = _index + 1 + _collapseStep;
-        GameObject item = itemManager.GetAttackItem(attackIndex);
+        GameObject item = _im.GetAttackItem(attackIndex);
 
         if (item == null)
         {
@@ -172,7 +174,7 @@ public class BetweenItemState : ICombatState
         else
         {
             _sm.FinalizeScore();
-            cm.SwitchState(new DefaultCombatState());
+            cm.SwitchState(new RedrawItemsState());
         }
     }
 
@@ -189,7 +191,7 @@ public class BetweenItemState : ICombatState
 
     private int GetAttackItemCount()
     {
-        return GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().GetAttackItemCount();
+        return _im.GetAttackItemCount();
     }
 
     private Vector3 GetStackPosition(int slotIndex)

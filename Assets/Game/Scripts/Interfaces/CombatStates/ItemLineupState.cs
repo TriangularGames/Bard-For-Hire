@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// State for stacking all selected items under the attack display area, then transitioning to RedrawItemsState after a brief hold.
 /// </summary>
-public class StackedItemsState : ICombatState
+public class ItemLineUpState : ICombatState
 {
     private readonly List<ItemData> _items;
     private readonly DiceRoller _roller;
@@ -25,7 +25,7 @@ public class StackedItemsState : ICombatState
     private bool _allLerpsDone;
     private bool _transitioned;
 
-    public StackedItemsState(List<ItemData> items, DiceRoller roller, List<GameObject> itemObjects)
+    public ItemLineUpState(List<ItemData> items, DiceRoller roller, List<GameObject> itemObjects)
     {
         _items = items;
         _roller = roller;
@@ -84,7 +84,7 @@ public class StackedItemsState : ICombatState
             if (_holdTimer >= _holdDuration)
             {
                 _transitioned = true;
-                cm.SwitchState(new RedrawItemsState(_items, _roller, _itemObjects));
+                _roller.StartCombatRoll(_items, 0);
             }
         }
     }
@@ -130,6 +130,10 @@ public class StackedItemsState : ICombatState
     private void DetachFromHand(GameObject item)
     {
         ItemManager itemManager = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
+
+        // Turn off selection display & disable text
+        item.GetComponent<Select>().RemoveDisplay();
+        item.GetComponent<ItemController>().DisableText();
 
         // Remove from pool tracking lists only — don't destroy yet
         itemManager.itemPool.RemoveItem(item);
