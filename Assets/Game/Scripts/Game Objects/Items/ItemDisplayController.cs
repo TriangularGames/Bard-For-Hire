@@ -15,9 +15,8 @@ public class ItemDisplayController : ItemController
 
     private void Start()
     {
-        _Image = transform.GetChild(1).GetComponent<Image>();
+        _Image = transform.GetChild(0).GetComponent<Image>();
         _material = _Image.material;
-        _material.SetFloat(_dissolveAmount, 0f);
     }
 
     public void Reset()
@@ -26,7 +25,7 @@ public class ItemDisplayController : ItemController
         {
             _material.SetFloat(_dissolveAmount, 0f);
         }
-        transform.GetChild(1).gameObject.SetActive(true);
+        transform.GetChild(0).gameObject.SetActive(true);
     }
 
     /// <summary>
@@ -51,7 +50,7 @@ public class ItemDisplayController : ItemController
     /// </summary>
     public void HideImage()
     {
-        transform.GetChild(1).gameObject.SetActive(false);
+        transform.GetChild(0).gameObject.SetActive(false);
     }
 
     /// <summary>

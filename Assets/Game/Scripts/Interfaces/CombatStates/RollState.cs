@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// State used for rolling the die, including handling the shuffle animation and calculating the final roll result
 /// </summary>
-public class DiceRollState : ICombatState
+public class RollState : ICombatState
 {
     private readonly DiceRoller _roller;
     private readonly List<ItemData> _items;
@@ -26,7 +26,7 @@ public class DiceRollState : ICombatState
     private int _advantageRollA;
     private int _advantageRollB;
 
-    public DiceRollState(List<ItemData> items, DiceRoller roller, int index, bool withAdvantage)
+    public RollState(List<ItemData> items, DiceRoller roller, int index, bool withAdvantage)
     {
         _items = items;
         _roller = roller;
@@ -37,6 +37,11 @@ public class DiceRollState : ICombatState
 
     public void EnterState(CombatManager cm)
     {
+        ScoreManager manager = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
+
+        // Setup item display
+        manager.SetupItemDisplay(_index);
+
         // Calculate modifier
         _modifier = 0;
         if (!_isSingleRoll)
@@ -65,7 +70,6 @@ public class DiceRollState : ICombatState
             if (UpgradeFightingManager.Instance.UseComeback())
             {
                 UpgradeFightingManager.Instance.UsingComeback();
-                ScoreManager manager = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
                 manager.roller.upgradeNotifText.text = "Comeback!";
             }
 
@@ -103,15 +107,6 @@ public class DiceRollState : ICombatState
         int final = Mathf.Clamp(_natRoll + _modifier, 1, 20);
 
         AudioManager.Instance.PlayClip("DieRoll");
-
-        ScoreManager sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
-
-        //if (_index == 0)
-        //{
-        //    sm.InitializeRound(_items);
-        //}
-        
-        //sm.SetupItemDisplay(_index);
     }
 
     public void ExitState(CombatManager cm) { }

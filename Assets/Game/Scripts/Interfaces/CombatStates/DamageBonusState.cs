@@ -98,6 +98,6 @@ public class DamageBonusState : ICombatState
 
     private void FinishBonuses(CombatManager cm)
     {
-        cm.SwitchState(new AttackDelayState(_items, _index, _finalRoll, _totalDamage, _sm));
+        cm.SwitchState(new AttackState(_items, _index, _finalRoll, _totalDamage, _sm));
     }
 }

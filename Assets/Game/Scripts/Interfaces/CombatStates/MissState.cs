@@ -7,7 +7,7 @@ using UnityEngine;
 /// including timing for the miss animation and transitioning to the next state (second chance, quick save, or between item)
 /// after the miss is revealed and any applicable upgrades are checked.
 /// </summary>
-public class MissDelayState : ICombatState
+public class MissState : ICombatState
 {
     private readonly List<ItemData> _items;
     private readonly int _index;
@@ -15,7 +15,7 @@ public class MissDelayState : ICombatState
     private float _timer;
     private const float MissDelayDuration = 1.0f;
 
-    public MissDelayState(List<ItemData> items, int index, ScoreManager sm)
+    public MissState(List<ItemData> items, int index, ScoreManager sm)
     {
         _items = items;
         _index = index;
@@ -40,13 +40,13 @@ public class MissDelayState : ICombatState
             if (UpgradeFightingManager.Instance.CanUseSecondChance())
             {
                 _sm.roller.upgradeNotifText.text = "Second Chance";
-                cm.SwitchState(new DiceRollState(_items, _sm.roller, _index, false));
+                cm.SwitchState(new RollState(_items, _sm.roller, _index, false));
             }
             else if (UpgradeFightingManager.Instance.CanUseQuickSave())
             {
                 _sm.roller.upgradeNotifText.text = "Quick Save";
                 _sm.ApplyQuickSave(_index, _sm.pendingItems[_index]);
-                cm.SwitchState(new BetweenItemState(_items, _index, _sm));
+                cm.SwitchState(new MoveLineupState(_items, _index, _sm));
             }
             else
             {

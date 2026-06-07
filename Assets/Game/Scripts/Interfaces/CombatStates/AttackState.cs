@@ -5,7 +5,7 @@ using UnityEngine;
 /// State used for applying the attack damage after a hit, including timing for the attack animation and
 /// transitioning to the next state (between item or next item) after the attack is applied.
 /// </summary>
-public class AttackDelayState : ICombatState
+public class AttackState : ICombatState
 {
     private readonly List<ItemData> _items;
     private readonly int _index;
@@ -17,7 +17,7 @@ public class AttackDelayState : ICombatState
     private bool _attackApplied;
 
 
-    public AttackDelayState(List<ItemData> items, int index, int finalRoll, int totalDamage, ScoreManager sm)
+    public AttackState(List<ItemData> items, int index, int finalRoll, int totalDamage, ScoreManager sm)
     {
         _items = items;
         _index = index;

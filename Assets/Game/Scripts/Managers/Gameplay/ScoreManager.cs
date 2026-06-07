@@ -75,6 +75,7 @@ public class ScoreManager : MonoBehaviour
     {
         ItemManager itemManager = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
         GameObject stackedItem = itemManager.GetAttackItem(index);
+
         if (stackedItem != null)
         {
             itemDisplay.transform.position = stackedItem.transform.position;

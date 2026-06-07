@@ -116,8 +116,16 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
         if (_itemManager.ItemsSelected.Contains(gameObject))
         {
             _itemManager.DeselectItem(gameObject, selectionNum);
+            icon.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+            selectionNum.text = "";
             isSelected = false;
         }
+    }
+
+    public void RemoveDisplay()
+    {
+        icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
+        selectionNum.text = "";
     }
 
     public void OnPointerExit(PointerEventData eventData)

@@ -20,7 +20,8 @@ public class ShowRollResultState : ICombatState
     private float _timer;
     private float _duration;
 
-    public ShowRollResultState(DiceRoller roller, int nat, int modifier, int final, List<ItemData> items, int index, bool isSingleRoll, System.Action<int> onDone)
+    public ShowRollResultState(DiceRoller roller, int nat, int modifier,
+        int final, List<ItemData> items, int index, bool isSingleRoll, System.Action<int> onDone)
     {
         _roller = roller;
         _nat = nat;
