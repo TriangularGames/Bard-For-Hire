@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 /// <summary>
 /// Lerps the used stacked item off screen, then destroys it and hands off to BetweenItemState.

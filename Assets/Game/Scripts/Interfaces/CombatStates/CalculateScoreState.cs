@@ -8,15 +8,15 @@ using UnityEngine;
 /// </summary>
 public class CalculateScoreState : ICombatState
 {
+    private readonly ScoreManager _sm;
     private readonly List<ItemData> _items;
     private readonly int _index;
     private readonly int _rollResult;
     private bool _initialized;
 
-    private ScoreManager sm;
-
-    public CalculateScoreState(List<ItemData> items, int index, int rollResult)
+    public CalculateScoreState(ScoreManager sm, List<ItemData> items, int index, int rollResult)
     {
+        _sm = sm;
         _items = items;
         _index = index;
         _rollResult = rollResult;
@@ -24,9 +24,6 @@ public class CalculateScoreState : ICombatState
 
     public void EnterState(CombatManager cm)
     {
-        sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
-
-        //sm.SetupItemDisplay(_index);
         _initialized = true;
     }
 
@@ -37,21 +34,21 @@ public class CalculateScoreState : ICombatState
 
         if (!EnemyManager.Instance.AreEnemiesAlive())
         {
-            sm.FinalizeScore();
+            _sm.FinalizeScore();
             cm.SwitchState(new DefaultCombatState());
             return;
         }
 
         int finalRoll = UpgradeFightingManager.Instance.GetBonusRoll(_rollResult);
-        ItemData item = sm.pendingItems[_index];
+        ItemData item = _sm.pendingItems[_index];
 
         if (item.Playable <= finalRoll)
         {
-            cm.SwitchState(new HitState(_items, _index, finalRoll, sm));
+            cm.SwitchState(new HitState(_items, _index, finalRoll, _sm));
         }
         else
         {
-            cm.SwitchState(new MissState(_items, _index, sm));
+            cm.SwitchState(new MissState(_items, _index, _sm));
         }
 
         _initialized = false;

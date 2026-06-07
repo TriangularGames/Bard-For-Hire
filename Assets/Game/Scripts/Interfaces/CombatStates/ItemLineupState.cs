@@ -25,6 +25,8 @@ public class ItemLineUpState : ICombatState
     private bool _allLerpsDone;
     private bool _transitioned;
 
+    private ScoreManager _sm;
+
     public ItemLineUpState(List<ItemData> items, DiceRoller roller, List<GameObject> itemObjects)
     {
         _items = items;
@@ -40,12 +42,11 @@ public class ItemLineUpState : ICombatState
         _transitioned = false;
         _currentItemIndex = 0;
 
-        ScoreManager sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
-        sm.InitializeRound(_items);
+        _sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
 
-        _displayWorldPos = sm.itemDisplay.GetComponent<RectTransform>().position;
+        _displayWorldPos = _sm.itemDisplay.GetComponent<RectTransform>().position;
         // Stack items under the attack display area, NOT under Hand's GridLayoutGroup
-        _stackParent = sm.itemDisplay.transform.parent;
+        _stackParent = _sm.itemDisplay.transform.parent;
 
         _rectTransforms = new List<RectTransform>();
         _startPositions = new List<Vector3>();

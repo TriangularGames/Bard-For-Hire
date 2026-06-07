@@ -26,6 +26,8 @@ public class RollState : ICombatState
     private int _advantageRollA;
     private int _advantageRollB;
 
+    private ScoreManager _sm;
+
     public RollState(List<ItemData> items, DiceRoller roller, int index, bool withAdvantage)
     {
         _items = items;
@@ -37,10 +39,10 @@ public class RollState : ICombatState
 
     public void EnterState(CombatManager cm)
     {
-        ScoreManager manager = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
+        _sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
 
         // Setup item display
-        manager.SetupItemDisplay(_index);
+        _sm.SetupItemDisplay(_index);
 
         // Calculate modifier
         _modifier = 0;
@@ -70,7 +72,7 @@ public class RollState : ICombatState
             if (UpgradeFightingManager.Instance.UseComeback())
             {
                 UpgradeFightingManager.Instance.UsingComeback();
-                manager.roller.upgradeNotifText.text = "Comeback!";
+                _sm.roller.upgradeNotifText.text = "Comeback!";
             }
 
             var (a, b, chosen) = _roller.RollAdvantage();
@@ -163,7 +165,7 @@ public class RollState : ICombatState
                 int final = Mathf.Clamp(_natRoll + _modifier, 1, 20);
 
                 // Transition to show modifier/crit state, pass result forward
-                cm.SwitchState(new ShowRollResultState(_roller, _natRoll, _modifier, final, _items, _index, _isSingleRoll, _onSingleRollDone));
+                cm.SwitchState(new ShowRollResultState(_sm, _roller, _natRoll, _modifier, final, _items, _index, _isSingleRoll, _onSingleRollDone));
             }
         }
     }

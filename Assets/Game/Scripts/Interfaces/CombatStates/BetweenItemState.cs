@@ -159,13 +159,13 @@ public class MoveLineupState : ICombatState
     private void TransitionNext(CombatManager cm)
     {
         if (_transitioned) return;
-        if (_transitionTimer < TransitionDelay) { _transitionTimer += Time.deltaTime; return; }
+        if (_transitionTimer < TransitionDelay) { _transitionTimer += Time.deltaTime * _sm.GameSpeed; return; }
 
         if (!EnemyManager.Instance.AreEnemiesAlive())
         {
             _sm.FinalizeScore();
             _transitioned = true;
-            cm.SwitchState(new RedrawItemsState());
+            cm.SwitchState(new RedrawItemsState(_sm));
             return;
         }
 
@@ -180,7 +180,7 @@ public class MoveLineupState : ICombatState
         {
             _sm.FinalizeScore();
             _transitioned = true;
-            cm.SwitchState(new RedrawItemsState());
+            cm.SwitchState(new RedrawItemsState(_sm));
         }
     }
 

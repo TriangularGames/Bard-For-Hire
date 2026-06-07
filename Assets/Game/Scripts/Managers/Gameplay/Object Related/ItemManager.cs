@@ -8,10 +8,10 @@ public class ItemManager : MonoBehaviour
     public Button discardBtn;
     public Button clearBtn;
     public Button attackBtn;
+    public Button inventoryBtn;
 
     [HideInInspector] public List<GameObject> ItemsSelected;
     [SerializeField] private int selectionLimit = 4;
-    [SerializeField] private Sprite selectionImg;
     [SerializeField] private TMP_Text selectionCountText;
 
     private bool scoringCompleted = true;
@@ -35,6 +35,7 @@ public class ItemManager : MonoBehaviour
         discardBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
         clearBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
         attackBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
+        inventoryBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
     }
 
     private void OnDisable()
@@ -45,6 +46,7 @@ public class ItemManager : MonoBehaviour
         discardBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
         clearBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
         attackBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
+        inventoryBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
     }
 
     public bool HasRoom()

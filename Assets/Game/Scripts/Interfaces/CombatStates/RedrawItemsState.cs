@@ -6,10 +6,16 @@ using UnityEngine.UI;
 /// </summary>
 public class RedrawItemsState : ICombatState
 {
+    private readonly ScoreManager _sm;
     private bool _transitioned;
 
     private const float EndCombatDuration = 1.5f;
     private float _endCombatTimer = 0f;
+
+    public RedrawItemsState(ScoreManager sm)
+    {
+        _sm = sm;
+    }
 
     public void EnterState(CombatManager cm)
     {
@@ -40,7 +46,7 @@ public class RedrawItemsState : ICombatState
     {
         if (PauseManager.Instance.IsPaused) return;
         if (_transitioned) return;
-        if (_endCombatTimer < EndCombatDuration) { _endCombatTimer += Time.deltaTime; return; }
+        if (_endCombatTimer < EndCombatDuration) { _endCombatTimer += Time.deltaTime * _sm.GameSpeed; return; }
 
         _transitioned = true;
         cm.SwitchState(new DefaultCombatState());
