@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BetweenItemState : ICombatState
 {
-    private enum Phase { Wait, Collapse, Done }
+    private enum Phase { Wait, Collapse, Done, EndCombatDelay }
 
     private readonly List<ItemData> _items;
     private readonly int _index;
@@ -24,6 +24,7 @@ public class BetweenItemState : ICombatState
     private Vector3 _lerpStart;
     private RectTransform _movingRect;
     private bool _transitioned;
+    private const float EndCombatDuration = 4.0f;
 
     public BetweenItemState(List<ItemData> items, int index, ScoreManager sm, bool skipWait = false)
     {
@@ -76,6 +77,9 @@ public class BetweenItemState : ICombatState
                 break;
             case Phase.Done:
                 TransitionNext(cm);
+                break;
+            case Phase.EndCombatDelay:
+                UpdateEndCombatDelay(cm);
                 break;
         }
     }
@@ -154,26 +158,24 @@ public class BetweenItemState : ICombatState
     private void TransitionNext(CombatManager cm)
     {
         if (_transitioned) return;
-        _transitioned = true;
-
         if (!EnemyManager.Instance.AreEnemiesAlive())
         {
             _sm.FinalizeScore();
-            cm.SwitchState(new DefaultCombatState());
+            StartEndCombatDelay();
             return;
         }
 
-        if (_sm.roller.upgradeNotifText != null)
-            _sm.roller.upgradeNotifText.text = "";
+        if (_sm.roller.upgradeNotifText != null) _sm.roller.upgradeNotifText.text = "";
 
         if (_index + 1 < _items.Count)
         {
+            _transitioned = true;  // next item — no delay
             _sm.roller.StartCombatRoll(_items, _index + 1);
         }
         else
         {
             _sm.FinalizeScore();
-            cm.SwitchState(new DefaultCombatState());
+            StartEndCombatDelay();
         }
     }
 
@@ -197,5 +199,18 @@ public class BetweenItemState : ICombatState
     {
         Vector3 displayPos = _sm.itemDisplay.GetComponent<RectTransform>().position;
         return displayPos + StackOffset * slotIndex;
+    }
+
+    private void StartEndCombatDelay()
+    {
+        _phase = Phase.EndCombatDelay;
+        _timer = 0f;
+    }
+    private void UpdateEndCombatDelay(CombatManager cm)
+    {
+        _timer += Time.deltaTime;
+        if (_timer < EndCombatDuration / _sm.GameSpeed) return;
+        _transitioned = true;
+        cm.SwitchState(new DefaultCombatState());
     }
 }

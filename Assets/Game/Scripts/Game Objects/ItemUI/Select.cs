@@ -10,7 +10,7 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
     private bool isSelected = false;
     public bool IsSelected => isSelected;
 
-    private bool SelectionEnabled = true;
+    private bool SelectionEnabled = false;
 
     private ItemManager _itemManager;
 
@@ -18,6 +18,8 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
     {
         EventBus.Subscribe<ScoringStartedEvent>(DisableSelection);
         EventBus.Subscribe<ScoringEndedEvent>(EnableSelection);
+
+        SelectionEnabled = CombatManager.Instance.GetCurrentState() is DefaultCombatState;
     }
 
     private void OnDisable()
