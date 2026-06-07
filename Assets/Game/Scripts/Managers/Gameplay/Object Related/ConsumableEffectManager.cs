@@ -6,11 +6,27 @@ public class ConsumableEffectManager : MonoBehaviour
     public bool selectingItemToDestroy;
     public bool selectingItemToClone;
     public bool selectingItemToPolymorph;
+    public bool isScoring = false;
 
     private void Awake()
     {
         Instance = this;
     }
+
+    private void OnEnable()
+    {
+        EventBus.Subscribe<ScoringStartedEvent>(OnScoringStarted);
+        EventBus.Subscribe<ScoringEndedEvent>(OnScoringEnded);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe<ScoringStartedEvent>(OnScoringStarted);
+        EventBus.Unsubscribe<ScoringEndedEvent>(OnScoringEnded);
+    }
+
+    private void OnScoringStarted(ScoringStartedEvent e) => isScoring = true;
+    private void OnScoringEnded(ScoringEndedEvent e) => isScoring = false;
 
     public void UseConsumable(ConsumableData consumable)
     {
@@ -21,32 +37,14 @@ public class ConsumableEffectManager : MonoBehaviour
                 UpgradeFightingManager.Instance.tempDCReduce = 2; break;
 
             case ConsumableID.PoisonPotion:
-                foreach (Transform enemyLocation in GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().spawnPoints)
-                {
-                    // Check if the location has an enemy in it
-                    if (enemyLocation.transform.childCount > 0)
-                    {
-                        // Get the enemy at this location
-                        GameObject enemy = enemyLocation.transform.GetChild(0).gameObject;
-
-                        if (enemy.GetComponent<EnemyController>().GetHealth() > 0)
-                        {
-                            EventBus.Publish<DamageTakenEvent>(
-                                    new DamageTakenEvent(enemyLocation.transform.GetChild(0).gameObject.GetEntityId(), 5, false, false));
-                            break;
-                        }
-                    }
-                }
+                PoisonFirstEnemy();
                 break;
 
             case ConsumableID.SharpeningStone:
                 UpgradeFightingManager.Instance.tempDamgeIncrease = 1.3f; break;
 
             case ConsumableID.LuckPotion:
-                    UpgradeFightingManager.Instance.rollAbove10 = true; break;
-
-            case ConsumableID.RerollPotion:
-                UpgradeFightingManager.Instance.reroll = true; break;
+                UpgradeFightingManager.Instance.rollAbove10 = true; break;
 
             case ConsumableID.PotionOfMelting:
                 selectingItemToDestroy = true;
@@ -62,6 +60,31 @@ public class ConsumableEffectManager : MonoBehaviour
 
         }
     }
+
+    private void PoisonFirstEnemy()
+    {
+        foreach (Transform spawnPoint in EnemyManager.Instance.spawnPoints)
+        {
+            if (spawnPoint.childCount == 0) continue;
+
+            GameObject enemy = null;
+            for (int i = 0; i < spawnPoint.childCount; i++)
+            {
+                if (spawnPoint.GetChild(i).GetComponent<EnemyController>() != null)
+                {
+                    enemy = spawnPoint.GetChild(i).gameObject;
+                    break;
+                }
+            }
+
+            if (enemy == null) continue;
+            if (enemy.GetComponent<EnemyController>().GetHealth() <= 0) continue;
+
+            EventBus.Publish(new DamageTakenEvent(enemy.GetEntityId(), 5, false, false));
+            return;
+        }
+    }
+
     public void DestroyItem(ItemData item)
     {
         PlayerManager.Instance.RemoveInventoryItem(item);
