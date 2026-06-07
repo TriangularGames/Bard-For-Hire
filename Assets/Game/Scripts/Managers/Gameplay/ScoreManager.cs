@@ -14,6 +14,8 @@ public class ScoreManager : MonoBehaviour
     public List<ItemData> pendingItems;
     private string rewardDisplayText;
 
+    public Queue<(string name, int damage, ItemData item)> BonusAttackQueue = new Queue<(string, int, ItemData)>();
+
     private void OnEnable()
     {
         EventBus.Subscribe<MoneyEarnedEvent>(MakeRewardText);
@@ -104,20 +106,16 @@ public class ScoreManager : MonoBehaviour
         EventBus.Publish<HitEvent>(new HitEvent());
         AttackEnemy(item, totalDamage);
 
+        BonusAttackQueue.Clear();
+
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.ComboChain))
-        {
-            AttackEnemy(item, Mathf.RoundToInt(totalDamage * 0.5f));
-        }
+            BonusAttackQueue.Enqueue(("Combo Chain", Mathf.RoundToInt(totalDamage * 0.5f), item));
 
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.DoubleCrit) && finalRoll == 20)
-        {
-            AttackEnemy(item, totalDamage);
-        }
-
+            BonusAttackQueue.Enqueue(("Double Crit", totalDamage, item));
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.EchoStrike) && index == pendingItems.Count - 1)
-        {
-            AttackEnemy(item, totalDamage);
-        }
+            BonusAttackQueue.Enqueue(("Echo Strike", totalDamage, item));
+
     }
 
     public void ApplyQuickSave(int index, ItemData item)
@@ -180,22 +178,18 @@ public class ScoreManager : MonoBehaviour
         roller.ResetText();
     }
 
-    private void AttackEnemy(ItemData item, int damage)
+    public void AttackEnemy(ItemData item, int damage)
     {
         if (EnemyManager.Instance.isBossDay && EnemyManager.Instance.hasDisabled
             && EnemyManager.Instance.disabledItem == item.ItemType) return;
 
         switch (item.target)
         {
-            case 1: 
-                AttackFirstEnemy(item, damage); break;
+            case 1:
+                AttackGuys(item, damage, UpgradeFightingManager.Instance.archmageActive ? 2 : 1);
+                break;
             case 2:
-                int hits = 0;
-                foreach (Transform loc in EnemyManager.Instance.spawnPoints)
-                {
-                    if (hits >= 2) break;
-                    if (TryAttackAt(loc, item, damage)) hits++;
-                }
+                AttackGuys(item, damage, UpgradeFightingManager.Instance.archmageActive ? 3 : 2);
                 break;
             case 3:
                 foreach (Transform loc in EnemyManager.Instance.spawnPoints)
@@ -209,6 +203,16 @@ public class ScoreManager : MonoBehaviour
         foreach (Transform loc in EnemyManager.Instance.spawnPoints)
         {
             if (TryAttackAt(loc, item, damage)) break;
+        }
+    }
+
+    private void AttackGuys(ItemData item, int damage, int numberOfGuys)
+    {
+        int hits = 0;
+        foreach (Transform enemyLocation in EnemyManager.Instance.spawnPoints)
+        {
+            if (hits >= numberOfGuys) break;
+            if (TryAttackAt(enemyLocation, item, damage)) hits++;
         }
     }
 

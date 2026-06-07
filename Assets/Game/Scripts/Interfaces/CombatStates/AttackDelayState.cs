@@ -15,6 +15,7 @@ public class AttackDelayState : ICombatState
     private float _timer;
     private const float AttackDelayDuration = 1.0f;
 
+
     public AttackDelayState(List<ItemData> items, int index, int finalRoll, int totalDamage, ScoreManager sm)
     {
         _items = items;
@@ -40,7 +41,10 @@ public class AttackDelayState : ICombatState
 
         if (_timer >= 1.0f * _sm.GameSpeed)
         {
-            cm.SwitchState(new RemoveUsedItemState(_items, _index, _sm));
+            if (_sm.BonusAttackQueue.Count > 0 && _timer >= 1.0f)
+                cm.SwitchState(new BonusAttackState(_items, _index, _sm));
+            else
+                cm.SwitchState(new RemoveUsedItemState(_items, _index, _sm));
         }
     }
 }

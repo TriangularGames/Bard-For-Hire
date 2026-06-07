@@ -39,7 +39,7 @@ public class EnemyController : MonoBehaviour
     private float delayTimer;
     private int flashIndex = 0;
 
-    public int GetHealth() {  return health; }
+    public int GetHealth() { return health; }
 
     public void SetIndicator() { indicator.SetActive(!indicator.activeSelf); }
 
@@ -62,10 +62,6 @@ public class EnemyController : MonoBehaviour
         SetAnimation();
         SetDamageTxt();
         smoke = transform.parent.GetChild(0).GetComponent<ParticleSystem>();
-        if (enemyData.yPos != 0)
-        {
-            transform.localPosition = new Vector3(0f, enemyData.yPos, 0f);
-        }
     }
 
     protected void SetSprite()
@@ -217,6 +213,7 @@ public class EnemyController : MonoBehaviour
 
                 // Take -1 health
                 health -= 1;
+                health = Mathf.Max(health, 0);
                 SetDamageTxt();
 
                 // If the enemy is dead or not

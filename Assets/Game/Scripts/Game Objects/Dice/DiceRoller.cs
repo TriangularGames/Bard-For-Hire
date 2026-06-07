@@ -21,6 +21,22 @@ public class DiceRoller : MonoBehaviour
     {
         int nat = Random.Range(1, 21);
 
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.Gambler))
+        {
+            if (nat > 3 && nat < 18)
+            {
+                int second = UnityEngine.Random.Range(1, 21);
+                int distA = Mathf.Min(nat, 21 - nat);
+                int distB = Mathf.Min(second, 21 - second);
+                if (distB < distA) nat = second;
+            }
+        }
+
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.Ace) && nat == 1)
+        {
+            nat = 20;
+        }
+
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.WeightedDice))
         {
             if (nat <= 10 && Random.value < 0.3f)
@@ -34,6 +50,7 @@ public class DiceRoller : MonoBehaviour
             int second = Random.Range(1, 21);
             if (second == 20) nat = 20;
         }
+    
 
         return nat;
     }
@@ -58,8 +75,7 @@ public class DiceRoller : MonoBehaviour
     // Determines if this is a normal roll or an early advantage roll, then starts the appropriate state
     public void StartCombatRoll(List<ItemData> items, int index)
     {
-        bool withAdvantage = index == 0 
-            && UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage);
+        bool withAdvantage = (index == 0 && UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage)) || UpgradeFightingManager.Instance.shadowThiefActive || UpgradeFightingManager.Instance.UseComeback();
 
         CombatManager.Instance.SwitchState(new DiceRollState(items, this, index, withAdvantage));
     }

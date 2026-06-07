@@ -45,17 +45,30 @@ public class DiceRollState : ICombatState
             {
                 _modifier += 2;
             }
+            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.GreatWeaponMaster) && _items != null)
+            {
+                _modifier += Mathf.RoundToInt(_items[_index].Playable * 0.25f);
+            }
             if (UpgradeFightingManager.Instance.tempDCReduce > 0)
             {
                 _modifier += UpgradeFightingManager.Instance.tempDCReduce;
             }
         }
 
+        bool gotAdvantage = _withAdvantage || UpgradeFightingManager.Instance.shadowThiefActive || UpgradeFightingManager.Instance.UseComeback();
+
         // Reset per-roll crit flag before each roll
         UpgradeFightingManager.Instance.rolledNat20 = false;
 
-        if (_withAdvantage)
+        if (gotAdvantage)
         {
+            if (UpgradeFightingManager.Instance.UseComeback())
+            {
+                UpgradeFightingManager.Instance.UsingComeback();
+                ScoreManager manager = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
+                manager.roller.upgradeNotifText.text = "Comeback!";
+            }
+
             var (a, b, chosen) = _roller.RollAdvantage();
             _advantageRollA = a;
             _advantageRollB = b;
