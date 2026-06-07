@@ -44,6 +44,8 @@ public class ItemLineUpState : ICombatState
 
         _sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
 
+        _sm.InitializeRound(_items);
+
         _displayWorldPos = _sm.itemDisplay.GetComponent<RectTransform>().position;
         // Stack items under the attack display area, NOT under Hand's GridLayoutGroup
         _stackParent = _sm.itemDisplay.transform.parent;
