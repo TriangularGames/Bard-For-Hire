@@ -284,19 +284,11 @@ public class UpgradeFightingManager : MonoBehaviour
                     }
                 }
             }
-        //this is for the upgrade "Lucky Strike" (1.25x bonus score for random slot (changes every turn))
-        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.LuckyStrike))
-         {
-             if(slotIndex == luckySlot)
-             {
-                    int before = damage;
-                    damage = Mathf.RoundToInt(damage * 1.25f);
-                    bonuses.Add(new DamageBonus { source = "Lucky Strike", amount = damage - before });
-                }
-         }
         }
+
         if (ragingRN)
         {
+            Debug.LogWarning("Raging!!");
             int before = damage;
             damage = Mathf.RoundToInt(damage * 2f);
             bonuses.Add(new DamageBonus { source = "Rage", amount = damage - before });
@@ -316,6 +308,19 @@ public class UpgradeFightingManager : MonoBehaviour
             bonuses.Add(new DamageBonus { source = "Relic Keeper", amount = damage - before });
 
         }
+
+        //this is for the upgrade "Lucky Strike" (1.25x bonus score for random slot (changes every turn))
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.LuckyStrike))
+        {
+            Debug.LogWarning("Lucky Strike Slot: " + luckySlot);
+            if (slotIndex == luckySlot)
+            {
+                int before = damage;
+                damage = Mathf.RoundToInt(damage * 1.25f);
+                bonuses.Add(new DamageBonus { source = "Lucky Strike", amount = damage - before });
+            }
+        }
+        
         if (archmageActive)
         {
             int before = damage;

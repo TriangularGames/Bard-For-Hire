@@ -28,7 +28,7 @@ public class ConsumableController : MonoBehaviour
     private void SetSprite()
     {
         transform.GetChild(0).GetComponent<Image>().sprite = consumableData.icon;
-        transform.GetChild(0).GetComponent<Image>().color = new Color(0.5568628f, 0.427451f, 0.0509804f, 1f);
+        transform.GetChild(0).GetComponent<Image>().color = Color.white;
     }
 
     public void SetTextColor(Color color)

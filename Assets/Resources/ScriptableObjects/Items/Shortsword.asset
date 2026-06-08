@@ -15,9 +15,12 @@ MonoBehaviour:
   ItemName: Shortsword
   ItemDescription: A hefty blade
   cost: 3
+  target: 1
   ItemType: 1
   Rarity: 0
+  weaponBonus: 0
+  bonusDamageStacks: 0
   Damage: 5
   Mult: 0
   Playable: 11
-  icon: {fileID: 21300000, guid: 73d2ef03464f946a78c0a90c3c53f962, type: 3}
+  icon: {fileID: 21300000, guid: 9e72ff219a69fed4194758683299af73, type: 3}

@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
-    [SerializeField] GameObject itemDisplay;
+    public GameObject itemDisplay;
     [SerializeField] private TMP_Text roundText;
     public int curRound = 1;
     private int MaxRounds = 3;
@@ -13,6 +12,8 @@ public class ScoreManager : MonoBehaviour
     public DiceRoller roller;
     public List<ItemData> pendingItems;
     private string rewardDisplayText;
+
+    public Queue<(string name, int damage, ItemData item)> BonusAttackQueue = new Queue<(string, int, ItemData)>();
 
     private void OnEnable()
     {
@@ -65,16 +66,25 @@ public class ScoreManager : MonoBehaviour
         EventBus.Publish<ScoringStartedEvent>(new ScoringStartedEvent());
         pendingItems = items;
         UpgradeFightingManager.Instance.StartRound();
+        UpgradeFightingManager.Instance.GetTheHandBonuses(items);
     }
 
     // Called by CalculateScoreState to set up item display
     public void SetupItemDisplay(int index)
     {
+        ItemManager itemManager = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
+        GameObject stackedItem = itemManager.GetAttackItem(index);
+
+        if (stackedItem != null)
+        {
+            itemDisplay.transform.position = stackedItem.transform.position;
+            stackedItem.SetActive(false);
+        }
+
         itemDisplay.GetComponent<ItemController>().itemData = pendingItems[index];
         itemDisplay.GetComponent<ItemController>().Setup();
         itemDisplay.SetActive(true);
         itemDisplay.GetComponent<ItemDisplayController>().Reset();
-        EventBus.Publish<ItemUsedEvent>(new ItemUsedEvent(pendingItems[index]));
     }
 
     public void ShowHit(int index)
@@ -96,20 +106,16 @@ public class ScoreManager : MonoBehaviour
         EventBus.Publish<HitEvent>(new HitEvent());
         AttackEnemy(item, totalDamage);
 
+        BonusAttackQueue.Clear();
+
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.ComboChain))
-        {
-            AttackEnemy(item, Mathf.RoundToInt(totalDamage * 0.5f));
-        }
+            BonusAttackQueue.Enqueue(("Combo Chain", Mathf.RoundToInt(totalDamage * 0.5f), item));
 
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.DoubleCrit) && finalRoll == 20)
-        {
-            AttackEnemy(item, totalDamage);
-        }
-
+            BonusAttackQueue.Enqueue(("Double Crit", totalDamage, item));
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.EchoStrike) && index == pendingItems.Count - 1)
-        {
-            AttackEnemy(item, totalDamage);
-        }
+            BonusAttackQueue.Enqueue(("Echo Strike", totalDamage, item));
+
     }
 
     public void ApplyQuickSave(int index, ItemData item)
@@ -172,22 +178,18 @@ public class ScoreManager : MonoBehaviour
         roller.ResetText();
     }
 
-    private void AttackEnemy(ItemData item, int damage)
+    public void AttackEnemy(ItemData item, int damage)
     {
         if (EnemyManager.Instance.isBossDay && EnemyManager.Instance.hasDisabled
             && EnemyManager.Instance.disabledItem == item.ItemType) return;
 
         switch (item.target)
         {
-            case 1: 
-                AttackFirstEnemy(item, damage); break;
+            case 1:
+                AttackGuys(item, damage, UpgradeFightingManager.Instance.archmageActive ? 2 : 1);
+                break;
             case 2:
-                int hits = 0;
-                foreach (Transform loc in EnemyManager.Instance.spawnPoints)
-                {
-                    if (hits >= 2) break;
-                    if (TryAttackAt(loc, item, damage)) hits++;
-                }
+                AttackGuys(item, damage, UpgradeFightingManager.Instance.archmageActive ? 3 : 2);
                 break;
             case 3:
                 foreach (Transform loc in EnemyManager.Instance.spawnPoints)
@@ -201,6 +203,16 @@ public class ScoreManager : MonoBehaviour
         foreach (Transform loc in EnemyManager.Instance.spawnPoints)
         {
             if (TryAttackAt(loc, item, damage)) break;
+        }
+    }
+
+    private void AttackGuys(ItemData item, int damage, int numberOfGuys)
+    {
+        int hits = 0;
+        foreach (Transform enemyLocation in EnemyManager.Instance.spawnPoints)
+        {
+            if (hits >= numberOfGuys) break;
+            if (TryAttackAt(enemyLocation, item, damage)) hits++;
         }
     }
 
@@ -271,7 +283,12 @@ public struct VictoryEvent
 public struct ItemUsedEvent
 {
     public ItemData item;
-    public ItemUsedEvent(ItemData _item) { item = _item; }
+    public int attackIndex;
+    public ItemUsedEvent(ItemData _item, int _attackIndex)
+    {
+        item = _item;
+        attackIndex = _attackIndex;
+    }
 }
 
 public struct HitEvent { }

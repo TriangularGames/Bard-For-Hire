@@ -19,6 +19,7 @@ public class ConsumableSelect : MonoBehaviour, IPointerEnterHandler, IPointerDow
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (ConsumableEffectManager.Instance.isScoring) return;
         selection.color = new Color(0f, 0f, 1f, 0.5f);
     }
 
@@ -29,6 +30,8 @@ public class ConsumableSelect : MonoBehaviour, IPointerEnterHandler, IPointerDow
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (ConsumableEffectManager.Instance.isScoring) return;
+
         ConsumableEffectManager.Instance.UseConsumable(consumableController.consumableData);
 
         ConsumableManager.Instance.RemoveConsumable(consumableController.consumableData);

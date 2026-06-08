@@ -29,6 +29,7 @@ public class UpgradeManager : MonoBehaviour
         {
             if (Upgrades[i].UpgradeID == id)
             {
+                Debug.LogWarning("Has Upgrade: " + id);
                 return true;
             }
         }

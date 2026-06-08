@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -20,6 +21,22 @@ public class DiceRoller : MonoBehaviour
     {
         int nat = Random.Range(1, 21);
 
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.Gambler))
+        {
+            if (nat > 3 && nat < 18)
+            {
+                int second = UnityEngine.Random.Range(1, 21);
+                int distA = Mathf.Min(nat, 21 - nat);
+                int distB = Mathf.Min(second, 21 - second);
+                if (distB < distA) nat = second;
+            }
+        }
+
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.Ace) && nat == 1)
+        {
+            nat = 20;
+        }
+
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.WeightedDice))
         {
             if (nat <= 10 && Random.value < 0.3f)
@@ -33,15 +50,16 @@ public class DiceRoller : MonoBehaviour
             int second = Random.Range(1, 21);
             if (second == 20) nat = 20;
         }
+    
 
         return nat;
     }
 
-    public int RollAdvantage()
+    public (int a, int b, int chosen) RollAdvantage()
     {
         int a = Random.Range(1, 21);
         int b = Random.Range(1, 21);
-        return Mathf.Max(a, b);
+        return (a, b, Mathf.Max(a, b));
     }
 
     public void ResetText()
@@ -54,14 +72,11 @@ public class DiceRoller : MonoBehaviour
         if (upgradeNotifText != null) upgradeNotifText.text = "";
     }
 
-    // Replaced all async functions
-    public void RollDie(int modifier, System.Action<int> onDone)
+    // Determines if this is a normal roll or an early advantage roll, then starts the appropriate state
+    public void StartCombatRoll(List<ItemData> items, int index)
     {
-        CombatManager.Instance.SwitchState(new DiceRollState(this, modifier, false, onDone));
-    }
+        bool withAdvantage = (index == 0 && UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage)) || UpgradeFightingManager.Instance.shadowThiefActive || UpgradeFightingManager.Instance.UseComeback();
 
-    public void RollWithAdvantage(int modifier, System.Action<int> onDone)
-    {
-        CombatManager.Instance.SwitchState(new DiceRollState(this, modifier, true, onDone));
+        CombatManager.Instance.SwitchState(new RollState(items, this, index, withAdvantage));
     }
 }

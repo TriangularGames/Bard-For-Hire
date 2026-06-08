@@ -8,12 +8,10 @@ public class ItemManager : MonoBehaviour
     public Button discardBtn;
     public Button clearBtn;
     public Button attackBtn;
+    public Button inventoryBtn;
 
     [HideInInspector] public List<GameObject> ItemsSelected;
     [SerializeField] private int selectionLimit = 4;
-    [SerializeField] private List<Sprite> selectionBoxes;
-    [SerializeField] private Transform lineupParent;
-    [SerializeField] private float lineupMoveSpeed = 8f;
     [SerializeField] private TMP_Text selectionCountText;
 
     private bool scoringCompleted = true;
@@ -27,6 +25,8 @@ public class ItemManager : MonoBehaviour
 
     public ItemPool itemPool;
 
+    private List<GameObject> _attackItems;
+
     private void OnEnable()
     {
         EventBus.Subscribe<ItemUsedEvent>(DeleteItem);
@@ -35,6 +35,7 @@ public class ItemManager : MonoBehaviour
         discardBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
         clearBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
         attackBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
+        inventoryBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
     }
 
     private void OnDisable()
@@ -45,6 +46,7 @@ public class ItemManager : MonoBehaviour
         discardBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
         clearBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
         attackBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
+        inventoryBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
     }
 
     public bool HasRoom()
@@ -61,21 +63,14 @@ public class ItemManager : MonoBehaviour
 
     private void DeleteItem(ItemUsedEvent e)
     {
-        GameObject toDelete = null;
-        foreach (GameObject item in ItemsSelected)
-        {
-            if (item.GetComponent<ItemController>().itemData == e.item)
-            {
-                toDelete = item;
-            }
-        }
+        if (_attackItems == null || e.attackIndex < 0 || e.attackIndex >= _attackItems.Count) return;
 
-        if (toDelete != null)
-        {
-            ItemsSelected.Remove(toDelete);
-            itemPool.RemoveItem(toDelete);
-            Destroy(toDelete);
-        }
+        GameObject toDelete = _attackItems[e.attackIndex];
+        if (toDelete == null) return;
+
+        _attackItems[e.attackIndex] = null;
+        itemPool.RemoveItem(toDelete);
+        Destroy(toDelete);
     }
 
     private void Start()
@@ -87,7 +82,7 @@ public class ItemManager : MonoBehaviour
         UpdateSelectionText();
         ItemsSelected = new List<GameObject>();
         discardsLeft = MAXDiscards;
-        discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard x" + discardsLeft.ToString();
+        discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard " + discardsLeft.ToString() + "/" + MAXDiscards;
 # if UNITY_EDITOR
         Debug.Assert(itemPool = GameObject.FindWithTag("ItemPool").GetComponent<ItemPool>(), "ItemManager requires ItemPool");
 #else
@@ -97,6 +92,7 @@ public class ItemManager : MonoBehaviour
 
     private void Update()
     {
+        // Update button interactability
         if (discardsLeft != 0)
         {
             discardBtn.interactable = true;
@@ -157,7 +153,7 @@ public class ItemManager : MonoBehaviour
                 ItemsSelected.Clear();
                 GrabNewItems(itemsDiscarded);
                 discardsLeft--;
-                discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard x" + discardsLeft.ToString();
+                discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard " + discardsLeft.ToString() + "/" + MAXDiscards;
             }
         }
         UpdateSelectionText();
@@ -168,19 +164,18 @@ public class ItemManager : MonoBehaviour
     /// </summary>
     public void GrabNewItems(int amount)
     {
-        Debug.Log("Getting new items!");
-        if (itemPool.GetItems().Count != itemPool.GetMaxSlots())
-        {
-            // Checking if unused weapons count is more than what needs to be grabbed to fill the space
-            if (PlayerManager.Instance.itemsNotUsed.Count < amount)
-            {
-                PlayerManager.Instance.RefreshItems(); 
-            }
-            for (int i = 0; i < amount; i++)
-            {
-                itemPool.InstantiateItem(PlayerManager.Instance.GetRandomItem());
-            }
+        int emptySlots = itemPool.GetMaxSlots() - itemPool.GetItems().Count;
+        int toGrab = Mathf.Min(amount, emptySlots);
+        if (toGrab <= 0) return;
 
+        if (PlayerManager.Instance.itemsNotUsed.Count < toGrab)
+        {
+            PlayerManager.Instance.RefreshItems();
+        }
+
+        for (int i = 0; i < toGrab; i++)
+        {
+            itemPool.InstantiateItem(PlayerManager.Instance.GetRandomItem());
         }
     }
 
@@ -204,40 +199,74 @@ public class ItemManager : MonoBehaviour
     {
         scoringCompleted = false;
         List<ItemData> itemData = new List<ItemData>();
+        List<GameObject> itemObjects = new List<GameObject>(ItemsSelected);
+
         foreach (GameObject itemObj in ItemsSelected)
         {
             itemData.Add(itemObj.GetComponent<ItemController>().itemData);
         }
 
+        BeginAttack(itemObjects);
+
         DiceRoller roller = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>().roller;
-        CombatManager.Instance.SwitchState(new DiceRollState(itemData, roller));
+        CombatManager.Instance.SwitchState(new ItemLineUpState(itemData, roller, itemObjects));
     }
 
     private void PrepNewRound(ScoringCompletedEvent e)
     {
-        GrabNewItems(e.count);
+        _attackItems?.Clear();
         scoringCompleted = true;
     }
 
-    public void SelectItem(GameObject item, Image selection)
+    public void SelectItem(GameObject item, TMP_Text num)
     {
         if (HasRoom())
         {
             ItemsSelected.Add(item);
-            selection.sprite = selectionBoxes[ItemsSelected.IndexOf(item)];
+            Relabel();
             UpdateSelectionText();
         }
     }
 
-    public void DeselectItem(GameObject item, Image selection)
+    public void DeselectItem(GameObject item, TMP_Text num)
     {
         ItemsSelected.Remove(item);
-        selection.color = new Color(0f, 0f, 0f, 0f);
-        foreach (GameObject selectedItem in ItemsSelected)
-        {
-            selectedItem.GetComponent<Select>().SetImage(selectionBoxes[ItemsSelected.IndexOf(selectedItem)]);
-        }
+        num.text = "";
+        Relabel();
         UpdateSelectionText();
+    }
+
+    // Relabel selected items
+    public void Relabel()
+    {
+        for (int i = 0; i <= ItemsSelected.Count - 1; i++)
+        {
+            GameObject text = ItemsSelected[i].transform.GetChild(1).gameObject;
+            text.GetComponent<TMP_Text>().text = (i + 1).ToString();
+        }
+    }
+
+    public void BeginAttack(List<GameObject> attackItems)
+    {
+        _attackItems = new List<GameObject>(attackItems);
+        // Hand selection is done � only attack snapshot matters now
+        ItemsSelected.Clear();
+        UpdateSelectionText();
+    }
+
+    public GameObject GetAttackItem(int index)
+    {
+        if (_attackItems == null || index < 0 || index >= _attackItems.Count) return null;
+        return _attackItems[index];
+    }
+    public int GetAttackItemCount()
+    {
+        return _attackItems?.Count ?? 0;
+    }
+
+    public void ShowItemInventory()
+    {
+        MenuManager.Instance.SwitchState(new InventoryMenuState());
     }
 }
 

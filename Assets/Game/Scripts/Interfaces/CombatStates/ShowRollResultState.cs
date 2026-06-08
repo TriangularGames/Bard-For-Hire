@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 /// <summary>
@@ -8,6 +9,7 @@ using UnityEngine;
 /// </summary>
 public class ShowRollResultState : ICombatState
 {
+    private readonly ScoreManager _sm;
     private readonly DiceRoller _roller;
     private readonly int _nat;
     private readonly int _modifier;
@@ -20,8 +22,10 @@ public class ShowRollResultState : ICombatState
     private float _timer;
     private float _duration;
 
-    public ShowRollResultState(DiceRoller roller, int nat, int modifier, int final, List<ItemData> items, int index, bool isSingleRoll, System.Action<int> onDone)
+    public ShowRollResultState(ScoreManager sm, DiceRoller roller, int nat, int modifier,
+        int final, List<ItemData> items, int index, bool isSingleRoll, System.Action<int> onDone)
     {
+        _sm = sm;
         _roller = roller;
         _nat = nat;
         _modifier = modifier;
@@ -82,7 +86,7 @@ public class ShowRollResultState : ICombatState
             }
             else
             {
-                cm.SwitchState(new CalculateScoreState(_items, _index, _final));
+                cm.SwitchState(new CalculateScoreState(_sm, _items, _index, _final));
             }
         }
     }

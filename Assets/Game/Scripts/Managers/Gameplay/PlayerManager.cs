@@ -97,6 +97,8 @@ public class PlayerManager : Singleton<PlayerManager>
     private void OnItemScored(ItemUsedEvent e)
     {
         RemoveItem(e.item);
+        RemoveInventoryItem(e.item);     // remove from iventory after use
+        EventBus.Publish(new RefreshInventoryDisplayEvent());
     }
 
     /// <summary>
