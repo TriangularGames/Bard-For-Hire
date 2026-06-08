@@ -146,7 +146,7 @@ public class ScoreManager : MonoBehaviour
                 int remainingRounds = MaxRounds - curRound;
                 if (remainingRounds > 0)
                 {
-                    EventBus.Publish(new MoneyEarnedEvent(remainingRounds * 5, "Early Completion"));
+                    EventBus.Publish(new MoneyEarnedEvent(remainingRounds * 5, "Early Completion", null));
                 }
                 Debug.Log("Combat Completed!");
                 MenuManager.Instance.SwitchState(new VictoryMenuState());
