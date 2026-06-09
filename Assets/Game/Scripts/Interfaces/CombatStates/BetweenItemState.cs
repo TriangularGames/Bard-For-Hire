@@ -163,10 +163,15 @@ public class MoveLineupState : ICombatState
 
         if (!EnemyManager.Instance.AreEnemiesAlive())
         {
-            _sm.FinalizeScore();
+            if (_sm.CheckCombatEnd())
+            {
+                _transitioned = true;
+                return;
+            }
+
+            _sm.FinalizeRound();
             _transitioned = true;
             cm.SwitchState(new RedrawItemsState(_sm));
-            return;
         }
 
         if (_sm.roller.upgradeNotifText != null) _sm.roller.upgradeNotifText.text = "";
@@ -178,7 +183,13 @@ public class MoveLineupState : ICombatState
         }
         else
         {
-            _sm.FinalizeScore();
+            if (_sm.CheckCombatEnd())
+            {
+                _transitioned = true;
+                return;
+            }
+
+            _sm.FinalizeRound();
             _transitioned = true;
             cm.SwitchState(new RedrawItemsState(_sm));
         }

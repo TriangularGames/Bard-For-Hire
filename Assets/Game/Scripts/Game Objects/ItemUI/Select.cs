@@ -16,22 +16,22 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
 
     private void OnEnable()
     {
-        EventBus.Subscribe<ScoringStartedEvent>(DisableSelection);
-        EventBus.Subscribe<ScoringEndedEvent>(EnableSelection);
+        EventBus.Subscribe<RoundStartedEvent>(DisableSelection);
+        EventBus.Subscribe<RoundEndedEvent>(EnableSelection);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<ScoringStartedEvent>(DisableSelection);
-        EventBus.Unsubscribe<ScoringEndedEvent>(EnableSelection);
+        EventBus.Unsubscribe<RoundStartedEvent>(DisableSelection);
+        EventBus.Unsubscribe<RoundEndedEvent>(EnableSelection);
     }
 
-    private void EnableSelection(ScoringEndedEvent e)
+    private void EnableSelection(RoundEndedEvent e)
     {
         SelectionEnabled = true;
     }
 
-    private void DisableSelection(ScoringStartedEvent e)
+    private void DisableSelection(RoundStartedEvent e)
     {
         SelectionEnabled = false;
     }

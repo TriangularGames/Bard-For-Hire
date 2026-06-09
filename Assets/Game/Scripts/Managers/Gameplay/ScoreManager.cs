@@ -63,7 +63,7 @@ public class ScoreManager : MonoBehaviour
     // Called by CalculateScoreState on first item
     public void InitializeRound(List<ItemData> items)
     {
-        EventBus.Publish<ScoringStartedEvent>(new ScoringStartedEvent());
+        EventBus.Publish<RoundStartedEvent>(new RoundStartedEvent());
         pendingItems = items;
         UpgradeFightingManager.Instance.StartRound();
         UpgradeFightingManager.Instance.GetTheHandBonuses(items);
@@ -133,49 +133,41 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    public void FinalizeScore()
+    public void FinalizeRound()
     {
         int count = pendingItems.Count;
         HideItemDisplay();
-        EventBus.Publish<ScoringEndedEvent>(new ScoringEndedEvent());
+        EventBus.Publish<RoundEndedEvent>(new RoundEndedEvent());
+        EventBus.Publish(new ScoringCompletedEvent(count));
+        Debug.Log("Round " + curRound + " Completed!");
+        curRound++;
+        roundText.text = "Round " + curRound + "/3";
 
-        if (!EnemyManager.Instance.AreEnemiesAlive() || curRound == MaxRounds)
-        {
-            if (!EnemyManager.Instance.AreEnemiesAlive())
-            {
-                int remainingRounds = MaxRounds - curRound;
-                if (remainingRounds > 0)
-                {
-                    EventBus.Publish(new MoneyEarnedEvent(remainingRounds * 5, "Early Completion"));
-                }
-                Debug.Log("Combat Completed!");
-                MenuManager.Instance.SwitchState(new VictoryMenuState());
-                EventBus.Publish(new VictoryEvent(rewardDisplayText));
-            }
-            else
-            {
-                Debug.Log("Combat Failed!");
-                MenuManager.Instance.SwitchState(new GameOverMenuState());
-            }
-        }
-        else
-        {
-            Debug.Log("Round " + curRound + " Completed!");
-            curRound++;
-            roundText.text = "Round " + curRound + "/3";
-
-            List<ItemData> currentHand = new List<ItemData>();
-            ItemManager itemManager = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
-            foreach (GameObject obj in itemManager.itemPool.GetItems())
-            {
-                ItemController ic = obj.GetComponent<ItemController>();
-                if (ic != null) currentHand.Add(ic.itemData);
-            }
-
-            UpgradeFightingManager.Instance.EndRound(currentHand);
-            EventBus.Publish(new ScoringCompletedEvent(count));
-        }
         roller.ResetText();
+    }
+
+    public bool CheckCombatEnd()
+    {
+        if (!EnemyManager.Instance.AreEnemiesAlive())
+        {
+            int remainingRounds = MaxRounds - curRound;
+            if (remainingRounds > 0)
+                EventBus.Publish(new MoneyEarnedEvent(remainingRounds * 5, "Early Completion"));
+
+            Debug.Log("Combat Completed!");
+            MenuManager.Instance.SwitchState(new VictoryMenuState());
+            EventBus.Publish(new VictoryEvent(rewardDisplayText));
+            return true;
+        }
+
+        if (curRound >= MaxRounds)
+        {
+            Debug.Log("Combat Failed!");
+            MenuManager.Instance.SwitchState(new GameOverMenuState());
+            return true;
+        }
+
+        return false;
     }
 
     public void AttackEnemy(ItemData item, int damage)
@@ -264,7 +256,7 @@ public class ScoreManager : MonoBehaviour
 }
 
 // Event structs for ScoreManager to publish
-public struct ScoringStartedEvent { }
+public struct RoundStartedEvent { }
 
 public struct ScoringCompletedEvent
 {
@@ -272,7 +264,7 @@ public struct ScoringCompletedEvent
     public ScoringCompletedEvent(int _count) { count = _count; }
 }
 
-public struct ScoringEndedEvent { }
+public struct RoundEndedEvent { }
 
 public struct VictoryEvent
 {
