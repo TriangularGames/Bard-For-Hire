@@ -62,6 +62,10 @@ public class EnemyController : MonoBehaviour
         SetAnimation();
         SetDamageTxt();
         smoke = transform.parent.GetChild(0).GetComponent<ParticleSystem>();
+        if (enemyData.yPos != 0)
+        {
+            transform.localPosition = new Vector3(0f, enemyData.yPos, 0f);
+        }
     }
 
     protected void SetSprite()
@@ -97,7 +101,7 @@ public class EnemyController : MonoBehaviour
         {
             flashColor = Color.gray;
         }
-        if (!Weak && !Resist)
+        if (!Weak && !Resist || Weak && Resist)
         {
             flashColor = Color.red;
         }
@@ -129,12 +133,6 @@ public class EnemyController : MonoBehaviour
             resist.GetComponent<DestroyText>().Setup(dmgDisplayPool);
             resist.GetComponent<TMP_Text>().color = flashColor;
             resist.GetComponent<TMP_Text>().text = "Resist";
-        }
-        // If both flags are active
-        if (Weak && Resist)
-        {
-            // TODO: fill in this
-            // Do something here
         }
     }
 
@@ -220,12 +218,8 @@ public class EnemyController : MonoBehaviour
                 if (health <= 0)
                 {
                     health = 0;
-                    // Enemy dies once flashes are completed
-                    if (flashIndex == flashTimes - 1)
-                    {
-                        state = ENEMY_STATE.DEAD;
-                        return;
-                    }
+                    state = ENEMY_STATE.DEAD;
+                    return;
                 }
 
                 flashIndex++;

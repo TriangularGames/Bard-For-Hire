@@ -101,7 +101,7 @@ public class EnemyManager : Singleton<EnemyManager>
 
         int coins = enemyC.enemyData.coinReward;
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.MercenaryContract)) coins = Mathf.RoundToInt(coins * 1.3f);
-        EventBus.Publish(new MoneyEarnedEvent(coins, enemyC.enemyData.Name));
+        EventBus.Publish(new MoneyEarnedEvent(coins, enemyC.enemyData.Name, enemyC.gameObject.transform.parent.gameObject));
 
         if (enemies.Contains(e.enemy))
         {
@@ -322,10 +322,12 @@ public struct MoneyEarnedEvent
     public int coinAmount;
     // Reason being either Early Completion/Enemy Name
     public string reason;
+    public GameObject location;
 
-    public MoneyEarnedEvent(int _coinAmount, string _reason)
+    public MoneyEarnedEvent(int _coinAmount, string _reason, GameObject _loc)
     {
         coinAmount = _coinAmount;
         reason = _reason;
+        location = _loc;
     }
 }
