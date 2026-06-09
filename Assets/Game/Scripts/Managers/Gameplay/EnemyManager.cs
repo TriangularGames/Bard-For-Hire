@@ -46,10 +46,24 @@ public class EnemyManager : Singleton<EnemyManager>
     /// </summary>
     public List<GameObject> enemyDisplays;
 
-    /// <summary>
-    /// Reset EnemyManager on Game End
-    /// </summary>
-    public void Reset()
+    private void OnEnable()
+    {
+        EventBus.Subscribe<EnemyDefeatedEvent>(RemoveEnemy);
+        EventBus.Subscribe<EnterCombatEvent>(CombatSetup);
+        EventBus.Subscribe<EnterShopEvent>(ShopSetup);
+        EventBus.Subscribe<ResetGameEvent>(ResetGame);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe<EnemyDefeatedEvent>(RemoveEnemy);
+        EventBus.Unsubscribe<EnterCombatEvent>(CombatSetup);
+        EventBus.Unsubscribe<EnterShopEvent>(ShopSetup);
+        EventBus.Unsubscribe<ResetGameEvent>(ResetGame);
+    }
+
+    // Reset to Game Defaults
+    private void ResetGame(ResetGameEvent e)
     {
         currentDay = 0;
         bossesKilled = 0;
@@ -59,20 +73,6 @@ public class EnemyManager : Singleton<EnemyManager>
         roundData = DEFAULTRoundData;
         isBossDay = false;
         isBossGone = false;
-    }
-
-    private void OnEnable()
-    {
-        EventBus.Subscribe<EnemyDefeatedEvent>(RemoveEnemy);
-        EventBus.Subscribe<EnterCombatEvent>(CombatSetup);
-        EventBus.Subscribe<EnterShopEvent>(ShopSetup);
-    }
-
-    private void OnDisable()
-    {
-        EventBus.Unsubscribe<EnemyDefeatedEvent>(RemoveEnemy);
-        EventBus.Unsubscribe<EnterCombatEvent>(CombatSetup);
-        EventBus.Unsubscribe<EnterShopEvent>(ShopSetup);
     }
 
     public override void Awake()

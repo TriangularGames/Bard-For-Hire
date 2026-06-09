@@ -52,20 +52,7 @@ public class PlayerManager : Singleton<PlayerManager>
         itemsNotUsed = new List<ItemData>();
     }
 
-    // Reset Item Lists on Game End
-    public void Reset()
-    {
-        upgradeInventory.Clear();
-        consumableInventory.Clear();
-        itemsUsed.Clear();
-        itemsHeld.Clear();
-        itemsNotUsed.Clear();
-        itemInventory.Clear();
-        itemInventory.AddRange(_defaultInventory);
-        foreach (ItemData item in itemInventory)
-         item.bonusDamageStacks = 0;
-    }
-
+    #region EventBus Event Subscriptions
     private void OnEnable()
     {
         EventBus.Subscribe<ItemUsedEvent>(OnItemScored);
@@ -77,6 +64,7 @@ public class PlayerManager : Singleton<PlayerManager>
         EventBus.Subscribe<EnterShopEvent>(EnterShop);
         EventBus.Subscribe<EnterCombatEvent>(EnterCombat);
         EventBus.Subscribe<MoneyEarnedEvent>(AddMoney);
+        EventBus.Subscribe<ResetGameEvent>(ResetGame);
     }
 
     private void OnDisable()
@@ -90,6 +78,22 @@ public class PlayerManager : Singleton<PlayerManager>
         EventBus.Unsubscribe<EnterShopEvent>(EnterShop);
         EventBus.Unsubscribe<EnterCombatEvent>(EnterCombat);
         EventBus.Unsubscribe<MoneyEarnedEvent>(AddMoney);
+        EventBus.Unsubscribe<ResetGameEvent>(ResetGame);
+    }
+    #endregion
+
+    // Reset to defaults
+    private void ResetGame(ResetGameEvent e)
+    {
+        upgradeInventory.Clear();
+        consumableInventory.Clear();
+        itemsUsed.Clear();
+        itemsHeld.Clear();
+        itemsNotUsed.Clear();
+        itemInventory.Clear();
+        itemInventory.AddRange(_defaultInventory);
+        foreach (ItemData item in itemInventory)
+            item.bonusDamageStacks = 0;
     }
 
     private void AddMoney(MoneyEarnedEvent e)
