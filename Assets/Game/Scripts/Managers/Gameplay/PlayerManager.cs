@@ -39,9 +39,11 @@ public class PlayerManager : Singleton<PlayerManager>
 
     [Tooltip("Max amount of Upgrades player can hold")]
     public int MAXUpgrades = 4;
+    private GameObject UpgradeLimitTxt;
 
     [Tooltip("Max amount of Consumables player can hold")]
     public int MAXConsumables = 2;
+    private GameObject ConsumableLimitTxt;
 
     private void Start()
     {
@@ -146,6 +148,7 @@ public class PlayerManager : Singleton<PlayerManager>
     private void EnterCombat(EnterCombatEvent e)
     {
         SetCoinText();
+        SetLimitText();
     }
 
     private void EnterShop(EnterShopEvent e)
@@ -243,6 +246,21 @@ public class PlayerManager : Singleton<PlayerManager>
     public void SetCoinText()
     {
         GameObject.FindWithTag("Coins").GetComponent<TMP_Text>().text = Coins.ToString();
+    }
+
+    public void SetLimitText()
+    {
+        if (UpgradeLimitTxt == null)
+        {
+            UpgradeLimitTxt = GameObject.FindWithTag("UpgradeLimit");
+        }
+        if (ConsumableLimitTxt == null)
+        {
+            ConsumableLimitTxt = GameObject.FindWithTag("ConsumableLimit");
+        }
+
+        UpgradeLimitTxt.GetComponent<TMP_Text>().text = upgradeInventory.Count + "/" + MAXUpgrades;
+        ConsumableLimitTxt.GetComponent<TMP_Text>().text = consumableInventory.Count + "/" + MAXConsumables;
     }
 
     public void RefreshItems()

@@ -451,6 +451,7 @@ GameObject:
   - component: {fileID: 5123161086659477240}
   - component: {fileID: 9062780397028255441}
   - component: {fileID: 3266854364836290320}
+  - component: {fileID: 907678052110622183}
   m_Layer: 5
   m_Name: Tooltip
   m_TagString: Untagged
@@ -599,6 +600,21 @@ MonoBehaviour:
   contentTxt: {fileID: 1251654277833191351}
   layoutElement: {fileID: 9062780397028255441}
   characterWrapLimit: 75
+--- !u!114 &907678052110622183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2661043598822955305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfabb0440166ab443bba8876756fdfa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Shadow
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 10, y: -10}
+  m_UseGraphicAlpha: 1
 --- !u!1 &3145022235815636484
 GameObject:
   m_ObjectHideFlags: 0
@@ -633,8 +649,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 63.95, y: -32.2}
-  m_SizeDelta: {x: 127.9, y: 64.4}
+  m_AnchoredPosition: {x: 62.6, y: -32.2}
+  m_SizeDelta: {x: 125.2, y: 64.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1939556584978605031
 CanvasRenderer:
@@ -908,8 +924,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 160.72, y: -42.2}
-  m_SizeDelta: {x: 271.44, y: 64.4}
+  m_AnchoredPosition: {x: 159.37, y: -42.2}
+  m_SizeDelta: {x: 268.74, y: 64.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5740543832097413713
 MonoBehaviour:
@@ -971,7 +987,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 219.67, y: -32.2}
+  m_AnchoredPosition: {x: 216.97, y: -32.2}
   m_SizeDelta: {x: 103.54, y: 40.75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2294355360635695320

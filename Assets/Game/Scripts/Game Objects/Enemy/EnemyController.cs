@@ -101,7 +101,7 @@ public class EnemyController : MonoBehaviour
         {
             flashColor = Color.gray;
         }
-        if (!Weak && !Resist)
+        if (!Weak && !Resist || Weak && Resist)
         {
             flashColor = Color.red;
         }
@@ -133,12 +133,6 @@ public class EnemyController : MonoBehaviour
             resist.GetComponent<DestroyText>().Setup(dmgDisplayPool);
             resist.GetComponent<TMP_Text>().color = flashColor;
             resist.GetComponent<TMP_Text>().text = "Resist";
-        }
-        // If both flags are active
-        if (Weak && Resist)
-        {
-            // TODO: fill in this
-            // Do something here
         }
     }
 
