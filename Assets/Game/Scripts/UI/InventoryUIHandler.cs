@@ -9,9 +9,21 @@ public class InventoryUIHandler : MonoBehaviour
     [SerializeField] private Transform inventoryLayout;
     [SerializeField] private Button backButton;
 
+    private void OnEnable()
+    {
+        EventBus.Subscribe<ShowInventoryEvent>(OnShowInventory);
+        EventBus.Subscribe<HideInventoryEvent>(OnHideInventory);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe<ShowInventoryEvent>(OnShowInventory);
+        EventBus.Unsubscribe<HideInventoryEvent>(OnHideInventory);
+    }
+
     private void Start()
     {
-        DisplayGroupedInventory();
+        ShowInventory();
 
         // Back Button
         backButton.onClick.AddListener(() =>
@@ -20,52 +32,21 @@ public class InventoryUIHandler : MonoBehaviour
         });
     }
 
-    private void OnEnable()
+    private void ShowInventory()
     {
-        SubscribeToEvents();
+        // Add the NotUsed items, in full display first
+        NotUsedDisplay();
+
+        // Then add the Used items, at slightly lower alpha
+        ItemsUsedDisplay();
     }
 
-    private void OnDisable()
-    {
-        UnsubscribeFromEvents();
-    }
-
-    /// <summary>
-    /// Subscribes to necessary events on the event bus.
-    /// </summary>
-    private void SubscribeToEvents()
-    {
-        EventBus.Subscribe<ShowInventoryEvent>(OnShowInventory);
-        EventBus.Subscribe<HideInventoryEvent>(OnHideInventory);
-        EventBus.Subscribe<RefreshInventoryDisplayEvent>(RefreshDisplay);
-    }
-
-    /// <summary>
-    /// Unsubscribes from events on the event bus.
-    /// </summary>
-    private void UnsubscribeFromEvents()
-    {
-        EventBus.Unsubscribe<ShowInventoryEvent>(OnShowInventory);
-        EventBus.Unsubscribe<HideInventoryEvent>(OnHideInventory);
-        EventBus.Unsubscribe<RefreshInventoryDisplayEvent>(RefreshDisplay);
-    }
-
-    private void RefreshDisplay(RefreshInventoryDisplayEvent e)
-    {
-        // TODO: figure out better way of doing this without just deleting and respawning objects
-        foreach (Transform child in inventoryLayout)
-        {
-            Destroy(child.gameObject);
-        }
-        DisplayGroupedInventory();
-    }
-
-    private void DisplayGroupedInventory()
+    private void NotUsedDisplay()
     {
         // Group items by name and count duplicates
         Dictionary<ItemData, int> groupedItems = new Dictionary<ItemData, int>();
 
-        foreach (ItemData item in PlayerManager.Instance.itemInventory)
+        foreach (ItemData item in PlayerManager.Instance.itemsNotUsed)
         {
             // Try to find an existing key with the same name
             ItemData existingKey = null;
@@ -98,6 +79,46 @@ public class InventoryUIHandler : MonoBehaviour
         }
     }
 
+    private void ItemsUsedDisplay()
+    {
+        // Group items by name and count duplicates
+        Dictionary<ItemData, int> groupedItems = new Dictionary<ItemData, int>();
+
+        foreach (ItemData item in PlayerManager.Instance.itemsUsed)
+        {
+            // Try to find an existing key with the same name
+            ItemData existingKey = null;
+            foreach (ItemData key in groupedItems.Keys)
+            {
+                if (key.name == item.name)
+                {
+                    existingKey = key;
+                    break;
+                }
+            }
+
+            if (existingKey != null)
+                groupedItems[existingKey]++;
+            else
+                groupedItems[item] = 1;
+        }
+
+        if (groupedItems.Count >= 5)
+        {
+            inventoryLayout.GetComponent<GridLayoutGroup>().cellSize = new Vector2(100, 100);
+            inventoryLayout.GetComponent<GridLayoutGroup>().spacing = new Vector2(40, 0);
+        }
+
+        // Spawn one slot per unique item, passing in the quantity
+        foreach (KeyValuePair<ItemData, int> entry in groupedItems)
+        {
+            GameObject slot = AssetManager.Instance.Spawn("InventorySlot", inventoryLayout);
+            slot.GetComponent<InventorySlot>().SetupSlotInfo(entry.Key, entry.Value);
+            slot.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.5f);
+        }
+    }
+
+    #region Show/Hide Toggle
     /// <summary>
     /// Handles the event to show the Inventory.
     /// </summary>
@@ -106,6 +127,7 @@ public class InventoryUIHandler : MonoBehaviour
     {
         // Code to show the Inventory
         ToggleInventoryVisibility(eventData.show);
+        ShowInventory();
     }
 
     /// <summary>
@@ -116,6 +138,12 @@ public class InventoryUIHandler : MonoBehaviour
     {
         // Code to hide the Inventory
         ToggleInventoryVisibility(eventData.show);
+        
+        // TODO: fix this so its not just deleting everything
+        foreach (Transform child in  inventoryLayout.transform)
+        {
+            Destroy(child.gameObject);
+        }
     }
 
     /// <summary>
@@ -126,6 +154,7 @@ public class InventoryUIHandler : MonoBehaviour
     {
         inventoryPanel.SetActive(isVisible);
     }
+    #endregion
 }
 
 /// <summary>
