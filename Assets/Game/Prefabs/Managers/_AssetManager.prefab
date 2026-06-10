@@ -47,10 +47,11 @@ MonoBehaviour:
   registeredPrefabs:
   - {fileID: 9005676489685703692, guid: ba1d4a41e0c8ae14aa823dd0dfd4f555, type: 3}
   - {fileID: 2484180083775032184, guid: e3049f045c265c646ad8d933c9229ab4, type: 3}
+  - {fileID: 2338348622536006590, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
+  - {fileID: 2484180083775032184, guid: 27f4cbeab3b6cc94dbe2bc45e4f106a7, type: 3}
+  - {fileID: 3539659081906062393, guid: d5eec28e673901b40a7b6f66d5cad8c9, type: 3}
+  - {fileID: 7912760789123558999, guid: 60ea8ae34a9c6b1478dbf3299f5eac97, type: 3}
+  - {fileID: 9005676489685703692, guid: 0742a6cd766f55b41a3529d16bd72924, type: 3}
+  - {fileID: 9202378692417087149, guid: e55cc4c6f3d76e744ab63d7b0d6109dc, type: 3}
   - {fileID: 6253461791045948769, guid: 89eab7e4fd908a84d9b63a2bd5b8958e, type: 3}
   - {fileID: 4620715596389784687, guid: 5109dd767d9c08f4ebf5a5e6773dedff, type: 3}
-  - {fileID: 9005676489685703692, guid: 0742a6cd766f55b41a3529d16bd72924, type: 3}
-  - {fileID: 3539659081906062393, guid: d5eec28e673901b40a7b6f66d5cad8c9, type: 3}
-  - {fileID: 2484180083775032184, guid: 27f4cbeab3b6cc94dbe2bc45e4f106a7, type: 3}
-  - {fileID: 2338348622536006590, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
-  - {fileID: 9202378692417087149, guid: e55cc4c6f3d76e744ab63d7b0d6109dc, type: 3}

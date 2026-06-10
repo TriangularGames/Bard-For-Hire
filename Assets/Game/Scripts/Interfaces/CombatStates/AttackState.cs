@@ -45,6 +45,11 @@ public class AttackState : ICombatState
             ItemData item = _sm.pendingItems[_index];
             _sm.ApplyAttack(_index, _totalDamage, item, _finalRoll);
 
+            // Set HighestDamageDealt variable
+            if (PlayerManager.Instance.highestDamageDealt < _totalDamage)
+            { PlayerManager.Instance.highestDamageDealt = _totalDamage; }
+
+
             if (_sm.BonusAttackQueue.Count > 0)
             {
                 cm.SwitchState(new BonusAttackState(_items, _index, _sm));

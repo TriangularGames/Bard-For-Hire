@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading;
 using TMPro;
 using UnityEngine;
 
@@ -11,29 +10,34 @@ enum PLAYER_STATE
 
 public class PlayerManager : Singleton<PlayerManager>
 {
+    [Header("Starting Inventory Loadout")]
     [SerializeField] private List<ItemData> _defaultInventory;
+
+    [Header("Active Player Inventory")]
     public List<ItemData> itemInventory;
     public List<UpgradeData> upgradeInventory;
     public List<ConsumableData> consumableInventory;
 
     // For Gameplay, what Weapons are still available to be grabbed from Inventory,
     // what Weapons are active, and what Weapons aren't
+    [Header("Weapons Available For Combat")]
+    [Tooltip("Weapons played")]
     public List<ItemData> itemsUsed;
+    [Tooltip("Weapons in Hand")]
     public List<ItemData> itemsHeld;
+    [Tooltip("Weapons not drawn")]
     public List<ItemData> itemsNotUsed;
-
-    // Current selected Character
-    public PlayerController selectedCharacter;
 
     // Vars for Coin Gain
     private PLAYER_STATE state = PLAYER_STATE.DEFAULT;
-    private float _coinDuration = 0.125f;
+    [SerializeField] private float _coinDuration = 0.125f;
     private float _coinSpawnTimer = 0f;
     private GameObject spawnPoint = null;
     private GameObject _coin = null;
     private Transform _startPos = null;
     private int _coinsToGain = 0;
 
+    [Header("Other Info")]
     [Tooltip("Amount of money the Player has")]
     public int Coins;
 
@@ -45,11 +49,26 @@ public class PlayerManager : Singleton<PlayerManager>
     public int MAXConsumables = 2;
     private GameObject ConsumableLimitTxt;
 
+    [Header("Overall Stats (For the EndRun Screen)")]
+    private int TotalMoneyGained;
+    public int totalMoneyGained { get { return TotalMoneyGained; } set { TotalMoneyGained = value; } }
+    
+    // TODO: set this up
+    private int HighestDamageDealt;
+    public int highestDamageDealt { get { return HighestDamageDealt; } set { HighestDamageDealt = value; } }
+    
+    // TODO: set this up
+    private string MostUsedWeapon;
+    public string mostUsedWeapon { get { return MostUsedWeapon; } set { MostUsedWeapon = value; } }
+
     private void Start()
     {
         itemsUsed = new List<ItemData>();
         itemsHeld = new List<ItemData>();
         itemsNotUsed = new List<ItemData>();
+        totalMoneyGained = 0;
+        highestDamageDealt = 0;
+        mostUsedWeapon = "";
     }
 
     #region EventBus Event Subscriptions
@@ -99,6 +118,7 @@ public class PlayerManager : Singleton<PlayerManager>
     private void AddMoney(MoneyEarnedEvent e)
     {
         _coinsToGain = e.coinAmount;
+        totalMoneyGained += e.coinAmount;
         spawnPoint = e.location;
         state = PLAYER_STATE.GAINMONEY;
         SetCoinText();
