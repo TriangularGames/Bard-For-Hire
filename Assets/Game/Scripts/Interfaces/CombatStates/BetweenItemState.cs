@@ -121,7 +121,7 @@ public class MoveLineupState : ICombatState
 
         if (t < 1f) return;
 
-        // This shift finished � next item moves forward
+        // This shift finished and next item moves forward
         _collapseStep++;
         if (_collapseStep < GetCollapseMoveCount())
         {
@@ -160,21 +160,23 @@ public class MoveLineupState : ICombatState
     private void TransitionNext(CombatManager cm)
     {
         if (_transitioned) return;
-        if (_transitionTimer < TransitionDelay) { _transitionTimer += Time.deltaTime * _sm.GameSpeed; return; }
-
-        if (_sm.roller.upgradeNotifText != null) _sm.roller.upgradeNotifText.text = "";
 
         if (_index + 1 < _items.Count)
         {
-            _transitioned = true;  // next item � no delay
-            _sm.roller.StartCombatRoll(_items, _index + 1);
-        }
-        else
-        {
-            _sm.FinalizeRound();
             _transitioned = true;
-            cm.SwitchState(new RedrawItemsState(_sm));
+            _sm.roller.StartCombatRoll(_items, _index + 1);
+            return;  // no TransitionDelay
         }
+
+        if (_transitionTimer < TransitionDelay)
+        {
+            _transitionTimer += Time.deltaTime * _sm.GameSpeed;
+            return;
+        }
+
+        _sm.FinalizeRound();
+        _transitioned = true;
+        cm.SwitchState(new RedrawItemsState(_sm));
     }
 
     private bool HasRemainingStackItems()
