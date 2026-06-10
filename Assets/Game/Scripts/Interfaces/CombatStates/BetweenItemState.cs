@@ -26,7 +26,7 @@ public class MoveLineupState : ICombatState
     private RectTransform _movingRect;
     private bool _transitioned;
 
-    private const float TransitionDelay = 1.5f;
+    private const float TransitionDelay = 1.0f;
     private float _transitionTimer = 0f;
 
     public MoveLineupState(List<ItemData> items, int index, ScoreManager sm, bool skipWait = false)
@@ -59,6 +59,7 @@ public class MoveLineupState : ICombatState
             else
             {
                 _phase = Phase.Done;
+                _transitionTimer = TransitionDelay;  // no collapse, start transition timer immediately
             }
         }
         else
@@ -161,19 +162,6 @@ public class MoveLineupState : ICombatState
         if (_transitioned) return;
         if (_transitionTimer < TransitionDelay) { _transitionTimer += Time.deltaTime * _sm.GameSpeed; return; }
 
-        if (!EnemyManager.Instance.AreEnemiesAlive())
-        {
-            if (_sm.CheckCombatEnd())
-            {
-                _transitioned = true;
-                return;
-            }
-
-            _sm.FinalizeRound();
-            _transitioned = true;
-            cm.SwitchState(new RedrawItemsState(_sm));
-        }
-
         if (_sm.roller.upgradeNotifText != null) _sm.roller.upgradeNotifText.text = "";
 
         if (_index + 1 < _items.Count)
@@ -183,12 +171,6 @@ public class MoveLineupState : ICombatState
         }
         else
         {
-            if (_sm.CheckCombatEnd())
-            {
-                _transitioned = true;
-                return;
-            }
-
             _sm.FinalizeRound();
             _transitioned = true;
             cm.SwitchState(new RedrawItemsState(_sm));

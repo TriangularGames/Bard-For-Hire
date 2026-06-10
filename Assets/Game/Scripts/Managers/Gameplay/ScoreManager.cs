@@ -18,16 +18,23 @@ public class ScoreManager : MonoBehaviour
     private void OnEnable()
     {
         EventBus.Subscribe<MoneyEarnedEvent>(MakeRewardText);
+        EventBus.Subscribe<EnemyDefeatedEvent>(OnEnemyDefeated);
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<MoneyEarnedEvent>(MakeRewardText);
+        EventBus.Unsubscribe<EnemyDefeatedEvent>(OnEnemyDefeated);
     }
 
     private void MakeRewardText(MoneyEarnedEvent e)
     {
         rewardDisplayText += e.reason + " : " + e.coinAmount + "\n";
+    }
+
+    private void OnEnemyDefeated(EnemyDefeatedEvent e)
+    {
+        CheckCombatEnd();
     }
 
     private void Start()
