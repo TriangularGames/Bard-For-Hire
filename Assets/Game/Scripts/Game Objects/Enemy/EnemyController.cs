@@ -39,6 +39,8 @@ public class EnemyController : MonoBehaviour
 
     private float delayTimer;
     private int flashIndex = 0;
+    private bool FadeHealth = false;
+    [SerializeField] private float fadeDuration = 0.3f;
 
     public int GetHealth() { return health; }
 
@@ -176,7 +178,6 @@ public class EnemyController : MonoBehaviour
             Weak = e.weakness;
             Resist = e.resistance;
 
-            //StartCoroutine("Flash");
             state = ENEMY_STATE.DAMAGED;
         }
     }
@@ -200,6 +201,18 @@ public class EnemyController : MonoBehaviour
             case ENEMY_STATE.DYING:
                 break;
         }
+
+        if (FadeHealth)
+        {
+            FadeAway();
+            FadeHealth = false;
+        }
+    }
+
+    private void FadeAway()
+    {
+        healthTxt.color = new Color(healthTxt.color.r, healthTxt.color.g, healthTxt.color.b, Mathf.Lerp(1, 0, fadeDuration));
+        healthIcon.color = new Color(healthIcon.color.r, healthIcon.color.g, healthIcon.color.b, Mathf.Lerp(1, 0, fadeDuration));
     }
 
     private void Flash()
@@ -261,6 +274,7 @@ public class EnemyController : MonoBehaviour
     public void Smoke()
     {
         smoke.Play();
+        FadeHealth = true;
     }
 
     public void RemoveEnemy()
