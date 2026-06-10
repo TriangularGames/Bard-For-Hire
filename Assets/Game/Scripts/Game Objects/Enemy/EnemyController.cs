@@ -28,7 +28,8 @@ public class EnemyController : MonoBehaviour
     [Header("Enemy Display")]
     [SerializeField] protected SpriteRenderer EnemySprite;
     [SerializeField] protected Animator anim;
-    [SerializeField] private GameObject indicator;
+    [SerializeField] private SpriteRenderer healthIcon;
+    [SerializeField] private Sprite selectedIndicator;
     [SerializeField] private ParticleSystem hit;
     [SerializeField] private ParticleSystem smoke;
 
@@ -41,7 +42,7 @@ public class EnemyController : MonoBehaviour
 
     public int GetHealth() { return health; }
 
-    public void SetIndicator() { indicator.SetActive(!indicator.activeSelf); }
+    public void SetIndicator() { healthIcon.sprite = selectedIndicator; }
 
     private void OnEnable()
     {
@@ -72,9 +73,9 @@ public class EnemyController : MonoBehaviour
             // if the ypos is greater than 0.1 (because it starts conflicting with the UI)
             if (enemyData.yPos > 0.1f)
             {
-                indicator.transform.localPosition = new Vector3(indicator.transform.localPosition.x,
-                    indicator.transform.localPosition.y + 0.4f,
-                    indicator.transform.localPosition.z);
+                healthIcon.gameObject.transform.localPosition = new Vector3(healthIcon.gameObject.transform.localPosition.x,
+                    healthIcon.gameObject.transform.localPosition.y + 0.4f,
+                    healthIcon.gameObject.transform.localPosition.z);
 
                 healthTxt.gameObject.transform.localPosition = new Vector3(healthTxt.gameObject.transform.localPosition.x,
                     healthTxt.gameObject.transform.localPosition.y + 0.5f,
