@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Natural 20
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Natural 20
-  UpgradeDescription: Doubles odds of rolling a natural 20
-  cost: 7
+  UpgradeDescription: Doubles odds of rolling a 20
+  cost: 8
   UpgradeType: 1
   Rarity: 0
   UpgradeID: 19

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Battle Tactics
   UpgradeDescription: 1 bonus damage for your second and third attack
-  cost: 5
+  cost: 7
   UpgradeType: 0
   Rarity: 0
   UpgradeID: 1
