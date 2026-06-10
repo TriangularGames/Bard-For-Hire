@@ -19,7 +19,6 @@ public class EnemyData : ScriptableObject
     [Header("Day Appearance")]
     [SerializeField] public int minDay = 0;
     [SerializeField] public int maxDay = 0;
-    [SerializeField] public bool canAppearInNormalEncounters;
 
     [SerializeField] public float yPos = 0;
 

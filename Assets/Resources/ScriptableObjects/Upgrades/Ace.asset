@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Ace
   UpgradeDescription: Critical Misses become Critical Hits
-  cost: 10
+  cost: 12
   UpgradeType: 1
   Rarity: 0
   UpgradeID: 26

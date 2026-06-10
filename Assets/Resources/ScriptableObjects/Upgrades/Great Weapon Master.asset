@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   UpgradeName: Great Weapon Master
   UpgradeDescription: "Gain modifier equal to 25% of your weapon\u2019s roll check "
-  cost: 13
+  cost: 17
   UpgradeType: 1
   Rarity: 1
   UpgradeID: 24
