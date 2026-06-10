@@ -257,8 +257,8 @@ public class UpgradeFightingManager : MonoBehaviour
         //this is for the upgrade "Flow State" (Each action does extra damage equal to 10% of previous round's damage)
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.FlowState))
         {
-            damage += Mathf.RoundToInt(previousRoundDamage * 0.15f);
-            bonuses.Add(new DamageBonus { source = "Flow State", amount = Mathf.RoundToInt(previousRoundDamage * 0.15f) });
+            damage += Mathf.RoundToInt(previousRoundDamage * 0.12f);
+            bonuses.Add(new DamageBonus { source = "Flow State", amount = Mathf.RoundToInt(previousRoundDamage * 0.12f) });
         }
 
         //this is for the upgrade "Perfect Battle" (Each consecutive action played without failing a DC gives 10% bonus damage)

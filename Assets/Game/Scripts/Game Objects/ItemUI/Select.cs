@@ -60,36 +60,6 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
     {
         if (SelectionEnabled)
         {
-            //destroy
-            if (ConsumableEffectManager.Instance.selectingItemToDestroy)
-            {
-                ConsumableEffectManager.Instance.DestroyItem(GetComponent<ItemController>().itemData);
-
-                Destroy(gameObject);
-
-                return;
-            }
-
-            // clonin
-            if (ConsumableEffectManager.Instance.selectingItemToClone)
-            {
-                ConsumableEffectManager.Instance.CloneItem(GetComponent<ItemController>().itemData);
-
-                return;
-            }
-
-            // polymorphin
-            if (ConsumableEffectManager.Instance.selectingItemToPolymorph)
-            {
-                ItemData newItem = ConsumableEffectManager.Instance.PolymorphItem(GetComponent<ItemController>().itemData);
-
-                GetComponent<ItemController>().itemData = newItem;
-
-                GetComponent<ItemController>().Setup();
-
-                return;
-            }
-
             if (!isSelected && _itemManager.HasRoom())
             {
                 _itemManager.SelectItem(gameObject, selectionNum);

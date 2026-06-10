@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Die : MonoBehaviour
+public class EnemyDeathHandler : MonoBehaviour
 {
     public void Smoke()
     {

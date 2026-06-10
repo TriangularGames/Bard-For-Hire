@@ -1,11 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class ConsumableEffectManager : MonoBehaviour
 {
     public static ConsumableEffectManager Instance;
-    public bool selectingItemToDestroy;
-    public bool selectingItemToClone;
-    public bool selectingItemToPolymorph;
     public bool isScoring = false;
 
     private void Awake()
@@ -28,7 +27,7 @@ public class ConsumableEffectManager : MonoBehaviour
     private void OnScoringStarted(RoundStartedEvent e) => isScoring = true;
     private void OnScoringEnded(RoundEndedEvent e) => isScoring = false;
 
-    public void UseConsumable(ConsumableData consumable)
+    public void UseConsumable(ConsumableData consumable, List<GameObject> selectedItems)
     {
         switch (consumable.Type)
         {
@@ -47,15 +46,19 @@ public class ConsumableEffectManager : MonoBehaviour
                 UpgradeFightingManager.Instance.rollAbove10 = true; break;
 
             case ConsumableID.PotionOfMelting:
-                selectingItemToDestroy = true;
+                DestroyItems(selectedItems);
                 break;
 
             case ConsumableID.PotionOfPolymorph:
-                selectingItemToPolymorph = true;
+                ItemController polymorphTarget =selectedItems[0].GetComponent<ItemController>();
+                polymorphTarget.itemData = PolymorphItem(polymorphTarget.itemData);
+                polymorphTarget.Setup();
+                polymorphTarget.GetComponent<Select>().Deselect();
                 break;
 
             case ConsumableID.PotionOfCloning:
-                selectingItemToClone = true;
+                CloneItem(selectedItems[0].GetComponent<ItemController>().itemData);
+                selectedItems[0].GetComponent<Select>().Deselect();
                 break;
 
         }
@@ -85,20 +88,24 @@ public class ConsumableEffectManager : MonoBehaviour
         }
     }
 
-    public void DestroyItem(ItemData item)
+    private void DestroyItems(List<GameObject> items)
     {
-        PlayerManager.Instance.RemoveInventoryItem(item);
-        selectingItemToDestroy = false;
+        foreach (GameObject itemObj in items)
+        {
+            ItemData item = itemObj.GetComponent<ItemController>().itemData;
+
+            PlayerManager.Instance.RemoveInventoryItem(item);
+            itemObj.GetComponent<Select>().Deselect();
+            Destroy(itemObj);
+        }
     }
 
     public ItemData PolymorphItem(ItemData item)
     {
-        selectingItemToPolymorph = false;
         return PlayerManager.Instance.TransformInventoryItem(item);
     }
     public void CloneItem(ItemData item)
     {
         PlayerManager.Instance.CloneInventoryItem(item);
-        selectingItemToClone = false;
     }
 }

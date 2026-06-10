@@ -6,7 +6,7 @@ public class EnemyManager : Singleton<EnemyManager>
     [Header("Enemy Data")]
     [SerializeField] List<string> memberTypes;
     [SerializeField] public int daysTilBoss = 3;
-    [SerializeField] private int bossesKilledBeforePooling = 3;
+    [SerializeField] private int daysBeforePooling = 10;
     public bool isBossDay;
     public bool isBossGone;
     public EnemyData bossData;
@@ -46,10 +46,24 @@ public class EnemyManager : Singleton<EnemyManager>
     /// </summary>
     public List<GameObject> enemyDisplays;
 
-    /// <summary>
-    /// Reset EnemyManager on Game End
-    /// </summary>
-    public void Reset()
+    private void OnEnable()
+    {
+        EventBus.Subscribe<EnemyDefeatedEvent>(RemoveEnemy);
+        EventBus.Subscribe<EnterCombatEvent>(CombatSetup);
+        EventBus.Subscribe<EnterShopEvent>(ShopSetup);
+        EventBus.Subscribe<ResetGameEvent>(ResetGame);
+    }
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe<EnemyDefeatedEvent>(RemoveEnemy);
+        EventBus.Unsubscribe<EnterCombatEvent>(CombatSetup);
+        EventBus.Unsubscribe<EnterShopEvent>(ShopSetup);
+        EventBus.Unsubscribe<ResetGameEvent>(ResetGame);
+    }
+
+    // Reset to Game Defaults
+    private void ResetGame(ResetGameEvent e)
     {
         currentDay = 0;
         bossesKilled = 0;
@@ -59,20 +73,6 @@ public class EnemyManager : Singleton<EnemyManager>
         roundData = DEFAULTRoundData;
         isBossDay = false;
         isBossGone = false;
-    }
-
-    private void OnEnable()
-    {
-        EventBus.Subscribe<EnemyDefeatedEvent>(RemoveEnemy);
-        EventBus.Subscribe<EnterCombatEvent>(CombatSetup);
-        EventBus.Subscribe<EnterShopEvent>(ShopSetup);
-    }
-
-    private void OnDisable()
-    {
-        EventBus.Unsubscribe<EnemyDefeatedEvent>(RemoveEnemy);
-        EventBus.Unsubscribe<EnterCombatEvent>(CombatSetup);
-        EventBus.Unsubscribe<EnterShopEvent>(ShopSetup);
     }
 
     public override void Awake()
@@ -101,7 +101,7 @@ public class EnemyManager : Singleton<EnemyManager>
 
         int coins = enemyC.enemyData.coinReward;
         if (UpgradeManager.Instance.HasUpgrade(UpgradeID.MercenaryContract)) coins = Mathf.RoundToInt(coins * 1.3f);
-        EventBus.Publish(new MoneyEarnedEvent(coins, enemyC.enemyData.Name));
+        EventBus.Publish(new MoneyEarnedEvent(coins, enemyC.enemyData.Name, enemyC.gameObject.transform.parent.gameObject));
 
         if (enemies.Contains(e.enemy))
         {
@@ -151,7 +151,7 @@ public class EnemyManager : Singleton<EnemyManager>
         nextEncounter.Clear();
         bossData = null;
 
-        if (isBossDay)
+        if (isBossDay && currentDay < daysBeforePooling)
         {
             List<EnemyData> list = new List<EnemyData>();
             foreach (EnemyData enemy in ResourceManager.Instance.EnemyData)
@@ -220,7 +220,7 @@ public class EnemyManager : Singleton<EnemyManager>
             {
                 if (!enemy.ShowUpThisDay(currentDay) || (enemy.GetScaledUpHealth(TotalMult) > remainingHealth)) continue;
                 bool isNormalEnemy = !enemy.isBoss;
-                bool isPoolableBoss = enemy.isBoss && enemy.canAppearInNormalEncounters && bossesKilled >= bossesKilledBeforePooling;
+                bool isPoolableBoss = enemy.isBoss && currentDay >= daysBeforePooling;
 
                 if (isNormalEnemy || isPoolableBoss)
                     affordableGuys.Add(enemy);
@@ -233,7 +233,7 @@ public class EnemyManager : Singleton<EnemyManager>
                 {
                     if (!enemy.ShowUpThisDay(currentDay)) continue;
                     bool isNormalEnemy = !enemy.isBoss;
-                    bool isPoolableBoss = enemy.isBoss && enemy.canAppearInNormalEncounters && bossesKilled >= bossesKilledBeforePooling;
+                    bool isPoolableBoss = enemy.isBoss && currentDay >= daysBeforePooling;
                     if ((isNormalEnemy || isPoolableBoss) && (cheapest == null || enemy.GetScaledUpHealth(TotalMult) < cheapest.GetScaledUpHealth(TotalMult)))
                         cheapest = enemy;
                 }
@@ -334,10 +334,12 @@ public struct MoneyEarnedEvent
     public int coinAmount;
     // Reason being either Early Completion/Enemy Name
     public string reason;
+    public GameObject location;
 
-    public MoneyEarnedEvent(int _coinAmount, string _reason)
+    public MoneyEarnedEvent(int _coinAmount, string _reason, GameObject _loc)
     {
         coinAmount = _coinAmount;
         reason = _reason;
+        location = _loc;
     }
 }

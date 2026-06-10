@@ -38,7 +38,7 @@ public class ScoreManager : MonoBehaviour
 
     private void OnEnemyDefeated(EnemyDefeatedEvent e)
     {
-        // Victory / game over — list should be empty (or run from end of EnemyManager.RemoveEnemy)
+        // Victory / game over ï¿½ list should be empty (or run from end of EnemyManager.RemoveEnemy)
         if (!EnemyManager.Instance.AreEnemiesAlive())
         {
             if (CheckCombatEnd())

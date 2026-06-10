@@ -62,6 +62,25 @@ public class EnemyController : MonoBehaviour
         SetAnimation();
         SetDamageTxt();
         smoke = transform.parent.GetChild(0).GetComponent<ParticleSystem>();
+
+        // If enemy has a ypos value (meaning it needs to be raised)
+        if (enemyData.yPos != 0)
+        {
+            // Change its ypos
+            transform.localPosition = new Vector3(0f, enemyData.yPos, 0f);
+
+            // if the ypos is greater than 0.1 (because it starts conflicting with the UI)
+            if (enemyData.yPos > 0.1f)
+            {
+                indicator.transform.localPosition = new Vector3(indicator.transform.localPosition.x,
+                    indicator.transform.localPosition.y + 0.4f,
+                    indicator.transform.localPosition.z);
+
+                healthTxt.gameObject.transform.localPosition = new Vector3(healthTxt.gameObject.transform.localPosition.x,
+                    healthTxt.gameObject.transform.localPosition.y + 0.5f,
+                    healthTxt.gameObject.transform.localPosition.z);
+            }
+        }
     }
 
     protected void SetSprite()
@@ -97,7 +116,7 @@ public class EnemyController : MonoBehaviour
         {
             flashColor = Color.gray;
         }
-        if (!Weak && !Resist)
+        if (!Weak && !Resist || Weak && Resist)
         {
             flashColor = Color.red;
         }
@@ -129,12 +148,6 @@ public class EnemyController : MonoBehaviour
             resist.GetComponent<DestroyText>().Setup(dmgDisplayPool);
             resist.GetComponent<TMP_Text>().color = flashColor;
             resist.GetComponent<TMP_Text>().text = "Resist";
-        }
-        // If both flags are active
-        if (Weak && Resist)
-        {
-            // TODO: fill in this
-            // Do something here
         }
     }
 
@@ -220,12 +233,8 @@ public class EnemyController : MonoBehaviour
                 if (health <= 0)
                 {
                     health = 0;
-                    // Enemy dies once flashes are completed
-                    if (flashIndex == flashTimes - 1)
-                    {
-                        state = ENEMY_STATE.DEAD;
-                        return;
-                    }
+                    state = ENEMY_STATE.DEAD;
+                    return;
                 }
 
                 flashIndex++;
