@@ -13,6 +13,10 @@ public class ScoreManager : MonoBehaviour
     public List<ItemData> pendingItems;
     private string rewardDisplayText;
 
+    private List<ItemData> _pendingLineupItems;
+    private int _pendingLineupIndex;
+    private bool _hasPendingLineup;
+
     public Queue<(string name, int damage, ItemData item)> BonusAttackQueue = new Queue<(string, int, ItemData)>();
 
     private void OnEnable()
@@ -34,7 +38,20 @@ public class ScoreManager : MonoBehaviour
 
     private void OnEnemyDefeated(EnemyDefeatedEvent e)
     {
-        CheckCombatEnd();
+        // Victory / game over — list should be empty (or run from end of EnemyManager.RemoveEnemy)
+        if (!EnemyManager.Instance.AreEnemiesAlive())
+        {
+            if (CheckCombatEnd())
+            {
+                _hasPendingLineup = false; // don't lineup after victory
+                return;
+            }
+        }
+
+        // Deferred MoveLineup after death anim
+        if (!_hasPendingLineup) return;
+        _hasPendingLineup = false;
+        CombatManager.Instance.SwitchState(new MoveLineupState(_pendingLineupItems, _pendingLineupIndex, this, skipWait: true));
     }
 
     private void Start()
@@ -65,6 +82,13 @@ public class ScoreManager : MonoBehaviour
                 GameSpeed = 1;
                 break;
         }
+    }
+
+    public void SetPendingLineup(List<ItemData> items, int index)
+    {
+        _pendingLineupItems = items;
+        _pendingLineupIndex = index;
+        _hasPendingLineup = true;
     }
 
     // Called by CalculateScoreState on first item

@@ -315,6 +315,18 @@ public class EnemyManager : Singleton<EnemyManager>
         }
     }
 
+    /// <summary>
+    /// Helper to check if an enemy is currently in dying state (for item effects that trigger on enemy death, but before EnemyDefeatedEvent is published)
+    /// </summary>
+    /// <returns></returns>
+    public bool IsAnyEnemyDying()
+    {
+        foreach (GameObject enemy in enemies)
+        {
+            if (enemy != null && enemy.GetComponent<EnemyController>().GetHealth() <= 0) return true;
+        }
+        return false;
+    }
 }
 
 public struct MoneyEarnedEvent
