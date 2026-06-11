@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class ConsumableEffectManager : MonoBehaviour
 {
@@ -29,6 +28,7 @@ public class ConsumableEffectManager : MonoBehaviour
 
     public void UseConsumable(ConsumableData consumable, List<GameObject> selectedItems)
     {
+        AudioManager.Instance.PlayClip("Potion");
         switch (consumable.Type)
         {
             // this is for the cosumable "Focus Potion" (Reduces Roll DC by 2 for this turn)

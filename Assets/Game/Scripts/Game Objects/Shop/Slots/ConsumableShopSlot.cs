@@ -43,6 +43,7 @@ public class ConsumableShopSlot : ShopSlot
         // Subtract money from player
         EventBus.Publish(new PurchaseEvent(int.Parse(value.text)));
         EventBus.Publish(new ConsumableBoughtEvent(_data));
+        AudioManager.Instance.PlayClip("Potion");
         _Purchased = true;
         ClearInfo();
     } 

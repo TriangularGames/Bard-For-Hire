@@ -427,7 +427,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: c5503d429ce944b4b941207ae0381e5f, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: consumableInventory.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[0]'
@@ -460,7 +460,7 @@ PrefabInstance:
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'consumableInventory.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: bcc88dff219fb8a4594ab2cdaa45bca3, type: 2}
+      objectReference: {fileID: 11400000, guid: 80bc42ca0c868f6469ecd8e84c376797, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'consumableInventory.Array.data[1]'
       value: 
@@ -6415,6 +6415,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 57f8651f349e51544ae5f35d08cde68a, type: 3}
   - {fileID: 8300000, guid: 0dd9764c7f988814f9dfdd02cdc57c54, type: 3}
   - {fileID: 8300000, guid: bfaa0231956db6249a536e27e12a7d81, type: 3}
+  - {fileID: 8300000, guid: e6fea89ca2e3d30408cc3028d09ca640, type: 3}
   _ambienceClips: []
   _musicAudioSource: {fileID: 919389011}
   _sfxAudioSource: {fileID: 953761885}

@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 enum ENEMY_STATE
 {
