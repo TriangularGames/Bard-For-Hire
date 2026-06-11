@@ -89,6 +89,7 @@ public class PlayerManager : Singleton<PlayerManager>
     // Reset to defaults
     private void ResetGame(ResetGameEvent e)
     {
+        Coins = 0;
         upgradeInventory.Clear();
         consumableInventory.Clear();
         itemsUsed.Clear();
