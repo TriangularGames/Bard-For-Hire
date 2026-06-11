@@ -184,7 +184,6 @@ public class ItemManager : MonoBehaviour
     /// </summary>
     public void ClearItems()
     {
-        // TODO: fix this
         foreach (GameObject item in itemPool.storedObjects)
         {
             item.GetComponent<Select>().Deselect();
@@ -218,7 +217,7 @@ public class ItemManager : MonoBehaviour
         scoringCompleted = true;
     }
 
-    public void SelectItem(GameObject item, TMP_Text num)
+    public void SelectItem(GameObject item)
     {
         if (HasRoom())
         {
@@ -241,7 +240,7 @@ public class ItemManager : MonoBehaviour
     {
         for (int i = 0; i <= ItemsSelected.Count - 1; i++)
         {
-            GameObject text = ItemsSelected[i].transform.GetChild(1).gameObject;
+            GameObject text = ItemsSelected[i].transform.GetChild(ItemsSelected[i].transform.childCount - 1).gameObject;
             text.GetComponent<TMP_Text>().text = (i + 1).ToString();
         }
     }

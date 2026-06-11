@@ -62,7 +62,7 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
         {
             if (!isSelected && _itemManager.HasRoom())
             {
-                _itemManager.SelectItem(gameObject, selectionNum);
+                _itemManager.SelectItem(gameObject);
                 icon.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
                 isSelected = true;
             }
@@ -71,7 +71,7 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
                 if (_itemManager.ItemsSelected.Contains(gameObject))
                 {
                     _itemManager.DeselectItem(gameObject, selectionNum);
-                    icon.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                    icon.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                     isSelected = false;
                 }
             }
@@ -84,7 +84,7 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
         if (_itemManager.ItemsSelected.Contains(gameObject))
         {
             _itemManager.DeselectItem(gameObject, selectionNum);
-            icon.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+            icon.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
             selectionNum.text = "";
             isSelected = false;
         }
@@ -92,7 +92,7 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
 
     public void RemoveDisplay()
     {
-        icon.transform.localScale = new Vector3(0.15f, 0.15f, 0.15f);
+        icon.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
         selectionNum.text = "";
     }
 
@@ -103,7 +103,7 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
             if (!isSelected)
             {
                 selectionNum.text = "";
-                icon.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+                icon.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
             }
         }
     }

@@ -107,11 +107,6 @@ public class PlayerManager : Singleton<PlayerManager>
         SetCoinText();
     }
 
-    private void Update()
-    {
-        
-    }
-
     private void EnterCombat(EnterCombatEvent e)
     {
         SetCoinText();

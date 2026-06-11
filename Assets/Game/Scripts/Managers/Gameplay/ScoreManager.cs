@@ -132,6 +132,8 @@ public class ScoreManager : MonoBehaviour
             {
                 Debug.Log("Combat Failed!");
                 AudioManager.Instance.PlayClip("Lose");
+                // This is to get the Miss animation to play on Lose
+                EventBus.Publish<MissEvent>(new MissEvent());
                 MenuManager.Instance.SwitchState(new GameOverMenuState());
             }
         }
