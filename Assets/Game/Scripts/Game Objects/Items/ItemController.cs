@@ -6,6 +6,7 @@ public class ItemController : MonoBehaviour
 {
     [SerializeField] public ItemData itemData;
 
+    [SerializeField] private Image icon;
     [SerializeField] private TMP_Text damageTxt;
     [SerializeField] private TMP_Text playableText;
 
@@ -18,7 +19,7 @@ public class ItemController : MonoBehaviour
 
     private void SetSprite()
     {
-        transform.GetChild(0).GetComponent<Image>().sprite = itemData.icon;
+        icon.sprite = itemData.icon;
     }
 
     private void SetDamageTxt()
@@ -29,14 +30,14 @@ public class ItemController : MonoBehaviour
         }
         else
         {
-            damageTxt.text = "Dmg " + ((itemData.Damage + itemData.bonusDamageStacks));
+            damageTxt.text = (itemData.Damage + itemData.bonusDamageStacks).ToString();
         }
         
     }
 
     public void SetDamageDisplay(int value)
     {
-        damageTxt.text = "Dmg " + value;
+        damageTxt.text = value.ToString();
     }
 
     public void DisableText()
@@ -55,7 +56,7 @@ public class ItemController : MonoBehaviour
 
     private void SetPlayableTxt()
     {
-        playableText.text = "Roll (" + itemData.Playable.ToString() + ")";
+        playableText.text = itemData.Playable.ToString();
     }
 
     public void HideDisplayText()
