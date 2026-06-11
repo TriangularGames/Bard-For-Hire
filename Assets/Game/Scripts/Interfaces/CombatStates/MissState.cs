@@ -13,7 +13,7 @@ public class MissState : ICombatState
     private readonly int _index;
     private readonly ScoreManager _sm;
     private float _timer;
-    private const float MissDelayDuration = 1.0f;
+    private float MissDelayDuration = 1.0f;
 
     public MissState(List<ItemData> items, int index, ScoreManager sm)
     {
@@ -26,6 +26,9 @@ public class MissState : ICombatState
     {
         _timer = 0f;
         _sm.ShowMiss();
+
+        ItemDisplayController itemDisplay = _sm.itemDisplay.gameObject.GetComponent<ItemDisplayController>();
+        MissDelayDuration = itemDisplay.stateInfo.length;
     }
 
     public void ExitState(CombatManager cm) { }

@@ -13,7 +13,7 @@ public class AttackState : ICombatState
     private readonly int _totalDamage;
     private readonly ScoreManager _sm;
     private float _timer;
-    private const float AttackDelayDuration = 1.0f;
+    private float AttackDelayDuration = 1.0f;
     private bool _attackApplied;
 
 
@@ -30,6 +30,9 @@ public class AttackState : ICombatState
     {
         _timer = 0f;
         _attackApplied = false;
+
+        ItemDisplayController itemDisplay = _sm.itemDisplay.gameObject.GetComponent<ItemDisplayController>();
+        AttackDelayDuration = itemDisplay.stateInfo.length;
     }
 
     public void ExitState(CombatManager cm) { }
