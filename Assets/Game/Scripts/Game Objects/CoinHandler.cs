@@ -31,7 +31,15 @@ public class CoinHandler : MonoBehaviour
     {
         _coinsToGain = e.coinAmount;
         spawnPoint = e.location;
-        state = PLAYER_STATE.GAINMONEY;
+        if (spawnPoint == null)
+        {
+            PlayerManager.Instance.Coins += _coinsToGain;
+            PlayerManager.Instance.SetCoinText();
+        }
+        else
+        {
+            state = PLAYER_STATE.GAINMONEY;
+        }
     }
 
     // Update is called once per frame
