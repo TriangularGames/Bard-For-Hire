@@ -14,7 +14,7 @@ public class UpgradeShopSlot : ShopSlot
     {
         _data = item;
 
-        value.text = _data.cost.ToString();
+        value.text = "$" + _data.cost.ToString();
         icon.sprite = _data.icon;
         icon.color = new Color(0f, 0f, 0f, 1f);
         buy.gameObject.SetActive(true);
@@ -41,7 +41,7 @@ public class UpgradeShopSlot : ShopSlot
     public override void Purchase()
     {
         // Subtract money from player
-        EventBus.Publish(new PurchaseEvent(int.Parse(value.text)));
+        EventBus.Publish(new PurchaseEvent(_data.cost));
         EventBus.Publish(new UpgradeBoughtEvent(_data));
         _Purchased = true;
         ClearInfo();
