@@ -6,7 +6,8 @@ public class InventoryUIHandler : MonoBehaviour
 {
     // Inventory Panel
     [SerializeField] private GameObject inventoryPanel;
-    [SerializeField] private Transform inventoryLayout;
+    [SerializeField] private Transform inventoryUnusedLayout;
+    [SerializeField] private Transform inventoryUsedLayout;
     [SerializeField] private Button backButton;
 
     private void OnEnable()
@@ -23,8 +24,6 @@ public class InventoryUIHandler : MonoBehaviour
 
     private void Start()
     {
-        ShowInventory();
-
         // Back Button
         backButton.onClick.AddListener(() =>
         {
@@ -67,14 +66,14 @@ public class InventoryUIHandler : MonoBehaviour
 
         if (groupedItems.Count >= 5)
         {
-            inventoryLayout.GetComponent<GridLayoutGroup>().cellSize = new Vector2(100, 100);
-            inventoryLayout.GetComponent<GridLayoutGroup>().spacing = new Vector2(40, 0);
+            inventoryUnusedLayout.GetComponent<GridLayoutGroup>().cellSize = new Vector2(100, 100);
+            inventoryUnusedLayout.GetComponent<GridLayoutGroup>().spacing = new Vector2(40, 0);
         }
 
         // Spawn one slot per unique item, passing in the quantity
         foreach (KeyValuePair<ItemData, int> entry in groupedItems)
         {
-            GameObject slot = AssetManager.Instance.Spawn("InventorySlot", inventoryLayout);
+            GameObject slot = AssetManager.Instance.Spawn("InventorySlot", inventoryUnusedLayout);
             slot.GetComponent<InventorySlot>().SetupSlotInfo(entry.Key, entry.Value);
         }
     }
@@ -105,16 +104,16 @@ public class InventoryUIHandler : MonoBehaviour
 
         if (groupedItems.Count >= 5)
         {
-            inventoryLayout.GetComponent<GridLayoutGroup>().cellSize = new Vector2(100, 100);
-            inventoryLayout.GetComponent<GridLayoutGroup>().spacing = new Vector2(40, 0);
+            inventoryUsedLayout.GetComponent<GridLayoutGroup>().cellSize = new Vector2(100, 100);
+            inventoryUsedLayout.GetComponent<GridLayoutGroup>().spacing = new Vector2(40, 0);
         }
 
         // Spawn one slot per unique item, passing in the quantity
         foreach (KeyValuePair<ItemData, int> entry in groupedItems)
         {
-            GameObject slot = AssetManager.Instance.Spawn("InventorySlot", inventoryLayout);
+            GameObject slot = AssetManager.Instance.Spawn("InventorySlot", inventoryUsedLayout);
             slot.GetComponent<InventorySlot>().SetupSlotInfo(entry.Key, entry.Value);
-            slot.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.5f);
+            slot.GetComponent<Image>().color = new Color(0.7f, 0.7f, 0.7f, 0.5f);
         }
     }
 
@@ -140,7 +139,11 @@ public class InventoryUIHandler : MonoBehaviour
         ToggleInventoryVisibility(eventData.show);
         
         // TODO: fix this so its not just deleting everything
-        foreach (Transform child in  inventoryLayout.transform)
+        foreach (Transform child in inventoryUsedLayout.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Transform child in inventoryUnusedLayout.transform)
         {
             Destroy(child.gameObject);
         }
