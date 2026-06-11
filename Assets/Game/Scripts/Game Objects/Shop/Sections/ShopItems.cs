@@ -18,19 +18,6 @@ public class ShopItems : ShopSection
 
     public void SetupSlots(List<ItemData> itemList)
     {
-        // Setup the slots to display data
-        //int i = 0;
-        //foreach (GameObject slot in displaySlots)
-        //{
-        //    if (!slot.GetComponent<ItemShopSlot>()._Purchased)
-        //    {
-        //        // If slot hasn't been purchased, fill out the item in the slot, and add it's data to list of Items
-        //        slot.GetComponent<ItemShopSlot>().SetupSlotInfo(itemList[i]);
-        //        _data.Add(itemList[i]);
-        //    }
-        //    i++;
-        //}
-
         List<GameObject> slots = new List<GameObject>();
         // Get the Item display slots on this Object
         for (int j = 0; j < transform.childCount; j++)
