@@ -7,7 +7,9 @@ public class ItemController : MonoBehaviour
     [SerializeField] public ItemData itemData;
 
     [SerializeField] private Image icon;
+    [SerializeField] private GameObject dmgBanner;
     [SerializeField] private TMP_Text damageTxt;
+    [SerializeField] private GameObject playableBanner;
     [SerializeField] private TMP_Text playableText;
 
     public void Setup()
@@ -44,6 +46,8 @@ public class ItemController : MonoBehaviour
     {
         damageTxt.text = "";
         playableText.text = "";
+        dmgBanner.SetActive(false);
+        playableBanner.SetActive(false);
     }
 
     public void SetDamageWithBonus(int baseD, UpgradeFightingManager.DamageBonus bonus)
