@@ -291,7 +291,6 @@ public class EnemyManager : Singleton<EnemyManager>
     {
         // Generate list of enemies based on Round # specific data
         // send data to panel in Shop
-        // TODO: make functionality
         GameObject enemyDisplayHolder = GameObject.FindWithTag("EnemyDisplays");
         enemyDisplays.Clear();
 

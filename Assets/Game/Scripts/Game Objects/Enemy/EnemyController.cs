@@ -28,7 +28,8 @@ public class EnemyController : MonoBehaviour
     [Header("Enemy Display")]
     [SerializeField] protected SpriteRenderer EnemySprite;
     [SerializeField] protected Animator anim;
-    [SerializeField] private GameObject indicator;
+    [SerializeField] private SpriteRenderer healthIcon;
+    [SerializeField] private Sprite selectedIndicator;
     [SerializeField] private ParticleSystem hit;
     [SerializeField] private ParticleSystem smoke;
 
@@ -38,10 +39,12 @@ public class EnemyController : MonoBehaviour
 
     private float delayTimer;
     private int flashIndex = 0;
+    private bool FadeHealth = false;
+    [SerializeField] private float fadeDuration = 0.3f;
 
     public int GetHealth() { return health; }
 
-    public void SetIndicator() { indicator.SetActive(!indicator.activeSelf); }
+    public void SetIndicator() { healthIcon.sprite = selectedIndicator; }
 
     private void OnEnable()
     {
@@ -72,9 +75,9 @@ public class EnemyController : MonoBehaviour
             // if the ypos is greater than 0.1 (because it starts conflicting with the UI)
             if (enemyData.yPos > 0.1f)
             {
-                indicator.transform.localPosition = new Vector3(indicator.transform.localPosition.x,
-                    indicator.transform.localPosition.y + 0.4f,
-                    indicator.transform.localPosition.z);
+                healthIcon.gameObject.transform.localPosition = new Vector3(healthIcon.gameObject.transform.localPosition.x,
+                    healthIcon.gameObject.transform.localPosition.y + 0.4f,
+                    healthIcon.gameObject.transform.localPosition.z);
 
                 healthTxt.gameObject.transform.localPosition = new Vector3(healthTxt.gameObject.transform.localPosition.x,
                     healthTxt.gameObject.transform.localPosition.y + 0.5f,
@@ -170,12 +173,28 @@ public class EnemyController : MonoBehaviour
         if (e.id == gameObject.GetEntityId())
         {
             flashTimes = e.damage;
-            AudioManager.Instance.PlayClip("Hit");
+            if (e.dmgType != null)
+            {
+                switch (e.dmgType)
+                {
+                    case "Piercing":
+                        AudioManager.Instance.PlayClip("Pierce");
+                        break;
+
+                    case "Slashing":
+                        AudioManager.Instance.PlayClip("Slash");
+                        break;
+
+                    case "Magical":
+                        AudioManager.Instance.PlayClip("Magic");
+                        break;
+                }
+            }
+            //AudioManager.Instance.PlayClip("Hit");
 
             Weak = e.weakness;
             Resist = e.resistance;
 
-            //StartCoroutine("Flash");
             state = ENEMY_STATE.DAMAGED;
         }
     }
@@ -199,6 +218,18 @@ public class EnemyController : MonoBehaviour
             case ENEMY_STATE.DYING:
                 break;
         }
+
+        if (FadeHealth)
+        {
+            FadeAway();
+            FadeHealth = false;
+        }
+    }
+
+    private void FadeAway()
+    {
+        healthTxt.color = new Color(healthTxt.color.r, healthTxt.color.g, healthTxt.color.b, Mathf.Lerp(1, 0, fadeDuration));
+        healthIcon.color = new Color(healthIcon.color.r, healthIcon.color.g, healthIcon.color.b, Mathf.Lerp(1, 0, fadeDuration));
     }
 
     private void Flash()
@@ -260,6 +291,8 @@ public class EnemyController : MonoBehaviour
     public void Smoke()
     {
         smoke.Play();
+        AudioManager.Instance.PlayClip("Poof");
+        FadeHealth = true;
     }
 
     public void RemoveEnemy()
@@ -274,14 +307,16 @@ public class EnemyController : MonoBehaviour
 public struct DamageTakenEvent
 {
     public int damage;
+    public string dmgType;
     public EntityId id;
     public bool weakness;
     public bool resistance;
 
-    public DamageTakenEvent(int _id, int _damage, bool _weakness, bool _resistance)
+    public DamageTakenEvent(int _id, int _damage, string _dmgType, bool _weakness, bool _resistance)
     {
         id = _id;
         damage = _damage;
+        dmgType = _dmgType;
         weakness = _weakness;
         resistance = _resistance;
     }

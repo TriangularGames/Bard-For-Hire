@@ -6,7 +6,10 @@ public class ItemController : MonoBehaviour
 {
     [SerializeField] public ItemData itemData;
 
+    [SerializeField] private Image icon;
+    [SerializeField] private GameObject dmgBanner;
     [SerializeField] private TMP_Text damageTxt;
+    [SerializeField] private GameObject playableBanner;
     [SerializeField] private TMP_Text playableText;
 
     public void Setup()
@@ -18,7 +21,7 @@ public class ItemController : MonoBehaviour
 
     private void SetSprite()
     {
-        transform.GetChild(0).GetComponent<Image>().sprite = itemData.icon;
+        icon.sprite = itemData.icon;
     }
 
     private void SetDamageTxt()
@@ -29,20 +32,22 @@ public class ItemController : MonoBehaviour
         }
         else
         {
-            damageTxt.text = "Dmg " + ((itemData.Damage + itemData.bonusDamageStacks));
+            damageTxt.text = (itemData.Damage + itemData.bonusDamageStacks).ToString();
         }
         
     }
 
     public void SetDamageDisplay(int value)
     {
-        damageTxt.text = "Dmg " + value;
+        damageTxt.text = value.ToString();
     }
 
     public void DisableText()
     {
         damageTxt.text = "";
         playableText.text = "";
+        dmgBanner.SetActive(false);
+        playableBanner.SetActive(false);
     }
 
     public void SetDamageWithBonus(int baseD, UpgradeFightingManager.DamageBonus bonus)
@@ -55,7 +60,7 @@ public class ItemController : MonoBehaviour
 
     private void SetPlayableTxt()
     {
-        playableText.text = "Roll (" + itemData.Playable.ToString() + ")";
+        playableText.text = itemData.Playable.ToString();
     }
 
     public void HideDisplayText()

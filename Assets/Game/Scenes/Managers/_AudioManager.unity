@@ -177,6 +177,14 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 646240cf8ff42634b95efdec795cc60a, type: 3}
   - {fileID: 8300000, guid: 03423c70e821d7e4c9daa06e3dbb0bd7, type: 3}
   - {fileID: 8300000, guid: 5ea6c4051ddf6ba43acf7e2a3a89d6c2, type: 3}
+  - {fileID: 8300000, guid: 0dd9764c7f988814f9dfdd02cdc57c54, type: 3}
+  - {fileID: 8300000, guid: e6fea89ca2e3d30408cc3028d09ca640, type: 3}
+  - {fileID: 8300000, guid: a0a4f2301ac0d4d4fa9824ee91c48e14, type: 3}
+  - {fileID: 8300000, guid: 57f8651f349e51544ae5f35d08cde68a, type: 3}
+  - {fileID: 8300000, guid: 4dfb23479cf4b5d49bd79d33f920e6b5, type: 3}
+  - {fileID: 8300000, guid: 8e02bd1c9f421154196da52ad1ba50a3, type: 3}
+  - {fileID: 8300000, guid: 1788878c59e1ec648b5ded2745e20fd4, type: 3}
+  - {fileID: 8300000, guid: bfaa0231956db6249a536e27e12a7d81, type: 3}
   _ambienceClips: []
   _musicAudioSource: {fileID: 606113510}
   _sfxAudioSource: {fileID: 1546817573}

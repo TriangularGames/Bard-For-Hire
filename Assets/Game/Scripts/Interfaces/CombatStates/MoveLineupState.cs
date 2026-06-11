@@ -91,7 +91,7 @@ public class MoveLineupState : ICombatState
     private void UpdateWait(CombatManager cm)
     {
         _timer += Time.deltaTime;
-        if (_timer < WaitDuration * _sm.GameSpeed) return;
+        if (_timer < WaitDuration) return;
 
         // Any items left after the one just used?
         if (HasRemainingStackItems())
@@ -160,6 +160,17 @@ public class MoveLineupState : ICombatState
     private void TransitionNext(CombatManager cm)
     {
         if (_transitioned) return;
+        if (_transitionTimer < TransitionDelay) { _transitionTimer += Time.deltaTime; return; }
+
+        if (!EnemyManager.Instance.AreEnemiesAlive())
+        {
+            _sm.FinalizeScore();
+            _transitioned = true;
+            cm.SwitchState(new RedrawItemsState(_sm));
+            return;
+        }
+
+        if (_sm.roller.upgradeNotifText != null) _sm.roller.upgradeNotifText.text = "";
 
         if (_index + 1 < _items.Count)
         {

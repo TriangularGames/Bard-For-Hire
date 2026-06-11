@@ -46,7 +46,7 @@ public class RedrawItemsState : ICombatState
     {
         if (PauseManager.Instance.IsPaused) return;
         if (_transitioned) return;
-        if (_endCombatTimer < EndCombatDuration) { _endCombatTimer += Time.deltaTime * _sm.GameSpeed; return; }
+        if (_endCombatTimer < EndCombatDuration) { _endCombatTimer += Time.deltaTime; return; }
 
         _transitioned = true;
         cm.SwitchState(new DefaultCombatState());

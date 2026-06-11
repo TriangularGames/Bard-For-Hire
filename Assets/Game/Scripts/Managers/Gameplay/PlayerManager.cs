@@ -1,39 +1,28 @@
 using System.Collections.Generic;
-using System.Threading;
 using TMPro;
 using UnityEngine;
 
-enum PLAYER_STATE
-{
-    DEFAULT,
-    GAINMONEY
-};
-
 public class PlayerManager : Singleton<PlayerManager>
 {
+    [Header("Starting Inventory Loadout")]
     [SerializeField] private List<ItemData> _defaultInventory;
+
+    [Header("Active Player Inventory")]
     public List<ItemData> itemInventory;
     public List<UpgradeData> upgradeInventory;
     public List<ConsumableData> consumableInventory;
 
     // For Gameplay, what Weapons are still available to be grabbed from Inventory,
     // what Weapons are active, and what Weapons aren't
+    [Header("Weapons Available For Combat")]
+    [Tooltip("Weapons played")]
     public List<ItemData> itemsUsed;
+    [Tooltip("Weapons in Hand")]
     public List<ItemData> itemsHeld;
+    [Tooltip("Weapons not drawn")]
     public List<ItemData> itemsNotUsed;
 
-    // Current selected Character
-    public PlayerController selectedCharacter;
-
-    // Vars for Coin Gain
-    private PLAYER_STATE state = PLAYER_STATE.DEFAULT;
-    private float _coinDuration = 0.125f;
-    private float _coinSpawnTimer = 0f;
-    private GameObject spawnPoint = null;
-    private GameObject _coin = null;
-    private Transform _startPos = null;
-    private int _coinsToGain = 0;
-
+    [Header("Other Info")]
     [Tooltip("Amount of money the Player has")]
     public int Coins;
 
@@ -45,11 +34,26 @@ public class PlayerManager : Singleton<PlayerManager>
     public int MAXConsumables = 2;
     private GameObject ConsumableLimitTxt;
 
+    [Header("Overall Stats (For the EndRun Screen)")]
+    private int TotalMoneyGained;
+    public int totalMoneyGained { get { return TotalMoneyGained; } set { TotalMoneyGained = value; } }
+    
+    // TODO: set this up
+    private int HighestDamageDealt;
+    public int highestDamageDealt { get { return HighestDamageDealt; } set { HighestDamageDealt = value; } }
+    
+    // TODO: set this up
+    private string MostUsedWeapon;
+    public string mostUsedWeapon { get { return MostUsedWeapon; } set { MostUsedWeapon = value; } }
+
     private void Start()
     {
         itemsUsed = new List<ItemData>();
         itemsHeld = new List<ItemData>();
         itemsNotUsed = new List<ItemData>();
+        totalMoneyGained = 0;
+        highestDamageDealt = 0;
+        mostUsedWeapon = "";
     }
 
     #region EventBus Event Subscriptions
@@ -85,6 +89,7 @@ public class PlayerManager : Singleton<PlayerManager>
     // Reset to defaults
     private void ResetGame(ResetGameEvent e)
     {
+        Coins = 0;
         upgradeInventory.Clear();
         consumableInventory.Clear();
         itemsUsed.Clear();
@@ -98,55 +103,8 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private void AddMoney(MoneyEarnedEvent e)
     {
-        _coinsToGain = e.coinAmount;
-        spawnPoint = e.location;
-        state = PLAYER_STATE.GAINMONEY;
+        totalMoneyGained += e.coinAmount;
         SetCoinText();
-    }
-
-    private void Update()
-    {
-        switch (state)
-        {
-            case PLAYER_STATE.DEFAULT:
-                _coinSpawnTimer = 0f;
-                return;
-
-            case PLAYER_STATE.GAINMONEY:
-                _coinSpawnTimer += Time.deltaTime;
-
-                if (_coinSpawnTimer >= _coinDuration && _coinsToGain != 0) 
-                {
-                    // spawn a coin
-                    if (_coin == null)
-                    {
-                        _coin = AssetManager.Instance.Spawn("Coin", spawnPoint.transform);
-                        _coin.transform.SetParent(null);
-                        _coin.transform.SetAsLastSibling();
-                        _startPos = _coin.transform;
-                    }
-
-                    // move coin to display
-                    _coin.transform.position = Vector3.Lerp(_startPos.position, GameObject.FindWithTag("Coins").transform.position, Time.deltaTime / _coinDuration);
-
-                    // set coin text display
-                    if (Vector3.Distance(_coin.transform.position, GameObject.FindWithTag("Coins").transform.position) < 0.1f)
-                    {
-                        Coins += 1;
-                        SetCoinText();
-                        // remove coin
-                        Destroy(_coin);
-                        _coinsToGain -= 1;
-                        _coinSpawnTimer = 0f;
-                    }
-                }
-
-                if (_coinsToGain <= 0)
-                {
-                    state = PLAYER_STATE.DEFAULT;
-                }
-                break;
-        }
     }
 
     private void EnterCombat(EnterCombatEvent e)

@@ -38,7 +38,7 @@ public class MissState : ICombatState
         if (PauseManager.Instance.IsPaused) return;
         _timer += Time.deltaTime;
 
-        if (_timer >= MissDelayDuration * _sm.GameSpeed)
+        if (_timer >= MissDelayDuration)
         {
             if (UpgradeFightingManager.Instance.CanUseSecondChance())
             {

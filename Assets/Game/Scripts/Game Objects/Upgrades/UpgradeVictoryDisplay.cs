@@ -3,15 +3,12 @@ using UnityEngine.UI;
 
 public class UpgradeVictoryDisplay : MonoBehaviour
 {
-    public UpgradeData upgradeData;
-
     public void Setup(UpgradeData upgrade)
     {
-        upgradeData = upgrade;
-        SetSprite();
+        SetSprite(upgrade);
     }
-    private void SetSprite()
+    private void SetSprite(UpgradeData upgrade)
     {
-        transform.GetChild(0).GetComponent<Image>().sprite = upgradeData.icon;
+        transform.GetChild(0).GetComponent<Image>().sprite = upgrade.icon;
     }
 }

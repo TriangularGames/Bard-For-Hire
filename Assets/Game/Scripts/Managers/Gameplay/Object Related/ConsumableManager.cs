@@ -74,7 +74,6 @@ public class ConsumableManager : MonoBehaviour
                 controller.consumableData = consumable;
                 controller.Setup();
                 display.SetActive(true);
-                // TODO: change this to an event call instead
                 PlayerManager.Instance.consumableInventory.Remove(consumable);
                 return;
             }

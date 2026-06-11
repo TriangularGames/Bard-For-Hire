@@ -69,6 +69,7 @@ public class DamageBonusState : ICombatState
             // Show bonus text
             var itemDisplay = _sm.pendingItems[_index];
             SetBonusText(_baseDamage, bonus);
+            AudioManager.Instance.PlayClip("BonusDmg");
             _showingBonus = true;
             _timer = 0f;
         }

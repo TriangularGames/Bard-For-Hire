@@ -35,7 +35,7 @@ public class HitState : ICombatState
         if (PauseManager.Instance.IsPaused) return;
         _timer += Time.deltaTime;
 
-        if (_timer >= HitDelayDuration * _sm.GameSpeed)
+        if (_timer >= HitDelayDuration)
         {
             ItemData item = _sm.pendingItems[_index];
             int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, _index, out var bonuses);

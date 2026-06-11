@@ -19,6 +19,7 @@ public class ItemDisplayController : ItemController
     {
         _Image = transform.GetChild(0).GetComponent<Image>();
         _material = _Image.material;
+        _material.SetFloat(_dissolveAmount, 0f);
     }
 
     public void Reset()

@@ -23,6 +23,7 @@ public class AudioManager : Singleton<AudioManager>
     private void Start()
     {
         PlayClip(0, _musicClips[0]);
+        _musicAudioSource.ignoreListenerPause = true;
     }
 
     public void PlayClip(int audioType, int clipVal)

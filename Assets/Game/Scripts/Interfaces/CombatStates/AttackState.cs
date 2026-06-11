@@ -42,11 +42,16 @@ public class AttackState : ICombatState
         if (PauseManager.Instance.IsPaused) return;
         _timer += Time.deltaTime;
 
-        if (!_attackApplied && _timer >= AttackDelayDuration / _sm.GameSpeed)
+        if (!_attackApplied && _timer >= AttackDelayDuration)
         {
             _attackApplied = true;
             ItemData item = _sm.pendingItems[_index];
             _sm.ApplyAttack(_index, _totalDamage, item, _finalRoll);
+
+            // Set HighestDamageDealt variable
+            if (PlayerManager.Instance.highestDamageDealt < _totalDamage)
+            { PlayerManager.Instance.highestDamageDealt = _totalDamage; }
+
 
             if (_sm.BonusAttackQueue.Count > 0)
             {

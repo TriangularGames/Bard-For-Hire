@@ -137,6 +137,8 @@ public class ItemLineUpState : ICombatState
         // Turn off selection display & disable text
         item.GetComponent<Select>().RemoveDisplay();
         item.GetComponent<ItemController>().DisableText();
+        // Disables TooltipTrigger to prevent Tooltips on items being used for attacks
+        item.GetComponent<TooltipTrigger>().enabled = false;
 
         // Remove from pool tracking lists only — don't destroy yet
         itemManager.itemPool.RemoveItem(item);

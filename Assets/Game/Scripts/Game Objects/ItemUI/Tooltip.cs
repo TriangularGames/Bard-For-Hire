@@ -117,6 +117,17 @@ public class Tooltip : MonoBehaviour
         var pivot = CalculatePivot(normalizedPosition);
         GetComponent<RectTransform>().pivot = pivot;
         transform.position = position;
+
+        // Flip shadow of Tooltip depending on pivot
+        Shadow shadow = GetComponent<Shadow>();
+        if (pivot.x > 0)
+        {
+            shadow.effectDistance = new Vector2(-10, shadow.effectDistance.y);
+        }
+        else
+        {
+            shadow.effectDistance = new Vector2(10, shadow.effectDistance.y);
+        }
     }
 
     private Vector2 CalculatePivot(Vector2 normalizedPosition)

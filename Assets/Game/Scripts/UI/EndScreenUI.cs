@@ -16,10 +16,19 @@ public class EndScreenUI : MonoBehaviour
 
     private void SetText()
     {
-        infoDisplaytxt.text = "Total Money Earned: " + "100" +
-            "\nHighest Damage Dealth: " + "100" +
-            "\nMost Used Weapon: " + "Dagger" +
+        infoDisplaytxt.text = "Total Money Earned: " + PlayerManager.Instance.totalMoneyGained +
+            "\nHighest Damage Dealth: " + PlayerManager.Instance.highestDamageDealt +
+            "\nMost Used Weapon: " + PlayerManager.Instance.mostUsedWeapon +
             "\nUpgrades Held:";
+    }
+
+    private void SetShowcase()
+    {
+        for (int i = 0; i < PlayerManager.Instance.upgradeInventory.Count; i++)
+        {
+            GameObject obj = AssetManager.Instance.Spawn("UpgradeVictoryDisplay", upgradeShowcase);
+            obj.GetComponent<UpgradeVictoryDisplay>().Setup(PlayerManager.Instance.upgradeInventory[i]);
+        }
     }
 
     public void GoToShop()

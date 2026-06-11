@@ -14,7 +14,7 @@ public class ConsumableShopSlot : ShopSlot
     {
         _data = item;
 
-        value.text = _data.cost.ToString();
+        value.text = "$" + _data.cost.ToString();
         icon.sprite = _data.icon;
         icon.color = Color.white;
         buy.gameObject.SetActive(true);
@@ -41,8 +41,9 @@ public class ConsumableShopSlot : ShopSlot
     public override void Purchase()
     {
         // Subtract money from player
-        EventBus.Publish(new PurchaseEvent(int.Parse(value.text)));
+        EventBus.Publish(new PurchaseEvent(_data.cost));
         EventBus.Publish(new ConsumableBoughtEvent(_data));
+        AudioManager.Instance.PlayClip("Potion");
         _Purchased = true;
         ClearInfo();
     } 
