@@ -103,6 +103,8 @@ public class ItemLineUpState : ICombatState
         if (_lerpTimer == 0f)
         {
             DetachFromHand(_itemObjects[_currentItemIndex]);
+            // Disables TooltipTrigger to prevent Tooltips on items being used for attacks
+            _itemObjects[_currentItemIndex].GetComponent<TooltipTrigger>().enabled = false;
         }
 
         _lerpTimer += Time.deltaTime;

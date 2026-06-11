@@ -155,13 +155,37 @@ public class OptionsManager : Singleton<OptionsManager>
     private void LoadGameplaySettings()
     {
         gameSpeed = PlayerPrefs.GetInt("GameSpeed", 0);
+        SetTimeScale();
     }
 
     public void SaveGameplaySettings(int GameSpeed)
     {
         gameSpeed = GameSpeed;
         PlayerPrefs.SetInt("GameSpeed", gameSpeed);
+        SetTimeScale();
         PlayerPrefs.Save();
+    }
+
+    private void SetTimeScale()
+    {
+        switch (GameSpeed)
+        {
+            case 0:
+                Time.timeScale = 1;
+                break;
+
+            case 1:
+                Time.timeScale = 2;
+                break;
+
+            case 2:
+                Time.timeScale = 3;
+                break;
+
+            case 3:
+                Time.timeScale = 4;
+                break;
+        }
     }
 
     /// <summary>

@@ -8,7 +8,6 @@ public class ScoreManager : MonoBehaviour
     [SerializeField] private TMP_Text roundText;
     public int curRound = 1;
     private int MaxRounds = 3;
-    public int GameSpeed = 4;
     public DiceRoller roller;
     public List<ItemData> pendingItems;
     private string rewardDisplayText;
@@ -34,30 +33,6 @@ public class ScoreManager : MonoBehaviour
     {
         itemDisplay.SetActive(false);
         EventBus.Publish<EnterCombatEvent>(new EnterCombatEvent());
-        SetGameSpeed();
-    }
-
-    private void SetGameSpeed()
-    {
-        GameSpeed = PlayerPrefs.GetInt("GameSpeed");
-        switch (GameSpeed)
-        {
-            case 0:
-                GameSpeed = 4;
-                break;
-
-            case 1:
-                GameSpeed = 3;
-                break;
-
-            case 2:
-                GameSpeed = 2;
-                break;
-
-            case 3:
-                GameSpeed = 1;
-                break;
-        }
     }
 
     // Called by CalculateScoreState on first item

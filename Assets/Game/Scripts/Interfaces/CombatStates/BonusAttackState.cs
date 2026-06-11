@@ -39,7 +39,7 @@ public class BonusAttackState : ICombatState
             _attacking = true;
             _timer = 0f;
         }
-        else if (_attacking && _timer >= 1.5f * _sm.GameSpeed)
+        else if (_attacking && _timer >= 1.5f)
         {
             if (_sm.BonusAttackQueue.Count > 0)
             {

@@ -39,8 +39,10 @@ public class AttackState : ICombatState
         if (PauseManager.Instance.IsPaused) return;
         _timer += Time.deltaTime;
 
-        if (!_attackApplied && _timer >= AttackDelayDuration / _sm.GameSpeed)
+        Debug.Log("Im here");
+        if (!_attackApplied && _timer >= AttackDelayDuration)
         {
+            Debug.Log("Applying attack");
             _attackApplied = true;
             ItemData item = _sm.pendingItems[_index];
             _sm.ApplyAttack(_index, _totalDamage, item, _finalRoll);
