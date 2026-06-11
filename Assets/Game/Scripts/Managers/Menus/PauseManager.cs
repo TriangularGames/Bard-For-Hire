@@ -41,6 +41,7 @@ public class PauseManager : Singleton<PauseManager>
 
         // Game is paused!
         Time.timeScale = 0;
+        AudioListener.pause = true;
         IsPaused = true;
     }
 
@@ -52,6 +53,7 @@ public class PauseManager : Singleton<PauseManager>
     {
         TogglePauseMenuVisibility(false);
         Time.timeScale = 1;
+        AudioListener.pause = false;
         IsPaused = false;
     }
 
