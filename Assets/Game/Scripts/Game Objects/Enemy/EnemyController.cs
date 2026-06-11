@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 enum ENEMY_STATE
 {
@@ -173,7 +174,24 @@ public class EnemyController : MonoBehaviour
         if (e.id == gameObject.GetEntityId())
         {
             flashTimes = e.damage;
-            AudioManager.Instance.PlayClip("Hit");
+            if (e.dmgType != null)
+            {
+                switch (e.dmgType)
+                {
+                    case "Piercing":
+                        AudioManager.Instance.PlayClip("Pierce");
+                        break;
+
+                    case "Slashing":
+                        AudioManager.Instance.PlayClip("Slash");
+                        break;
+
+                    case "Magical":
+                        AudioManager.Instance.PlayClip("Magic");
+                        break;
+                }
+            }
+            //AudioManager.Instance.PlayClip("Hit");
 
             Weak = e.weakness;
             Resist = e.resistance;
@@ -274,6 +292,7 @@ public class EnemyController : MonoBehaviour
     public void Smoke()
     {
         smoke.Play();
+        AudioManager.Instance.PlayClip("Poof");
         FadeHealth = true;
     }
 
@@ -289,14 +308,16 @@ public class EnemyController : MonoBehaviour
 public struct DamageTakenEvent
 {
     public int damage;
+    public string dmgType;
     public EntityId id;
     public bool weakness;
     public bool resistance;
 
-    public DamageTakenEvent(int _id, int _damage, bool _weakness, bool _resistance)
+    public DamageTakenEvent(int _id, int _damage, string _dmgType, bool _weakness, bool _resistance)
     {
         id = _id;
         damage = _damage;
+        dmgType = _dmgType;
         weakness = _weakness;
         resistance = _resistance;
     }

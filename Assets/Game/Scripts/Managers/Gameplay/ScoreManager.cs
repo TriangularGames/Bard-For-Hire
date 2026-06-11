@@ -150,11 +150,13 @@ public class ScoreManager : MonoBehaviour
                 }
                 Debug.Log("Combat Completed!");
                 MenuManager.Instance.SwitchState(new VictoryMenuState());
+                AudioManager.Instance.PlayClip("Victory");
                 EventBus.Publish(new VictoryEvent(rewardDisplayText));
             }
             else
             {
                 Debug.Log("Combat Failed!");
+                AudioManager.Instance.PlayClip("Lose");
                 MenuManager.Instance.SwitchState(new GameOverMenuState());
             }
         }
@@ -258,7 +260,7 @@ public class ScoreManager : MonoBehaviour
             item.bonusDamageStacks++;
         }
 
-        EventBus.Publish(new DamageTakenEvent(enemy.GetEntityId(), damage, weakness, resistance));
+        EventBus.Publish(new DamageTakenEvent(enemy.GetEntityId(), damage, item.ItemType.ToString(), weakness, resistance));
         return true;
     }
 }

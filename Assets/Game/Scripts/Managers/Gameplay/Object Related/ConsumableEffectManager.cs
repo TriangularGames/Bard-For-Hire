@@ -83,7 +83,7 @@ public class ConsumableEffectManager : MonoBehaviour
             if (enemy == null) continue;
             if (enemy.GetComponent<EnemyController>().GetHealth() <= 0) continue;
 
-            EventBus.Publish(new DamageTakenEvent(enemy.GetEntityId(), 5, false, false));
+            EventBus.Publish(new DamageTakenEvent(enemy.GetEntityId(), 5, "", false, false));
             return;
         }
     }

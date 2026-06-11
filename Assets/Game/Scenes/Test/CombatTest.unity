@@ -427,20 +427,20 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: c5503d429ce944b4b941207ae0381e5f, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: consumableInventory.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 48de6d5808541dd44bab3a6786d0408c, type: 2}
+      objectReference: {fileID: 11400000, guid: 91c86d55d54da2d4cb2477df5dd87424, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: e2ec801ac0770cf4994ee60489abbf31, type: 2}
+      objectReference: {fileID: 11400000, guid: 0a22d3c0d81a01f4d8c416ca4f9d7036, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[2]'
       value: 
-      objectReference: {fileID: 11400000, guid: 8baae2718b50b28478be31773c04cf8c, type: 2}
+      objectReference: {fileID: 11400000, guid: 0a22d3c0d81a01f4d8c416ca4f9d7036, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[3]'
       value: 
@@ -6280,7 +6280,7 @@ Transform:
   m_GameObject: {fileID: 919389009}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 471.57022, y: 231.92033, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6408,6 +6408,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 646240cf8ff42634b95efdec795cc60a, type: 3}
   - {fileID: 8300000, guid: 03423c70e821d7e4c9daa06e3dbb0bd7, type: 3}
   - {fileID: 8300000, guid: 5ea6c4051ddf6ba43acf7e2a3a89d6c2, type: 3}
+  - {fileID: 8300000, guid: 1788878c59e1ec648b5ded2745e20fd4, type: 3}
+  - {fileID: 8300000, guid: 8e02bd1c9f421154196da52ad1ba50a3, type: 3}
+  - {fileID: 8300000, guid: 4dfb23479cf4b5d49bd79d33f920e6b5, type: 3}
+  - {fileID: 8300000, guid: a0a4f2301ac0d4d4fa9824ee91c48e14, type: 3}
+  - {fileID: 8300000, guid: 57f8651f349e51544ae5f35d08cde68a, type: 3}
+  - {fileID: 8300000, guid: 0dd9764c7f988814f9dfdd02cdc57c54, type: 3}
+  - {fileID: 8300000, guid: bfaa0231956db6249a536e27e12a7d81, type: 3}
   _ambienceClips: []
   _musicAudioSource: {fileID: 919389011}
   _sfxAudioSource: {fileID: 953761885}
