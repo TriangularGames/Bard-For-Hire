@@ -21,13 +21,13 @@ public class ScoreManager : MonoBehaviour
     private void OnEnable()
     {
         EventBus.Subscribe<MoneyEarnedEvent>(MakeRewardText);
-        EventBus.Subscribe<EnemyDefeatedEvent>(OnEnemyDefeated);
+        EventBus.Subscribe<LastCoinCollected>(OnLastCoinCollected);
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<MoneyEarnedEvent>(MakeRewardText);
-        EventBus.Unsubscribe<EnemyDefeatedEvent>(OnEnemyDefeated);
+        EventBus.Unsubscribe<LastCoinCollected>(OnLastCoinCollected);
     }
 
     private void MakeRewardText(MoneyEarnedEvent e)
@@ -35,7 +35,7 @@ public class ScoreManager : MonoBehaviour
         rewardDisplayText += e.reason + " : " + e.coinAmount + "\n";
     }
 
-    private void OnEnemyDefeated(EnemyDefeatedEvent e)
+    private void OnLastCoinCollected(LastCoinCollected e)
     {
         // Victory / game over � list should be empty (or run from end of EnemyManager.RemoveEnemy)
         if (!EnemyManager.Instance.AreEnemiesAlive())
