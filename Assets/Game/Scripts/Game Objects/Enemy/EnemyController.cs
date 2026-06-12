@@ -75,14 +75,24 @@ public class EnemyController : MonoBehaviour
             transform.localPosition = new Vector3(0f, enemyData.yPos, 0f);
 
             // if the ypos is greater than 0.1 (because it starts conflicting with the UI)
-            if (enemyData.yPos > 0.1f)
+            if (0.1f < enemyData.yPos && enemyData.yPos <= 0.2f)
             {
                 healthIcon.gameObject.transform.localPosition = new Vector3(healthIcon.gameObject.transform.localPosition.x,
-                    healthIcon.gameObject.transform.localPosition.y + 0.4f,
+                    healthIcon.gameObject.transform.localPosition.y + 0.3f,
                     healthIcon.gameObject.transform.localPosition.z);
 
                 healthTxt.gameObject.transform.localPosition = new Vector3(healthTxt.gameObject.transform.localPosition.x,
-                    healthTxt.gameObject.transform.localPosition.y + 0.5f,
+                    healthTxt.gameObject.transform.localPosition.y + 0.4f,
+                    healthTxt.gameObject.transform.localPosition.z);
+            }
+            else if (enemyData.yPos > 0.2)
+            {
+                healthIcon.gameObject.transform.localPosition = new Vector3(healthIcon.gameObject.transform.localPosition.x,
+                    healthIcon.gameObject.transform.localPosition.y - 0.1f,
+                    healthIcon.gameObject.transform.localPosition.z);
+
+                healthTxt.gameObject.transform.localPosition = new Vector3(healthTxt.gameObject.transform.localPosition.x,
+                    healthTxt.gameObject.transform.localPosition.y - 0.2f,
                     healthTxt.gameObject.transform.localPosition.z);
             }
         }
