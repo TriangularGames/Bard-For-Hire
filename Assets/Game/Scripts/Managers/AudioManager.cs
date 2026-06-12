@@ -118,7 +118,7 @@ public class AudioManager : Singleton<AudioManager>
         PlayClip("Back");
     }
 
-    public void OnMouseOver()
+    public void Confirm2()
     {
         PlayClip("MouseOver");
     }

@@ -32,8 +32,8 @@ public class ItemManager : MonoBehaviour
         EventBus.Subscribe<ItemUsedEvent>(DeleteItem);
         EventBus.Subscribe<ScoringCompletedEvent>(PrepNewRound);
 
-        discardBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
-        clearBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
+        discardBtn.onClick.AddListener(delegate { AudioManager.Instance.Error(); });
+        clearBtn.onClick.AddListener(delegate { AudioManager.Instance.Error(); });
         attackBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
         inventoryBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
     }
@@ -43,8 +43,8 @@ public class ItemManager : MonoBehaviour
         EventBus.Unsubscribe<ItemUsedEvent>(DeleteItem);
         EventBus.Unsubscribe<ScoringCompletedEvent>(PrepNewRound);
 
-        discardBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
-        clearBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
+        discardBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Error(); });
+        clearBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Error(); });
         attackBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
         inventoryBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
     }
@@ -93,13 +93,13 @@ public class ItemManager : MonoBehaviour
     private void Update()
     {
         // Update button interactability
-        if (discardsLeft != 0)
+        if (discardsLeft == 0)
         {
-            discardBtn.interactable = true;
+            discardBtn.interactable = false;
         }
         else
         {
-            discardBtn.interactable = false;
+            discardBtn.interactable = true;
         }
 
         if (!scoringCompleted)
@@ -109,7 +109,10 @@ public class ItemManager : MonoBehaviour
         }
         else
         {
-            discardBtn.interactable = true;
+            if (discardsLeft != 0)
+            {
+                discardBtn.interactable = true;
+            }
             clearBtn.interactable = true;
         }
 

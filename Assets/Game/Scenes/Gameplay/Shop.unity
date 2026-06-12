@@ -3164,6 +3164,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShopManager
   rerollBtn: {fileID: 54071545}
+  optionsBtn: {fileID: 1927156929}
+  nextRoundBtn: {fileID: 248419764}
   dayDisplay: {fileID: 1235457406}
   commonWeight: 60
   uncommonWeight: 29

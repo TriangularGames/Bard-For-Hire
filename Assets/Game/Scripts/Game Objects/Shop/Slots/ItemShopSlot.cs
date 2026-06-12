@@ -43,6 +43,7 @@ public class ItemShopSlot : ShopSlot
         // Subtract money from player
         EventBus.Publish(new PurchaseEvent(_data.cost));
         EventBus.Publish(new ItemBoughtEvent(_data));
+        AudioManager.Instance.PlayClip("Equip");
         _Purchased = true;
         ClearInfo();
     }

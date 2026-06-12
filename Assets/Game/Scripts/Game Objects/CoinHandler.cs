@@ -73,6 +73,7 @@ public class CoinHandler : MonoBehaviour
                     {
                         PlayerManager.Instance.Coins += 1;
                         PlayerManager.Instance.SetCoinText();
+                        AudioManager.Instance.PlayClip("Coin");
                         // remove coin
                         Destroy(_coin);
                         _coinsToGain -= 1;

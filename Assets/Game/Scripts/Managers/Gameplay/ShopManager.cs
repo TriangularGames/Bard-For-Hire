@@ -7,6 +7,8 @@ public class ShopManager : MonoBehaviour
 {
     [Header("Shop Specific")]
     [SerializeField] Button rerollBtn;
+    [SerializeField] Button optionsBtn;
+    [SerializeField] Button nextRoundBtn;
     [SerializeField] TMP_Text dayDisplay;
 
     [Header("Shop Loadout Limits")]
@@ -40,12 +42,20 @@ public class ShopManager : MonoBehaviour
     {
         EventBus.Subscribe<UpgradeBoughtEvent>(UpdateUpgradeDisplay);
         EventBus.Subscribe<ConsumableBoughtEvent>(UpdateConsumableDisplay);
+
+        rerollBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
+        optionsBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
+        nextRoundBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm2(); });
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<UpgradeBoughtEvent>(UpdateUpgradeDisplay);
         EventBus.Unsubscribe<ConsumableBoughtEvent>(UpdateConsumableDisplay);
+
+        rerollBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
+        optionsBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
+        nextRoundBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm2(); });
     }
 
     private void Start()

@@ -55,12 +55,14 @@ public class ShowRollResultState : ICombatState
         {
             _roller.displayRoll.color = Color.yellow;
             _roller.displayCrit.text = "CRITICAL HIT!";
+            AudioManager.Instance.PlayClip("Nat20");
             _roller.displayCrit.color = Color.yellow;
         }
         else if (_nat == 1)
         {
             _roller.displayRoll.color = Color.red;
             _roller.displayCrit.text = "CRITICAL MISS!";
+            AudioManager.Instance.PlayClip("Nat1");
             _roller.displayCrit.color = Color.red;
         }
     }

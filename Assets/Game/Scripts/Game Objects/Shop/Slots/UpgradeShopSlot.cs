@@ -43,6 +43,7 @@ public class UpgradeShopSlot : ShopSlot
         // Subtract money from player
         EventBus.Publish(new PurchaseEvent(_data.cost));
         EventBus.Publish(new UpgradeBoughtEvent(_data));
+        AudioManager.Instance.PlayClip("Upgrade");
         _Purchased = true;
         ClearInfo();
     }

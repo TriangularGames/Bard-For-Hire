@@ -141,6 +141,8 @@ public class EnemyController : MonoBehaviour
             weak.GetComponent<DestroyText>().Setup(dmgDisplayPool);
             weak.GetComponent<TMP_Text>().color = flashColor;
             weak.GetComponent<TMP_Text>().text = "Weak";
+            // TODO: make sure this sound is ok (seems like it but I'm unsure)
+            AudioManager.Instance.PlayClip("Weak");
         }
         if (Resist)
         {
@@ -153,6 +155,8 @@ public class EnemyController : MonoBehaviour
             resist.GetComponent<DestroyText>().Setup(dmgDisplayPool);
             resist.GetComponent<TMP_Text>().color = flashColor;
             resist.GetComponent<TMP_Text>().text = "Resist";
+            // TODO: make sure this sound is ok (seems like it but I'm unsure)
+            AudioManager.Instance.PlayClip("Swipe");
         }
     }
 
