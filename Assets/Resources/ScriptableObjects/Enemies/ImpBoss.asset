@@ -16,11 +16,11 @@ MonoBehaviour:
   coinReward: 20
   weakness: 1
   icon: {fileID: -1719286492, guid: c1aa23252332b40079bc22157101e480, type: 3}
-  animator: {fileID: 22100000, guid: fda619271b6b4144e97c3cc5472a161a, type: 2}
+  animator: {fileID: 22100000, guid: 3409dd6f3e952d9499eccd7acc853ef4, type: 2}
   Name: Imp King
   Description: Biggest Imp you've ever seen!
   isBoss: 1
   ability: 2
   minDay: 9
   maxDay: 0
-  yPos: 0.3
+  yPos: 0.25
