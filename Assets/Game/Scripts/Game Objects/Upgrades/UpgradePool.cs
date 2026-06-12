@@ -8,7 +8,7 @@ public class UpgradePool : BaseItemContainer
         GameObject upgradeSpawned = AssetManager.Instance.Spawn("Upgrade", transform);
         upgradeSpawned.GetComponent<UpgradeController>().upgradeData = upgrade;
         upgradeSpawned.GetComponent<UpgradeController>().Setup(onSold);
-        upgradeSpawned.GetComponent<UpgradeController>().SetTextColor(Color.crimson);
+        upgradeSpawned.GetComponent<UpgradeController>().RemoveText();
         AddItem(upgradeSpawned);
     }
 }
