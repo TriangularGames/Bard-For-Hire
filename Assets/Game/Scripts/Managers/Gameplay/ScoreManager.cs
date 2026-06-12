@@ -141,6 +141,8 @@ public class ScoreManager : MonoBehaviour
 
     public void FinalizeRound()
     {
+        if (CheckCombatEnd()) return;
+
         int count = pendingItems.Count;
         HideItemDisplay();
         EventBus.Publish<RoundEndedEvent>(new RoundEndedEvent());
