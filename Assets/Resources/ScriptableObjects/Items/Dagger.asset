@@ -22,5 +22,5 @@ MonoBehaviour:
   bonusDamageStacks: 0
   Damage: 2
   Mult: 0
-  Playable: 15
+  Playable: 2
   icon: {fileID: 21300000, guid: 81f9d840f28bc4cf6ad53960594638a1, type: 3}
