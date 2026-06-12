@@ -13,6 +13,8 @@ public class AttackState : ICombatState
     private readonly int _totalDamage;
     private readonly ScoreManager _sm;
     private float _timer;
+    private float _delayTimer;
+    private float DelayDuration;
     private float AttackDelayDuration = 1.0f;
     private bool _attackApplied;
 
@@ -33,6 +35,25 @@ public class AttackState : ICombatState
 
         ItemDisplayController itemDisplay = _sm.itemDisplay.gameObject.GetComponent<ItemDisplayController>();
         AttackDelayDuration = itemDisplay.stateInfo.length;
+
+        // Create additional delay based on Damage being done
+        //  before moving onto the next state
+        GameObject curTarget = EnemyManager.Instance.CurrentActiveTarget();
+        int targetHealth = 0;
+
+        if (curTarget != null)
+        {
+            targetHealth = curTarget.GetComponent<EnemyController>().GetHealth();
+        }
+
+        if (targetHealth < _totalDamage)
+        {
+            DelayDuration = targetHealth * EnemyManager.Instance.GetDelayTime();
+        }
+        else
+        {
+            DelayDuration = _totalDamage * EnemyManager.Instance.GetDelayTime();
+        }
     }
 
     public void ExitState(CombatManager cm) { }
@@ -47,19 +68,27 @@ public class AttackState : ICombatState
             _attackApplied = true;
             ItemData item = _sm.pendingItems[_index];
             _sm.ApplyAttack(_index, _totalDamage, item, _finalRoll);
+        }
 
-            // Set HighestDamageDealt variable
-            if (PlayerManager.Instance.highestDamageDealt < _totalDamage)
-            { PlayerManager.Instance.highestDamageDealt = _totalDamage; }
+        if (_attackApplied)
+        {
+            _delayTimer += Time.deltaTime;
 
-
-            if (_sm.BonusAttackQueue.Count > 0)
+            if (_delayTimer >= DelayDuration)
             {
-                cm.SwitchState(new BonusAttackState(_items, _index, _sm));
-            }
-            else
-            {
-                cm.SwitchState(new RemoveUsedItemState(_items, _index, _sm));
+                // Set HighestDamageDealt variable
+                if (PlayerManager.Instance.highestDamageDealt < _totalDamage)
+                { PlayerManager.Instance.highestDamageDealt = _totalDamage; }
+
+
+                if (_sm.BonusAttackQueue.Count > 0)
+                {
+                    cm.SwitchState(new BonusAttackState(_items, _index, _sm));
+                }
+                else
+                {
+                    cm.SwitchState(new RemoveUsedItemState(_items, _index, _sm));
+                }
             }
         }
     }

@@ -36,6 +36,19 @@ public class EnemyManager : Singleton<EnemyManager>
     /// </summary>
     List<GameObject> enemies;
 
+    public GameObject CurrentActiveTarget() { if (enemies.Count != 0) return enemies[0]; else { return null; } }
+    public float GetDelayTime()
+    {
+        if (enemies.Count != 0)
+        {
+            return enemies[0].GetComponent<EnemyController>().GetDelayTime();
+        }
+        else
+        {
+            return 0f;
+        }
+    }
+
     /// <summary>
     /// Spawnpoints for the enemies
     /// </summary>
@@ -46,6 +59,7 @@ public class EnemyManager : Singleton<EnemyManager>
     /// </summary>
     public List<GameObject> enemyDisplays;
 
+    #region Eventbus Subscriptions
     private void OnEnable()
     {
         EventBus.Subscribe<EnemyDefeatedEvent>(RemoveEnemy);
@@ -61,6 +75,7 @@ public class EnemyManager : Singleton<EnemyManager>
         EventBus.Unsubscribe<EnterShopEvent>(ShopSetup);
         EventBus.Unsubscribe<ResetGameEvent>(ResetGame);
     }
+    #endregion
 
     // Reset to Game Defaults
     private void ResetGame(ResetGameEvent e)

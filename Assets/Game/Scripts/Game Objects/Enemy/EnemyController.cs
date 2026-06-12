@@ -44,6 +44,8 @@ public class EnemyController : MonoBehaviour
 
     public int GetHealth() { return health; }
 
+    public float GetDelayTime() {  return delayTime; }
+
     public void SetIndicator() { healthIcon.sprite = selectedIndicator; }
 
     private void OnEnable()
