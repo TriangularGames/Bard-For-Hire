@@ -5128,7 +5128,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2409952213380443163
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5176,7 +5176,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemDisplayController
   itemData: {fileID: 0}
   icon: {fileID: 6626455982863538205}
+  dmgBanner: {fileID: 0}
   damageTxt: {fileID: 8764568480261642421}
+  playableBanner: {fileID: 0}
   playableText: {fileID: 3987853901148647408}
   confetti: {fileID: 5233638562138662888}
   anim: {fileID: 6147536252434017762}
@@ -5376,7 +5378,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0

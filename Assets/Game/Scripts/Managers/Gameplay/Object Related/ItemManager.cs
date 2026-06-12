@@ -113,12 +113,15 @@ public class ItemManager : MonoBehaviour
             clearBtn.interactable = true;
         }
 
+        // TODO: make button not pop up/out of existence immediately
         if (ItemsSelected.Count == 0 || !scoringCompleted)
         {
+            attackBtn.gameObject.SetActive(false);
             attackBtn.interactable = false;
         }
         else
         {
+            attackBtn.gameObject.SetActive(true);
             attackBtn.interactable = true;
         }
     }
