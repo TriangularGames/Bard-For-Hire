@@ -53,9 +53,9 @@ public class ItemController : MonoBehaviour
     public void SetDamageWithBonus(int baseD, UpgradeFightingManager.DamageBonus bonus)
     {
         if (bonus.amount > 0)
-            damageTxt.text = $"Dmg {baseD}  <color=yellow>+ {bonus.amount} {bonus.source}</color>";
+            damageTxt.text = $"{baseD}  <color=yellow>+ {bonus.amount} {bonus.source}</color>";
         else if (bonus.amount < 0)
-            damageTxt.text = $"Dmg {baseD}  <color=red>{bonus.amount} {bonus.source}</color>";
+            damageTxt.text = $"{baseD}  <color=red>{bonus.amount} {bonus.source}</color>";
     }
 
     private void SetPlayableTxt()

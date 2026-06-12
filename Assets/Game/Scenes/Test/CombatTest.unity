@@ -496,7 +496,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: upgradeInventory.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[10]'
@@ -601,7 +601,7 @@ PrefabInstance:
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 040269c658e4194468a2ff4d373f6e60, type: 2}
+      objectReference: {fileID: 11400000, guid: ee3987168b0fa644592053a4af7b1836, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[1]'
       value: 
@@ -19017,10 +19017,6 @@ PrefabInstance:
     - target: {fileID: 2338348622536006590, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
       propertyPath: m_Name
       value: ItemDisplay
-      objectReference: {fileID: 0}
-    - target: {fileID: 2338348622536006590, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2409952213380443163, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
       propertyPath: m_Pivot.x
