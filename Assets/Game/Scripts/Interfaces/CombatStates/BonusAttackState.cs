@@ -11,6 +11,8 @@ public class BonusAttackState : ICombatState
     private bool _attacking;
     private (string name, int damage, ItemData item) _current;
 
+    private float BonusAttackTime;
+
     public BonusAttackState(List<ItemData> items, int index, ScoreManager sm)
     {
         _items = items;
@@ -23,6 +25,9 @@ public class BonusAttackState : ICombatState
         _timer = 0f;
         _attacking = false;
         DequeueNext(cm);
+
+        ItemDisplayController itemDisplay = _sm.itemDisplay.gameObject.GetComponent<ItemDisplayController>();
+        BonusAttackTime = itemDisplay.stateInfo.length;
     }
 
     public void ExitState(CombatManager cm) { }
@@ -39,7 +44,7 @@ public class BonusAttackState : ICombatState
             _attacking = true;
             _timer = 0f;
         }
-        else if (_attacking && _timer >= 1.5f)
+        else if (_attacking && _timer >= BonusAttackTime)
         {
             if (_sm.BonusAttackQueue.Count > 0)
             {
