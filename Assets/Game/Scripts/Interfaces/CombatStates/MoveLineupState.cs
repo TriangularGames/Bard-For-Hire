@@ -26,7 +26,7 @@ public class MoveLineupState : ICombatState
     private RectTransform _movingRect;
     private bool _transitioned;
 
-    private const float TransitionDelay = 1.5f;
+    private const float TransitionDelay = 1.0f;
     private float _transitionTimer = 0f;
 
     public MoveLineupState(List<ItemData> items, int index, ScoreManager sm, bool skipWait = false)
@@ -59,12 +59,15 @@ public class MoveLineupState : ICombatState
             else
             {
                 _phase = Phase.Done;
+                _transitionTimer = TransitionDelay;  // no collapse, start transition timer immediately
             }
         }
         else
         {
             _phase = Phase.Wait;
         }
+
+        _transitionTimer = TransitionDelay;
     }
 
     public void ExitState(CombatManager cm) {}
@@ -120,7 +123,7 @@ public class MoveLineupState : ICombatState
 
         if (t < 1f) return;
 
-        // This shift finished � next item moves forward
+        // This shift finished and next item moves forward
         _collapseStep++;
         if (_collapseStep < GetCollapseMoveCount())
         {
@@ -163,7 +166,7 @@ public class MoveLineupState : ICombatState
 
         if (!EnemyManager.Instance.AreEnemiesAlive())
         {
-            _sm.FinalizeScore();
+            _sm.FinalizeRound();
             _transitioned = true;
             cm.SwitchState(new RedrawItemsState(_sm));
             return;
@@ -173,15 +176,20 @@ public class MoveLineupState : ICombatState
 
         if (_index + 1 < _items.Count)
         {
-            _transitioned = true;  // next item � no delay
-            _sm.roller.StartCombatRoll(_items, _index + 1);
-        }
-        else
-        {
-            _sm.FinalizeScore();
             _transitioned = true;
-            cm.SwitchState(new RedrawItemsState(_sm));
+            _sm.roller.StartCombatRoll(_items, _index + 1);
+            return;  // no TransitionDelay
         }
+
+        if (_transitionTimer < TransitionDelay)
+        {
+            _transitionTimer += Time.deltaTime;
+            return;
+        }
+
+        _sm.FinalizeRound();
+        _transitioned = true;
+        cm.SwitchState(new RedrawItemsState(_sm));
     }
 
     private bool HasRemainingStackItems()

@@ -12,21 +12,45 @@ public class ScoreManager : MonoBehaviour
     public List<ItemData> pendingItems;
     private string rewardDisplayText;
 
+    private List<ItemData> _pendingLineupItems;
+    private int _pendingLineupIndex;
+    private bool _hasPendingLineup;
+
     public Queue<(string name, int damage, ItemData item)> BonusAttackQueue = new Queue<(string, int, ItemData)>();
 
     private void OnEnable()
     {
         EventBus.Subscribe<MoneyEarnedEvent>(MakeRewardText);
+        EventBus.Subscribe<LastCoinCollected>(OnLastCoinCollected);
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<MoneyEarnedEvent>(MakeRewardText);
+        EventBus.Unsubscribe<LastCoinCollected>(OnLastCoinCollected);
     }
 
     private void MakeRewardText(MoneyEarnedEvent e)
     {
         rewardDisplayText += e.reason + " : " + e.coinAmount + "\n";
+    }
+
+    private void OnLastCoinCollected(LastCoinCollected e)
+    {
+        // Victory / game over � list should be empty (or run from end of EnemyManager.RemoveEnemy)
+        if (!EnemyManager.Instance.AreEnemiesAlive())
+        {
+            if (CheckCombatEnd())
+            {
+                _hasPendingLineup = false; // don't lineup after victory
+                return;
+            }
+        }
+
+        // Deferred MoveLineup after death anim
+        if (!_hasPendingLineup) return;
+        _hasPendingLineup = false;
+        CombatManager.Instance.SwitchState(new MoveLineupState(_pendingLineupItems, _pendingLineupIndex, this, skipWait: true));
     }
 
     private void Start()
@@ -35,10 +59,17 @@ public class ScoreManager : MonoBehaviour
         EventBus.Publish<EnterCombatEvent>(new EnterCombatEvent());
     }
 
+    public void SetPendingLineup(List<ItemData> items, int index)
+    {
+        _pendingLineupItems = items;
+        _pendingLineupIndex = index;
+        _hasPendingLineup = true;
+    }
+
     // Called by CalculateScoreState on first item
     public void InitializeRound(List<ItemData> items)
     {
-        EventBus.Publish<ScoringStartedEvent>(new ScoringStartedEvent());
+        EventBus.Publish<RoundStartedEvent>(new RoundStartedEvent());
         pendingItems = items;
         UpgradeFightingManager.Instance.StartRound();
         UpgradeFightingManager.Instance.GetTheHandBonuses(items);
@@ -108,53 +139,41 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    public void FinalizeScore()
+    public void FinalizeRound()
     {
         int count = pendingItems.Count;
         HideItemDisplay();
-        EventBus.Publish<ScoringEndedEvent>(new ScoringEndedEvent());
+        EventBus.Publish<RoundEndedEvent>(new RoundEndedEvent());
+        EventBus.Publish(new ScoringCompletedEvent(count));
+        Debug.Log("Round " + curRound + " Completed!");
+        curRound++;
+        roundText.text = "Round " + curRound + "/3";
 
-        if (!EnemyManager.Instance.AreEnemiesAlive() || curRound == MaxRounds)
-        {
-            if (!EnemyManager.Instance.AreEnemiesAlive())
-            {
-                int remainingRounds = MaxRounds - curRound;
-                if (remainingRounds > 0)
-                {
-                    EventBus.Publish(new MoneyEarnedEvent(remainingRounds * 5, "Early Completion", null));
-                }
-                Debug.Log("Combat Completed!");
-                MenuManager.Instance.SwitchState(new VictoryMenuState());
-                AudioManager.Instance.PlayClip("Victory");
-                EventBus.Publish(new VictoryEvent(rewardDisplayText));
-            }
-            else
-            {
-                Debug.Log("Combat Failed!");
-                AudioManager.Instance.PlayClip("Lose");
-                // This is to get the Miss animation to play on Lose
-                EventBus.Publish<MissEvent>(new MissEvent());
-                MenuManager.Instance.SwitchState(new GameOverMenuState());
-            }
-        }
-        else
-        {
-            Debug.Log("Round " + curRound + " Completed!");
-            curRound++;
-            roundText.text = "Round " + curRound + "/3";
-
-            List<ItemData> currentHand = new List<ItemData>();
-            ItemManager itemManager = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
-            foreach (GameObject obj in itemManager.itemPool.GetItems())
-            {
-                ItemController ic = obj.GetComponent<ItemController>();
-                if (ic != null) currentHand.Add(ic.itemData);
-            }
-
-            UpgradeFightingManager.Instance.EndRound(currentHand);
-            EventBus.Publish(new ScoringCompletedEvent(count));
-        }
         roller.ResetText();
+    }
+
+    public bool CheckCombatEnd()
+    {
+        if (!EnemyManager.Instance.AreEnemiesAlive())
+        {
+            int remainingRounds = MaxRounds - curRound;
+            if (remainingRounds > 0)
+                EventBus.Publish(new MoneyEarnedEvent(remainingRounds * 5, "Early Completion", null));
+
+            Debug.Log("Combat Completed!");
+            MenuManager.Instance.SwitchState(new VictoryMenuState());
+            EventBus.Publish(new VictoryEvent(rewardDisplayText));
+            return true;
+        }
+
+        if (curRound >= MaxRounds)
+        {
+            Debug.Log("Combat Failed!");
+            MenuManager.Instance.SwitchState(new GameOverMenuState());
+            return true;
+        }
+
+        return false;
     }
 
     public void AttackEnemy(ItemData item, int damage)
@@ -243,7 +262,7 @@ public class ScoreManager : MonoBehaviour
 }
 
 // Event structs for ScoreManager to publish
-public struct ScoringStartedEvent { }
+public struct RoundStartedEvent { }
 
 public struct ScoringCompletedEvent
 {
@@ -251,7 +270,7 @@ public struct ScoringCompletedEvent
     public ScoringCompletedEvent(int _count) { count = _count; }
 }
 
-public struct ScoringEndedEvent { }
+public struct RoundEndedEvent { }
 
 public struct VictoryEvent
 {

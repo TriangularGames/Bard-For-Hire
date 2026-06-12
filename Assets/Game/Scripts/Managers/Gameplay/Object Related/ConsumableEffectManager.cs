@@ -13,18 +13,18 @@ public class ConsumableEffectManager : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus.Subscribe<ScoringStartedEvent>(OnScoringStarted);
-        EventBus.Subscribe<ScoringEndedEvent>(OnScoringEnded);
+        EventBus.Subscribe<RoundStartedEvent>(OnScoringStarted);
+        EventBus.Subscribe<RoundEndedEvent>(OnScoringEnded);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<ScoringStartedEvent>(OnScoringStarted);
-        EventBus.Unsubscribe<ScoringEndedEvent>(OnScoringEnded);
+        EventBus.Unsubscribe<RoundStartedEvent>(OnScoringStarted);
+        EventBus.Unsubscribe<RoundEndedEvent>(OnScoringEnded);
     }
 
-    private void OnScoringStarted(ScoringStartedEvent e) => isScoring = true;
-    private void OnScoringEnded(ScoringEndedEvent e) => isScoring = false;
+    private void OnScoringStarted(RoundStartedEvent e) => isScoring = true;
+    private void OnScoringEnded(RoundEndedEvent e) => isScoring = false;
 
     public void UseConsumable(ConsumableData consumable, List<GameObject> selectedItems)
     {

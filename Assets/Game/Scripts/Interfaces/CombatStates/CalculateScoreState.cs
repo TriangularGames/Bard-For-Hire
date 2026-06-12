@@ -34,7 +34,6 @@ public class CalculateScoreState : ICombatState
 
         if (!EnemyManager.Instance.AreEnemiesAlive())
         {
-            _sm.FinalizeScore();
             cm.SwitchState(new DefaultCombatState());
             return;
         }

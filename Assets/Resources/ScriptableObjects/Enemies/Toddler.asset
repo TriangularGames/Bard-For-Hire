@@ -24,6 +24,4 @@ MonoBehaviour:
   minDay: 0
   maxDay: 3
   canAppearInNormalEncounters: 0
-  hasBonus: 0
-  bonusStat: 0
-  isMultiplier: 0
+  yPos: 0

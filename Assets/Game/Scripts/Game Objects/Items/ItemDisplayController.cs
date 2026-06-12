@@ -13,6 +13,8 @@ public class ItemDisplayController : ItemController
     private float _dissolveDuration = 0.5f;
     private int _dissolveAmount = Shader.PropertyToID("_DissolveAmount");
 
+    public AnimatorStateInfo stateInfo;
+
     private void Start()
     {
         _Image = transform.GetChild(0).GetComponent<Image>();
@@ -36,6 +38,8 @@ public class ItemDisplayController : ItemController
     {
         anim.SetTrigger("Success");
         confetti.Play();
+
+        stateInfo = anim.GetCurrentAnimatorStateInfo(0);
     }
 
     /// <summary>
@@ -44,6 +48,8 @@ public class ItemDisplayController : ItemController
     public void Fail()
     {
         anim.SetTrigger("Fail");
+
+        stateInfo = anim.GetCurrentAnimatorStateInfo(0);
     }
 
     /// <summary>

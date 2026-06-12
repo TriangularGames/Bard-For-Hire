@@ -16,7 +16,6 @@ public class DiceRoller : MonoBehaviour
     [SerializeField] public float numberChangeyInterval = 0.005f;
     [SerializeField] public float changeyDuration = 1.4f;
     [SerializeField] public float revealPause = 2f;
-
     public int RollNat()
     {
         int nat = Random.Range(1, 21);

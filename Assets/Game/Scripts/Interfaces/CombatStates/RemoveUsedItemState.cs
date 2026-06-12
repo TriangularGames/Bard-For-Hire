@@ -18,6 +18,8 @@ public class RemoveUsedItemState : ICombatState
     private Vector3 _lerpTarget;
     private float _timer;
 
+    private bool _finished;
+
     public RemoveUsedItemState(List<ItemData> items, int index, ScoreManager sm)
     {
         _items = items;
@@ -77,8 +79,19 @@ public class RemoveUsedItemState : ICombatState
 
     private void FinishAndTransition(CombatManager cm)
     {
+        if (_finished) return;
+        _finished = true;
+
         EventBus.Publish(new ItemUsedEvent(_sm.pendingItems[_index], _index));
-        cm.SwitchState(new MoveLineupState(_items, _index, _sm, skipWait: true));
+
+        if (EnemyManager.Instance.IsAnyEnemyDying())
+        {
+            _sm.SetPendingLineup(_items, _index);
+        }
+        else
+        {
+            cm.SwitchState(new MoveLineupState(_items, _index, _sm, skipWait: true));
+        }
     }
 
     private Vector3 GetExitPosition(ItemManager itemManager)

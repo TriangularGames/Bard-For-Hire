@@ -83,9 +83,12 @@ public class CoinHandler : MonoBehaviour
                 if (_coinsToGain <= 0)
                 {
                     state = PLAYER_STATE.DEFAULT;
+                    EventBus.Publish(new LastCoinCollected());
                 }
 
                 break;
         }
     }
 }
+
+public struct LastCoinCollected { }
