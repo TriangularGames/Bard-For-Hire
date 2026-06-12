@@ -5176,9 +5176,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemDisplayController
   itemData: {fileID: 0}
   icon: {fileID: 6626455982863538205}
-  dmgBanner: {fileID: 0}
+  dmgBanner: {fileID: 2703443023480299699}
   damageTxt: {fileID: 8764568480261642421}
-  playableBanner: {fileID: 0}
+  playableBanner: {fileID: 940425596526879965}
   playableText: {fileID: 3987853901148647408}
   confetti: {fileID: 5233638562138662888}
   anim: {fileID: 6147536252434017762}
