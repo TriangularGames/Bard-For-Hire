@@ -106,6 +106,7 @@ public class ItemManager : MonoBehaviour
         {
             discardBtn.interactable = false;
             clearBtn.interactable = false;
+            inventoryBtn.interactable = false;
         }
         else
         {
@@ -114,6 +115,7 @@ public class ItemManager : MonoBehaviour
                 discardBtn.interactable = true;
             }
             clearBtn.interactable = true;
+            inventoryBtn.interactable = true;
         }
 
         // TODO: make button not pop up/out of existence immediately

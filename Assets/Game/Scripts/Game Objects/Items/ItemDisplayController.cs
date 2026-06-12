@@ -1,13 +1,10 @@
-using NUnit.Framework.Constraints;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ItemDisplayController : ItemController
 {
     [SerializeField] private ParticleSystem confetti;
     [SerializeField] private Animator anim;
-    private Image _Image;
     private Material _material;
 
     // Dissolve Variables
@@ -18,8 +15,14 @@ public class ItemDisplayController : ItemController
 
     private void Start()
     {
-        _Image = transform.GetChild(0).GetComponent<Image>();
-        _material = _Image.material;
+        _material = icon.material;
+        _material.SetFloat(_dissolveAmount, 0f);
+    }
+
+    public void ResetDissolve()
+    {
+        StopCoroutine("Dissolve");
+        _material = icon.material;
         _material.SetFloat(_dissolveAmount, 0f);
     }
 
@@ -43,13 +46,9 @@ public class ItemDisplayController : ItemController
         }
     }
 
-    public void Reset()
+    public void ResetDisplay()
     {
-        if (_material != null)
-        {
-            _material.SetFloat(_dissolveAmount, 0f);
-        }
-        transform.GetChild(0).gameObject.SetActive(true);
+        ResetDissolve();
     }
 
     /// <summary>
@@ -74,14 +73,6 @@ public class ItemDisplayController : ItemController
     }
 
     /// <summary>
-    /// At the end of Fail state, Hide the Image
-    /// </summary>
-    public void HideImage()
-    {
-        transform.GetChild(0).gameObject.SetActive(false);
-    }
-
-    /// <summary>
     /// Animation Event during the Fail state
     /// </summary>
     public void Disappear()
@@ -95,17 +86,20 @@ public class ItemDisplayController : ItemController
     /// <returns></returns>
     IEnumerator Dissolve()
     {
-        float elapsedTime = 0f;
-        while (elapsedTime < _dissolveDuration)
+        if (_material.GetFloat(_dissolveAmount) < 1.0f)
         {
-            elapsedTime += Time.deltaTime;
+            float elapsedTime = 0f;
+            while (elapsedTime < _dissolveDuration)
+            {
+                elapsedTime += Time.deltaTime;
 
-            var percentage = elapsedTime / _dissolveDuration;
+                var percentage = elapsedTime / _dissolveDuration;
 
-            float lerpedDissolve = Mathf.Lerp(0f, 1.1f, percentage);
+                float lerpedDissolve = Mathf.Lerp(0f, 1.1f, percentage);
 
-            _material.SetFloat(_dissolveAmount, lerpedDissolve);
-            yield return null;
+                _material.SetFloat(_dissolveAmount, lerpedDissolve);
+                yield return null;
+            }
         }
     }
 }

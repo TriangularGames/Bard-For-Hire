@@ -6,7 +6,7 @@ public class ItemController : MonoBehaviour
 {
     [SerializeField] public ItemData itemData;
 
-    [SerializeField] private Image icon;
+    [SerializeField] protected Image icon;
     [SerializeField] private GameObject dmgBanner;
     [SerializeField] protected TMP_Text damageTxt;
     [SerializeField] private GameObject playableBanner;

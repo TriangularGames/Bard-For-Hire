@@ -1,11 +1,11 @@
 using UnityEngine;
 
-public class GameOverMenuState : IMenuState
+public class TotalVictoryMenuState : IMenuState
 {
     public void EnterState(MenuManager mm)
     {
         Debug.Log("Entering Game Over State");
-        EventBus.Publish(new ShowGameOverMenuEvent(true, false));
+        EventBus.Publish(new ShowGameOverMenuEvent(false, true));
     }
 
     public void ExitState(MenuManager mm)

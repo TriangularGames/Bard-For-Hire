@@ -41,6 +41,23 @@ public class CalculateScoreState : ICombatState
         int finalRoll = UpgradeFightingManager.Instance.GetBonusRoll(_rollResult);
         ItemData item = _sm.pendingItems[_index];
 
+        // Setting data for use in Most Weapon Used
+        string existingKey = null;
+        foreach (string key in PlayerManager.Instance.WeaponsUsedAmounts.Keys)
+        {
+            if (key == item.ItemName)
+            {
+                existingKey = key;
+                break;
+            }
+        }
+
+        if (existingKey != null)
+            PlayerManager.Instance.WeaponsUsedAmounts[existingKey]++;
+        else
+            PlayerManager.Instance.WeaponsUsedAmounts[item.ItemName] = 1;
+
+
         if (item.Playable <= finalRoll)
         {
             cm.SwitchState(new HitState(_items, _index, finalRoll, _sm));

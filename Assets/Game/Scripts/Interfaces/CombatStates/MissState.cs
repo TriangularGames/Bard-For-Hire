@@ -43,6 +43,7 @@ public class MissState : ICombatState
             if (UpgradeFightingManager.Instance.CanUseSecondChance())
             {
                 _sm.roller.upgradeNotifText.text = "Second Chance";
+                _sm.itemDisplay.gameObject.GetComponent<ItemDisplayController>().ResetDisplay();
                 cm.SwitchState(new RollState(_items, _sm.roller, _index, false));
             }
             else if (UpgradeFightingManager.Instance.CanUseQuickSave())

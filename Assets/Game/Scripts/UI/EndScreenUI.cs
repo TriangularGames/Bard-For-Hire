@@ -3,32 +3,80 @@ using UnityEngine;
 
 public class EndScreenUI : MonoBehaviour
 {
-    [SerializeField] private TMP_Text infoDisplaytxt;
+    [SerializeField] private TMP_Text titleTxt;
+    [SerializeField] private TMP_Text infoDisplayTxt;
     [SerializeField] private Transform upgradeShowcase;
 
-    // subscribe to event for call, when it's called. setup the information using PlayerManager?
-    // PlayerManager should have: total money earned variable, highest damage dealt, tracker for most weapon used
+    [SerializeField] private GameObject mainMenuBtn;
+    [SerializeField] private GameObject continueBtn;
 
-    private void Start()
+    // If Game is Over (A Loss)
+    private bool GameOver = false;
+
+    // If Game is Won (3rd Boss is defeated)
+    private bool GameWon = false;
+
+    public void SetGameOver()
     {
-        
+        GameOver = true;
     }
 
-    private void SetText()
+    public void SetGameWon()
     {
-        infoDisplaytxt.text = "Total Money Earned: " + PlayerManager.Instance.totalMoneyGained +
-            "\nHighest Damage Dealth: " + PlayerManager.Instance.highestDamageDealt +
-            "\nMost Used Weapon: " + PlayerManager.Instance.mostUsedWeapon +
+        GameWon = true;
+    }
+
+    public void SetText()
+    {
+        if (GameOver)
+        {
+            titleTxt.text = "Battle Lost";
+        }
+        if (GameWon)
+        {
+            titleTxt.text = "Total Victory!";
+        }
+
+        infoDisplayTxt.text = "Day " + GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().currentDay.ToString() +
+            "\nTotal Money Earned: " + PlayerManager.Instance.totalMoneyGained +
+            "\nHighest Damage Dealt: " + PlayerManager.Instance.highestDamageDealt +
+            "\nMost Used Weapon: " + PlayerManager.Instance.GetMostUsedWeapon() +
             "\nUpgrades Held:";
     }
 
-    private void SetShowcase()
+    public void SetShowcase()
     {
         for (int i = 0; i < PlayerManager.Instance.upgradeInventory.Count; i++)
         {
             GameObject obj = AssetManager.Instance.Spawn("UpgradeVictoryDisplay", upgradeShowcase);
             obj.GetComponent<UpgradeVictoryDisplay>().Setup(PlayerManager.Instance.upgradeInventory[i]);
         }
+    }
+
+    public void ButtonDisplay()
+    {
+        if (GameOver)
+        {
+            mainMenuBtn.SetActive(true);
+            continueBtn.SetActive(false);
+        }
+
+        if (GameWon)
+        {
+            mainMenuBtn.SetActive(true);
+            continueBtn.SetActive(true);
+        }
+    }
+
+    public void Clear()
+    {
+        infoDisplayTxt.text = string.Empty;
+        foreach (Transform child in upgradeShowcase.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        GameOver = false;
+        GameWon = false;
     }
 
     public void GoToShop()

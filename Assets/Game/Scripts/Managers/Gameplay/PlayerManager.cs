@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -44,6 +45,14 @@ public class PlayerManager : Singleton<PlayerManager>
     // TODO: set this up
     private string MostUsedWeapon;
     public string mostUsedWeapon { get { return MostUsedWeapon; } set { MostUsedWeapon = value; } }
+
+    public Dictionary<string, int> WeaponsUsedAmounts = new Dictionary<string, int>();
+
+    public string GetMostUsedWeapon()
+    {
+        int max = WeaponsUsedAmounts.Max(x => x.Value);
+        return WeaponsUsedAmounts.Where(kvp => kvp.Value == max).Select(kvp => kvp.Key).First();
+    }
 
     private void Start()
     {

@@ -3,7 +3,7 @@ using UnityEngine;
 public class GameOverHandler : MonoBehaviour
 {
     [Tooltip("Game over menu UI.")]
-    [SerializeField] private GameOverUI gameOverUI;
+    [SerializeField] private EndScreenUI gameOverUI;
 
     private void OnEnable()
     {
@@ -23,7 +23,20 @@ public class GameOverHandler : MonoBehaviour
     {
         // Code to show the Pause Menu
         ToggleGameOverMenuVisibility(true);
-        gameOverUI.SetDayText();
+        if (eventData.GameOver)
+        {
+            gameOverUI.SetGameOver();
+        }
+
+        if (eventData.GameWon)
+        {
+            gameOverUI.SetGameWon();
+        }
+
+        gameOverUI.SetText();
+        gameOverUI.SetShowcase();
+        gameOverUI.ButtonDisplay();
+
 
         // Game is paused!
         Time.timeScale = 0;
@@ -37,9 +50,10 @@ public class GameOverHandler : MonoBehaviour
     {
         // Code to hide the Pause Menu
         ToggleGameOverMenuVisibility(false);
+        gameOverUI.Clear();
 
         // Game is unpaused!
-        Time.timeScale = 1;
+        Time.timeScale = OptionsManager.Instance.GetTimeScale();
     }
     /// <summary>
     /// Subscribes to necessary events on the event bus.
@@ -69,6 +83,17 @@ public class GameOverHandler : MonoBehaviour
     }
 }
 
-public struct ShowGameOverMenuEvent { }
+public struct ShowGameOverMenuEvent
+{
+    public bool GameOver;
+    public bool GameWon;
+
+    public ShowGameOverMenuEvent(bool _GameOver, bool _GameWon)
+    {
+        GameOver = _GameOver;
+        GameWon = _GameWon;
+    }
+
+}
 
 public struct HideGameOverMenuEvent { }

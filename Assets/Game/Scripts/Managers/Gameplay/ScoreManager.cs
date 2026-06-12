@@ -38,13 +38,10 @@ public class ScoreManager : MonoBehaviour
     private void OnLastCoinCollected(LastCoinCollected e)
     {
         // Victory / game over � list should be empty (or run from end of EnemyManager.RemoveEnemy)
-        if (!EnemyManager.Instance.AreEnemiesAlive())
+        if (CheckCombatEnd())
         {
-            if (CheckCombatEnd())
-            {
-                _hasPendingLineup = false; // don't lineup after victory
-                return;
-            }
+            _hasPendingLineup = false; // don't lineup after victory
+            return;
         }
 
         // Deferred MoveLineup after death anim
@@ -90,7 +87,7 @@ public class ScoreManager : MonoBehaviour
         itemDisplay.GetComponent<ItemController>().itemData = pendingItems[index];
         itemDisplay.GetComponent<ItemController>().Setup();
         itemDisplay.SetActive(true);
-        itemDisplay.GetComponent<ItemDisplayController>().Reset();
+        itemDisplay.GetComponent<ItemDisplayController>().ResetDisplay();
     }
 
     public void ShowHit(int index)
@@ -167,10 +164,19 @@ public class ScoreManager : MonoBehaviour
             if (remainingRounds > 0)
                 EventBus.Publish(new MoneyEarnedEvent(remainingRounds * 5, "Early Completion", null));
 
-            Debug.Log("Combat Completed!");
-            MenuManager.Instance.SwitchState(new VictoryMenuState());
-            EventBus.Publish(new VictoryEvent(rewardDisplayText));
-            return true;
+            if (EnemyManager.Instance.currentDay == 9)
+            {
+                Debug.Log("Victory Achieved");
+                MenuManager.Instance.SwitchState(new TotalVictoryMenuState());
+                return true;
+            }
+            else
+            {
+                Debug.Log("Combat Completed!");
+                MenuManager.Instance.SwitchState(new VictoryMenuState());
+                EventBus.Publish(new VictoryEvent(rewardDisplayText));
+                return true;
+            }
         }
 
         if (curRound >= MaxRounds)

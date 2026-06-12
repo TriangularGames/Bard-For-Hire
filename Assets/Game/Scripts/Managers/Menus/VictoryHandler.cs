@@ -38,7 +38,7 @@ public class VictoryHandler : MonoBehaviour
         ToggleVictoryMenuVisibility(false);
 
         // Game is unpaused!
-        Time.timeScale = 1;
+        Time.timeScale = OptionsManager.Instance.GetTimeScale();
     }
     /// <summary>
     /// Subscribes to necessary events on the event bus.
