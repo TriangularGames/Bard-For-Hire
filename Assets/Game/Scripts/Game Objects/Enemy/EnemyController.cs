@@ -85,16 +85,6 @@ public class EnemyController : MonoBehaviour
                     healthTxt.gameObject.transform.localPosition.y + 0.4f,
                     healthTxt.gameObject.transform.localPosition.z);
             }
-            else if (enemyData.yPos > 0.2f)
-            {
-                healthIcon.gameObject.transform.localPosition = new Vector3(healthIcon.gameObject.transform.localPosition.x,
-                    healthIcon.gameObject.transform.localPosition.y + 0.3025f,
-                    healthIcon.gameObject.transform.localPosition.z);
-
-                healthTxt.gameObject.transform.localPosition = new Vector3(healthTxt.gameObject.transform.localPosition.x,
-                    healthTxt.gameObject.transform.localPosition.y + 0.4025f,
-                    healthTxt.gameObject.transform.localPosition.z);
-            }
         }
     }
 
