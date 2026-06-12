@@ -166,7 +166,7 @@ public class MoveLineupState : ICombatState
 
         if (!EnemyManager.Instance.AreEnemiesAlive())
         {
-            //_sm.FinalizeScore();
+            _sm.FinalizeRound();
             _transitioned = true;
             cm.SwitchState(new RedrawItemsState(_sm));
             return;
