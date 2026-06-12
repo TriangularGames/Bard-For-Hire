@@ -1,3 +1,4 @@
+using NUnit.Framework.Constraints;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +21,26 @@ public class ItemDisplayController : ItemController
         _Image = transform.GetChild(0).GetComponent<Image>();
         _material = _Image.material;
         _material.SetFloat(_dissolveAmount, 0f);
+    }
+
+    protected override void SetDamageTxt()
+    {
+        base.SetDamageTxt();
+
+        if (int.Parse(damageTxt.text) < 10)
+        {
+            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 100, 0f);
+        }
+
+        if (int.Parse(damageTxt.text) >= 10)
+        {
+            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(-10, 100, 0f);
+        }
+
+        if (int.Parse(damageTxt.text) >= 100)
+        {
+            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(-25, 100, 0f);
+        }
     }
 
     public void Reset()

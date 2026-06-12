@@ -129,15 +129,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5367561544759518233, guid: f8fb48b432ba35345a0fcf098baede92, type: 3}
       propertyPath: m_Name
-      value: CombatManager
+      value: _CombatManager
       objectReference: {fileID: 0}
     - target: {fileID: 5728380413820628369, guid: f8fb48b432ba35345a0fcf098baede92, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 418.15237
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5728380413820628369, guid: f8fb48b432ba35345a0fcf098baede92, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 238.12222
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5728380413820628369, guid: f8fb48b432ba35345a0fcf098baede92, type: 3}
       propertyPath: m_LocalPosition.z

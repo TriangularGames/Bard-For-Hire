@@ -8,7 +8,7 @@ public class ItemController : MonoBehaviour
 
     [SerializeField] private Image icon;
     [SerializeField] private GameObject dmgBanner;
-    [SerializeField] private TMP_Text damageTxt;
+    [SerializeField] protected TMP_Text damageTxt;
     [SerializeField] private GameObject playableBanner;
     [SerializeField] private TMP_Text playableText;
 
@@ -24,7 +24,7 @@ public class ItemController : MonoBehaviour
         icon.sprite = itemData.icon;
     }
 
-    private void SetDamageTxt()
+    protected virtual void SetDamageTxt()
     {
         if (itemData.Mult)
         {

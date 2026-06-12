@@ -188,6 +188,25 @@ public class OptionsManager : Singleton<OptionsManager>
         }
     }
 
+    public int GetTimeScale()
+    {
+        switch (GameSpeed)
+        {
+            case 0:
+                return 1;
+
+            case 1:
+                return 2;
+
+            case 2:
+                return 3;
+
+            case 3:
+                return 4;
+        }
+        return -1;
+    }
+
     /// <summary>
     /// Applies current settings to the game.
     /// </summary>

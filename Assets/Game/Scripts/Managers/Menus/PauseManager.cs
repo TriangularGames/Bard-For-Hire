@@ -52,7 +52,10 @@ public class PauseManager : Singleton<PauseManager>
     private void OnHidePauseMenu(HidePauseMenuEvent eventData)
     {
         TogglePauseMenuVisibility(false);
-        Time.timeScale = 1;
+        if (OptionsManager.Instance.GetTimeScale() > -1)
+        {
+            Time.timeScale = OptionsManager.Instance.GetTimeScale();
+        }
         AudioListener.pause = false;
         IsPaused = false;
     }

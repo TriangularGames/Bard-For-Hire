@@ -496,7 +496,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: upgradeInventory.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[10]'
@@ -3021,6 +3021,7 @@ GameObject:
   - component: {fileID: 422085960}
   - component: {fileID: 422085962}
   - component: {fileID: 422085961}
+  - component: {fileID: 422085963}
   m_Layer: 5
   m_Name: txtRound
   m_TagString: Untagged
@@ -3147,6 +3148,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 422085959}
   m_CullTransparentMesh: 1
+--- !u!95 &422085963
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 422085959}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4f0576ce599efff4388f1da7c745ba28, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &432364893
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29312,14 +29335,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3618707142333632006, guid: 1da358517fa78d649a6456ded77d3dd8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6210061080180698499, guid: 1da358517fa78d649a6456ded77d3dd8, type: 3}
-      propertyPath: isBossDay
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6210061080180698499, guid: 1da358517fa78d649a6456ded77d3dd8, type: 3}
-      propertyPath: currentDay
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

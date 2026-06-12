@@ -149,6 +149,11 @@ public class ScoreManager : MonoBehaviour
         curRound++;
         roundText.text = "Round " + curRound + "/3";
 
+        if (curRound == 3)
+        {
+            roundText.GetComponent<Animator>().SetTrigger("Flash");
+        }
+
         roller.ResetText();
     }
 

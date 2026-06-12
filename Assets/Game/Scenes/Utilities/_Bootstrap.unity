@@ -521,15 +521,12 @@ MonoBehaviour:
   progressText: {fileID: 937952065}
   minimumDisplayTime: 1.5
   managerScenesToLoad:
+  - _InputManager
+  - _AudioManager
+  - _GameResourceManager
   - _GameManager
-  - _AssetManager
-  - _ResourceManager
   - _PlayerManager
   - _MenuManager
-  - _AudioManager
-  - _OptionsManager
-  - _InputManager
-  - _PauseManager
   firstGameplayScene: MainMenu
 --- !u!4 &910452830
 Transform:
