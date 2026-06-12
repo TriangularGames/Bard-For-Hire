@@ -38,7 +38,6 @@ public class PlayerManager : Singleton<PlayerManager>
     private int TotalMoneyGained;
     public int totalMoneyGained { get { return TotalMoneyGained; } set { TotalMoneyGained = value; } }
     
-    // TODO: set this up
     private int HighestDamageDealt;
     public int highestDamageDealt { get { return HighestDamageDealt; } set { HighestDamageDealt = value; } }
     
