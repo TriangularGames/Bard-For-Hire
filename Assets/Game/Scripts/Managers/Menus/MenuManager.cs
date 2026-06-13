@@ -4,6 +4,7 @@ using UnityEngine;
 public class MenuManager : Singleton<MenuManager>
 {
     private IMenuState currentState;
+
     private Stack<IMenuState> stateHistory;
     public IMenuState GetCurrentState() { return currentState; }
 
