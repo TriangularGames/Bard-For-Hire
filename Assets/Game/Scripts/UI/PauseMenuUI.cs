@@ -24,6 +24,7 @@ public class PauseMenuUI : MonoBehaviour
 
     public void OptionsMenu()
     {
+        EventBus.Publish(new KeepPauseEvent());
         MenuManager.Instance.SwitchState(new OptionsMenuState());
         PauseManager.Instance.IsPaused = true; // Ensure the game remains paused when opening options
     }
@@ -33,3 +34,5 @@ public class PauseMenuUI : MonoBehaviour
         MenuManager.Instance.ResumePreviousState();
     }
 }
+
+public struct KeepPauseEvent { };

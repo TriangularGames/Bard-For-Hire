@@ -9,6 +9,7 @@ public class PauseManager : Singleton<PauseManager>
     /// Variable to keep track if the game is currently Paused
     /// </summary>
     public bool IsPaused = false;
+    private bool keepPauseOnNextHide = false;
 
     public override void Awake()
     {
@@ -52,12 +53,25 @@ public class PauseManager : Singleton<PauseManager>
     private void OnHidePauseMenu(HidePauseMenuEvent eventData)
     {
         TogglePauseMenuVisibility(false);
+
+        if (keepPauseOnNextHide)
+        {
+            keepPauseOnNextHide = false;
+            return;
+        }
+
         if (OptionsManager.Instance.GetTimeScale() > -1)
         {
             Time.timeScale = OptionsManager.Instance.GetTimeScale();
         }
+
         AudioListener.pause = false;
         IsPaused = false;
+    }
+
+    private void OnKeepPause(KeepPauseEvent e)
+    {
+        keepPauseOnNextHide = true;
     }
 
     /// <summary>
@@ -67,6 +81,7 @@ public class PauseManager : Singleton<PauseManager>
     {
         EventBus.Subscribe<ShowPauseMenuEvent>(OnShowPauseMenu);
         EventBus.Subscribe<HidePauseMenuEvent>(OnHidePauseMenu);
+        EventBus.Subscribe<KeepPauseEvent>(OnKeepPause);
     }
 
     /// <summary>
@@ -76,6 +91,7 @@ public class PauseManager : Singleton<PauseManager>
     {
         EventBus.Unsubscribe<ShowPauseMenuEvent>(OnShowPauseMenu);
         EventBus.Unsubscribe<HidePauseMenuEvent>(OnHidePauseMenu);
+        EventBus.Unsubscribe<KeepPauseEvent>(OnKeepPause);
     }
 
     /// <summary>
