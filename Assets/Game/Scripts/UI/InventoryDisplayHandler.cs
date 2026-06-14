@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class InventoryDisplayHandler : MonoBehaviour
 {
@@ -55,12 +54,6 @@ public class InventoryDisplayHandler : MonoBehaviour
                 groupedItems[existingKey]++;
             else
                 groupedItems[item] = 1;
-        }
-
-        if (groupedItems.Count >= 5)
-        {
-            inventoryLayout.GetComponent<GridLayoutGroup>().cellSize = new Vector2(100, 100);
-            inventoryLayout.GetComponent<GridLayoutGroup>().spacing = new Vector2(40, 0);
         }
 
         // Spawn one slot per unique item, passing in the quantity
