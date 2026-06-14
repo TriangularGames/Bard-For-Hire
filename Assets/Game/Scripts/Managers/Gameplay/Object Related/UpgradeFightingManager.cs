@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class UpgradeFightingManager : MonoBehaviour
@@ -26,7 +27,7 @@ public class UpgradeFightingManager : MonoBehaviour
     public bool shadowThiefActive = false;
     public bool knightActive = false;
     public bool relicActive = false;
-
+    public TextMeshProUGUI disabledText;
     private void Awake()
     {
         Instance = this;
@@ -94,7 +95,7 @@ public class UpgradeFightingManager : MonoBehaviour
 
         if (EnemyManager.Instance.isBossDay)
         {
-            if(EnemyManager.Instance.bossData.ability == BossAbilities.DisableAction)
+            if (EnemyManager.Instance.bossData.ability == BossAbilities.DisableAction)
             {
                 List<ItemType> items = new List<ItemType>();
                 foreach (ItemData item in currentHand)
@@ -108,6 +109,8 @@ public class UpgradeFightingManager : MonoBehaviour
                     return;
                 }
                 EnemyManager.Instance.disabledItem = items[Random.Range(0, items.Count)];
+                disabledText.text = "Disabled " + EnemyManager.Instance.disabledItem.ToString();
+                Debug.Log(EnemyManager.Instance.disabledItem.ToString());
                 EnemyManager.Instance.hasDisabled = true;
             }
         }
@@ -119,6 +122,7 @@ public class UpgradeFightingManager : MonoBehaviour
         secondChanceUsed = false;
         EnemyManager.Instance.currentDay++;
         EnemyManager.Instance.GenerateNext();
+        disabledText.text = "";
         successStreak = 0;
     }
 

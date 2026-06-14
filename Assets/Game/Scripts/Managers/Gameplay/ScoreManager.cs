@@ -162,7 +162,14 @@ public class ScoreManager : MonoBehaviour
         {
             roundText.GetComponent<Animator>().SetTrigger("Flash");
         }
-
+        List<ItemData> currentHand = new List<ItemData>();
+        ItemManager itemManager = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
+        foreach (GameObject obj in itemManager.itemPool.GetItems())
+        {
+            ItemController icont = obj?.GetComponent<ItemController>();
+            if (icont != null) currentHand.Add(icont.itemData);
+        }
+        UpgradeFightingManager.Instance.EndRound(currentHand);
         roller.ResetText();
     }
 

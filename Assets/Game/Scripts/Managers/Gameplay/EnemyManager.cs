@@ -9,10 +9,12 @@ public class EnemyManager : Singleton<EnemyManager>
     [SerializeField] private int daysBeforePooling = 10;
     public bool isBossDay;
     public bool isBossGone;
+    [SerializeField] private List<EnemyData> tutorialEncounter = new List<EnemyData>();
+    [SerializeField] private List<EnemyData> orderedBosses = new List<EnemyData>();
     public EnemyData bossData;
     public ItemType disabledItem;
     public bool hasDisabled;
-    public float amountOff = 0.15f;
+    public float amountOff = 0.12f;
     private float healthMult = 1f;
     private float dailyMult = 1f;
     private float TotalMult => healthMult * dailyMult;
@@ -151,7 +153,7 @@ public class EnemyManager : Singleton<EnemyManager>
             healthMult *= roundData.bossVictoryMultiplier;
         }
         currentDay++;
-        isBossDay = (currentDay % daysTilBoss == 0 && currentDay != 0);
+        isBossDay = (currentDay % daysTilBoss == 0 && currentDay != 0 && currentDay < daysBeforePooling);
         GenerateRound();
         LookAhead();
     }
@@ -165,18 +167,31 @@ public class EnemyManager : Singleton<EnemyManager>
     {
         nextEncounter.Clear();
         bossData = null;
-
-        if (isBossDay && currentDay < daysBeforePooling)
+        if (currentDay == 0)
         {
-            List<EnemyData> list = new List<EnemyData>();
-            foreach (EnemyData enemy in ResourceManager.Instance.EnemyData)
+            nextEncounter = new List<EnemyData>(tutorialEncounter);
+            return;
+        }
+
+        if (isBossDay)
+        {
+            if (bossesKilled < orderedBosses.Count)
             {
-                if (enemy.isBoss & enemy.ShowUpThisDay(currentDay))
-                {
-                    list.Add(enemy);
-                }
+                bossData = orderedBosses[bossesKilled];
             }
-            bossData = list[Random.Range(0, list.Count)];
+            else
+            {
+                List<EnemyData> list = new List<EnemyData>();
+                foreach (EnemyData enemy in ResourceManager.Instance.EnemyData)
+                {
+                    if (enemy.isBoss & enemy.ShowUpThisDay(currentDay))
+                    {
+                        list.Add(enemy);
+                    }
+                }
+
+                bossData = list[Random.Range(0, list.Count)];
+            }
             nextEncounter.Add(bossData);
             return;
         }
