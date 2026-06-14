@@ -16,7 +16,7 @@ public class ItemLineUpState : ICombatState
     private Transform _stackParent;
     private int _placementIndex;
 
-    private Vector3 _stackOffset = new Vector3(-0.05f, 0f, 0.01f);
+    private Vector3 _stackOffset = new Vector3(-0.09f, -0.03f, 0.01f);
     private float _lerpDuration = 0.5f;
     private float _holdDuration = 0.5f;
 
@@ -104,6 +104,8 @@ public class ItemLineUpState : ICombatState
         if (_lerpTimer == 0f)
         {
             DetachFromHand(_itemObjects[_currentItemIndex]);
+            // Fade the image based on distance from ItemDisplay
+            _itemObjects[_currentItemIndex].GetComponent<ItemController>().FadeImage(_currentItemIndex);
         }
 
         _lerpTimer += Time.deltaTime;

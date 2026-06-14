@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MoveLineupState : ICombatState
@@ -10,7 +11,7 @@ public class MoveLineupState : ICombatState
     private readonly ScoreManager _sm;
     private readonly bool _skipWait;
 
-    private static readonly Vector3 StackOffset = new Vector3(-0.05f, 0f, 0.01f);
+    private static readonly Vector3 StackOffset = new Vector3(-0.09f, -0.03f, 0.01f);
     private const float WaitDuration = 0.8f;
     private const float CollapseDuration = 0.35f;
 
@@ -18,6 +19,7 @@ public class MoveLineupState : ICombatState
     private float _timer;
 
     private ItemManager _im;
+    private GameObject _curItem;
 
     // Sequential collapse: which shift we're currently animating (0 = first move after used item)
     private int _collapseStep;
@@ -123,6 +125,9 @@ public class MoveLineupState : ICombatState
 
         if (t < 1f) return;
 
+        // Readjust fade based on position
+        _curItem.GetComponent<ItemController>().FadeImage(_collapseStep);
+
         // This shift finished and next item moves forward
         _collapseStep++;
         if (_collapseStep < GetCollapseMoveCount())
@@ -151,12 +156,13 @@ public class MoveLineupState : ICombatState
             return;
         }
 
+        _curItem = item;
         _movingRect = item.GetComponent<RectTransform>();
         _lerpStart = _movingRect.position;
         _lerpTimer = 0f;
 
         // Earlier items stay on top
-        item.transform.SetSiblingIndex(0);
+        item.transform.SetSiblingIndex(_index);
     }
 
     private void TransitionNext(CombatManager cm)

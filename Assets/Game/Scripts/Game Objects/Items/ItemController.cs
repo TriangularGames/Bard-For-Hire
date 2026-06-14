@@ -50,6 +50,17 @@ public class ItemController : MonoBehaviour
         playableBanner.SetActive(false);
     }
 
+    public void FadeImage(int value)
+    {
+        ResetColor();
+        icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, icon.color.a / (value * 2));
+    }
+
+    private void ResetColor()
+    {
+        icon.color = Color.white;
+    }
+
     public void SetDamageWithBonus(int baseD, UpgradeFightingManager.DamageBonus bonus)
     {
         if (bonus.amount > 0)
