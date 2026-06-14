@@ -70,7 +70,7 @@ public class LoadingScreenScrollingUI : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (ContainerA.transform.localPosition.x <= LeftBoundary)
         {

@@ -37,17 +37,27 @@ public class ScoreManager : MonoBehaviour
 
     private void OnLastCoinCollected(LastCoinCollected e)
     {
-        // Victory / game over � list should be empty (or run from end of EnemyManager.RemoveEnemy)
-        if (CheckCombatEnd())
+        if (EnemyManager.Instance.AreEnemiesAlive())
         {
-            _hasPendingLineup = false; // don't lineup after victory
-            return;
+            if (_hasPendingLineup)
+            {
+                _hasPendingLineup = false;
+                CombatManager.Instance.SwitchState(new MoveLineupState(_pendingLineupItems, _pendingLineupIndex, this, skipWait: true));
+            }
+            else
+            {
+                return;
+            }
         }
-
-        // Deferred MoveLineup after death anim
-        if (!_hasPendingLineup) return;
-        _hasPendingLineup = false;
-        CombatManager.Instance.SwitchState(new MoveLineupState(_pendingLineupItems, _pendingLineupIndex, this, skipWait: true));
+        else
+        {
+            // Victory / game over � list should be empty (or run from end of EnemyManager.RemoveEnemy)
+            if (CheckCombatEnd())
+            {
+                _hasPendingLineup = false; // don't lineup after victory
+                return;
+            }
+        }
     }
 
     private void Start()

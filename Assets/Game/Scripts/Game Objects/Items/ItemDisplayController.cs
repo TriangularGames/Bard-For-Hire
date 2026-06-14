@@ -5,6 +5,7 @@ public class ItemDisplayController : ItemController
 {
     [SerializeField] private ParticleSystem confetti;
     [SerializeField] private Animator anim;
+    [SerializeField] private GameObject DamageTxtObject;
     private Material _material;
 
     // Dissolve Variables
@@ -29,6 +30,26 @@ public class ItemDisplayController : ItemController
     protected override void SetDamageTxt()
     {
         base.SetDamageTxt();
+
+        if (int.Parse(damageTxt.text) < 10)
+        {
+            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 100, 0f);
+        }
+
+        if (int.Parse(damageTxt.text) >= 10)
+        {
+            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(-10, 100, 0f);
+        }
+
+        if (int.Parse(damageTxt.text) >= 100)
+        {
+            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(-25, 100, 0f);
+        }
+    }
+
+    public void SetDamageDisplay(int value)
+    {
+        damageTxt.text = value.ToString();
 
         if (int.Parse(damageTxt.text) < 10)
         {

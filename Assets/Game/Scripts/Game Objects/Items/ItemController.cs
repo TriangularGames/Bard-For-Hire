@@ -37,11 +37,6 @@ public class ItemController : MonoBehaviour
         
     }
 
-    public void SetDamageDisplay(int value)
-    {
-        damageTxt.text = value.ToString();
-    }
-
     public void DisableText()
     {
         damageTxt.text = "";

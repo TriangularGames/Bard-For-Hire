@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public class DamageBonusState : ICombatState
 {
-    private ItemController _itemController;
+    private ItemDisplayController _itemController;
 
     private readonly List<ItemData> _items;
     private readonly int _index;
@@ -41,7 +41,7 @@ public class DamageBonusState : ICombatState
         _showingBonus = false;
 
         // Set initial damage text
-        _itemController = _sm.itemDisplay.GetComponent<ItemController>();
+        _itemController = _sm.itemDisplay.GetComponent<ItemDisplayController>();
         SetDamageText(_baseDamage);
     }
 
