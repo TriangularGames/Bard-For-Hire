@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ConsumableData
   ConsumableName: Potion of Polymorph
   ConsumableDescription: Changes one weapon into another random weapon
-  cost: 5
+  cost: 6
   Type: 6
-  Rarity: 0
+  Rarity: 2
   icon: {fileID: 21300000, guid: 284dd48f616081e448a6f3e809aa7339, type: 3}

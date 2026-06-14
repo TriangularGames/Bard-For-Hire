@@ -5639,7 +5639,7 @@ GameObject:
   - component: {fileID: 642465726}
   - component: {fileID: 642465725}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: DisableText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30533,7 +30533,7 @@ GameObject:
   - component: {fileID: 1982487718}
   - component: {fileID: 1982487717}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: TutorialPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
