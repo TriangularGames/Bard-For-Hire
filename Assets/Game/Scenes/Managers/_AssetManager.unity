@@ -129,7 +129,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 706058641183546412, guid: 86e10fe7d8294474a911a8fe1534696e, type: 3}
       propertyPath: m_Name
-      value: _GameResourceManager
+      value: _AssetManager
       objectReference: {fileID: 0}
     - target: {fileID: 6644739216974512204, guid: 86e10fe7d8294474a911a8fe1534696e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -174,32 +174,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 706058641183546412, guid: 86e10fe7d8294474a911a8fe1534696e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 9077133685499806065}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 86e10fe7d8294474a911a8fe1534696e, type: 3}
---- !u!1 &9077133685499806064 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 706058641183546412, guid: 86e10fe7d8294474a911a8fe1534696e, type: 3}
-  m_PrefabInstance: {fileID: 9077133685499806063}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &9077133685499806065
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9077133685499806064}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d094ebee80fb07844be8ac29804c1ff9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ResourceManager
-  ItemData: []
-  UpgradeData: []
-  ConsumableData: []
-  EnemyData: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

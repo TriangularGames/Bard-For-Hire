@@ -9,14 +9,14 @@ EditorBuildSettings:
     path: Assets/Game/Scenes/Utilities/_Bootstrap.unity
     guid: 092c5f6363933e544978761870479d81
   - enabled: 1
+    path: Assets/Game/Scenes/Managers/_ResourceManager.unity
+    guid: a36c59429cecd994f9e1b300442ee0d6
+  - enabled: 1
+    path: Assets/Game/Scenes/Managers/_AssetManager.unity
+    guid: fbfb6557ef0078e4585774dd42e989f8
+  - enabled: 1
     path: Assets/Game/Scenes/Managers/_InputManager.unity
     guid: ea6753b003d857845bb64d23787e3d04
-  - enabled: 1
-    path: Assets/Game/Scenes/Managers/_AudioManager.unity
-    guid: a6170f511bf4bbe4caaf6c4bc0a69d2a
-  - enabled: 1
-    path: Assets/Game/Scenes/Managers/_GameResourceManager.unity
-    guid: fbfb6557ef0078e4585774dd42e989f8
   - enabled: 1
     path: Assets/Game/Scenes/Managers/_GameManager.unity
     guid: e5178a33b57f4e7429586f9a0dabd02c
@@ -27,14 +27,17 @@ EditorBuildSettings:
     path: Assets/Game/Scenes/Managers/_MenuManager.unity
     guid: 993a59e6c4333034d81af0547b3e1e83
   - enabled: 1
+    path: Assets/Game/Scenes/Managers/_AudioManager.unity
+    guid: a6170f511bf4bbe4caaf6c4bc0a69d2a
+  - enabled: 1
     path: Assets/Game/Scenes/UI/MainMenu.unity
     guid: ab5a65bb9d8b28a49969124a77b8bafa
   - enabled: 1
     path: Assets/Game/Scenes/Gameplay/Combat.unity
-    guid: f7f7374ef6e5a5845b6ada796dd71a51
+    guid: 03785107e8d972b45b17e501ff2205ae
   - enabled: 1
     path: Assets/Game/Scenes/Gameplay/Shop.unity
-    guid: b0be4a5c27b07c94b933327218cb6149
+    guid: 272d1cc982b00514b89245aa4f3c0739
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

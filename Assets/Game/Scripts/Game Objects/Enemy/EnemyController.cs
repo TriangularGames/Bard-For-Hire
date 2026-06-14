@@ -291,6 +291,10 @@ public class EnemyController : MonoBehaviour
 
     private void Die()
     {
+        if (enemyData.yPos > 0)
+        {
+            transform.localPosition = new Vector3(transform.localPosition.x, 0.1f, transform.localPosition.z);
+        }
         anim.SetTrigger("Dead");
     }
 
