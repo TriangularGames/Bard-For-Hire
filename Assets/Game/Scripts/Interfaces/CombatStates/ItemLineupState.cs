@@ -14,6 +14,7 @@ public class ItemLineUpState : ICombatState
     private List<Vector3> _startPositions;
     private Vector3 _displayWorldPos;
     private Transform _stackParent;
+    private int _placementIndex;
 
     private Vector3 _stackOffset = new Vector3(-0.05f, 0f, 0.01f);
     private float _lerpDuration = 0.5f;
@@ -40,7 +41,8 @@ public class ItemLineUpState : ICombatState
         _holdTimer = 0f;
         _allLerpsDone = false;
         _transitioned = false;
-        _currentItemIndex = 0;
+        _currentItemIndex = _items.Count - 1;
+        _placementIndex = 0;
 
         _sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
 
@@ -60,13 +62,12 @@ public class ItemLineUpState : ICombatState
             _startPositions.Add(rect.position);
         }
 
-        for (int i = 0; i < _itemObjects.Count; i++)
+        for (int i = _itemObjects.Count - 1; i > 0; i--)
         {
-            Canvas itemCanvas = _itemObjects[i].GetComponent<Canvas>();
-            if (itemCanvas != null)
-            {
-                itemCanvas.sortingOrder = 100 - i;
-            }
+            Transform itemTransform = _itemObjects[i].GetComponent<Transform>();
+            itemTransform.localPosition = new Vector3(itemTransform.localPosition.x,
+                itemTransform.localPosition.y,
+                itemTransform.localPosition.z + i);
         }
     }
 
@@ -94,7 +95,7 @@ public class ItemLineUpState : ICombatState
 
     private void UpdateSequentialLerp(CombatManager cm)
     {
-        if (_currentItemIndex >= _itemObjects.Count)
+        if (_currentItemIndex < 0)
         {
             _allLerpsDone = true;
             return;
@@ -120,9 +121,9 @@ public class ItemLineUpState : ICombatState
         if (t >= 1f)
         {
             _lerpTimer = 0f;
-            _currentItemIndex++;
+            _currentItemIndex--;
 
-            if (_currentItemIndex >= _itemObjects.Count)
+            if (_currentItemIndex < 0)
             {
                 _allLerpsDone = true;
             }
@@ -145,7 +146,8 @@ public class ItemLineUpState : ICombatState
 
         // Reparent away from Hand grid, keep world position
         item.transform.SetParent(_stackParent, true);
-        item.transform.SetSiblingIndex(0);
+        item.transform.SetSiblingIndex(_placementIndex);
+        _placementIndex++;
 
         Select select = item.GetComponent<Select>();
         if (select != null && select.IsSelected)
