@@ -199,6 +199,7 @@ public class ScoreManager : MonoBehaviour
         if (curRound >= MaxRounds)
         {
             Debug.Log("Combat Failed!");
+            EventBus.Publish<MissEvent>(new MissEvent());
             CombatManager.Instance.SwitchState(new DefaultCombatState());
             MenuManager.Instance.SwitchState(new GameOverMenuState());
             return true;
