@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting.InputSystem;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,6 +23,30 @@ public class LoadingScreenScrollingUI : MonoBehaviour
 
     private List<Image> imgObjects;
 
+    private void OnEnable()
+    {
+        SceneLoader.Instance.OnLoadingStarted += ChangeImages;
+    }
+
+    private void OnDisable()
+    {
+        SceneLoader.Instance.OnLoadingCompleted -= ChangeImages;
+    }
+
+    public void ChangeImages()
+    {
+        if (ResourceManager.Instance.ItemData != null)
+        {
+            int randomNum = Random.Range(0, ResourceManager.Instance.ItemData.Length);
+            Sprite icon = ResourceManager.Instance.ItemData[randomNum].icon;
+
+            foreach (Image image in imgObjects)
+            {
+                image.sprite = icon;
+            }
+        }
+    }
+
     private void Start()
     {
         imgObjects = new List<Image>();
@@ -41,14 +66,7 @@ public class LoadingScreenScrollingUI : MonoBehaviour
         {
             imgObjects.Add(child.GetComponent<Image>());
         }
-
-        int randomNum = Random.Range(0, ResourceManager.Instance.ItemData.Length);
-        Sprite icon = ResourceManager.Instance.ItemData[randomNum].icon;
-
-        foreach (Image image in imgObjects)
-        {
-            image.sprite = icon;
-        }
+        
     }
 
     // Update is called once per frame

@@ -15,7 +15,7 @@ MonoBehaviour:
   health: 9
   coinReward: 5
   weakness: 0
-  icon: {fileID: 21300000, guid: 377fdf77db0fac4438502484b3d74d06, type: 3}
+  icon: {fileID: 945064458, guid: 653ea24888f0f401e9d1d5b8e8b5b764, type: 3}
   animator: {fileID: 22100000, guid: 6c07c4ea922b39f41b6657dc0efe131f, type: 2}
   Name: Kobold
   Description: An even smaller guy, even larger problems
