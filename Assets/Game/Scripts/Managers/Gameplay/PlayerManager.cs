@@ -42,7 +42,6 @@ public class PlayerManager : Singleton<PlayerManager>
     private int HighestDamageDealt;
     public int highestDamageDealt { get { return HighestDamageDealt; } set { HighestDamageDealt = value; } }
     
-    // TODO: set this up
     private string MostUsedWeapon;
     public string mostUsedWeapon { get { return MostUsedWeapon; } set { MostUsedWeapon = value; } }
 

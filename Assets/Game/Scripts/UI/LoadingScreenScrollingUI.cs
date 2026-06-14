@@ -30,7 +30,7 @@ public class LoadingScreenScrollingUI : MonoBehaviour
 
     private void OnDisable()
     {
-        SceneLoader.Instance.OnLoadingCompleted -= ChangeImages;
+        SceneLoader.Instance.OnLoadingStarted -= ChangeImages;
     }
 
     public void ChangeImages()
@@ -66,7 +66,6 @@ public class LoadingScreenScrollingUI : MonoBehaviour
         {
             imgObjects.Add(child.GetComponent<Image>());
         }
-        
     }
 
     // Update is called once per frame

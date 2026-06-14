@@ -22,7 +22,7 @@ public class SceneLoader : Singleton<SceneLoader>
     private TextMeshProUGUI progressText = null!;
     private string progressDots = ".";
 
-    [SerializeField, Range(0.1f, 2f), Tooltip("Minimum time the loading screen is shown")]
+    [SerializeField, Range(0.1f, 5f), Tooltip("Minimum time the loading screen is shown")]
     private float minimumDisplayTime = 0.6f;
     [SerializeField]
     private List<string> managerScenesToLoad = new();
@@ -103,18 +103,19 @@ public class SceneLoader : Singleton<SceneLoader>
     {
         AsyncOperation op = SceneManager.LoadSceneAsync(sceneName, mode);
         if (op == null) yield break;
-        progressText.text = "Now Loading" + progressDots;
-        if (progressDots.Length >= 3)
-        {
-            progressDots = ".";
-        }
-        else
-        {
-            progressDots += ".";
-        }
 
         while (!op.isDone)
         {
+            progressText.text = "Now Loading" + progressDots;
+            if (progressDots.Length >= 3)
+            {
+                progressDots = ".";
+            }
+            else
+            {
+                progressDots += ".";
+            }
+
             if (progressBar != null)
             {
                 progressBar.value = op.progress;
