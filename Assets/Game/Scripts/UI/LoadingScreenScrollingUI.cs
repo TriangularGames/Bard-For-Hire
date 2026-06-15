@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,24 +25,31 @@ public class LoadingScreenScrollingUI : MonoBehaviour
 
     private void OnEnable()
     {
+        imgObjects = new List<Image>();
+        ChangeImages();
+    }
+
+    private void OnDisable()
+    {
         ChangeImages();
     }
 
     public void ChangeImages()
     {
-        Debug.Log("Item Images Count: " + itemImages.Count);
         int randomNum = Random.Range(0, itemImages.Count);
         Sprite icon = itemImages[randomNum];
 
-        foreach (Image image in imgObjects)
+        if (imgObjects != null || imgObjects.Count != 0)
         {
-            image.sprite = icon;
+            foreach (Image image in imgObjects)
+            {
+                image.sprite = icon;
+            }
         }
     }
 
     private void Start()
     {
-        imgObjects = new List<Image>();
         foreach (Transform child in ContainerA.transform)
         {
             imgObjects.Add(child.GetComponent<Image>());
