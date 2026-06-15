@@ -40,7 +40,7 @@ public class ShowRollResultState : ICombatState
     {
         _timer = 0f;
 
-        if (_modifier != 0)
+        if (_modifier != 0 && _nat != 1 && _nat != 20)
         {
             _roller.displayModifier.text = $"+ {_modifier}";
             _duration = _roller.revealPause * 0.4f;

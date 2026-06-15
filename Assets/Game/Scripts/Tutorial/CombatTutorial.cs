@@ -22,7 +22,7 @@ public class CombatTutorial: MonoBehaviour
     }
     private void Start() // EventBus + Start tutorial up
     {
-        if (!TutorialManager.Instance.WeShowTutorial()) return;
+        if (TutorialManager.Instance == null || !TutorialManager.Instance.WeShowTutorial()) return;
 
         EventBus.Subscribe<RoundStartedEvent>(OnScoringStarted);
         EventBus.Subscribe<ScoringCompletedEvent>(OnRoundComplete);
@@ -121,7 +121,7 @@ public class CombatTutorial: MonoBehaviour
 
             new TutorialStep
             {
-                message = "Each weapon has a damage value which is how much it deals on a hit, and a roll number which is the minimum you must roll on the 20-sided dice for the attack to go through.",
+                message = "Each weapon has a damage value which is how much health each hit removes from the enemy, and a roll number which is the minimum you must roll on a 20-sided dice for the attack to succeed.",
                 highlight = attackHandHighlight,
             },
 
@@ -135,13 +135,13 @@ public class CombatTutorial: MonoBehaviour
 
              new TutorialStep
             {
-                message = "Hover over an enemy to see what type they are and what they're weak to. \n\nThese enemies are weak to piercing attacks!",
+                message = "Hover over an enemy to see their name and weakness. \n\nThe first enemy in this lineup is weak to Piercing attacks!",
                 highlight = attackHandHighlight,
             },
 
               new TutorialStep
             {
-                 message = "You have 4 ray of frosts here, which deal magic damage won't be as effective against these kobolds who are weak to piercing. \nTry discarding them for something better.",
+                 message = "You have 4 Ray of Frosts here, which deal Magical damage. These won't be as effective against Kobolds who are weak to Piercing. \nTry discarding them for something better.",
                  highlight = discardButtonHighlight,
                  waitForAction = true,
                  onEnter = () =>
@@ -156,7 +156,7 @@ public class CombatTutorial: MonoBehaviour
 
                new TutorialStep
             {
-                message = "Now your hand is full of Daggers! \nYou can also press Clear at any time to deselect everything in your current loadout without losing any weapons.",
+                message = "Now your hand is full of Daggers! \nYou can also press Clear at any time to deselect everything in your current loadout.",
                 highlight = clearButtonHighlight,
                 onEnter = () =>
                 {
@@ -167,7 +167,7 @@ public class CombatTutorial: MonoBehaviour
 
             new TutorialStep
             {
-                message = "You can select up to 4 attacks. \n\nThe order they are played depends on the order you click them. Which is indicated by the number on top.",
+                message = "You can select up to 4 attacks. \n\nTheir attack order depends on the order you click on them. Which is indicated by the overlayed number.",
                 highlight = attackHandHighlight,
             },
 
@@ -195,36 +195,44 @@ public class CombatTutorial: MonoBehaviour
 
             new TutorialStep
             {
-                message = "Rolling a 20 makes your attack a  <color=yellow>CRITICAL HIT  <color=white>which does double damage. \nRolling a 1 makes you attack a  <color=red>CRITICAL MISS  <color=black>which always fails no matter what.",
+                message = "Rolling a 20 makes your attack a   <color=yellow>CRITICAL HIT  <color=black>which does double damage. \nRolling a 1 makes your attack a   <color=red>CRITICAL MISS  <color=black>which always fails no matter what.",
     },
 
               new TutorialStep
             {
-                message = "Daggers deal 50% more damage against these enemies because of their weakness. \nMatching weapon types to enemy weaknesses is the key to survival",
+                message = "Hitting a weakness makes your attacks deal 50% more damage. \nMatching weapon types to enemy weaknesses is the key to survival!",
             },
 
               new TutorialStep
             {
-                message = "The bag will show the items in your inventory and the items you've used so that you can gauge future prospects while rerolling",
+                message = "You can check the bag at any time to check which items you've used this day and which are still in your inventory.",
                 highlight = inventoryButtonHighlight,
+            },
+
+              new TutorialStep
+            {
+                message = "Once you've run out of items to refill your arsenal, your used items will reshuffle into your inventory.",
             },
 
             new TutorialStep
             {
-                message = "This is your upgrade bar. It's your permanent power-ups that boost your attacks and rolls.",
+                message = "This is your Emblem sash. Emblems are permanent upgrades obtained for a run that boost your attacks and rolls!",
                 highlight = upgradeBarHighlight,
             },
 
             new TutorialStep
             {
-                message = "And this is your consumable bar. It's your one time use items that can be used to save you in a pinch.",
+                message = "And this is your Potion bar. Potions are one-time use items that can give temporary boosts, strengthen your deck, or deal damage to enemies!",
                 highlight = consumableBarHighlight,
             },
 
             new TutorialStep
             {
-                message = "Now complete the encounter!",
-                waitForAction = true,
+                message = "Now complete the encounter! Show my kin that Pimp the Imp IS a great teacher!",
+            },
+            new TutorialStep
+            {
+                message = "Now complete the encounter! Show my kin that Pimp the Imp IS a great teacher!",
                 onEnter = () =>
                 {
                     ForceInput.Instance?.ClearRequirements();
