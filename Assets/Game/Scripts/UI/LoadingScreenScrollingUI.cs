@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Unity.VisualScripting.InputSystem;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,28 +22,22 @@ public class LoadingScreenScrollingUI : MonoBehaviour
     private bool swapDirections = false;
 
     private List<Image> imgObjects;
+    [SerializeField] private List<Sprite> itemImages;
 
     private void OnEnable()
     {
-        SceneLoader.Instance.OnLoadingStarted += ChangeImages;
-    }
-
-    private void OnDisable()
-    {
-        SceneLoader.Instance.OnLoadingStarted -= ChangeImages;
+        ChangeImages();
     }
 
     public void ChangeImages()
     {
-        if (ResourceManager.Instance.ItemData != null)
-        {
-            int randomNum = Random.Range(0, ResourceManager.Instance.ItemData.Length);
-            Sprite icon = ResourceManager.Instance.ItemData[randomNum].icon;
+        Debug.Log("Item Images Count: " + itemImages.Count);
+        int randomNum = Random.Range(0, itemImages.Count);
+        Sprite icon = itemImages[randomNum];
 
-            foreach (Image image in imgObjects)
-            {
-                image.sprite = icon;
-            }
+        foreach (Image image in imgObjects)
+        {
+            image.sprite = icon;
         }
     }
 
