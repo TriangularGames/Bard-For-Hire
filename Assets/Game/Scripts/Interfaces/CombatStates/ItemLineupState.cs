@@ -15,7 +15,7 @@ public class ItemLineUpState : ICombatState
     private Vector3 _displayWorldPos;
     private Transform _stackParent;
 
-    private Vector3 _stackOffset = new Vector3(-0.05f, 0f, 0.01f);
+    private Vector3 _stackOffset = new Vector3(-0.05f, 0f, -0.01f);
     private float _lerpDuration = 0.5f;
     private float _holdDuration = 0.5f;
 
@@ -40,7 +40,7 @@ public class ItemLineUpState : ICombatState
         _holdTimer = 0f;
         _allLerpsDone = false;
         _transitioned = false;
-        _currentItemIndex = 0;
+        _currentItemIndex = _itemObjects.Count - 1;
 
         _sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
 
@@ -58,15 +58,6 @@ public class ItemLineUpState : ICombatState
             RectTransform rect = _itemObjects[i].GetComponent<RectTransform>();
             _rectTransforms.Add(rect);
             _startPositions.Add(rect.position);
-        }
-
-        for (int i = 0; i < _itemObjects.Count; i++)
-        {
-            Canvas itemCanvas = _itemObjects[i].GetComponent<Canvas>();
-            if (itemCanvas != null)
-            {
-                itemCanvas.sortingOrder = 100 - i;
-            }
         }
     }
 
@@ -94,7 +85,7 @@ public class ItemLineUpState : ICombatState
 
     private void UpdateSequentialLerp(CombatManager cm)
     {
-        if (_currentItemIndex >= _itemObjects.Count)
+        if (_currentItemIndex < 0)
         {
             _allLerpsDone = true;
             return;
@@ -120,9 +111,9 @@ public class ItemLineUpState : ICombatState
         if (t >= 1f)
         {
             _lerpTimer = 0f;
-            _currentItemIndex++;
+            _currentItemIndex--;
 
-            if (_currentItemIndex >= _itemObjects.Count)
+            if (_currentItemIndex < 0)
             {
                 _allLerpsDone = true;
             }
@@ -145,7 +136,7 @@ public class ItemLineUpState : ICombatState
 
         // Reparent away from Hand grid, keep world position
         item.transform.SetParent(_stackParent, true);
-        item.transform.SetSiblingIndex(0);
+        item.transform.SetSiblingIndex(_itemObjects.Count - 1 - _currentItemIndex);
 
         Select select = item.GetComponent<Select>();
         if (select != null && select.IsSelected)
