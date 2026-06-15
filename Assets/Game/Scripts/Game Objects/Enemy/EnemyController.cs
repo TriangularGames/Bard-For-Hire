@@ -129,6 +129,9 @@ public class EnemyController : MonoBehaviour
 
     private void DisplayWeakResistText()
     {
+        // If both are active, don't display text
+        if (Weak && Resist) return;
+
         // Check if damage taken is a Weakness or a Resistance
         if (Weak)
         {
