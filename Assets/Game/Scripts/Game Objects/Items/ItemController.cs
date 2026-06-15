@@ -7,10 +7,10 @@ public class ItemController : MonoBehaviour
     [SerializeField] public ItemData itemData;
 
     [SerializeField] protected Image icon;
-    [SerializeField] private GameObject dmgBanner;
+    [SerializeField] protected GameObject dmgBanner;
     [SerializeField] protected TMP_Text damageTxt;
-    [SerializeField] private GameObject playableBanner;
-    [SerializeField] private TMP_Text playableText;
+    [SerializeField] protected GameObject playableBanner;
+    [SerializeField] protected TMP_Text playableText;
 
     public void Setup()
     {

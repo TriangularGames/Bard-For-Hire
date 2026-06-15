@@ -71,6 +71,10 @@ public class ItemDisplayController : ItemController
 
     public void ResetDisplay()
     {
+        damageTxt.gameObject.SetActive(true);
+        playableText.gameObject.SetActive(true);
+        dmgBanner.SetActive(true);
+        playableBanner.SetActive(true);
         ResetDissolve();
     }
 
@@ -123,6 +127,10 @@ public class ItemDisplayController : ItemController
                 _material.SetFloat(_dissolveAmount, lerpedDissolve);
                 yield return null;
             }
+            damageTxt.gameObject.SetActive(false);
+            playableText.gameObject.SetActive(false);
+            dmgBanner.SetActive(false);
+            playableBanner.SetActive(false);
         }
     }
 }
