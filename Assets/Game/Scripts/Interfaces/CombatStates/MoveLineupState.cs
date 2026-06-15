@@ -43,6 +43,9 @@ public class MoveLineupState : ICombatState
     {
         _im = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
 
+        // To reset the Pitch of the Bonus Damage being added between items
+        AudioManager.Instance.ResetPitch();
+
         _timer = 0f;
         _phase = Phase.Wait;
         _collapseStep = 0;
