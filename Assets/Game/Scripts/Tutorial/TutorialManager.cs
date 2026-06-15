@@ -19,6 +19,7 @@ public class TutorialManager : Singleton<TutorialManager>
     private System.Action stepComplete; // We completed a step?
 
     private const string TutorialKey = "TutorialComplete"; // PlayerPrefs store have we completed tutorial
+
     public override void Awake() // Set up things
     {
         base.Awake();

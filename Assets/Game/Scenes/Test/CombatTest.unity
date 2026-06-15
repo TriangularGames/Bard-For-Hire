@@ -496,7 +496,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: upgradeInventory.Array.size
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[10]'
@@ -657,7 +657,7 @@ PrefabInstance:
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: e3cb333e5da20b84b8e5f75044ffef61, type: 2}
+      objectReference: {fileID: 11400000, guid: 1d6b1bff6aaa63b499cee15897e54ed8, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[1]'
       value: 
@@ -665,11 +665,11 @@ PrefabInstance:
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[2]'
       value: 
-      objectReference: {fileID: 11400000, guid: 1d6b1bff6aaa63b499cee15897e54ed8, type: 2}
+      objectReference: {fileID: 11400000, guid: 91c86d55d54da2d4cb2477df5dd87424, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[3]'
       value: 
-      objectReference: {fileID: 11400000, guid: dbce602f78b007841b92dfc4fc6f370e, type: 2}
+      objectReference: {fileID: 11400000, guid: b96774ddc6caa7a44bd6c33f8cfef5b0, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[4]'
       value: 
@@ -20349,6 +20349,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1082438382}
     m_Modifications:
     - target: {fileID: -7514263471939101069, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
+      propertyPath: dmgAnimator
+      value: 
+      objectReference: {fileID: 1583709363}
+    - target: {fileID: -7514263471939101069, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
       propertyPath: DamageTxtObject
       value: 
       objectReference: {fileID: 1583709359}
@@ -20451,7 +20455,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4581136893744826212, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1583709363}
   m_SourcePrefab: {fileID: 100100000, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
 --- !u!224 &1247202533 stripped
 RectTransform:
@@ -23171,6 +23178,28 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4581136893744826212, guid: ccc0e880d0ead8545946f13b1a98d928, type: 3}
   m_PrefabInstance: {fileID: 1247202532}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &1583709363
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583709359}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b1e4ac1ab35a6914698231c0bfbb7be9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &1605294842
 PrefabInstance:
   m_ObjectHideFlags: 0

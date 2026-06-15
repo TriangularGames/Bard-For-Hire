@@ -24,7 +24,7 @@ public class ItemController : MonoBehaviour
         icon.sprite = itemData.icon;
     }
 
-    protected virtual void SetDamageTxt()
+    private void SetDamageTxt()
     {
         if (itemData.Mult)
         {
@@ -54,14 +54,6 @@ public class ItemController : MonoBehaviour
     private void ResetColor()
     {
         icon.color = Color.white;
-    }
-
-    public void SetDamageWithBonus(int baseD, UpgradeFightingManager.DamageBonus bonus)
-    {
-        if (bonus.amount > 0)
-            damageTxt.text = $"{baseD}  <color=yellow>+ {bonus.amount} {bonus.source}</color>";
-        else if (bonus.amount < 0)
-            damageTxt.text = $"{baseD}  <color=red>{bonus.amount} {bonus.source}</color>";
     }
 
     private void SetPlayableTxt()
