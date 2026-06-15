@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TutorialManager : Singleton<TutorialManager>
+public class TutorialManager : MonoBehaviour
 {
     [Header ("UI Stuff")]
     [SerializeField] private GameObject tutorialPanel; // Main panel
@@ -20,15 +20,30 @@ public class TutorialManager : Singleton<TutorialManager>
 
     private const string TutorialKey = "TutorialComplete"; // PlayerPrefs store have we completed tutorial
 
-    public override void Awake() // Set up things
+    public static TutorialManager Instance;
+
+    private void Awake() // Set up things
     {
-        base.Awake();
-        tutorialPanel.SetActive (false);
+        Instance = this;
+        if (!WeShowTutorial())
+        {
+            if (tutorialPanel != null) Destroy(tutorialPanel);
+            Destroy(gameObject);
+            return;
+        }
+            tutorialPanel.SetActive (false);
         tutorialButton.onClick.AddListener(onContinuePressed);
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
     }
 
     public bool WeShowTutorial() // SHould we show the tutorial? If player doesn't have it in PlayerPrefs or if we force tutorial
     {
+        Debug.Log("Key exists: " + PlayerPrefs.HasKey(TutorialKey));
+        Debug.Log("Value is: " + PlayerPrefs.GetInt(TutorialKey, 0));
         return doTutorial || !PlayerPrefs.HasKey(TutorialKey);
     }
 
@@ -53,9 +68,10 @@ public class TutorialManager : Singleton<TutorialManager>
 
     public void ShowNextStep() // Moves onto next step in tutorial
     {
-        if(tutorialSteps.Count == 0) // End tutorial if we are on the last step
+        if(tutorialSteps.Count <= 1) // End tutorial if we are on the last step
         {
             EndTutorial();
+            Debug.Log("Tutorial Completed");
             return;
         }
         if (currentHighlight != null) // No current higlight if nothing to highlight

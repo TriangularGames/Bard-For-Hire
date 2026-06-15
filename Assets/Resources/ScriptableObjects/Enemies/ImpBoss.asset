@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a90f718c97b58d341b557410f360f753, type: 3}
   m_Name: ImpBoss
   m_EditorClassIdentifier: Assembly-CSharp::AudienceMemberData
-  health: 55
+  health: 52
   coinReward: 20
   weakness: 1
   icon: {fileID: -1719286492, guid: c1aa23252332b40079bc22157101e480, type: 3}
