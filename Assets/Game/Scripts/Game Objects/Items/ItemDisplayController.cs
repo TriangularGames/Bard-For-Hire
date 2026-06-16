@@ -30,6 +30,31 @@ public class ItemDisplayController : ItemController
         _material.SetFloat(_dissolveAmount, 0f);
     }
 
+    protected override void SetDamageTxt()
+    {
+        base.SetDamageTxt();
+
+        if (int.Parse(damageTxt.text) < 10)
+        {
+            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 100, 0f);
+        }
+
+        if (int.Parse(damageTxt.text) >= 10)
+        {
+            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(-10, 100, 0f);
+        }
+
+        if (int.Parse(damageTxt.text) >= 100)
+        {
+            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(-25, 100, 0f);
+        }
+        if (_damageBonusAdded)
+        {
+            dmgAnimator.SetTrigger("Shake");
+            _damageBonusAdded = false;
+        }
+    }
+
     public void SetDamageDisplay(int value)
     {
         damageTxt.text = value.ToString();

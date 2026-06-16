@@ -24,17 +24,9 @@ public class ItemController : MonoBehaviour
         icon.sprite = itemData.icon;
     }
 
-    private void SetDamageTxt()
+    protected virtual void SetDamageTxt()
     {
-        if (itemData.Mult)
-        {
-            damageTxt.text = "x" + itemData.Damage.ToString();
-        }
-        else
-        {
-            damageTxt.text = (itemData.Damage + itemData.bonusDamageStacks).ToString();
-        }
-        
+        damageTxt.text = (itemData.Damage + itemData.bonusDamageStacks).ToString();
     }
 
     public void DisableText()
