@@ -69,7 +69,7 @@ public class CoinHandler : MonoBehaviour
                     _coin.transform.position = Vector3.Lerp(_startPos.position, GameObject.FindWithTag("Coins").transform.position, Time.deltaTime / _coinDuration);
 
                     // set coin text display
-                    if (Vector3.Distance(_coin.transform.position, GameObject.FindWithTag("Coins").transform.position) < 0.1f)
+                    if (Vector3.Distance(_coin.transform.position, GameObject.FindWithTag("Coins").transform.position) < 0.01f)
                     {
                         PlayerManager.Instance.Coins += 1;
                         PlayerManager.Instance.SetCoinText();
@@ -78,6 +78,7 @@ public class CoinHandler : MonoBehaviour
                         Destroy(_coin);
                         _coinsToGain -= 1;
                         _coinSpawnTimer = 0f;
+                        PlayerManager.Instance.FlashCoinText();
                     }
                 }
 
