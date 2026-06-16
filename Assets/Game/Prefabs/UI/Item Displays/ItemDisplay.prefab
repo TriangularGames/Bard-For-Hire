@@ -75,7 +75,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4287497728
-  m_fontColor: {r: 0, g: 0.023529412, b: 0.5568628, a: 1}
+  m_fontColor: {r: 0, g: 0.21960784, b: 0.85882354, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 0
   m_fontColorGradient:
@@ -5182,6 +5182,7 @@ MonoBehaviour:
   playableText: {fileID: 3987853901148647408}
   confetti: {fileID: 5233638562138662888}
   anim: {fileID: 6147536252434017762}
+  dmgAnimator: {fileID: 0}
 --- !u!95 &6147536252434017762
 Animator:
   serializedVersion: 7
@@ -5354,7 +5355,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4278190222
-  m_fontColor: {r: 0.5566038, g: 0, b: 0, a: 1}
+  m_fontColor: {r: 0.7647059, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
