@@ -196,6 +196,10 @@ public class CombatTutorial: MonoBehaviour
             new TutorialStep
             {
                 message = "Rolling a 20 makes your attack a   <color=yellow>CRITICAL HIT  <color=black>which does double damage. \nRolling a 1 makes your attack a   <color=red>CRITICAL MISS  <color=black>which always fails no matter what.",
+                onEnter = () =>
+                {
+                    itemManager.noAttacking = true;
+                },
     },
 
               new TutorialStep
@@ -228,15 +232,18 @@ public class CombatTutorial: MonoBehaviour
 
             new TutorialStep
             {
-                message = "Now complete the encounter! Show my kin that Pimp the Imp IS a great teacher!",
-            },
-            new TutorialStep
-            {
-                message = "Now complete the encounter! Show my kin that Pimp the Imp IS a great teacher!",
-                onEnter = () =>
-                {
-                    ForceInput.Instance?.ClearRequirements();
-                }
+             message = "Now complete the encounter! Show my kin that Pimp the Imp IS a great teacher!",
+             onEnter = () =>
+             {
+
+             },
+             onContinue = () =>
+             {
+                 itemManager.noAttacking = false;
+                 itemManager.discardsLocked = false;
+                 itemManager.blockNormalDraw = false;
+                 ForceInput.Instance?.ClearRequirements();
+             }
             },
         };
 
@@ -263,6 +270,9 @@ public class CombatTutorial: MonoBehaviour
 
     private void OnTutorialComplete()
     {
+        itemManager.noAttacking = false;
+        itemManager.discardsLocked = false;
+        itemManager.blockNormalDraw = false;
         ForceInput.Instance?.ClearRequirements();
         TutorialManager.Instance.HidePanel();
     }

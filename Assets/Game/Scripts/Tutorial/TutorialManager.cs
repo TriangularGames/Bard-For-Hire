@@ -24,6 +24,7 @@ public class TutorialManager : MonoBehaviour
 
     private void Awake() // Set up things
     {
+
         Instance = this;
         if (!WeShowTutorial())
         {
@@ -68,7 +69,7 @@ public class TutorialManager : MonoBehaviour
 
     public void ShowNextStep() // Moves onto next step in tutorial
     {
-        if(tutorialSteps.Count <= 1) // End tutorial if we are on the last step
+        if(tutorialSteps.Count == 1) // End tutorial if we are on the last step
         {
             EndTutorial();
             Debug.Log("Tutorial Completed");
