@@ -22,21 +22,20 @@ public class LoadingScreenScrollingUI : MonoBehaviour
 
     private List<Image> imgObjects;
     [SerializeField] private List<Sprite> itemImages;
+    private int randomNum;
 
     private void OnEnable()
     {
-        imgObjects = new List<Image>();
-        ChangeImages();
-    }
-
-    private void OnDisable()
-    {
+        if (imgObjects == null)
+        {
+            imgObjects = new List<Image>();
+        }
         ChangeImages();
     }
 
     public void ChangeImages()
     {
-        int randomNum = Random.Range(0, itemImages.Count);
+        randomNum = Random.Range(0, itemImages.Count);
         Sprite icon = itemImages[randomNum];
 
         if (imgObjects != null || imgObjects.Count != 0)

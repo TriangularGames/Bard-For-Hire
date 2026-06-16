@@ -24,7 +24,6 @@ public class TutorialManager : MonoBehaviour
 
     private void Awake() // Set up things
     {
-
         Instance = this;
         if (!WeShowTutorial())
         {

@@ -352,6 +352,11 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         return itemInventory[Random.Range(0, itemInventory.Count)];
     }
+
+    internal void FlashCoinText()
+    {
+        GameObject.FindWithTag("Coins").GetComponent<Animator>().SetTrigger("CoinGain");
+    }
 }
 
 /// <summary>

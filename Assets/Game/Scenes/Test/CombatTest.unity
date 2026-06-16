@@ -496,7 +496,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 559c69f0e7f2c8c4a9bf7e44338a2743, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: upgradeInventory.Array.size
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'itemInventory.Array.data[10]'
@@ -657,19 +657,19 @@ PrefabInstance:
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: dbce602f78b007841b92dfc4fc6f370e, type: 2}
+      objectReference: {fileID: 11400000, guid: 48de6d5808541dd44bab3a6786d0408c, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: d0a462c819ec3d941bf9e39d9b643585, type: 2}
+      objectReference: {fileID: 11400000, guid: 8baae2718b50b28478be31773c04cf8c, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[2]'
       value: 
-      objectReference: {fileID: 11400000, guid: 91c86d55d54da2d4cb2477df5dd87424, type: 2}
+      objectReference: {fileID: 11400000, guid: df7e965bd914a8b4295ca7595977adc6, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[3]'
       value: 
-      objectReference: {fileID: 11400000, guid: b96774ddc6caa7a44bd6c33f8cfef5b0, type: 2}
+      objectReference: {fileID: 11400000, guid: e7b68fdfbdb8e0644b497942199c8ed1, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[4]'
       value: 
@@ -6245,7 +6245,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -393.00003, y: -88}
+  m_AnchoredPosition: {x: -623, y: 5}
   m_SizeDelta: {x: 94, y: 48.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &711192120
@@ -20702,7 +20702,7 @@ RectTransform:
   m_GameObject: {fileID: 1250019737}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -0}
-  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 524611739}
@@ -20710,7 +20710,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -235.1, y: -38}
+  m_AnchoredPosition: {x: -191, y: -60}
   m_SizeDelta: {x: 250, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1254470693
@@ -21244,7 +21244,7 @@ MonoBehaviour:
   displayCrit: {fileID: 1780548632}
   upgradeNotifText: {fileID: 1840874415}
   numberChangeyInterval: 0.005
-  changeyDuration: 1.4
+  changeyDuration: 0.5
   revealPause: 2
 --- !u!114 &1344256444
 MonoBehaviour:
@@ -29600,6 +29600,7 @@ GameObject:
   - component: {fileID: 1814545774}
   - component: {fileID: 1814545776}
   - component: {fileID: 1814545775}
+  - component: {fileID: 1814545777}
   m_Layer: 5
   m_Name: txtCoins
   m_TagString: Coins
@@ -29617,7 +29618,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1141452191}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -29726,6 +29727,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1814545773}
   m_CullTransparentMesh: 1
+--- !u!95 &1814545777
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1814545773}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6184eeb000280764a8d2be296fdff34c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1840874414
 GameObject:
   m_ObjectHideFlags: 0
@@ -31064,8 +31087,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -403, y: -25.2}
-  m_SizeDelta: {x: 645, y: 200.4}
+  m_AnchoredPosition: {x: -403, y: 0}
+  m_SizeDelta: {x: 645, y: 135}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2121445983
 MonoBehaviour:
@@ -31145,15 +31168,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GridLayoutGroup
   m_Padding:
-    m_Left: 0
+    m_Left: 75
     m_Right: 0
-    m_Top: 20
-    m_Bottom: 70
+    m_Top: 0
+    m_Bottom: 0
   m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 100, y: 50}
-  m_Spacing: {x: 40, y: 0}
+  m_Spacing: {x: 10, y: 0}
   m_Constraint: 2
   m_ConstraintCount: 1
 --- !u!114 &2121445988
@@ -31877,7 +31900,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.6509804}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.69803923}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -32419,7 +32442,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.6509804}
+  m_Color: {r: 0.006289184, g: 0.006289184, b: 0.006289184, a: 0.69803923}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
