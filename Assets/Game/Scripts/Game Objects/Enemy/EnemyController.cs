@@ -96,6 +96,7 @@ public class EnemyController : MonoBehaviour
     protected void SetAnimation()
     {
         anim.runtimeAnimatorController = enemyData.animator;
+        anim.SetFloat("IdleOffset", Random.Range(0.0f, 2.0f));
     }
 
     protected void SetDamageTxt()
