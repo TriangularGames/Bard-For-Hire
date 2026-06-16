@@ -96,7 +96,8 @@ public class EnemyController : MonoBehaviour
     protected void SetAnimation()
     {
         anim.runtimeAnimatorController = enemyData.animator;
-        anim.SetFloat("IdleOffset", Random.Range(0.0f, 2.0f));
+        anim.SetFloat("IdleOffset", Random.Range(0.0f, 4.0f));
+        anim.speed = Random.Range(0.5f, 1.0f);
     }
 
     protected void SetDamageTxt()
@@ -299,6 +300,7 @@ public class EnemyController : MonoBehaviour
         {
             transform.localPosition = new Vector3(transform.localPosition.x, 0.1f, transform.localPosition.z);
         }
+        anim.speed = 1.0f;
         anim.SetTrigger("Dead");
     }
 

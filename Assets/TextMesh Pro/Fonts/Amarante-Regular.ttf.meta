@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: dccb76ef748b2bd409baea431ef87bde
+guid: 13450c91006016041b37c566316bfc6a
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Enchanted Land
+  - Amarante
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

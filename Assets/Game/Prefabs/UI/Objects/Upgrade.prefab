@@ -188,8 +188,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Overwhelming Blows
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f2dd48e3e91546a4c99e1e94aaac0240, type: 2}
-  m_sharedMaterial: {fileID: -4558932142792424483, guid: f2dd48e3e91546a4c99e1e94aaac0240, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 05890a9bf838d04468d0f7f0ef4f27d4, type: 2}
+  m_sharedMaterial: {fileID: -1864198215573239494, guid: 05890a9bf838d04468d0f7f0ef4f27d4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -447,8 +447,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Sell for 99
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f2dd48e3e91546a4c99e1e94aaac0240, type: 2}
-  m_sharedMaterial: {fileID: -4558932142792424483, guid: f2dd48e3e91546a4c99e1e94aaac0240, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 05890a9bf838d04468d0f7f0ef4f27d4, type: 2}
+  m_sharedMaterial: {fileID: -1864198215573239494, guid: 05890a9bf838d04468d0f7f0ef4f27d4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

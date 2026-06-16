@@ -365,7 +365,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemShopSlot
   value: {fileID: 5338967664335739165}
+  icon: {fileID: 0}
   buy: {fileID: 3240057351450499370}
+  _Purchased: 0
 --- !u!1 &8377063985492403012
 GameObject:
   m_ObjectHideFlags: 0

@@ -3237,6 +3237,7 @@ MonoBehaviour:
   MoveRight: {x: 0.1, y: 0, z: 0}
   LeftBoundary: -479
   RightBoundary: 401
+  itemImages: []
 --- !u!114 &1086222688
 MonoBehaviour:
   m_ObjectHideFlags: 0

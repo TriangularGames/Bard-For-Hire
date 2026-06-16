@@ -67,15 +67,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 10
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f2dd48e3e91546a4c99e1e94aaac0240, type: 2}
-  m_sharedMaterial: {fileID: -4558932142792424483, guid: f2dd48e3e91546a4c99e1e94aaac0240, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c70c014573200d046a9b787a4ae307b7, type: 2}
+  m_sharedMaterial: {fileID: 3830408777688646808, guid: c70c014573200d046a9b787a4ae307b7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4287497728
-  m_fontColor: {r: 0, g: 0.21960784, b: 0.85882354, a: 1}
+    rgba: 4292902196
+  m_fontColor: {r: 0.20392157, g: 0.49019608, b: 0.8784314, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 0
   m_fontColorGradient:
@@ -92,8 +92,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60
-  m_fontSizeBase: 60
+  m_fontSize: 45
+  m_fontSizeBase: 45
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -5128,7 +5128,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2409952213380443163
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5347,15 +5347,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f2dd48e3e91546a4c99e1e94aaac0240, type: 2}
-  m_sharedMaterial: {fileID: -4558932142792424483, guid: f2dd48e3e91546a4c99e1e94aaac0240, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c70c014573200d046a9b787a4ae307b7, type: 2}
+  m_sharedMaterial: {fileID: 3830408777688646808, guid: c70c014573200d046a9b787a4ae307b7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190222
-  m_fontColor: {r: 0.7647059, g: 0, b: 0, a: 1}
+    rgba: 4281282525
+  m_fontColor: {r: 0.8679245, g: 0.18422928, b: 0.18422928, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -5372,8 +5372,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60
-  m_fontSizeBase: 60
+  m_fontSize: 45
+  m_fontSizeBase: 45
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
