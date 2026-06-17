@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MoveLineupState : ICombatState
 {
@@ -27,6 +28,9 @@ public class MoveLineupState : ICombatState
     private Vector3 _lerpStart;
     private RectTransform _movingRect;
     private bool _transitioned;
+
+    private Image _curImage;
+    private Color _curColor;
 
     private const float TransitionDelay = 1.0f;
     private float _transitionTimer = 0f;
@@ -126,10 +130,20 @@ public class MoveLineupState : ICombatState
 
         _movingRect.position = Vector3.Lerp(_lerpStart, GetStackPosition(_collapseStep), smoothT);
 
-        if (t < 1f) return;
-
         // Readjust fade based on position
-        _curItem.GetComponent<ItemController>().FadeImage(_collapseStep);
+        Color targetFade = new Color(_curColor.r,
+            _curColor.g,
+            _curColor.b,
+            1.0f / (_collapseStep * 2)
+        );
+
+        _curImage.color = Color.Lerp(
+            _curColor,
+            targetFade,
+            smoothT
+        );
+
+        if (t < 1f) return;
 
         // This shift finished and next item moves forward
         _collapseStep++;
@@ -163,6 +177,9 @@ public class MoveLineupState : ICombatState
         _movingRect = item.GetComponent<RectTransform>();
         _lerpStart = _movingRect.position;
         _lerpTimer = 0f;
+
+        _curImage = _curItem.GetComponent<ItemController>().GetImage();
+        _curColor = _curImage.color;
 
         // Earlier items stay on top
         item.transform.SetSiblingIndex(_index);

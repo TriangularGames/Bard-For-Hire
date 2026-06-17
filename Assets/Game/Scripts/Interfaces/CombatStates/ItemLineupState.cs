@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// State for stacking all selected items under the attack display area, then transitioning to RedrawItemsState after a brief hold.
@@ -15,6 +16,10 @@ public class ItemLineUpState : ICombatState
     private Vector3 _displayWorldPos;
     private Transform _stackParent;
     private int _placementIndex;
+    private int _stackChildCount;
+
+    private Image _itemImage;
+    private List<Color> _startColors;
 
     private Vector3 _stackOffset = new Vector3(-0.09f, -0.03f, 0.01f);
     private float _lerpDuration = 0.5f;
@@ -51,9 +56,11 @@ public class ItemLineUpState : ICombatState
         _displayWorldPos = _sm.itemDisplay.GetComponent<RectTransform>().position;
         // Stack items under the attack display area, NOT under Hand's GridLayoutGroup
         _stackParent = _sm.itemDisplay.transform.parent;
+        _stackChildCount = _stackParent.transform.childCount - 1;
 
         _rectTransforms = new List<RectTransform>();
         _startPositions = new List<Vector3>();
+        _startColors = new List<Color>();
 
         for (int i = 0; i < _itemObjects.Count; i++)
         {
@@ -68,6 +75,12 @@ public class ItemLineUpState : ICombatState
             itemTransform.localPosition = new Vector3(itemTransform.localPosition.x,
                 itemTransform.localPosition.y,
                 itemTransform.localPosition.z + i);
+        }
+
+        for (int i = 0; i < _itemObjects.Count; i++)
+        {
+            Image img = _itemObjects[i].GetComponent<ItemController>().GetImage();
+            _startColors.Add(img.color);
         }
     }
 
@@ -104,8 +117,6 @@ public class ItemLineUpState : ICombatState
         if (_lerpTimer == 0f)
         {
             DetachFromHand(_itemObjects[_currentItemIndex]);
-            // Fade the image based on distance from ItemDisplay
-            _itemObjects[_currentItemIndex].GetComponent<ItemController>().FadeImage(_currentItemIndex);
         }
 
         _lerpTimer += Time.deltaTime;
@@ -119,6 +130,20 @@ public class ItemLineUpState : ICombatState
             target,
             smoothT
         );
+
+        _itemImage = _itemObjects[_currentItemIndex].GetComponent<ItemController>().GetImage();
+
+        Color targetFade = new Color(_startColors[_currentItemIndex].r,
+            _startColors[_currentItemIndex].g,
+            _startColors[_currentItemIndex].b,
+            _startColors[_currentItemIndex].a / (_currentItemIndex * 2));
+
+        _itemImage.color = Color.Lerp(
+            _startColors[_currentItemIndex],
+            targetFade,
+            smoothT
+        );
+
 
         if (t >= 1f)
         {
@@ -146,9 +171,12 @@ public class ItemLineUpState : ICombatState
         // Remove from pool tracking lists only — don't destroy yet
         itemManager.itemPool.RemoveItem(item);
 
+        // Fade the image based on distance from ItemDisplay
+        //item.GetComponent<ItemController>().FadeImage(_currentItemIndex);
+
         // Reparent away from Hand grid, keep world position
         item.transform.SetParent(_stackParent, true);
-        item.transform.SetSiblingIndex(_placementIndex);
+        item.transform.SetSiblingIndex(_stackChildCount + _placementIndex);
         _placementIndex++;
 
         Select select = item.GetComponent<Select>();

@@ -94,10 +94,16 @@ public class ScoreManager : MonoBehaviour
             stackedItem.SetActive(false);
         }
 
+        if (itemDisplay.transform.parent.childCount - 1 != itemDisplay.transform.GetSiblingIndex())
+        {
+            itemDisplay.transform.SetAsLastSibling();
+        }
+
         itemDisplay.GetComponent<ItemController>().itemData = pendingItems[index];
         itemDisplay.GetComponent<ItemController>().Setup();
         itemDisplay.SetActive(true);
         itemDisplay.GetComponent<ItemDisplayController>().ResetDisplay();
+        
     }
 
     public void ShowHit(int index)

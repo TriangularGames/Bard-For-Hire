@@ -37,13 +37,18 @@ public class ItemController : MonoBehaviour
         playableBanner.SetActive(false);
     }
 
+    public Image GetImage()
+    {
+        return icon;
+    }
+
     public void FadeImage(int value)
     {
         ResetColor();
         icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, icon.color.a / (value * 2));
     }
 
-    private void ResetColor()
+    public void ResetColor()
     {
         icon.color = Color.white;
     }
