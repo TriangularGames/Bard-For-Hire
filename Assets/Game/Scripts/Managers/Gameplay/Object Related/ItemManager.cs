@@ -9,6 +9,11 @@ public class ItemManager : MonoBehaviour
     public Button clearBtn;
     public Button attackBtn;
     public Button inventoryBtn;
+    public struct TutorialDiscardCompletedEvent { }
+    public bool tutorialDiscardMode = false;
+    public bool noAttacking = false;
+    public bool discardsLocked = false;
+    public bool blockNormalDraw = false;
 
     [HideInInspector] public List<GameObject> ItemsSelected;
     [SerializeField] private int selectionLimit = 4;
@@ -75,10 +80,6 @@ public class ItemManager : MonoBehaviour
 
     private void Start()
     {
-        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.ActionSurge))
-        {
-            selectionLimit += 1;
-        }
         UpdateSelectionText();
         ItemsSelected = new List<GameObject>();
         discardsLeft = MAXDiscards;
@@ -93,42 +94,23 @@ public class ItemManager : MonoBehaviour
     private void Update()
     {
         // Update button interactability
-        if (discardsLeft == 0)
-        {
-            discardBtn.interactable = false;
-        }
-        else
-        {
-            discardBtn.interactable = true;
-        }
-
         if (!scoringCompleted)
-        {
-            discardBtn.interactable = false;
-            clearBtn.interactable = false;
-            inventoryBtn.interactable = false;
-        }
-        else
-        {
-            if (discardsLeft != 0)
-            {
-                discardBtn.interactable = true;
-            }
-            clearBtn.interactable = true;
-            inventoryBtn.interactable = true;
-        }
-
-        // TODO: make button not pop up/out of existence immediately
-        if (ItemsSelected.Count == 0 || !scoringCompleted)
         {
             attackBtn.gameObject.SetActive(false);
             attackBtn.interactable = false;
+            discardBtn.interactable = false;
+            clearBtn.interactable = false;
+            inventoryBtn.interactable = false;
+            return;
         }
-        else
-        {
-            attackBtn.gameObject.SetActive(true);
-            attackBtn.interactable = true;
-        }
+
+        discardBtn.interactable = discardsLeft > 0 && !discardsLocked;
+        clearBtn.interactable = true;
+        inventoryBtn.interactable = true;
+        bool meetsSelectionRequirement = ForceInput.Instance == null || ForceInput.Instance.SelectionRequirementMet(ItemsSelected.Count);
+        bool canAttack = ItemsSelected.Count > 0 && !noAttacking && meetsSelectionRequirement;
+        attackBtn.gameObject.SetActive(canAttack);
+        attackBtn.interactable = true;
     }
 
     /// <summary>
@@ -137,41 +119,61 @@ public class ItemManager : MonoBehaviour
     public void DiscardItems()
     {
         itemsDiscarded = 0;
-        if (discardsLeft != 0)
-        {
-            if (ItemsSelected.Count > 0)
-            {
-                // If unused Weapons is less than the amount needed to be refilled
-                // Refresh Weapons before drawing
-                if (PlayerManager.Instance.itemsNotUsed.Count < ItemsSelected.Count)
-                {
-                    PlayerManager.Instance.RefreshItems();
-                }
+        if (discardsLeft == 0) return;
+        if (ItemsSelected.Count == 0) return;
+        if (discardsLocked) return;
+        if (tutorialDiscardMode && !IsValidTutorialDiscard()) return;
 
-                for (int i = 0; i < ItemsSelected.Count; i++)
-                {
-                    if (itemPool.GetItems().Contains(ItemsSelected[i]))
-                    {
-                        Destroy(ItemsSelected[i]);
-                        EventBus.Publish(new ItemDiscardedEvent(ItemsSelected[i].GetComponent<ItemController>().itemData));
-                        itemsDiscarded++;
-                    }
-                }
-                itemPool.RemoveAll(ItemsSelected);
-                ItemsSelected.Clear();
-                GrabNewItems(itemsDiscarded);
-                discardsLeft--;
-                discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard " + discardsLeft.ToString() + "/" + MAXDiscards;
-            }
+        // If unused Weapons is less than the amount needed to be refilled
+        // Refresh Weapons before drawing
+        if (PlayerManager.Instance.itemsNotUsed.Count < ItemsSelected.Count)
+            PlayerManager.Instance.RefreshItems();
+
+        for (int i = 0; i < ItemsSelected.Count; i++)
+        {
+             if (itemPool.GetItems().Contains(ItemsSelected[i]))
+             {
+              Destroy(ItemsSelected[i]);
+              EventBus.Publish(new ItemDiscardedEvent(ItemsSelected[i].GetComponent<ItemController>().itemData));
+              itemsDiscarded++;
+             }
         }
+        itemPool.RemoveAll(ItemsSelected);
+        ItemsSelected.Clear();
+        discardsLeft--;
+        discardBtn.transform.GetComponentInChildren<TMP_Text>().text = "Discard " + discardsLeft.ToString() + "/" + MAXDiscards;
         UpdateSelectionText();
+        if (tutorialDiscardMode)
+        {
+            tutorialDiscardMode = false;
+            EventBus.Publish(new TutorialDiscardCompletedEvent());
+            return;
+        }
+
+        GrabNewItems(itemsDiscarded);
     }
+
+
+    private bool IsValidTutorialDiscard()
+    {
+        if (ItemsSelected.Count != 4) return false;
+        foreach (GameObject obj in ItemsSelected)
+        {
+            if (obj == null) return false;
+            ItemController ic = obj.GetComponent<ItemController>();
+            if (ic == null || ic.itemData == null) return false;
+            if (ic.itemData.ItemType != ItemType.Magical) return false;
+        }
+        return true;
+    }
+
 
     /// <summary>
     /// When round is over, or Items are discarded- get new Items from the inventory to take their place
     /// </summary>
     public void GrabNewItems(int amount)
     {
+        if (blockNormalDraw) return;
         int emptySlots = itemPool.GetMaxSlots() - itemPool.GetItems().Count;
         int toGrab = Mathf.Min(amount, emptySlots);
         if (toGrab <= 0) return;
@@ -198,6 +200,20 @@ public class ItemManager : MonoBehaviour
         }
         UpdateSelectionText();
     }
+
+    public void ForceHandContents(List<ItemData> forcedItems)
+    {
+        foreach (GameObject obj in new List<GameObject>(itemPool.storedObjects))
+            Destroy(obj);
+        itemPool.storedObjects.Clear();
+        ItemsSelected.Clear();
+
+        foreach (ItemData data in forcedItems)
+            itemPool.InstantiateItem(data);
+
+        UpdateSelectionText();
+    }
+
 
     /// <summary>
     /// Sends Item List to ScoreManager for final score total

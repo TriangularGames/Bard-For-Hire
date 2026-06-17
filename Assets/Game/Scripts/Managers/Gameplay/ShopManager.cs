@@ -85,11 +85,11 @@ public class ShopManager : MonoBehaviour
         switch (upgrade.UpgradeID)
         {
             case UpgradeID.Archmage:
-                return PlayerManager.Instance.CountItemsOfType(ItemType.Magical) >= 15;
+                return PlayerManager.Instance.CountItemsOfType(ItemType.Magical) >= 13;
             case UpgradeID.KnightCaptain:
-                return PlayerManager.Instance.CountItemsOfType(ItemType.Slashing) >= 15;
+                return PlayerManager.Instance.CountItemsOfType(ItemType.Slashing) >= 13;
             case UpgradeID.ShadowThief:
-                return PlayerManager.Instance.CountItemsOfType(ItemType.Piercing) >= 15;
+                return PlayerManager.Instance.CountItemsOfType(ItemType.Piercing) >= 13;
             default:
                 return true;
         }
@@ -322,6 +322,7 @@ public class ShopManager : MonoBehaviour
     {
         // Switch to Performance scene
         GameManager.Instance.SwitchState(new CombatState());
+        MenuManager.Instance.SwitchState(new DefaultMenuState());
     }
 
     /// <summary>

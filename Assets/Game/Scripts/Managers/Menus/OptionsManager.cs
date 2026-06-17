@@ -162,7 +162,10 @@ public class OptionsManager : Singleton<OptionsManager>
     {
         gameSpeed = GameSpeed;
         PlayerPrefs.SetInt("GameSpeed", gameSpeed);
-        SetTimeScale();
+        if (!PauseManager.Instance.IsPaused)
+        {
+            SetTimeScale();
+        }
         PlayerPrefs.Save();
     }
 

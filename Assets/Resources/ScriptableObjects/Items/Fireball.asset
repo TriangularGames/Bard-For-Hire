@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Fireball
   m_EditorClassIdentifier: Assembly-CSharp::Note
   ItemName: Fireball
-  ItemDescription: A large ball enflamed
+  ItemDescription: A large ball enflamed whcih deals damage to both the target and
+    the enemy behind it
   cost: 7
   target: 2
   ItemType: 2

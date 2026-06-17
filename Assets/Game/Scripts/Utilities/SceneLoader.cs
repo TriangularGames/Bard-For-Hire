@@ -21,7 +21,7 @@ public class SceneLoader : Singleton<SceneLoader>
     [SerializeField, Tooltip("Optional: text showing scene name or tip")]
     private TextMeshProUGUI progressText = null!;
 
-    [SerializeField, Range(0.1f, 2f), Tooltip("Minimum time the loading screen is shown")]
+    [SerializeField, Range(0.1f, 5f), Tooltip("Minimum time the loading screen is shown")]
     private float minimumDisplayTime = 0.6f;
     [SerializeField]
     private List<string> managerScenesToLoad = new();
@@ -102,9 +102,11 @@ public class SceneLoader : Singleton<SceneLoader>
     {
         AsyncOperation op = SceneManager.LoadSceneAsync(sceneName, mode);
         if (op == null) yield break;
-        progressText.text = "Loading " + sceneName;
+
         while (!op.isDone)
         {
+            progressText.text = "Now Loading";
+
             if (progressBar != null)
             {
                 progressBar.value = op.progress;
@@ -196,7 +198,7 @@ public class SceneLoader : Singleton<SceneLoader>
             // Optional text update
             if (progressText != null)
             {
-                progressText.text = $"Loading... {Mathf.RoundToInt(progress * 100)}%";
+                progressText.text = "Now Loading";
             }
 
             yield return null;

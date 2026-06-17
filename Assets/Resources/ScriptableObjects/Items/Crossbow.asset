@@ -20,7 +20,7 @@ MonoBehaviour:
   Rarity: 2
   weaponBonus: 0
   bonusDamageStacks: 0
-  Damage: 13
+  Damage: 11
   Mult: 0
   Playable: 15
-  icon: {fileID: 21300000, guid: 7fced4a8d1aca724c9f87ea3601345df, type: 3}
+  icon: {fileID: 21300000, guid: 9442584ac02af4938b99ff9446a14788, type: 3}

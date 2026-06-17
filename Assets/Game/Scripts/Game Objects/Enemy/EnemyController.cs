@@ -96,6 +96,8 @@ public class EnemyController : MonoBehaviour
     protected void SetAnimation()
     {
         anim.runtimeAnimatorController = enemyData.animator;
+        anim.SetFloat("IdleOffset", Random.Range(0.0f, 4.0f));
+        anim.speed = Random.Range(0.5f, 1.0f);
     }
 
     protected void SetDamageTxt()
@@ -129,6 +131,9 @@ public class EnemyController : MonoBehaviour
 
     private void DisplayWeakResistText()
     {
+        // If both are active, don't display text
+        if (Weak && Resist) return;
+
         // Check if damage taken is a Weakness or a Resistance
         if (Weak)
         {
@@ -291,6 +296,11 @@ public class EnemyController : MonoBehaviour
 
     private void Die()
     {
+        if (enemyData.yPos > 0)
+        {
+            transform.localPosition = new Vector3(transform.localPosition.x, 0.1f, transform.localPosition.z);
+        }
+        anim.speed = 1.0f;
         anim.SetTrigger("Dead");
     }
 

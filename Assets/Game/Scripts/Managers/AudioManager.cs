@@ -19,6 +19,13 @@ public class AudioManager : Singleton<AudioManager>
     [Header("AudioMixerGroup")]
     [SerializeField] private AudioMixerGroup[] _groups;
 
+    private float _dmgBonusPitch = 1;
+
+    public void ResetPitch()
+    {
+        _dmgBonusPitch = 1;
+    }
+
     // Funcs to control Audio
     private void Start()
     {
@@ -66,6 +73,15 @@ public class AudioManager : Singleton<AudioManager>
 
         if (clipToPlay != null)
         {
+            if (clipToPlay.name == "BonusDmg")
+            {
+                _sfxAudioSource.pitch = _dmgBonusPitch;
+                _dmgBonusPitch += 0.1f;
+            }
+            else
+            {
+                _sfxAudioSource.pitch = 1;
+            }
             _sfxAudioSource.PlayOneShot(clipToPlay);
         }
     }

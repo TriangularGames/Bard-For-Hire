@@ -81,8 +81,7 @@ public class EndScreenUI : MonoBehaviour
 
     public void GoToShop()
     {
-        GameManager.Instance.SwitchState(new ShopState());
-        MenuManager.Instance.SwitchState(new DefaultMenuState());
+        MenuManager.Instance.SwitchState(new VictoryMenuState());
     }
 
     public void GoToMainMenu()

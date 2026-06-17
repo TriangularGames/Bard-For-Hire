@@ -42,7 +42,6 @@ public class PlayerManager : Singleton<PlayerManager>
     private int HighestDamageDealt;
     public int highestDamageDealt { get { return HighestDamageDealt; } set { HighestDamageDealt = value; } }
     
-    // TODO: set this up
     private string MostUsedWeapon;
     public string mostUsedWeapon { get { return MostUsedWeapon; } set { MostUsedWeapon = value; } }
 
@@ -320,9 +319,43 @@ public class PlayerManager : Singleton<PlayerManager>
         return newItem;
     }
 
+    public ItemData GetItemOfType(ItemType type)
+    {
+        for (int i = 0; i < itemsNotUsed.Count; i++)
+        {
+            if (itemsNotUsed[i].ItemType == type)
+            {
+                ItemData item = itemsNotUsed[i];
+                itemsNotUsed.RemoveAt(i);
+                itemsHeld.Add(item);
+                return item;
+            }
+        }
+        for (int i = 0; i < itemsUsed.Count; i++)
+        {
+            if (itemsUsed[i].ItemType == type)
+            {
+                ItemData item = itemsUsed[i];
+                itemsUsed.RemoveAt(i);
+                itemsHeld.Add(item);
+                return item;
+            }
+        }
+        foreach (ItemData item in itemInventory)
+            if (item.ItemType == type) return item;
+
+        return null;
+    }
+
+
     public ItemData GetRandomInventoryItem()
     {
         return itemInventory[Random.Range(0, itemInventory.Count)];
+    }
+
+    internal void FlashCoinText()
+    {
+        GameObject.FindWithTag("Coins").GetComponent<Animator>().SetTrigger("CoinGain");
     }
 }
 

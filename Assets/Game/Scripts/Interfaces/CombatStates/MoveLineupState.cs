@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MoveLineupState : ICombatState
 {
@@ -10,7 +12,7 @@ public class MoveLineupState : ICombatState
     private readonly ScoreManager _sm;
     private readonly bool _skipWait;
 
-    private static readonly Vector3 StackOffset = new Vector3(-0.05f, 0f, 0.01f);
+    private static readonly Vector3 StackOffset = new Vector3(-0.09f, -0.03f, 0.01f);
     private const float WaitDuration = 0.8f;
     private const float CollapseDuration = 0.35f;
 
@@ -18,6 +20,7 @@ public class MoveLineupState : ICombatState
     private float _timer;
 
     private ItemManager _im;
+    private GameObject _curItem;
 
     // Sequential collapse: which shift we're currently animating (0 = first move after used item)
     private int _collapseStep;
@@ -25,6 +28,9 @@ public class MoveLineupState : ICombatState
     private Vector3 _lerpStart;
     private RectTransform _movingRect;
     private bool _transitioned;
+
+    private Image _curImage;
+    private Color _curColor;
 
     private const float TransitionDelay = 1.0f;
     private float _transitionTimer = 0f;
@@ -40,6 +46,9 @@ public class MoveLineupState : ICombatState
     public void EnterState(CombatManager cm)
     {
         _im = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
+
+        // To reset the Pitch of the Bonus Damage being added between items
+        AudioManager.Instance.ResetPitch();
 
         _timer = 0f;
         _phase = Phase.Wait;
@@ -121,6 +130,19 @@ public class MoveLineupState : ICombatState
 
         _movingRect.position = Vector3.Lerp(_lerpStart, GetStackPosition(_collapseStep), smoothT);
 
+        // Readjust fade based on position
+        Color targetFade = new Color(_curColor.r,
+            _curColor.g,
+            _curColor.b,
+            1.0f / (_collapseStep * 2)
+        );
+
+        _curImage.color = Color.Lerp(
+            _curColor,
+            targetFade,
+            smoothT
+        );
+
         if (t < 1f) return;
 
         // This shift finished and next item moves forward
@@ -151,12 +173,16 @@ public class MoveLineupState : ICombatState
             return;
         }
 
+        _curItem = item;
         _movingRect = item.GetComponent<RectTransform>();
         _lerpStart = _movingRect.position;
         _lerpTimer = 0f;
 
+        _curImage = _curItem.GetComponent<ItemController>().GetImage();
+        _curColor = _curImage.color;
+
         // Earlier items stay on top
-        item.transform.SetSiblingIndex(0);
+        item.transform.SetSiblingIndex(_index);
     }
 
     private void TransitionNext(CombatManager cm)

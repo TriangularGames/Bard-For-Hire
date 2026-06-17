@@ -162,7 +162,12 @@ public class RollState : ICombatState
                 {
                     _roller.displayRoll.text = _natRoll.ToString();
                 }
-                int final = Mathf.Clamp(_natRoll + _modifier, 1, 20);
+                int final = _natRoll;
+
+                if (_natRoll != 1 && _natRoll != 20)
+                {
+                   final = _natRoll + _modifier;
+                }
 
                 // Transition to show modifier/crit state, pass result forward
                 cm.SwitchState(new ShowRollResultState(_sm, _roller, _natRoll, _modifier, final, _items, _index, _isSingleRoll, _onSingleRollDone));

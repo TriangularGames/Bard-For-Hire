@@ -72,6 +72,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 2a41226bf9cf3e84fbd81214931fd794, type: 3}
   - {fileID: 8300000, guid: dbd4ad8ff52610d4ab342cc6d3f1af3b, type: 3}
   - {fileID: 8300000, guid: 57808ddbbea515045b82e9979ae1812a, type: 3}
+  - {fileID: 8300000, guid: de58dafafe858b5478ad0a69670e2aa6, type: 3}
   _ambienceClips: []
   _musicAudioSource: {fileID: 17557958345528308}
   _sfxAudioSource: {fileID: 4784535513818206028}

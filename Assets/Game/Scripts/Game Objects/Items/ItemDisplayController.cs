@@ -1,10 +1,12 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ItemDisplayController : ItemController
 {
     [SerializeField] private ParticleSystem confetti;
     [SerializeField] private Animator anim;
+    [SerializeField] private Animator dmgAnimator;
     private Material _material;
 
     // Dissolve Variables
@@ -12,6 +14,8 @@ public class ItemDisplayController : ItemController
     private int _dissolveAmount = Shader.PropertyToID("_DissolveAmount");
 
     public AnimatorStateInfo stateInfo;
+
+    private bool _damageBonusAdded= false;
 
     private void Start()
     {
@@ -44,10 +48,58 @@ public class ItemDisplayController : ItemController
         {
             damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(-25, 100, 0f);
         }
+        if (_damageBonusAdded)
+        {
+            dmgAnimator.SetTrigger("Shake");
+            _damageBonusAdded = false;
+        }
+    }
+
+    public void SetDamageDisplay(int value)
+    {
+        damageTxt.text = value.ToString();
+
+        if (int.Parse(damageTxt.text) < 10)
+        {
+            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 100, 0f);
+        }
+
+        if (int.Parse(damageTxt.text) >= 10)
+        {
+            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(-10, 100, 0f);
+        }
+
+        if (int.Parse(damageTxt.text) >= 100)
+        {
+            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(-25, 100, 0f);
+        }
+        if (_damageBonusAdded)
+        {
+            dmgAnimator.SetTrigger("Shake");
+            _damageBonusAdded = false;
+        }
+    }
+
+    public void SetDamageWithBonus(int baseD, UpgradeFightingManager.DamageBonus bonus)
+    {
+        if (bonus.amount > 0)
+        {
+            damageTxt.text = $"{baseD}  <color=yellow>+ {bonus.amount} {bonus.source}</color>";
+            _damageBonusAdded = true;
+        }
+        else if (bonus.amount < 0)
+        {
+            damageTxt.text = $"{baseD}  <color=red>{bonus.amount} {bonus.source}</color>";
+            _damageBonusAdded = true;
+        }
     }
 
     public void ResetDisplay()
     {
+        damageTxt.gameObject.SetActive(true);
+        playableText.gameObject.SetActive(true);
+        dmgBanner.SetActive(true);
+        playableBanner.SetActive(true);
         ResetDissolve();
     }
 
@@ -100,6 +152,10 @@ public class ItemDisplayController : ItemController
                 _material.SetFloat(_dissolveAmount, lerpedDissolve);
                 yield return null;
             }
+            damageTxt.gameObject.SetActive(false);
+            playableText.gameObject.SetActive(false);
+            dmgBanner.SetActive(false);
+            playableBanner.SetActive(false);
         }
     }
 }

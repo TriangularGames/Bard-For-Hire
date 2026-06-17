@@ -49,7 +49,11 @@ public class DiceRoller : MonoBehaviour
             int second = Random.Range(1, 21);
             if (second == 20) nat = 20;
         }
-    
+
+        if (ForceDiceRoll.Instance != null && ForceDiceRoll.Instance.WeOverrideNow())
+        {
+            nat = ForceDiceRoll.Instance.GetOverrideRoll(nat);
+        }
 
         return nat;
     }

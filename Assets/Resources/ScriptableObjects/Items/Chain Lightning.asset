@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Chain Lightning
   m_EditorClassIdentifier: Assembly-CSharp::Note
   ItemName: Chain Lightning
-  ItemDescription: Chains across all foes
+  ItemDescription: Chains lightning dealing damage to all foes
   cost: 11
   target: 3
   ItemType: 2

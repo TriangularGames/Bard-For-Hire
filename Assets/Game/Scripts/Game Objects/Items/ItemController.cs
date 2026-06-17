@@ -7,10 +7,10 @@ public class ItemController : MonoBehaviour
     [SerializeField] public ItemData itemData;
 
     [SerializeField] protected Image icon;
-    [SerializeField] private GameObject dmgBanner;
+    [SerializeField] protected GameObject dmgBanner;
     [SerializeField] protected TMP_Text damageTxt;
-    [SerializeField] private GameObject playableBanner;
-    [SerializeField] private TMP_Text playableText;
+    [SerializeField] protected GameObject playableBanner;
+    [SerializeField] protected TMP_Text playableText;
 
     public void Setup()
     {
@@ -26,20 +26,7 @@ public class ItemController : MonoBehaviour
 
     protected virtual void SetDamageTxt()
     {
-        if (itemData.Mult)
-        {
-            damageTxt.text = "x" + itemData.Damage.ToString();
-        }
-        else
-        {
-            damageTxt.text = (itemData.Damage + itemData.bonusDamageStacks).ToString();
-        }
-        
-    }
-
-    public void SetDamageDisplay(int value)
-    {
-        damageTxt.text = value.ToString();
+        damageTxt.text = (itemData.Damage + itemData.bonusDamageStacks).ToString();
     }
 
     public void DisableText()
@@ -50,12 +37,20 @@ public class ItemController : MonoBehaviour
         playableBanner.SetActive(false);
     }
 
-    public void SetDamageWithBonus(int baseD, UpgradeFightingManager.DamageBonus bonus)
+    public Image GetImage()
     {
-        if (bonus.amount > 0)
-            damageTxt.text = $"{baseD}  <color=yellow>+ {bonus.amount} {bonus.source}</color>";
-        else if (bonus.amount < 0)
-            damageTxt.text = $"{baseD}  <color=red>{bonus.amount} {bonus.source}</color>";
+        return icon;
+    }
+
+    public void FadeImage(int value)
+    {
+        ResetColor();
+        icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, icon.color.a / (value * 2));
+    }
+
+    public void ResetColor()
+    {
+        icon.color = Color.white;
     }
 
     private void SetPlayableTxt()

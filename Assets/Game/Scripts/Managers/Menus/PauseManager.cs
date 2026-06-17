@@ -60,7 +60,7 @@ public class PauseManager : Singleton<PauseManager>
             return;
         }
 
-        if (OptionsManager.Instance.GetTimeScale() > -1)
+        if (OptionsManager.Instance.GetTimeScale() > - 1)
         {
             Time.timeScale = OptionsManager.Instance.GetTimeScale();
         }

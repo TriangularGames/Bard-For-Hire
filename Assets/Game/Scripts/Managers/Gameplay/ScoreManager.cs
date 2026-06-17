@@ -37,17 +37,27 @@ public class ScoreManager : MonoBehaviour
 
     private void OnLastCoinCollected(LastCoinCollected e)
     {
-        // Victory / game over � list should be empty (or run from end of EnemyManager.RemoveEnemy)
-        if (CheckCombatEnd())
+        if (EnemyManager.Instance.AreEnemiesAlive())
         {
-            _hasPendingLineup = false; // don't lineup after victory
-            return;
+            if (_hasPendingLineup)
+            {
+                _hasPendingLineup = false;
+                CombatManager.Instance.SwitchState(new MoveLineupState(_pendingLineupItems, _pendingLineupIndex, this, skipWait: true));
+            }
+            else
+            {
+                return;
+            }
         }
-
-        // Deferred MoveLineup after death anim
-        if (!_hasPendingLineup) return;
-        _hasPendingLineup = false;
-        CombatManager.Instance.SwitchState(new MoveLineupState(_pendingLineupItems, _pendingLineupIndex, this, skipWait: true));
+        else
+        {
+            // Victory / game over � list should be empty (or run from end of EnemyManager.RemoveEnemy)
+            if (CheckCombatEnd())
+            {
+                _hasPendingLineup = false; // don't lineup after victory
+                return;
+            }
+        }
     }
 
     private void Start()
@@ -84,10 +94,16 @@ public class ScoreManager : MonoBehaviour
             stackedItem.SetActive(false);
         }
 
+        if (itemDisplay.transform.parent.childCount - 1 != itemDisplay.transform.GetSiblingIndex())
+        {
+            itemDisplay.transform.SetAsLastSibling();
+        }
+
         itemDisplay.GetComponent<ItemController>().itemData = pendingItems[index];
         itemDisplay.GetComponent<ItemController>().Setup();
         itemDisplay.SetActive(true);
         itemDisplay.GetComponent<ItemDisplayController>().ResetDisplay();
+        
     }
 
     public void ShowHit(int index)
@@ -152,7 +168,14 @@ public class ScoreManager : MonoBehaviour
         {
             roundText.GetComponent<Animator>().SetTrigger("Flash");
         }
-
+        List<ItemData> currentHand = new List<ItemData>();
+        ItemManager itemManager = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
+        foreach (GameObject obj in itemManager.itemPool.GetItems())
+        {
+            ItemController icont = obj?.GetComponent<ItemController>();
+            if (icont != null) currentHand.Add(icont.itemData);
+        }
+        UpgradeFightingManager.Instance.EndRound(currentHand);
         roller.ResetText();
     }
 
@@ -182,6 +205,8 @@ public class ScoreManager : MonoBehaviour
         if (curRound >= MaxRounds)
         {
             Debug.Log("Combat Failed!");
+            EventBus.Publish<MissEvent>(new MissEvent());
+            CombatManager.Instance.SwitchState(new DefaultCombatState());
             MenuManager.Instance.SwitchState(new GameOverMenuState());
             return true;
         }
