@@ -32,6 +32,7 @@ public class EnemyManager : Singleton<EnemyManager>
     private List<EnemyData> nextEncounter = new List<EnemyData>();
     private int bossesKilled;
     public int currentDay = 1;
+    public int finalDay = 12;
 
     /// <summary>
     /// Current active Enemies

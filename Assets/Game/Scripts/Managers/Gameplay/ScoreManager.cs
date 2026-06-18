@@ -193,7 +193,7 @@ public class ScoreManager : MonoBehaviour
             if (remainingRounds > 0)
                 EventBus.Publish(new MoneyEarnedEvent(remainingRounds * 5, "Early Completion", null));
 
-            if (EnemyManager.Instance.currentDay == 12)
+            if (EnemyManager.Instance.currentDay == EnemyManager.Instance.finalDay)
             {
                 Debug.Log("Victory Achieved");
                 MenuManager.Instance.SwitchState(new TotalVictoryMenuState());

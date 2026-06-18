@@ -98,7 +98,8 @@ public class ShopManager : MonoBehaviour
 
     private void SetDayText()
     {
-        dayDisplay.text = "Day " + GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().currentDay.ToString();
+        dayDisplay.text = "Day " + GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().currentDay.ToString() + "/"
+            + GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().finalDay.ToString();
     }
 
     /// <summary>
