@@ -44,7 +44,7 @@ public class TutorialManager : MonoBehaviour
     {
         Debug.Log("Key exists: " + PlayerPrefs.HasKey(TutorialKey));
         Debug.Log("Value is: " + PlayerPrefs.GetInt(TutorialKey, 0));
-        return doTutorial || !PlayerPrefs.HasKey(TutorialKey);
+        return doTutorial || (PlayerPrefs.GetInt(TutorialKey) == 0) || !PlayerPrefs.HasKey(TutorialKey);
     }
 
     public void ShowTutorial(List<TutorialStep> steps, System.Action onComplete = null) // Starts the tutorial for the player
