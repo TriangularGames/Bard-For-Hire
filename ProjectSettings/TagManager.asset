@@ -17,6 +17,7 @@ TagManager:
   - DmgTxtPool
   - UpgradeLimit
   - ConsumableLimit
+  - RollBanner
   layers:
   - Default
   - TransparentFX

@@ -12,6 +12,8 @@ public class ScoreManager : MonoBehaviour
     public List<ItemData> pendingItems;
     private string rewardDisplayText;
 
+    private Animator _banner;
+
     private List<ItemData> _pendingLineupItems;
     private int _pendingLineupIndex;
     private bool _hasPendingLineup;
@@ -63,6 +65,7 @@ public class ScoreManager : MonoBehaviour
     private void Start()
     {
         itemDisplay.SetActive(false);
+        _banner = GameObject.FindWithTag("RollBanner").GetComponent<Animator>();
         EventBus.Publish<EnterCombatEvent>(new EnterCombatEvent());
     }
 
@@ -154,6 +157,9 @@ public class ScoreManager : MonoBehaviour
 
     public void FinalizeRound()
     {
+        _banner.ResetTrigger("Lower");
+        _banner.SetTrigger("Raise");
+
         if (CheckCombatEnd()) return;
 
         int count = pendingItems.Count;
@@ -231,14 +237,6 @@ public class ScoreManager : MonoBehaviour
                 foreach (Transform loc in EnemyManager.Instance.spawnPoints)
                     TryAttackAt(loc, item, damage);
                 break;
-        }
-    }
-
-    private void AttackFirstEnemy(ItemData item, int damage)
-    {
-        foreach (Transform loc in EnemyManager.Instance.spawnPoints)
-        {
-            if (TryAttackAt(loc, item, damage)) break;
         }
     }
 
