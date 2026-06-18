@@ -18,7 +18,7 @@ MonoBehaviour:
   icon: {fileID: 1857308957, guid: 91f59d439d0d04a2c9dfed0c8f7aba6f, type: 3}
   animator: {fileID: 22100000, guid: 7f40644e7d14b80469793a39aeba87ff, type: 2}
   Name: Seraphim
-  Description: Big angel guy
+  Description: Sleep paralysis demon who claims to be from heaven
   isBoss: 0
   ability: 1
   minDay: 12

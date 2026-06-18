@@ -285,7 +285,7 @@ PrefabInstance:
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'upgradeInventory.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: e2ec801ac0770cf4994ee60489abbf31, type: 2}
+      objectReference: {fileID: 11400000, guid: 129eaaa19c6675442b19421a59d85b3c, type: 2}
     - target: {fileID: 3281830266552986131, guid: 49f43177a3ff68845a3a6c2a8a32be77, type: 3}
       propertyPath: 'consumableInventory.Array.data[0]'
       value: 
@@ -777,6 +777,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 908861401}
     m_Modifications:
+    - target: {fileID: 17557958345528308, guid: 52fe70dd40f726a42b9eece9c19b4b00, type: 3}
+      propertyPath: m_Volume
+      value: 0.16
+      objectReference: {fileID: 0}
     - target: {fileID: 1071484535146794390, guid: 52fe70dd40f726a42b9eece9c19b4b00, type: 3}
       propertyPath: m_Name
       value: _AudioManager
@@ -3562,8 +3566,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 69.90828, y: -3.2281342}
-  m_SizeDelta: {x: 120, y: 50}
+  m_AnchoredPosition: {x: 64.24414, y: -1.495}
+  m_SizeDelta: {x: 88.7894, y: 53.468}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1235457406
 MonoBehaviour:
@@ -3616,10 +3620,10 @@ MonoBehaviour:
   m_fontSizeBase: 80
   m_fontWeight: 400
   m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMin: 80
+  m_fontSizeMax: 80
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -3651,7 +3655,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -111.18908, y: 0, z: 0, w: 0}
+  m_margin: {x: -102.7122, y: -2.311945, z: -103.26439, w: -3.0825195}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -3798,8 +3802,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6210061080180698499, guid: 1da358517fa78d649a6456ded77d3dd8, type: 3}
-      propertyPath: currentDay
+      propertyPath: isBossDay
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6210061080180698499, guid: 1da358517fa78d649a6456ded77d3dd8, type: 3}
+      propertyPath: currentDay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6210061080180698499, guid: 1da358517fa78d649a6456ded77d3dd8, type: 3}
+      propertyPath: daysTilBoss
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

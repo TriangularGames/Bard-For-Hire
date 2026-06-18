@@ -18,7 +18,7 @@ MonoBehaviour:
   icon: {fileID: 1826804091, guid: 33c365787b7ba40c4ae479102cd29e43, type: 3}
   animator: {fileID: 22100000, guid: 567325e27f599a2449349c30ec67d66e, type: 2}
   Name: Ogre
-  Description: Doesn't know how to count
+  Description: Just wants to be friends, unfortunately keeps crushing skulls
   isBoss: 0
   ability: 0
   minDay: 12
