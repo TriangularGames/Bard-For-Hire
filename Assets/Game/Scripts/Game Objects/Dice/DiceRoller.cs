@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class DiceRoller : MonoBehaviour
 {
@@ -70,6 +71,7 @@ public class DiceRoller : MonoBehaviour
     {
         display.text = "";
         displayRoll.text = "";
+        displayRoll.color = Color.white;
         if (displayAdvantage != null) displayAdvantage.text = "";
         if (displayCrit != null) displayCrit.text = "";
         if (upgradeNotifText != null) upgradeNotifText.text = "";
