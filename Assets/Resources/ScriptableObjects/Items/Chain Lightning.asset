@@ -23,4 +23,4 @@ MonoBehaviour:
   Damage: 1
   Mult: 0
   Playable: 12
-  icon: {fileID: 21300000, guid: b686125776d0b094f838c7821f75e644, type: 3}
+  icon: {fileID: 21300000, guid: 02354a6d4fffa4dea8e86018cf7478a9, type: 3}
