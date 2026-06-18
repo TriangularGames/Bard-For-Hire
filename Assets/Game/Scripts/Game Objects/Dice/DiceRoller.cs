@@ -9,6 +9,7 @@ public class DiceRoller : MonoBehaviour
     [SerializeField] public TMP_Text displayRoll;
     [SerializeField] public TMP_Text displayAdvantage;
     [SerializeField] public TMP_Text displayModifier;
+    [SerializeField] public TMP_Text displayAdvantageModifier;
     [SerializeField] public TMP_Text displayCrit;
     [SerializeField] public TMP_Text upgradeNotifText;
 
@@ -70,7 +71,6 @@ public class DiceRoller : MonoBehaviour
         display.text = "";
         displayRoll.text = "";
         if (displayAdvantage != null) displayAdvantage.text = "";
-        if (displayModifier != null) displayModifier.text = "";
         if (displayCrit != null) displayCrit.text = "";
         if (upgradeNotifText != null) upgradeNotifText.text = "";
     }

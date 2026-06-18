@@ -17,7 +17,7 @@ MonoBehaviour:
   weakness: 2
   icon: {fileID: 1857308957, guid: 91f59d439d0d04a2c9dfed0c8f7aba6f, type: 3}
   animator: {fileID: 22100000, guid: 7f40644e7d14b80469793a39aeba87ff, type: 2}
-  Name: Disabler Boss
+  Name: Angelic Judge
   Description: Disables a random damage type each round
   isBoss: 1
   ability: 1

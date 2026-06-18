@@ -18,12 +18,17 @@ public class ShowRollResultState : ICombatState
     private readonly int _index;
     private readonly bool _isSingleRoll;
     private readonly System.Action<int> _onSingleRollDone;
-
+    private readonly bool _usedAdvantage;
+    private readonly int _advantageA;
+    private readonly int _advantageB;
+    private TMP_Text _targetDisplay;
+    private TMP_Text _targetBonusDisplay;
     private float _timer;
-    private float _duration;
-
+    private float _showModifierDuration;
+    private float _applyModifierDuration;
+    private bool _modifierShown;
     public ShowRollResultState(ScoreManager sm, DiceRoller roller, int nat, int modifier,
-        int final, List<ItemData> items, int index, bool isSingleRoll, System.Action<int> onDone)
+        int final, List<ItemData> items, int index, bool isSingleRoll, System.Action<int> onDone, int advantageA, int advantageB, bool usedAdvantage)
     {
         _sm = sm;
         _roller = roller;
@@ -34,26 +39,52 @@ public class ShowRollResultState : ICombatState
         _index = index;
         _isSingleRoll = isSingleRoll;
         _onSingleRollDone = onDone;
+        _advantageA = advantageA;
+        _advantageB = advantageB;
+        _usedAdvantage = usedAdvantage;
     }
 
     public void EnterState(CombatManager cm)
     {
         _timer = 0f;
+        _modifierShown = false;
 
-        if (_modifier != 0 && _nat != 1 && _nat != 20)
+        if (_usedAdvantage)
         {
-            _roller.displayModifier.text = $"+ {_modifier}";
-            _duration = _roller.revealPause * 0.4f;
+            _targetDisplay = (_advantageA >= _advantageB) ? _roller.displayRoll : _roller.displayAdvantage;
+            _targetBonusDisplay = (_advantageA >= _advantageB) ? _roller.displayModifier : _roller.displayAdvantageModifier;
         }
         else
         {
-            _duration = _roller.revealPause * 0.8f;
+            _targetDisplay = _roller.displayRoll;
+            _targetBonusDisplay = _roller.displayModifier;
+        }
+
+        bool hasModifier = _modifier != 0 && _nat != 1 && _nat != 20;
+
+        _showModifierDuration = hasModifier ? _roller.revealPause * 0.4f : 0f;
+        _applyModifierDuration = hasModifier ? _roller.revealPause * 0.4f : _roller.revealPause * 0.8f;
+
+        if (_usedAdvantage)
+        {
+            if (_advantageA > _advantageB)
+                _roller.displayAdvantage.color = Color.red;
+            else if (_advantageB > _advantageA)
+                _roller.displayRoll.color = Color.red;
         }
 
         // Show crit/miss
         if (_nat == 20)
         {
-            _roller.displayRoll.color = Color.yellow;
+            if (_usedAdvantage)
+            {
+                if (_advantageA == 20) _roller.displayRoll.color = Color.yellow;
+                if (_advantageB == 20) _roller.displayAdvantage.color = Color.yellow;
+            }
+            else
+            {
+                _roller.displayRoll.color = Color.yellow;
+            }
             _roller.displayCrit.text = "CRITICAL HIT!";
             AudioManager.Instance.PlayClip("Nat20");
             _roller.displayCrit.color = Color.yellow;
@@ -65,6 +96,11 @@ public class ShowRollResultState : ICombatState
             AudioManager.Instance.PlayClip("Nat1");
             _roller.displayCrit.color = Color.red;
         }
+
+        if (!hasModifier)
+        {
+            _modifierShown = true;
+        }
     }
 
     public void ExitState(CombatManager cm) { }
@@ -74,13 +110,34 @@ public class ShowRollResultState : ICombatState
         if (PauseManager.Instance.IsPaused) return;
 
         _timer += Time.deltaTime;
-        if (_timer >= _duration)
+
+        if (!_modifierShown)
         {
-            // Show final value
-            _roller.displayRoll.text = _final.ToString();
-            _roller.displayRoll.color = Color.white;
+            if (_timer >= _showModifierDuration)
+            {
+                _targetBonusDisplay.text = $"+{_modifier}</color>";
+                _modifierShown = true;
+                _timer = 0f;
+            }
+            return;
+        }
+
+        if (_timer >= _applyModifierDuration)
+        {
+            // Show final Value
+            _roller.displayRoll.text = "";
+            if (_usedAdvantage) _roller.displayAdvantage.text = "";
+
+            _targetBonusDisplay.text = "";
+            _targetDisplay.text = _final.ToString();
+
+            if (_usedAdvantage)
+            {
+                _roller.displayRoll.color = Color.white;
+                _roller.displayAdvantage.color = Color.white;
+            }
+
             _roller.displayCrit.text = "";
-            _roller.displayModifier.text = "";
 
             if (_isSingleRoll)
             {

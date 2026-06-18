@@ -121,7 +121,13 @@ public class CombatTutorial: MonoBehaviour
 
             new TutorialStep
             {
-                message = "Each weapon has a damage value which is how much health each hit removes from the enemy, and a roll number which is the minimum you must roll on a 20-sided dice for the attack to succeed.",
+                message = "Each weapon has a damage value which is how much health each hit removes from the enemy.",
+                highlight = attackHandHighlight,
+            },
+
+            new TutorialStep
+            {
+                message = "They also have a roll number which is the minimum you must roll on a 20-sided dice for the attack to succeed.",
                 highlight = attackHandHighlight,
             },
 
@@ -244,6 +250,10 @@ public class CombatTutorial: MonoBehaviour
                  itemManager.blockNormalDraw = false;
                  ForceInput.Instance?.ClearRequirements();
              }
+            },
+            new TutorialStep
+            {
+             message = "",
             },
         };
 
