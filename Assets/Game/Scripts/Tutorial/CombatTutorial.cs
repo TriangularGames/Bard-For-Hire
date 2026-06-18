@@ -6,6 +6,10 @@ public class CombatTutorial: MonoBehaviour
 {
     [Header("Highlight Targets")] // Different highlight targets for the zones to emphasize
     [SerializeField] private GameObject attackHandHighlight;
+    [SerializeField] private GameObject attackHighlight;
+    [SerializeField] private GameObject dmgHandHighlight;
+    [SerializeField] private GameObject rollHandHighlight;
+    [SerializeField] private GameObject enemyHighlight;
     [SerializeField] private GameObject upgradeBarHighlight;
     [SerializeField] private GameObject consumableBarHighlight;
     [SerializeField] private GameObject discardButtonHighlight;
@@ -122,19 +126,19 @@ public class CombatTutorial: MonoBehaviour
             new TutorialStep
             {
                 message = "Each weapon has a damage value which is how much health each hit removes from the enemy.",
-                highlight = attackHandHighlight,
+                highlight = dmgHandHighlight,
             },
 
             new TutorialStep
             {
                 message = "They also have a roll number which is the minimum you must roll on a 20-sided dice for the attack to succeed.",
-                highlight = attackHandHighlight,
+                highlight = rollHandHighlight,
             },
 
             new TutorialStep
             {
                 message = "Try clicking on a weapon.",
-                highlight = attackHandHighlight,
+                highlight = attackHighlight,
                 waitForAction = true,
                 onEnter = () => weaponClicked = false
             },
@@ -142,7 +146,7 @@ public class CombatTutorial: MonoBehaviour
              new TutorialStep
             {
                 message = "Hover over an enemy to see their name and weakness. \n\nThe first enemy in this lineup is weak to Piercing attacks!",
-                highlight = attackHandHighlight,
+                highlight = enemyHighlight,
             },
 
               new TutorialStep
@@ -174,14 +178,13 @@ public class CombatTutorial: MonoBehaviour
             new TutorialStep
             {
                 message = "You can select up to 4 attacks. \n\nTheir attack order depends on the order you click on them. Which is indicated by the overlayed number.",
-                highlight = attackHandHighlight,
+                highlight = attackHighlight,
             },
 
 
              new TutorialStep
             {
                 message = "Select 4 Daggers and press Attack!",
-                highlight = attackHandHighlight,
                 waitForAction = true,
                 onEnter = () =>
                 {
@@ -191,7 +194,6 @@ public class CombatTutorial: MonoBehaviour
                 },
                 onActionComplete = () =>
                 {
-                    attackHandHighlight.SetActive(false);
                     discardButtonHighlight.SetActive(false);
                     clearButtonHighlight.SetActive(false);
                     itemManager.blockNormalDraw = false;
@@ -201,7 +203,7 @@ public class CombatTutorial: MonoBehaviour
 
             new TutorialStep
             {
-                message = "Rolling a 20 makes your attack a   <color=yellow>CRITICAL HIT  <color=black>which does double damage. \nRolling a 1 makes your attack a   <color=red>CRITICAL MISS  <color=black>which always fails no matter what.",
+                message = "Rolling a 20 makes your attack a <color=yellow>CRITICAL HIT <color=black>which does double damage.\nRolling a 1 makes your attack a <color=red>CRITICAL MISS <color=black>which always fails no matter what.",
                 onEnter = () =>
                 {
                     itemManager.noAttacking = true;
