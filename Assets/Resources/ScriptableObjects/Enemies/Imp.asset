@@ -22,5 +22,5 @@ MonoBehaviour:
   isBoss: 0
   ability: 2
   minDay: 0
-  maxDay: 3
+  maxDay: 0
   yPos: 0.1

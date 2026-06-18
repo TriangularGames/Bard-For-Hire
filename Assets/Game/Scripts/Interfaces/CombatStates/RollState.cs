@@ -170,7 +170,7 @@ public class RollState : ICombatState
                 }
 
                 // Transition to show modifier/crit state, pass result forward
-                cm.SwitchState(new ShowRollResultState(_sm, _roller, _natRoll, _modifier, final, _items, _index, _isSingleRoll, _onSingleRollDone));
+                cm.SwitchState(new ShowRollResultState(_sm, _roller, _natRoll, _modifier, final, _items, _index, _isSingleRoll, _onSingleRollDone, _advantageRollA, _advantageRollB, _withAdvantage));
             }
         }
     }
