@@ -133,9 +133,9 @@ public class ShowRollResultState : ICombatState
 
             if (_usedAdvantage)
             {
-                _roller.displayRoll.color = Color.white;
                 _roller.displayAdvantage.color = Color.white;
             }
+            _roller.displayRoll.color = Color.white;
 
             _roller.displayCrit.text = "";
 

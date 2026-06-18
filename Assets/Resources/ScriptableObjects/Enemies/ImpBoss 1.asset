@@ -21,6 +21,6 @@ MonoBehaviour:
   Description: One of the king's many many sons
   isBoss: 1
   ability: 2
-  minDay: 9
+  minDay: 12
   maxDay: 0
   yPos: 0.25

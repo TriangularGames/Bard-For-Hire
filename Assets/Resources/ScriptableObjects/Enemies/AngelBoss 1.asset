@@ -21,6 +21,6 @@ MonoBehaviour:
   Description: Big angel guy
   isBoss: 1
   ability: 1
-  minDay: 0
+  minDay: 12
   maxDay: 0
   yPos: 0.2
