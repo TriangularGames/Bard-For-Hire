@@ -19,7 +19,7 @@ MonoBehaviour:
   animator: {fileID: 22100000, guid: 7f40644e7d14b80469793a39aeba87ff, type: 2}
   Name: Seraphim
   Description: Big angel guy
-  isBoss: 1
+  isBoss: 0
   ability: 1
   minDay: 12
   maxDay: 0

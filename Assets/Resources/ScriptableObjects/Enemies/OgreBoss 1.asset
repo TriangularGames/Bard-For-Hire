@@ -19,7 +19,7 @@ MonoBehaviour:
   animator: {fileID: 22100000, guid: 567325e27f599a2449349c30ec67d66e, type: 2}
   Name: Ogre
   Description: Doesn't know how to count
-  isBoss: 1
+  isBoss: 0
   ability: 0
   minDay: 12
   maxDay: 0
