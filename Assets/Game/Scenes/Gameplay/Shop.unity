@@ -3706,9 +3706,9 @@ MonoBehaviour:
   optionsBtn: {fileID: 1927156929}
   nextRoundBtn: {fileID: 248419764}
   dayDisplay: {fileID: 1235457406}
-  commonWeight: 60
+  commonWeight: 59
   uncommonWeight: 29
-  rareWeight: 10
+  rareWeight: 11
   legendaryWeight: 1
   _items: {fileID: 1516798803}
   _upgrades: {fileID: 2018655132}

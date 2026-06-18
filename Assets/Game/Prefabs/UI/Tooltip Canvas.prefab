@@ -165,7 +165,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Roll: 20'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f2dd48e3e91546a4c99e1e94aaac0240, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: -4558932142792424483, guid: f2dd48e3e91546a4c99e1e94aaac0240, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -302,7 +302,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: This is a body of text, this text gives some kind of description.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f2dd48e3e91546a4c99e1e94aaac0240, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: -4558932142792424483, guid: f2dd48e3e91546a4c99e1e94aaac0240, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -575,7 +575,7 @@ MonoBehaviour:
   m_IgnoreLayout: 0
   m_MinWidth: -1
   m_MinHeight: -1
-  m_PreferredWidth: 550
+  m_PreferredWidth: 800
   m_PreferredHeight: -1
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
@@ -599,7 +599,7 @@ MonoBehaviour:
   typeTxt: {fileID: 1198914589913017095}
   contentTxt: {fileID: 1251654277833191351}
   layoutElement: {fileID: 9062780397028255441}
-  characterWrapLimit: 75
+  characterWrapLimit: 50
 --- !u!114 &907678052110622183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -819,7 +819,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Slashing
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f2dd48e3e91546a4c99e1e94aaac0240, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: -4558932142792424483, guid: f2dd48e3e91546a4c99e1e94aaac0240, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1020,7 +1020,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Uncommon
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f2dd48e3e91546a4c99e1e94aaac0240, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: -4558932142792424483, guid: f2dd48e3e91546a4c99e1e94aaac0240, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1157,7 +1157,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Damage: 10'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: f2dd48e3e91546a4c99e1e94aaac0240, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: -4558932142792424483, guid: f2dd48e3e91546a4c99e1e94aaac0240, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
