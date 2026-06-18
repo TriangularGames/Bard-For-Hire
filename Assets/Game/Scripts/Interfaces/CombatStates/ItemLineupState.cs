@@ -31,6 +31,9 @@ public class ItemLineUpState : ICombatState
     private bool _allLerpsDone;
     private bool _transitioned;
 
+    private Animator _banner;
+    private bool _bannerDown = false;
+
     private ScoreManager _sm;
 
     public ItemLineUpState(List<ItemData> items, DiceRoller roller, List<GameObject> itemObjects)
@@ -48,7 +51,9 @@ public class ItemLineUpState : ICombatState
         _transitioned = false;
         _currentItemIndex = _items.Count - 1;
         _placementIndex = 0;
+        _bannerDown = false;
 
+        _banner = GameObject.FindWithTag("RollBanner").GetComponent<Animator>();
         _sm = GameObject.FindWithTag("ScoreManager").GetComponent<ScoreManager>();
 
         _sm.InitializeRound(_items);
@@ -98,7 +103,17 @@ public class ItemLineUpState : ICombatState
         else
         {
             _holdTimer += Time.deltaTime;
-            if (_holdTimer >= _holdDuration)
+            // Lower the roll banner
+            if (!_bannerDown)
+            {
+                _banner.SetTrigger("Lower");
+            }
+            if (_banner.GetCurrentAnimatorStateInfo(0).IsName("Lowered"))
+            {
+                _bannerDown = true;
+            }
+
+            if (_holdTimer >= _holdDuration && _bannerDown)
             {
                 _transitioned = true;
                 _roller.StartCombatRoll(_items, 0);
