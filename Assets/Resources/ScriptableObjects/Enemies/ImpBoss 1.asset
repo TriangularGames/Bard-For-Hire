@@ -19,7 +19,7 @@ MonoBehaviour:
   animator: {fileID: 22100000, guid: 3409dd6f3e952d9499eccd7acc853ef4, type: 2}
   Name: Imp Prince
   Description: One of the king's many many sons
-  isBoss: 1
+  isBoss: 0
   ability: 2
   minDay: 12
   maxDay: 0
