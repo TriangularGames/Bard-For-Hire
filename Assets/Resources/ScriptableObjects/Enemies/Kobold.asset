@@ -18,7 +18,7 @@ MonoBehaviour:
   icon: {fileID: 945064458, guid: 653ea24888f0f401e9d1d5b8e8b5b764, type: 3}
   animator: {fileID: 22100000, guid: 6c07c4ea922b39f41b6657dc0efe131f, type: 2}
   Name: Kobold
-  Description: An even smaller guy, even larger problems
+  Description: Small and angry, will bite your ankles
   isBoss: 0
   ability: 2
   minDay: 0
