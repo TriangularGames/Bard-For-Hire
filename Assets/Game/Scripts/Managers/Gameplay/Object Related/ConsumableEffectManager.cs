@@ -95,9 +95,20 @@ public class ConsumableEffectManager : MonoBehaviour
             ItemData item = itemObj.GetComponent<ItemController>().itemData;
 
             PlayerManager.Instance.RemoveInventoryItem(item);
+            PlayerManager.Instance.itemsHeld.Remove(item);
+            PlayerManager.Instance.itemsNotUsed.Remove(item);
             itemObj.GetComponent<Select>().Deselect();
             Destroy(itemObj);
+
+            ItemManager im = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
+            im.ItemsSelected.Remove(itemObj);
+            im.itemPool.RemoveItem(itemObj);
+            Destroy(itemObj);
         }
+        ItemManager itemManager = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
+        int emptySlots = itemManager.itemPool.GetMaxSlots() - itemManager.itemPool.GetItems().Count;
+        itemManager.GrabNewItems(emptySlots);
+        itemManager.Relabel();
     }
 
     public ItemData PolymorphItem(ItemData item)

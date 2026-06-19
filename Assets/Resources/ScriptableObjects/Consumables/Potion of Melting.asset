@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Potion of Melting
   m_EditorClassIdentifier: Assembly-CSharp::ConsumableData
   ConsumableName: Potion of Melting
-  ConsumableDescription: Permanently removes 2 weapons from your bag
+  ConsumableDescription: Permanently removes 2 weapons from your bag and refills
+    slots
   cost: 6
   Type: 5
   Rarity: 0
