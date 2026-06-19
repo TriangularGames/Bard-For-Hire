@@ -4940,8 +4940,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Now Loading
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 60d53ffb66a473c4f960230752d61e65, type: 2}
-  m_sharedMaterial: {fileID: -1340299700906356402, guid: 60d53ffb66a473c4f960230752d61e65, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ed6d021b45cfb6241ba0cde1c99341bb, type: 2}
+  m_sharedMaterial: {fileID: -3407869173491163698, guid: ed6d021b45cfb6241ba0cde1c99341bb, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4965,8 +4965,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 70
-  m_fontSizeBase: 70
+  m_fontSize: 130
+  m_fontSizeBase: 130
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -5034,7 +5034,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 25}
   m_SizeDelta: {x: 700, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1578788162
@@ -5585,14 +5585,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.23584908, g: 0.23584908, b: 0.23584908, a: 1}
+  m_Color: {r: 0.6320754, g: 0.6320754, b: 0.6320754, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: c6303b1df05201d49aafd339505559cc, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

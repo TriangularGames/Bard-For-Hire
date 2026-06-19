@@ -33,6 +33,9 @@ public class OptionsManager : Singleton<OptionsManager>
     [Tooltip("Speed of Gameplay.")]
     [SerializeField] private int gameSpeed;
 
+    [Header("Tutorial Button Flag")]
+    private bool inGame;
+
     public float MasterVolume { get { return masterVolume; } private set { masterVolume = value; } }
     public float MusicVolume { get { return musicVolume; } private set { musicVolume = value; } }
     public float SfxVolume { get { return sfxVolume; } private set { sfxVolume = value; } }
@@ -40,6 +43,7 @@ public class OptionsManager : Singleton<OptionsManager>
     public Resolution GameResolution { get { return gameResolution; } private set { gameResolution = value; } }
     public bool IsFullScreen { get { return isFullScreen; } private set { isFullScreen = value; } }
     public int GameSpeed { get { return gameSpeed; } private set { gameSpeed = value; } }
+    public bool InGame {  get { return inGame; } set { inGame = value; } }
 
 
     public override void Awake()
@@ -208,6 +212,12 @@ public class OptionsManager : Singleton<OptionsManager>
                 return 4;
         }
         return -1;
+    }
+
+    public void ResetTutorial()
+    {
+        PlayerPrefs.SetInt("TutorialComplete", 0);
+        PlayerPrefs.Save();
     }
 
     /// <summary>

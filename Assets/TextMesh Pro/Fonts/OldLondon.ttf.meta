@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 295b9e73b8df7c84981661915478508e
+guid: 52599908bf68996469ab16a929341f7a
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Warsuck
+  - Old London
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
