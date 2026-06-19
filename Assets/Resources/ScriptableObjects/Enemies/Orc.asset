@@ -21,6 +21,6 @@ MonoBehaviour:
   Description: Big man on campus
   isBoss: 0
   ability: 2
-  minDay: 6
+  minDay: 8
   maxDay: 0
   yPos: 0.02
