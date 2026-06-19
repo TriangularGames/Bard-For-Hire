@@ -5,6 +5,7 @@ public class MainMenuState : IMenuState
     public void EnterState(MenuManager gm)
     {
         Debug.Log("Entering MainMenuState");
+        OptionsManager.Instance.InGame = false;
         SceneLoader.Instance.LoadScene("MainMenu", UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
 

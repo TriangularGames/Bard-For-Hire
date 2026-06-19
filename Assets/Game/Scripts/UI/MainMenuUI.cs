@@ -9,9 +9,6 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] private Button creditBtn;
     [SerializeField] private GameObject creditWindow;
     [SerializeField] private Button closeBtn;
-    [SerializeField] private GameObject tutorialPrompt;
-    [SerializeField] private Button yesBtn;
-    [SerializeField] private Button noBtn;
 
     private void OnEnable()
     {
@@ -20,8 +17,6 @@ public class MainMenuUI : MonoBehaviour
         quitBtn.onClick.AddListener(delegate { AudioManager.Instance.Back(); });
         creditBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
         closeBtn.onClick.AddListener(delegate { AudioManager.Instance.Error(); });
-        yesBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
-        noBtn.onClick.AddListener(delegate { AudioManager.Instance.Error(); });
     }
 
     private void OnDisable()
@@ -31,18 +26,13 @@ public class MainMenuUI : MonoBehaviour
         quitBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Back(); });
         creditBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
         closeBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Error(); });
-        yesBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
-        noBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Error(); });
-    }
-
-    private void Awake()
-    {
-        tutorialPrompt.SetActive(false);
     }
 
     public void Play()
     {
-        tutorialPrompt.SetActive(true);
+        OptionsManager.Instance.InGame = true;
+        GameManager.Instance.SwitchState(new CombatState());
+        MenuManager.Instance.SwitchState(new DefaultMenuState());
     }
 
     public void Options()
@@ -63,25 +53,5 @@ public class MainMenuUI : MonoBehaviour
     public void CloseCredits()
     {
         creditWindow.SetActive(false);
-    }
-
-    public void Yes()
-    {
-        PlayerPrefs.SetInt("TutorialComplete", 0);
-        PlayerPrefs.Save();
-        StartGame();
-    }
-
-    public void No()
-    {
-        PlayerPrefs.SetInt("TutorialComplete", 1);
-        PlayerPrefs.Save();
-        StartGame();
-    }
-
-    public void StartGame()
-    {
-        GameManager.Instance.SwitchState(new CombatState());
-        MenuManager.Instance.SwitchState(new DefaultMenuState());
     }
 }

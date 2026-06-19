@@ -27,12 +27,14 @@ public class OptionsMenuUI : MonoBehaviour
     [Tooltip("Dropdown for GameSpeed.")]
     [SerializeField] private TMP_Dropdown gamespeedDropdown;
     [SerializeField] private string[] gamespeedOptions;
+    [Tooltip("Button to Reset Tutorial (Allow Player to do Tutorial again)")]
+    [SerializeField] private Button resetTutorialButton;
     [Tooltip("Button to close the options menu.")]
     [SerializeField] private Button backButton;
     [Header("Other Components")]
     private Resolution[] resolutions;
     private string[] qualityOptions;
-    
+
 
     private void Awake()
     {
@@ -51,11 +53,27 @@ public class OptionsMenuUI : MonoBehaviour
         Debug.Log("OptionsMenuUI enabled, updating UI with current settings.");
         UpdateUIWithCurrentSettings();
         backButton.onClick.AddListener(() => AudioManager.Instance.Back());
+        resetTutorialButton.onClick.AddListener(() => AudioManager.Instance.Confirm());
+
+        if (!OptionsManager.Instance.InGame)
+        {
+            resetTutorialButton.gameObject.SetActive(true);
+            resetTutorialButton.onClick.AddListener(() =>
+            {
+                OptionsManager.Instance.ResetTutorial();
+                resetTutorialButton.interactable = false;
+            });
+        }
+        else
+        {
+            resetTutorialButton.gameObject.SetActive(false);
+        }
     }
 
     private void OnDisable()
     {
         backButton.onClick.RemoveListener(() => AudioManager.Instance.Back());
+        resetTutorialButton.onClick.RemoveListener(() => AudioManager.Instance.Confirm());
     }
 
     /// <summary>
@@ -63,6 +81,8 @@ public class OptionsMenuUI : MonoBehaviour
     /// </summary>
     private void InitializeUIComponents()
     {
+        SetResetTutorialButton();
+
         // Back Button
         backButton.onClick.AddListener(() =>
         {
@@ -227,5 +247,20 @@ public class OptionsMenuUI : MonoBehaviour
         gamespeedDropdown.AddOptions(gamespeedOptions.ToList());
         gamespeedDropdown.value = OptionsManager.Instance.GameSpeed;
         gamespeedDropdown.RefreshShownValue();
+    }
+
+    private void SetResetTutorialButton()
+    {
+        if (!OptionsManager.Instance.InGame)
+        {
+            if (PlayerPrefs.GetInt("TutorialComplete") == 1)
+            {
+                resetTutorialButton.interactable = true;
+            }
+            else
+            {
+                resetTutorialButton.interactable = false;
+            }
+        }
     }
 }

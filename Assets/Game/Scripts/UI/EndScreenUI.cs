@@ -87,6 +87,7 @@ public class EndScreenUI : MonoBehaviour
     public void GoToMainMenu()
     {
         // Reset game to default values on quit
+        OptionsManager.Instance.InGame = false;
         EventBus.Publish(new ResetGameEvent());
 
         MenuManager.Instance.SwitchState(new MainMenuState());
