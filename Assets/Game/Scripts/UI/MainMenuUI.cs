@@ -6,6 +6,9 @@ public class MainMenuUI : MonoBehaviour
     [SerializeField] private Button startBtn;
     [SerializeField] private Button optionsBtn;
     [SerializeField] private Button quitBtn;
+    [SerializeField] private Button creditBtn;
+    [SerializeField] private GameObject creditWindow;
+    [SerializeField] private Button closeBtn;
     [SerializeField] private GameObject tutorialPrompt;
     [SerializeField] private Button yesBtn;
     [SerializeField] private Button noBtn;
@@ -15,6 +18,8 @@ public class MainMenuUI : MonoBehaviour
         startBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
         optionsBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
         quitBtn.onClick.AddListener(delegate { AudioManager.Instance.Back(); });
+        creditBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
+        closeBtn.onClick.AddListener(delegate { AudioManager.Instance.Error(); });
         yesBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
         noBtn.onClick.AddListener(delegate { AudioManager.Instance.Error(); });
     }
@@ -24,6 +29,8 @@ public class MainMenuUI : MonoBehaviour
         startBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
         optionsBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
         quitBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Back(); });
+        creditBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
+        closeBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Error(); });
         yesBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
         noBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Error(); });
     }
@@ -46,6 +53,16 @@ public class MainMenuUI : MonoBehaviour
     public void Quit()
     {
         Application.Quit();
+    }
+
+    public void OpenCredits()
+    {
+        creditWindow.SetActive(true);
+    }
+
+    public void CloseCredits()
+    {
+        creditWindow.SetActive(false);
     }
 
     public void Yes()
