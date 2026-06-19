@@ -191,8 +191,12 @@ public class OptionsMenuUI : MonoBehaviour
         for (int i = 0; i < resolutions.Length; i++)
         {
             var resolution = resolutions[i];
-            var option = $"{resolution.width}x{resolution.height}";
-            options.Add(option);
+            // Check if resolution is 16:9
+            if (resolution.width % 16 == 0 && resolution.height % 9 == 0)
+            {
+                var option = $"{resolution.width}x{resolution.height}";
+                options.Add(option);
+            }
 
             if (resolution.width == Screen.currentResolution.width && resolution.height == Screen.currentResolution.height)
             {
