@@ -107,7 +107,7 @@ public class CombatTutorial: MonoBehaviour
         {
             new TutorialStep
             {
-                message = "Haha adventurer you fell for my trap. You're stuck in this dungeon now. \nWell uh I guess while you're here I could show you the ropes.",
+                message = "Haha adventurer you fell for my trap. You're stuck in this dungeon now.\nWell uh I guess while you're here I could show you the ropes.",
                 onEnter = () =>
                 {
                    ForceDiceRoll.Instance?.StartForcedSequence();
@@ -119,19 +119,19 @@ public class CombatTutorial: MonoBehaviour
 
             new TutorialStep
             {
-                message = "This is your arsenal of weapons. \n\nClicking on an attack adds it to your loadout.",
+                message = "This is your arsenal of weapons.\n\nClicking on an attack adds it to your loadout.",
                 highlight = attackHandHighlight,
             },
 
             new TutorialStep
             {
-                message = "Each weapon has a damage value which is how much health each hit removes from the enemy.",
+                message = "Each weapon has a damage value which is how much health the attack deals to the enemy.",
                 highlight = dmgHandHighlight,
             },
 
             new TutorialStep
             {
-                message = "They also have a roll number which is the minimum you must roll on a 20-sided dice for the attack to succeed.",
+                message = "They also have a roll value which must be rolled on a 20-sided die for the attack to succeed.",
                 highlight = rollHandHighlight,
             },
 
@@ -145,13 +145,13 @@ public class CombatTutorial: MonoBehaviour
 
              new TutorialStep
             {
-                message = "Hover over an enemy to see their name and weakness. \n\nThe first enemy in this lineup is weak to Piercing attacks!",
+                message = "Hover over an enemy to see their name and weakness.\n\nThe first enemy in this lineup is weak to Piercing attacks!",
                 highlight = enemyHighlight,
             },
 
               new TutorialStep
             {
-                 message = "You have 4 Ray of Frosts here, which deal Magical damage. These won't be as effective against Kobolds who are weak to Piercing. \nTry discarding them for something better.",
+                 message = "You have 4 Ray of Frosts here, which deal Magical damage. These won't be as effective against Kobolds who are weak to Piercing.\nTry discarding them for something better.",
                  highlight = discardButtonHighlight,
                  waitForAction = true,
                  onEnter = () =>
@@ -166,7 +166,7 @@ public class CombatTutorial: MonoBehaviour
 
                new TutorialStep
             {
-                message = "Now your hand is full of Daggers! \nYou can also press Clear at any time to deselect everything in your current loadout.",
+                message = "Now your hand is full of Daggers!\nWhen you select attacks, you can press Clear at any time to remove them from your loadout.",
                 highlight = clearButtonHighlight,
                 onEnter = () =>
                 {
@@ -177,7 +177,7 @@ public class CombatTutorial: MonoBehaviour
 
             new TutorialStep
             {
-                message = "You can select up to 4 attacks. \n\nTheir attack order depends on the order you click on them. Which is indicated by the overlayed number.",
+                message = "You can select up to 4 attacks.\n\nTheir attack order depends on the order you click on them. Which is indicated by the overlayed number.",
                 highlight = attackHighlight,
             },
 
@@ -203,7 +203,7 @@ public class CombatTutorial: MonoBehaviour
 
             new TutorialStep
             {
-                message = "Rolling a 20 makes your attack a <color=yellow>CRITICAL HIT <color=black>which does double damage.\nRolling a 1 makes your attack a <color=red>CRITICAL MISS <color=black>which always fails no matter what.",
+                message = "Rolling a 20 makes your attack a <b><color=yellow>CRITICAL HIT </b><color=black>which does double damage.\nRolling a 1 makes your attack a <b><color=red>CRITICAL MISS </b><color=black>which always fails no matter what.",
                 onEnter = () =>
                 {
                     itemManager.noAttacking = true;
@@ -212,18 +212,18 @@ public class CombatTutorial: MonoBehaviour
 
               new TutorialStep
             {
-                message = "Hitting a weakness makes your attacks deal 50% more damage. \nMatching weapon types to enemy weaknesses is the key to survival!",
+                message = "Hitting a weakness makes your attacks deal <b>50%</b> more damage.\nMatching weapon types to enemy weaknesses is the key to survival!",
             },
 
               new TutorialStep
             {
-                message = "You can check the bag at any time to check which items you've used this day and which are still in your inventory.",
+                message = "You can click the backpack at any time to check which items you've used this day and which are still in your active inventory.",
                 highlight = inventoryButtonHighlight,
             },
 
               new TutorialStep
             {
-                message = "Once you've run out of items to refill your arsenal, your used items will reshuffle into your inventory.",
+                message = "Once you've run out of items to refill your arsenal, your used items will reshuffle into your active inventory.",
             },
 
             new TutorialStep
@@ -240,7 +240,7 @@ public class CombatTutorial: MonoBehaviour
 
             new TutorialStep
             {
-             message = "Now complete the encounter! Show my kin that Pimp the Imp IS a great teacher!",
+             message = "Now complete the encounter! Show my kin that Pimp the Imp <i>IS</i> a great teacher!",
              onEnter = () =>
              {
 

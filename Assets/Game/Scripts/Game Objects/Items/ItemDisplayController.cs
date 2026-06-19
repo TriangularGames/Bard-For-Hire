@@ -41,12 +41,12 @@ public class ItemDisplayController : ItemController
 
         if (int.Parse(damageTxt.text) >= 10)
         {
-            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(-10, 100, 0f);
+            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(-13, 100, 0f);
         }
 
         if (int.Parse(damageTxt.text) >= 100)
         {
-            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(-25, 100, 0f);
+            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(-30, 100, 0f);
         }
         if (_damageBonusAdded)
         {
@@ -66,12 +66,12 @@ public class ItemDisplayController : ItemController
 
         if (int.Parse(damageTxt.text) >= 10)
         {
-            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(-10, 100, 0f);
+            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(-13, 100, 0f);
         }
 
         if (int.Parse(damageTxt.text) >= 100)
         {
-            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(-25, 100, 0f);
+            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(-30, 100, 0f);
         }
         if (_damageBonusAdded)
         {
