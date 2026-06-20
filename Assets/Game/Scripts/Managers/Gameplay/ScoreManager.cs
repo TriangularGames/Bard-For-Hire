@@ -1,39 +1,35 @@
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-/// <summary>
-/// ScoreManager calculates the score based on the Items added to AttackHand
-/// </summary>
 public class ScoreManager : MonoBehaviour
 {
-    [SerializeField] GameObject itemDisplay;
-
+    public GameObject itemDisplay;
     [SerializeField] private TMP_Text roundText;
     public int curRound = 1;
     private int MaxRounds = 3;
-
-    public float waitForRoll = 2f;
-    private List<GameObject> lineupObjects;
-    public int GameSpeed = 4;
-
     public DiceRoller roller;
-    private List<ItemData> pendingItems;
-    private int curItem = -1;
-
+    public List<ItemData> pendingItems;
     private string rewardDisplayText;
+
+    private Animator _banner;
+
+    private List<ItemData> _pendingLineupItems;
+    private int _pendingLineupIndex;
+    private bool _hasPendingLineup;
+
+    public Queue<(string name, int damage, ItemData item)> BonusAttackQueue = new Queue<(string, int, ItemData)>();
 
     private void OnEnable()
     {
         EventBus.Subscribe<MoneyEarnedEvent>(MakeRewardText);
+        EventBus.Subscribe<LastCoinCollected>(OnLastCoinCollected);
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<MoneyEarnedEvent>(MakeRewardText);
+        EventBus.Unsubscribe<LastCoinCollected>(OnLastCoinCollected);
     }
 
     private void MakeRewardText(MoneyEarnedEvent e)
@@ -41,329 +37,294 @@ public class ScoreManager : MonoBehaviour
         rewardDisplayText += e.reason + " : " + e.coinAmount + "\n";
     }
 
-    private void Start()
+    private void OnLastCoinCollected(LastCoinCollected e)
     {
-        //combatCompleteText.text = "";
-        itemDisplay.SetActive(false);
-        EventBus.Publish<EnterCombatEvent>(new EnterCombatEvent());
-        SetGameSpeed();
-    }
-
-    private void SetGameSpeed()
-    {
-        GameSpeed = PlayerPrefs.GetInt("GameSpeed");
-        switch (GameSpeed)
+        if (EnemyManager.Instance.AreEnemiesAlive())
         {
-            case 0:
-                GameSpeed = 4;
-                break;
-            case 1:
-                GameSpeed = 3;
-                break;
-            case 2:
-                GameSpeed = 2;
-                break;
-            case 3:
-                GameSpeed = 1;
-                break;
-        }
-    }
-
-    /// <summary>
-    /// Calculates the final score for a round using ItemData List
-    /// </summary>
-    /// <param name="items">List of Items to be scored</param>
-    public async Task CalculateScore(List<ItemData> items)
-    {
-        EventBus.Publish<ScoringStartedEvent>(new ScoringStartedEvent());
-
-        pendingItems = items;
-        curItem = -1;
-        UpgradeFightingManager.Instance.StartRound();
-
-        if (pendingItems == null || pendingItems.Count <= 0)
-        {
-            return;
-        }
-
-        foreach (ItemData item in pendingItems)
-        {
-            if(!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive()) { FinalizeScore(); break; }
-            
-            curItem += 1;
-            Debug.Log("Item " + curItem + " being rolled for.");
-            // Display item being rolled for
-            itemDisplay.GetComponent<ItemController>().itemData = item;
-            itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 0f, 0f, 0f);
-            itemDisplay.GetComponent<ItemController>().Setup();
-            itemDisplay.SetActive(true);
-            // Remove item being checked from Hotbar
-            EventBus.Publish<ItemUsedEvent>(new ItemUsedEvent(item));
-
-            int rollResult = -1;
-            int modifier = 0;
-
-            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.SkillProficiency))
+            if (_hasPendingLineup)
             {
-                modifier += 2;
-            }
-
-            if (UpgradeFightingManager.Instance.tempDCReduce > 0)
-            {
-                modifier += UpgradeFightingManager.Instance.tempDCReduce;
-            }
-
-            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.EarlyAdvantage) && curItem == 0){
-                rollResult = await roller.RollWithAdvantage(modifier);
+                _hasPendingLineup = false;
+                CombatManager.Instance.SwitchState(new MoveLineupState(_pendingLineupItems, _pendingLineupIndex, this, skipWait: true));
             }
             else
             {
-                rollResult = await roller.RollDie(modifier);
-            }
-            await OnRollComplete(rollResult);
-        }
-    }
-
-    /// <summary>
-    /// Called when the roll is complete, and the score is calculated
-    /// </summary>
-    /// <param name="rollValue">The value of the roll</param>
-    private async Task OnRollComplete(int rollValue)
-    {
-        ItemData item = pendingItems[curItem];
-        int slotIndex = curItem;
-
-        int finalroll = UpgradeFightingManager.Instance.GetBonusRoll(rollValue);
-        // Include in here some effect thats displayed as each weapon is determined
-        // to be scored or not
-        if (item.Playable <= finalroll)
-        {
-            Debug.Log($"{item.name} was played!");
-            AudioManager.Instance.PlayClip("Success");
-            itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(0f, 1f, 0f, 1f);
-
-            await PauseExtensions.DelayRespectingPause(300 * GameSpeed);
-            EventBus.Publish<HitEvent>(new HitEvent());
-            await PauseExtensions.DelayRespectingPause(100 * GameSpeed);
-            int totalDamage = UpgradeFightingManager.Instance.GetBonusDamage(item, slotIndex, out var bonuses);
-            await itemDisplay.GetComponent<ItemController>().ShowDamageBonuses(bonuses, item.Damage);
-            UpgradeFightingManager.Instance.SuccessfulAction(item, totalDamage);
-
-            AttackEnemy(item, totalDamage);
-
-            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.ComboChain))
-            {
-                int comboDMG = Mathf.RoundToInt(totalDamage * 0.5f);
-                AttackEnemy(item, comboDMG);
-            }
-
-            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.DoubleCrit))
-            {
-                if(finalroll == 20)
-                AttackEnemy(item, totalDamage);
-            }
-
-            if (UpgradeManager.Instance.HasUpgrade(UpgradeID.EchoStrike))
-            {
-                if(slotIndex == pendingItems.Count - 1)
-                AttackEnemy(item, totalDamage);
+                return;
             }
         }
         else
         {
-            // Attack Missed
-            AudioManager.Instance.PlayClip("Fail");
-            itemDisplay.transform.GetChild(0).GetComponent<Image>().color = new Color(1f, 0f, 0f, 1f);
-            EventBus.Publish<MissEvent>(new MissEvent());
-            await PauseExtensions.DelayRespectingPause(100 * GameSpeed);
-
-            bool savedBySecondChance = false;
-            bool savedByQuickSave = false;
-
-            if (UpgradeFightingManager.Instance.CanUseSecondChance())
+            // Victory / game over � list should be empty (or run from end of EnemyManager.RemoveEnemy)
+            if (CheckCombatEnd())
             {
-                await roller.ShowUpgradeNotif("Second Chance");
-                rollValue = await roller.RollDie(0);
-                await OnRollComplete(rollValue);
-                savedBySecondChance = true;
+                _hasPendingLineup = false; // don't lineup after victory
                 return;
             }
-            if (!savedBySecondChance && UpgradeFightingManager.Instance.CanUseQuickSave())
-            {
-                await roller.ShowUpgradeNotif("Quick Save");
-                int quickSaveDamage = UpgradeFightingManager.Instance.GetQuickSaveDamage(item, slotIndex);
-                if (quickSaveDamage > 0) AttackEnemy(item, quickSaveDamage);
-                UpgradeFightingManager.Instance.SuccessfulAction(item, quickSaveDamage);
-                savedByQuickSave = true;
-            }
-            if (!savedByQuickSave)
-                UpgradeFightingManager.Instance.FailedAction();
-    }
-
-        // Wait for possible animations
-        await PauseExtensions.DelayRespectingPause(800 * GameSpeed);
-        if ((curItem + 1) == pendingItems.Count)
-        {
-            FinalizeScore();
         }
     }
 
-    private void AttackEnemy(ItemData item, int damage)
+    private void Start()
     {
-        if(EnemyManager.Instance.isBossDay && EnemyManager.Instance.hasDisabled
-            && EnemyManager.Instance.disabledItem == item.ItemType) {
-            return;
-        }
-
-        foreach (Transform enemyLocation in GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().spawnPoints)
-        {
-            // Check if the location has an enemy in it
-            if (enemyLocation.transform.childCount > 0)
-            {
-                // Get the enemy at this location
-                GameObject enemy = enemyLocation.transform.GetChild(0).gameObject;
-                bool weakness = false;
-                bool resistance = false;
-
-                if (enemy.GetComponent<EnemyController>().enemyData.weakness == item.ItemType)
-                {
-                    damage = Mathf.RoundToInt(damage * 1.55f);
-                    weakness = true;
-                }
-
-                if(EnemyManager.Instance.isBossDay && EnemyManager.Instance.bossData.ability == BossAbilities.EvenNumberReduce
-                    && damage % 2 == 0)
-                {
-                    damage = Mathf.RoundToInt(damage * 0.5f);
-                    resistance = true;
-                }
-
-                if (enemy.GetComponent<EnemyController>().GetHealth() > 0)
-                {
-                    EventBus.Publish<DamageTakenEvent>(
-                            new DamageTakenEvent(enemyLocation.transform.GetChild(0).gameObject.GetEntityId(), damage, weakness, resistance));
-                    break;
-                }
-            }
-        }
+        itemDisplay.SetActive(false);
+        _banner = GameObject.FindWithTag("RollBanner").GetComponent<Animator>();
+        EventBus.Publish<EnterCombatEvent>(new EnterCombatEvent());
     }
 
-    /// <summary>
-    /// Finalize the Score calculation for display.
-    /// </summary>
-    /// 
-    private void FinalizeScore()
+    public void SetPendingLineup(List<ItemData> items, int index)
     {
-        int count = pendingItems.Count;
-        //foreach (ItemData item in pendingItems)
-        //{
-        //    EventBus.Publish<ItemScoredEvent>(new ItemScoredEvent(item));
-        //}
+        _pendingLineupItems = items;
+        _pendingLineupIndex = index;
+        _hasPendingLineup = true;
+    }
+
+    // Called by CalculateScoreState on first item
+    public void InitializeRound(List<ItemData> items)
+    {
+        EventBus.Publish<RoundStartedEvent>(new RoundStartedEvent());
+        pendingItems = items;
+        UpgradeFightingManager.Instance.StartRound();
+        UpgradeFightingManager.Instance.GetTheHandBonuses(items);
+    }
+
+    // Called by CalculateScoreState to set up item display
+    public void SetupItemDisplay(int index)
+    {
+        ItemManager itemManager = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
+        GameObject stackedItem = itemManager.GetAttackItem(index);
+
+        if (stackedItem != null)
+        {
+            itemDisplay.transform.position = stackedItem.transform.position;
+            stackedItem.SetActive(false);
+        }
+
+        if (itemDisplay.transform.parent.childCount - 1 != itemDisplay.transform.GetSiblingIndex())
+        {
+            itemDisplay.transform.SetAsLastSibling();
+        }
+
+        itemDisplay.GetComponent<ItemController>().itemData = pendingItems[index];
+        itemDisplay.GetComponent<ItemController>().Setup();
+        itemDisplay.SetActive(true);
+        itemDisplay.GetComponent<ItemDisplayController>().ResetDisplay();
+        
+    }
+
+    public void ShowHit(int index)
+    {
+        AudioManager.Instance.PlayClip("Success");
+        itemDisplay.GetComponent<ItemDisplayController>().Success();
+    }
+
+    public void ShowMiss()
+    {
+        AudioManager.Instance.PlayClip("Fail");
+        itemDisplay.GetComponent<ItemDisplayController>().Fail();
+        EventBus.Publish<MissEvent>(new MissEvent());
+    }
+
+    public void ApplyAttack(int index, int totalDamage, ItemData item, int finalRoll)
+    {
+        UpgradeFightingManager.Instance.SuccessfulAction(item, totalDamage);
+        EventBus.Publish<HitEvent>(new HitEvent());
+        AttackEnemy(item, totalDamage);
+
+        BonusAttackQueue.Clear();
+
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.ComboChain))
+            BonusAttackQueue.Enqueue(("Combo Chain", Mathf.RoundToInt(totalDamage * 0.5f), item));
+
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.DoubleCrit) && finalRoll == 20)
+            BonusAttackQueue.Enqueue(("Double Crit", totalDamage, item));
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.EchoStrike) && index == pendingItems.Count - 1)
+            BonusAttackQueue.Enqueue(("Echo Strike", totalDamage, item));
+
+    }
+
+    public void ApplyQuickSave(int index, ItemData item)
+    {
+        int quickSaveDamage = UpgradeFightingManager.Instance.GetQuickSaveDamage(item, index);
+        if (quickSaveDamage > 0) AttackEnemy(item, quickSaveDamage);
+        UpgradeFightingManager.Instance.SuccessfulAction(item, quickSaveDamage);
+    }
+
+    public void HideItemDisplay()
+    {
         if (itemDisplay.activeSelf)
         {
             itemDisplay.SetActive(false);
         }
+    }
 
-        EventBus.Publish<ScoringEndedEvent>(new ScoringEndedEvent());
+    public void FinalizeRound()
+    {
+        _banner.ResetTrigger("Lower");
+        _banner.SetTrigger("Raise");
 
-        // Check if we have hit the MaxRounds or all Enemies are dead
-        if (!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive() || curRound == MaxRounds)
+        if (CheckCombatEnd()) return;
+
+        int count = pendingItems.Count;
+        HideItemDisplay();
+        EventBus.Publish<RoundEndedEvent>(new RoundEndedEvent());
+        EventBus.Publish(new ScoringCompletedEvent(count));
+        Debug.Log("Round " + curRound + " Completed!");
+        curRound++;
+        roundText.text = "Round " + curRound + "/3";
+
+        if (curRound == 3)
         {
-            // If we have, determine if the player has won
-            // TODO: change these to actually have some kind of proper display
-            if (!GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().AreEnemiesAlive())
+            roundText.GetComponent<Animator>().SetTrigger("Flash");
+        }
+        List<ItemData> currentHand = new List<ItemData>();
+        ItemManager itemManager = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
+        foreach (GameObject obj in itemManager.itemPool.GetItems())
+        {
+            ItemController icont = obj?.GetComponent<ItemController>();
+            if (icont != null) currentHand.Add(icont.itemData);
+        }
+        UpgradeFightingManager.Instance.EndRound(currentHand);
+        roller.ResetText();
+    }
+
+    public bool CheckCombatEnd()
+    {
+        if (!EnemyManager.Instance.AreEnemiesAlive())
+        {
+            int remainingRounds = MaxRounds - curRound;
+            if (remainingRounds > 0)
+                EventBus.Publish(new MoneyEarnedEvent(remainingRounds * 5, "Early Completion", null));
+
+            if (EnemyManager.Instance.currentDay == EnemyManager.Instance.finalDay)
             {
-                //combatCompleteText.text = "Winner!";
-                int remainingRounds = MaxRounds - curRound;
-                if (remainingRounds > 0)
-                {
-                    int bonusCoins = remainingRounds * 5;
-                    EventBus.Publish(new MoneyEarnedEvent(bonusCoins, "Early Completion"));
-                }
-                Debug.Log("Combat Completed!");
-                MenuManager.Instance.SwitchState(new VictoryMenuState());
-                EventBus.Publish(new VictoryEvent(rewardDisplayText));
+                Debug.Log("Victory Achieved");
+                MenuManager.Instance.SwitchState(new TotalVictoryMenuState());
+                return true;
             }
             else
             {
-                //combatCompleteText.text = "Loser.";
-                Debug.Log("Combat Failed!");
-                MenuManager.Instance.SwitchState(new GameOverMenuState());
+                Debug.Log("Combat Completed!");
+                MenuManager.Instance.SwitchState(new VictoryMenuState());
+                EventBus.Publish(new VictoryEvent(rewardDisplayText));
+                return true;
             }
         }
-        else
+
+        if (curRound >= MaxRounds)
         {
-            // TODO: add some better way of indicating next round!
-            // If we have not hit MaxRounds & Enemies are still alive, go to the next round
-            Debug.Log("Round " + curRound.ToString() + " Completed!");
-            curRound++;
-            roundText.text = "Round " + curRound + "/3";
-            List<ItemData> currentHand = new List<ItemData>();
-            ItemManager itemManager = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
-            foreach (GameObject obj in itemManager.itemPool.GetItems())
-            {
-                ItemController ic = obj.GetComponent<ItemController>();
-                if (ic != null) currentHand.Add(ic.itemData);
-            }
-            UpgradeFightingManager.Instance.EndRound(currentHand);
-            EventBus.Publish(new ScoringCompletedEvent(count));
+            Debug.Log("Combat Failed!");
+            EventBus.Publish<MissEvent>(new MissEvent());
+            CombatManager.Instance.SwitchState(new DefaultCombatState());
+            MenuManager.Instance.SwitchState(new GameOverMenuState());
+            return true;
         }
-        roller.ResetText();
+
+        return false;
+    }
+
+    public void AttackEnemy(ItemData item, int damage)
+    {
+        if (EnemyManager.Instance.isBossDay && EnemyManager.Instance.hasDisabled
+            && EnemyManager.Instance.disabledItem == item.ItemType) return;
+
+        switch (item.target)
+        {
+            case 1:
+                AttackGuys(item, damage, UpgradeFightingManager.Instance.archmageActive ? 2 : 1);
+                break;
+            case 2:
+                AttackGuys(item, damage, UpgradeFightingManager.Instance.archmageActive ? 3 : 2);
+                break;
+            case 3:
+                foreach (Transform loc in EnemyManager.Instance.spawnPoints)
+                    TryAttackAt(loc, item, damage);
+                break;
+        }
+    }
+
+    private void AttackGuys(ItemData item, int damage, int numberOfGuys)
+    {
+        int hits = 0;
+        foreach (Transform enemyLocation in EnemyManager.Instance.spawnPoints)
+        {
+            if (hits >= numberOfGuys) break;
+            if (TryAttackAt(enemyLocation, item, damage)) hits++;
+        }
+    }
+
+    private bool TryAttackAt(Transform enemyLocation, ItemData item, int damage)
+    {
+        if (enemyLocation.childCount == 0) return false;
+
+        GameObject enemy = null;
+        for (int i = 0; i < enemyLocation.transform.childCount; i++)
+        {
+            if (enemyLocation.transform.GetChild(i).GetComponent<EnemyController>() != null)
+            {
+                enemy = enemyLocation.transform.GetChild(i).gameObject;
+            }
+        }
+
+        if (enemy == null) return false;
+        if (enemy.GetComponent<EnemyController>().GetHealth() <= 0) return false;
+
+        bool weakness = false;
+        bool resistance = false;
+
+        if (enemy.GetComponent<EnemyController>().enemyData.weakness == item.ItemType)
+        {
+            damage = Mathf.RoundToInt(damage * 1.55f);
+            weakness = true;
+        }
+
+        if (EnemyManager.Instance.isBossDay
+            && EnemyManager.Instance.bossData.ability == BossAbilities.EvenNumberReduce
+            && damage % 2 == 0)
+        {
+            damage = Mathf.RoundToInt(damage * 0.5f);
+            resistance = true;
+        }
+
+        if (item.weaponBonus == WeaponBonus.PercentHealth)
+            damage += Mathf.RoundToInt(enemy.GetComponent<EnemyController>().GetHealth() * 0.1f);
+
+        if (item.weaponBonus == WeaponBonus.GrowingDamage)
+        {
+            damage += item.bonusDamageStacks;
+            item.bonusDamageStacks++;
+        }
+
+        EventBus.Publish(new DamageTakenEvent(enemy.GetEntityId(), damage, item.ItemType.ToString(), weakness, resistance));
+        return true;
     }
 }
 
-/// <summary>
-/// When Scoring has started
-/// </summary>
-public struct ScoringStartedEvent { }
+// Event structs for ScoreManager to publish
+public struct RoundStartedEvent { }
 
-/// <summary>
-/// Event for when Scoring is fully Completed, and transitioning to next Round
-/// </summary>
 public struct ScoringCompletedEvent
 {
     public int count;
-
-    public ScoringCompletedEvent(int _count)
-    {
-        count = _count;
-    }
+    public ScoringCompletedEvent(int _count) { count = _count; }
 }
 
-/// <summary>
-/// When Scoring has ended, prior to the Round or Victory/GameOver transitions
-/// </summary>
-public struct ScoringEndedEvent { }
+public struct RoundEndedEvent { }
 
 public struct VictoryEvent
 {
     public string textContent;
-
-    public VictoryEvent (string _textContent)
-    {
-        textContent = _textContent;
-    }
+    public VictoryEvent(string _textContent) { textContent = _textContent; }
 }
 
-/// <summary>
-/// Event for when an Item is used either Successfully or not
-/// </summary>
 public struct ItemUsedEvent
 {
     public ItemData item;
-
-    public ItemUsedEvent(ItemData _item)
+    public int attackIndex;
+    public ItemUsedEvent(ItemData _item, int _attackIndex)
     {
         item = _item;
+        attackIndex = _attackIndex;
     }
 }
 
-/// <summary>
-/// Event for when an Attack Hits
-/// </summary>
 public struct HitEvent { }
 
-/// <summary>
-/// Event for when an Attack Misses
-/// </summary>
 public struct MissEvent { }

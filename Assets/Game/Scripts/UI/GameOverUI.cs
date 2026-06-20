@@ -12,11 +12,12 @@ public class GameOverUI : MonoBehaviour
 
     public void GoToMainMenu()
     {
-        // TODO: change playermanager and enemymanager calls to an event
-        PlayerManager.Instance.Reset();
-        EnemyManager.Instance.Reset();
+        EventBus.Publish(new ResetGameEvent());
 
         MenuManager.Instance.SwitchState(new MainMenuState());
         GameManager.Instance.SwitchState(new DefaultGameState());
     }
 }
+
+// Also called in EndScreenUI
+public struct ResetGameEvent { }

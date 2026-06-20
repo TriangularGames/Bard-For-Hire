@@ -7,6 +7,8 @@ public class ShopManager : MonoBehaviour
 {
     [Header("Shop Specific")]
     [SerializeField] Button rerollBtn;
+    [SerializeField] Button optionsBtn;
+    [SerializeField] Button nextRoundBtn;
     [SerializeField] TMP_Text dayDisplay;
 
     [Header("Shop Loadout Limits")]
@@ -38,16 +40,22 @@ public class ShopManager : MonoBehaviour
 
     private void OnEnable()
     {
-        EventBus.Subscribe<ItemSelectedEvent>(CheckItemSelection);
         EventBus.Subscribe<UpgradeBoughtEvent>(UpdateUpgradeDisplay);
         EventBus.Subscribe<ConsumableBoughtEvent>(UpdateConsumableDisplay);
+
+        rerollBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
+        optionsBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm(); });
+        nextRoundBtn.onClick.AddListener(delegate { AudioManager.Instance.Confirm2(); });
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<ItemSelectedEvent>(CheckItemSelection);
         EventBus.Unsubscribe<UpgradeBoughtEvent>(UpdateUpgradeDisplay);
         EventBus.Unsubscribe<ConsumableBoughtEvent>(UpdateConsumableDisplay);
+
+        rerollBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
+        optionsBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm(); });
+        nextRoundBtn.onClick.RemoveListener(delegate { AudioManager.Instance.Confirm2(); });
     }
 
     private void Start()
@@ -68,15 +76,36 @@ public class ShopManager : MonoBehaviour
         }
         else
         {
-           rerollBtn.interactable= true;
+           rerollBtn.interactable = true;
         }
     }
 
-    private void SetDayText()
+    private bool UpgradeIsUnlocked(UpgradeData upgrade)
     {
-        dayDisplay.text = "Day " + GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().currentDay.ToString();
+        switch (upgrade.UpgradeID)
+        {
+            case UpgradeID.Archmage:
+                return PlayerManager.Instance.CountItemsOfType(ItemType.Magical) >= 13;
+            case UpgradeID.KnightCaptain:
+                return PlayerManager.Instance.CountItemsOfType(ItemType.Slashing) >= 13;
+            case UpgradeID.ShadowThief:
+                return PlayerManager.Instance.CountItemsOfType(ItemType.Piercing) >= 13;
+            default:
+                return true;
+        }
     }
 
+
+    private void SetDayText()
+    {
+        dayDisplay.text = "Day " + GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().currentDay.ToString() + "/"
+            + GameObject.FindWithTag("EnemyManager").GetComponent<EnemyManager>().finalDay.ToString();
+    }
+
+    /// <summary>
+    /// Generate Rarity for Item being Obtained
+    /// </summary>
+    /// <returns>Rarity of the Object</returns>
     private ObjectRarity RollRarity()
     {
         int total = commonWeight + uncommonWeight + rareWeight + legendaryWeight;
@@ -88,6 +117,11 @@ public class ShopManager : MonoBehaviour
         return ObjectRarity.Legendary;
     }
 
+    /// <summary>
+    /// Generate a Weapon (Item) for the shop from the total list of Weapons available
+    /// given a generated ObjectRarity
+    /// </summary>
+    /// <returns>ItemData of generated Weapon</returns>
     private ItemData GetRandomItem()
     {
         ObjectRarity targetRarity = RollRarity();
@@ -105,6 +139,11 @@ public class ShopManager : MonoBehaviour
         return pool[Random.Range(0, pool.Count)];
     }
 
+    /// <summary>
+    /// Generate an Upgrade for the shop from the total list of Upgrades available
+    /// given a generated ObjectRarity
+    /// </summary>
+    /// <returns>UpgradeData of generated Upgrade</returns>
     private UpgradeData GetRandomUpgrade()
     {
         ObjectRarity targetRarity = RollRarity();
@@ -122,6 +161,11 @@ public class ShopManager : MonoBehaviour
         return pool[Random.Range(0, pool.Count)];
     }
 
+    /// <summary>
+    /// Generate a Consumable for the shop from the total list of Consumables available
+    /// given a generated ObjectRarity
+    /// </summary>
+    /// <returns>ConsumableData of generated Consumable</returns>
     private ConsumableData GetRandomConsumable()
     {
         ObjectRarity targetRarity = RollRarity();
@@ -144,6 +188,10 @@ public class ShopManager : MonoBehaviour
         rerollBtn.transform.GetChild(0).GetComponent<TMP_Text>().text = "Reroll\n$" + rerollCost;
     }
 
+    /// <summary>
+    /// Initial function to setup all items available in the Shop
+    /// when switching into the Shop Scene
+    /// </summary>
     public void SetupShop()
     {
         // Setup the Weapons
@@ -169,12 +217,14 @@ public class ShopManager : MonoBehaviour
     private void GenerateUpgrades()
     {
         List<UpgradeData> upgrades = new List<UpgradeData>();
-        while (upgrades.Count != MAXUpgrades)
+        int tryThisManyTimesPleaseOkay = 1000;
+        while (upgrades.Count != MAXUpgrades && tryThisManyTimesPleaseOkay-- > 0)
         {
             UpgradeData option = GetRandomUpgrade();
             bool alreadyThere = upgrades.Contains(option);
             bool alreadyGotThatOne = PlayerManager.Instance.upgradeInventory.Contains(option);
-           if (!alreadyThere && !alreadyGotThatOne)
+            bool unlocked = UpgradeIsUnlocked(option);
+            if (!alreadyThere && !alreadyGotThatOne && unlocked)
                 upgrades.Add(option);
         }
         _upgrades.SetupSlots(upgrades);
@@ -206,6 +256,14 @@ public class ShopManager : MonoBehaviour
                 obj.GetComponent<ConsumableController>().Setup();
                 obj.GetComponent<ConsumableController>().SetTextColor(Color.white);
                 Destroy(obj.GetComponent<ConsumableSelect>());
+                for (int i = 0; i < obj.transform.childCount; i++)
+                {
+                    if (obj.transform.GetChild(i).GetComponent<TMP_Text>())
+                    {
+                        Destroy(obj.transform.GetChild(i).gameObject);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -215,44 +273,6 @@ public class ShopManager : MonoBehaviour
         _items.ClearSlots();
         _upgrades.ClearSlots();
         _consumables.ClearSlots();
-    }
-
-
-    private void CheckItemSelection(ItemSelectedEvent e)
-    {
-        // Check all Upgrade slots, if one is selected- disable and return
-        foreach (GameObject slot in _upgrades.GetSlots())
-        {
-            UpgradeShopSlot upgradeSlot = slot.GetComponent<UpgradeShopSlot>();
-            if (slot.GetEntityId() != e.id && upgradeSlot._isSelected)
-            {
-                upgradeSlot.Deselect();
-                return;
-            }
-        }
-
-        // Check all Consumable slots, if one is selected- disable and return
-        foreach (GameObject slot in _consumables.GetSlots())
-        {
-            ConsumableShopSlot consumableSlot = slot.GetComponent<ConsumableShopSlot>();
-            if (slot.GetEntityId() != e.id && consumableSlot._isSelected)
-            {
-                consumableSlot.Deselect();
-                return;
-            }
-        }
-
-        // Check all Item slots, if one is selected- disable and return
-        foreach (GameObject slot in _items.GetSlots())
-        {
-            ItemShopSlot itemSlot = slot.GetComponent<ItemShopSlot>();
-            if (slot.GetEntityId() != e.id && itemSlot._isSelected)
-            {
-                itemSlot.Deselect();
-                return;
-            }
-        }
-        return;
     }
 
     private void UpdateUpgradeDisplay(UpgradeBoughtEvent e)
@@ -303,6 +323,7 @@ public class ShopManager : MonoBehaviour
     {
         // Switch to Performance scene
         GameManager.Instance.SwitchState(new CombatState());
+        MenuManager.Instance.SwitchState(new DefaultMenuState());
     }
 
     /// <summary>

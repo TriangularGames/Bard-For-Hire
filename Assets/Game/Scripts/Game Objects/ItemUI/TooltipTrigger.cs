@@ -84,7 +84,14 @@ public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitH
                 EnemyData data = GetComponent<EnemyController>().enemyData;
                 if (data != null)
                 {
-                    TooltipSystem.Instance.Show("", data.Name, "", "", true, data.weakness.ToString());
+                    if (data.isBoss)
+                    {
+                        TooltipSystem.Instance.Show(data.Description, data.Name, "", "", true, data.weakness.ToString());
+                    }
+                    else
+                    {
+                        TooltipSystem.Instance.Show("", data.Name, "", "", true, data.weakness.ToString());
+                    }
                 }
             }
         }

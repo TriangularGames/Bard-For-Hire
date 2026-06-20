@@ -1,51 +1,69 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
 public class PlayerManager : Singleton<PlayerManager>
 {
+    [Header("Starting Inventory Loadout")]
     [SerializeField] private List<ItemData> _defaultInventory;
+
+    [Header("Active Player Inventory")]
     public List<ItemData> itemInventory;
     public List<UpgradeData> upgradeInventory;
     public List<ConsumableData> consumableInventory;
 
     // For Gameplay, what Weapons are still available to be grabbed from Inventory,
     // what Weapons are active, and what Weapons aren't
+    [Header("Weapons Available For Combat")]
+    [Tooltip("Weapons played")]
     public List<ItemData> itemsUsed;
+    [Tooltip("Weapons in Hand")]
     public List<ItemData> itemsHeld;
+    [Tooltip("Weapons not drawn")]
     public List<ItemData> itemsNotUsed;
 
-    // Current selected Character
-    public PlayerController selectedCharacter;
-
+    [Header("Other Info")]
     [Tooltip("Amount of money the Player has")]
     public int Coins;
 
     [Tooltip("Max amount of Upgrades player can hold")]
     public int MAXUpgrades = 4;
+    private GameObject UpgradeLimitTxt;
 
     [Tooltip("Max amount of Consumables player can hold")]
     public int MAXConsumables = 2;
+    private GameObject ConsumableLimitTxt;
+
+    [Header("Overall Stats (For the EndRun Screen)")]
+    private int TotalMoneyGained;
+    public int totalMoneyGained { get { return TotalMoneyGained; } set { TotalMoneyGained = value; } }
+    
+    private int HighestDamageDealt;
+    public int highestDamageDealt { get { return HighestDamageDealt; } set { HighestDamageDealt = value; } }
+    
+    private string MostUsedWeapon;
+    public string mostUsedWeapon { get { return MostUsedWeapon; } set { MostUsedWeapon = value; } }
+
+    public Dictionary<string, int> WeaponsUsedAmounts = new Dictionary<string, int>();
+
+    public string GetMostUsedWeapon()
+    {
+        int max = WeaponsUsedAmounts.Max(x => x.Value);
+        return WeaponsUsedAmounts.Where(kvp => kvp.Value == max).Select(kvp => kvp.Key).First();
+    }
 
     private void Start()
     {
         itemsUsed = new List<ItemData>();
         itemsHeld = new List<ItemData>();
         itemsNotUsed = new List<ItemData>();
+        totalMoneyGained = 0;
+        highestDamageDealt = 0;
+        mostUsedWeapon = "";
     }
 
-    // Reset Item Lists on Game End
-    public void Reset()
-    {
-        upgradeInventory.Clear();
-        consumableInventory.Clear();
-        itemsUsed.Clear();
-        itemsHeld.Clear();
-        itemsNotUsed.Clear();
-        itemInventory.Clear();
-        itemInventory.AddRange(_defaultInventory);
-    }
-
+    #region EventBus Event Subscriptions
     private void OnEnable()
     {
         EventBus.Subscribe<ItemUsedEvent>(OnItemScored);
@@ -57,6 +75,7 @@ public class PlayerManager : Singleton<PlayerManager>
         EventBus.Subscribe<EnterShopEvent>(EnterShop);
         EventBus.Subscribe<EnterCombatEvent>(EnterCombat);
         EventBus.Subscribe<MoneyEarnedEvent>(AddMoney);
+        EventBus.Subscribe<ResetGameEvent>(ResetGame);
     }
 
     private void OnDisable()
@@ -70,17 +89,35 @@ public class PlayerManager : Singleton<PlayerManager>
         EventBus.Unsubscribe<EnterShopEvent>(EnterShop);
         EventBus.Unsubscribe<EnterCombatEvent>(EnterCombat);
         EventBus.Unsubscribe<MoneyEarnedEvent>(AddMoney);
+        EventBus.Unsubscribe<ResetGameEvent>(ResetGame);
+    }
+    #endregion
+
+    // Reset to defaults
+    private void ResetGame(ResetGameEvent e)
+    {
+        Coins = 0;
+        upgradeInventory.Clear();
+        consumableInventory.Clear();
+        itemsUsed.Clear();
+        itemsHeld.Clear();
+        itemsNotUsed.Clear();
+        itemInventory.Clear();
+        itemInventory.AddRange(_defaultInventory);
+        foreach (ItemData item in itemInventory)
+            item.bonusDamageStacks = 0;
     }
 
     private void AddMoney(MoneyEarnedEvent e)
     {
-        Coins += e.coinAmount;
+        totalMoneyGained += e.coinAmount;
         SetCoinText();
     }
 
     private void EnterCombat(EnterCombatEvent e)
     {
         SetCoinText();
+        SetLimitText();
     }
 
     private void EnterShop(EnterShopEvent e)
@@ -95,6 +132,7 @@ public class PlayerManager : Singleton<PlayerManager>
     private void OnItemScored(ItemUsedEvent e)
     {
         RemoveItem(e.item);
+        EventBus.Publish(new RefreshInventoryDisplayEvent());
     }
 
     /// <summary>
@@ -157,6 +195,14 @@ public class PlayerManager : Singleton<PlayerManager>
         consumableInventory.Add(e.data);
     }
 
+    public int CountItemsOfType(ItemType type)
+    {
+        int count = 0;
+        foreach (ItemData item in itemInventory)
+            if (item.ItemType == type) count++;
+        return count;
+    }
+
     public override void Awake()
     {
         base.Awake();
@@ -169,6 +215,21 @@ public class PlayerManager : Singleton<PlayerManager>
     public void SetCoinText()
     {
         GameObject.FindWithTag("Coins").GetComponent<TMP_Text>().text = Coins.ToString();
+    }
+
+    public void SetLimitText()
+    {
+        if (UpgradeLimitTxt == null)
+        {
+            UpgradeLimitTxt = GameObject.FindWithTag("UpgradeLimit");
+        }
+        if (ConsumableLimitTxt == null)
+        {
+            ConsumableLimitTxt = GameObject.FindWithTag("ConsumableLimit");
+        }
+
+        UpgradeLimitTxt.GetComponent<TMP_Text>().text = upgradeInventory.Count + "/" + MAXUpgrades;
+        ConsumableLimitTxt.GetComponent<TMP_Text>().text = consumableInventory.Count + "/" + MAXConsumables;
     }
 
     public void RefreshItems()
@@ -193,17 +254,6 @@ public class PlayerManager : Singleton<PlayerManager>
     public int GetCoinAmount()
     {
         return Coins;
-    }
-
-    /// <summary>
-    /// Store items from inventory
-    /// </summary>
-    public void SetInventoryNotes(List<ItemData> _inventoryNotes)
-    {
-        foreach (ItemData item in _inventoryNotes)
-        {
-            itemInventory.Add(item);
-        }
     }
 
     public void ResetPool()
@@ -269,9 +319,43 @@ public class PlayerManager : Singleton<PlayerManager>
         return newItem;
     }
 
+    public ItemData GetItemOfType(ItemType type)
+    {
+        for (int i = 0; i < itemsNotUsed.Count; i++)
+        {
+            if (itemsNotUsed[i].ItemType == type)
+            {
+                ItemData item = itemsNotUsed[i];
+                itemsNotUsed.RemoveAt(i);
+                itemsHeld.Add(item);
+                return item;
+            }
+        }
+        for (int i = 0; i < itemsUsed.Count; i++)
+        {
+            if (itemsUsed[i].ItemType == type)
+            {
+                ItemData item = itemsUsed[i];
+                itemsUsed.RemoveAt(i);
+                itemsHeld.Add(item);
+                return item;
+            }
+        }
+        foreach (ItemData item in itemInventory)
+            if (item.ItemType == type) return item;
+
+        return null;
+    }
+
+
     public ItemData GetRandomInventoryItem()
     {
         return itemInventory[Random.Range(0, itemInventory.Count)];
+    }
+
+    internal void FlashCoinText()
+    {
+        GameObject.FindWithTag("Coins").GetComponent<Animator>().SetTrigger("CoinGain");
     }
 }
 

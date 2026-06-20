@@ -33,6 +33,9 @@ public class OptionsManager : Singleton<OptionsManager>
     [Tooltip("Speed of Gameplay.")]
     [SerializeField] private int gameSpeed;
 
+    [Header("Tutorial Button Flag")]
+    private bool inGame;
+
     public float MasterVolume { get { return masterVolume; } private set { masterVolume = value; } }
     public float MusicVolume { get { return musicVolume; } private set { musicVolume = value; } }
     public float SfxVolume { get { return sfxVolume; } private set { sfxVolume = value; } }
@@ -40,6 +43,7 @@ public class OptionsManager : Singleton<OptionsManager>
     public Resolution GameResolution { get { return gameResolution; } private set { gameResolution = value; } }
     public bool IsFullScreen { get { return isFullScreen; } private set { isFullScreen = value; } }
     public int GameSpeed { get { return gameSpeed; } private set { gameSpeed = value; } }
+    public bool InGame {  get { return inGame; } set { inGame = value; } }
 
 
     public override void Awake()
@@ -85,9 +89,9 @@ public class OptionsManager : Singleton<OptionsManager>
     /// </summary>
     private void LoadAudioSettings()
     {
-        MasterVolume = PlayerPrefs.GetFloat("masterVolume", 0.5f);
-        MusicVolume = PlayerPrefs.GetFloat("musicVolume", 1.0f);
-        SfxVolume = PlayerPrefs.GetFloat("sfxVolume", 1.0f);
+        MasterVolume = PlayerPrefs.GetFloat("masterVolume");
+        MusicVolume = PlayerPrefs.GetFloat("musicVolume");
+        SfxVolume = PlayerPrefs.GetFloat("sfxVolume");
     }
 
     /// <summary>
@@ -155,12 +159,64 @@ public class OptionsManager : Singleton<OptionsManager>
     private void LoadGameplaySettings()
     {
         gameSpeed = PlayerPrefs.GetInt("GameSpeed", 0);
+        SetTimeScale();
     }
 
     public void SaveGameplaySettings(int GameSpeed)
     {
         gameSpeed = GameSpeed;
         PlayerPrefs.SetInt("GameSpeed", gameSpeed);
+        if (!PauseManager.Instance.IsPaused)
+        {
+            SetTimeScale();
+        }
+        PlayerPrefs.Save();
+    }
+
+    private void SetTimeScale()
+    {
+        switch (GameSpeed)
+        {
+            case 0:
+                Time.timeScale = 1;
+                break;
+
+            case 1:
+                Time.timeScale = 2;
+                break;
+
+            case 2:
+                Time.timeScale = 3;
+                break;
+
+            case 3:
+                Time.timeScale = 4;
+                break;
+        }
+    }
+
+    public int GetTimeScale()
+    {
+        switch (GameSpeed)
+        {
+            case 0:
+                return 1;
+
+            case 1:
+                return 2;
+
+            case 2:
+                return 3;
+
+            case 3:
+                return 4;
+        }
+        return -1;
+    }
+
+    public void ResetTutorial()
+    {
+        PlayerPrefs.SetInt("TutorialComplete", 0);
         PlayerPrefs.Save();
     }
 
@@ -169,12 +225,12 @@ public class OptionsManager : Singleton<OptionsManager>
     /// </summary>
     public void ApplySettings()
     {
-        AudioListener.volume = MasterVolume;
+        //AudioListener.volume = MasterVolume;
         if (audioMixer != null)
         {
-            audioMixer.SetFloat("MasterVolume", LinearToDecibel(MasterVolume));
-            audioMixer.SetFloat("MusicVolume", LinearToDecibel(MusicVolume));
-            audioMixer.SetFloat("SFXVolume", LinearToDecibel(SfxVolume));
+            audioMixer.SetFloat("masterVolume", LinearToDecibel(MasterVolume));
+            audioMixer.SetFloat("musicVolume", LinearToDecibel(MusicVolume));
+            audioMixer.SetFloat("sfxVolume", LinearToDecibel(SfxVolume));
         }
         Screen.SetResolution(GameResolution.width, GameResolution.height, IsFullScreen);
         QualitySettings.SetQualityLevel(QualityLevel);

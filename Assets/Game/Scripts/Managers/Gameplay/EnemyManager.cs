@@ -1,21 +1,20 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
 
 public class EnemyManager : Singleton<EnemyManager>
 {
     [Header("Enemy Data")]
-    /// <summary>
-    /// Enemy types available for this Performance
-    /// </summary>
     [SerializeField] List<string> memberTypes;
-    [SerializeField] public int daysTilBoss = 3;
+    [SerializeField] public int daysTilBoss = 4;
+    [SerializeField] private int daysBeforePooling = 10;
     public bool isBossDay;
     public bool isBossGone;
+    [SerializeField] private List<EnemyData> tutorialEncounter = new List<EnemyData>();
+    [SerializeField] private List<EnemyData> orderedBosses = new List<EnemyData>();
     public EnemyData bossData;
     public ItemType disabledItem;
     public bool hasDisabled;
-    public float amountOff = 0.15f;
+    public float amountOff = 0.12f;
     private float healthMult = 1f;
     private float dailyMult = 1f;
     private float TotalMult => healthMult * dailyMult;
@@ -32,12 +31,26 @@ public class EnemyManager : Singleton<EnemyManager>
       
     private List<EnemyData> nextEncounter = new List<EnemyData>();
     private int bossesKilled;
-    public int currentDay = 0;
+    public int currentDay = 1;
+    public int finalDay = 12;
 
     /// <summary>
     /// Current active Enemies
     /// </summary>
     List<GameObject> enemies;
+
+    public GameObject CurrentActiveTarget() { if (enemies.Count != 0) return enemies[0]; else { return null; } }
+    public float GetDelayTime()
+    {
+        if (enemies.Count != 0)
+        {
+            return enemies[0].GetComponent<EnemyController>().GetDelayTime();
+        }
+        else
+        {
+            return 0f;
+        }
+    }
 
     /// <summary>
     /// Spawnpoints for the enemies
@@ -49,26 +62,13 @@ public class EnemyManager : Singleton<EnemyManager>
     /// </summary>
     public List<GameObject> enemyDisplays;
 
-    /// <summary>
-    /// Reset EnemyManager on Game End
-    /// </summary>
-    public void Reset()
-    {
-        currentDay = 0;
-        bossesKilled = 0;
-        healthMult = 1f;
-        dailyMult = 1f;
-        enemies.Clear();
-        roundData = DEFAULTRoundData;
-        isBossDay = false;
-        isBossGone = false;
-}
-
+    #region Eventbus Subscriptions
     private void OnEnable()
     {
         EventBus.Subscribe<EnemyDefeatedEvent>(RemoveEnemy);
         EventBus.Subscribe<EnterCombatEvent>(CombatSetup);
         EventBus.Subscribe<EnterShopEvent>(ShopSetup);
+        EventBus.Subscribe<ResetGameEvent>(ResetGame);
     }
 
     private void OnDisable()
@@ -76,6 +76,21 @@ public class EnemyManager : Singleton<EnemyManager>
         EventBus.Unsubscribe<EnemyDefeatedEvent>(RemoveEnemy);
         EventBus.Unsubscribe<EnterCombatEvent>(CombatSetup);
         EventBus.Unsubscribe<EnterShopEvent>(ShopSetup);
+        EventBus.Unsubscribe<ResetGameEvent>(ResetGame);
+    }
+    #endregion
+
+    // Reset to Game Defaults
+    private void ResetGame(ResetGameEvent e)
+    {
+        currentDay = 1;
+        bossesKilled = 0;
+        healthMult = 1f;
+        dailyMult = 1f;
+        enemies.Clear();
+        roundData = DEFAULTRoundData;
+        isBossDay = false;
+        isBossGone = false;
     }
 
     public override void Awake()
@@ -102,7 +117,9 @@ public class EnemyManager : Singleton<EnemyManager>
         int index = -1;
         EnemyController enemyC = e.enemy.GetComponent<EnemyController>();
 
-        EventBus.Publish<MoneyEarnedEvent>(new MoneyEarnedEvent(enemyC.enemyData.coinReward, enemyC.enemyData.Name));
+        int coins = enemyC.enemyData.coinReward;
+        if (UpgradeManager.Instance.HasUpgrade(UpgradeID.MercenaryContract)) coins = Mathf.RoundToInt(coins * 1.3f);
+        EventBus.Publish(new MoneyEarnedEvent(coins, enemyC.enemyData.Name, enemyC.gameObject.transform.parent.gameObject));
 
         if (enemies.Contains(e.enemy))
         {
@@ -137,7 +154,7 @@ public class EnemyManager : Singleton<EnemyManager>
             healthMult *= roundData.bossVictoryMultiplier;
         }
         currentDay++;
-        isBossDay = (currentDay % daysTilBoss == 0 && currentDay != 0);
+        isBossDay = (currentDay % daysTilBoss == 0 && currentDay != 0 && currentDay < daysBeforePooling);
         GenerateRound();
         LookAhead();
     }
@@ -151,18 +168,31 @@ public class EnemyManager : Singleton<EnemyManager>
     {
         nextEncounter.Clear();
         bossData = null;
+        if (currentDay == 1)
+        {
+            nextEncounter = new List<EnemyData>(tutorialEncounter);
+            return;
+        }
 
         if (isBossDay)
         {
-            List<EnemyData> list = new List<EnemyData>();
-            foreach (EnemyData enemy in ResourceManager.Instance.EnemyData)
+            if (bossesKilled < orderedBosses.Count)
             {
-                if (enemy.isBoss & enemy.ShowUpThisDay(currentDay))
-                {
-                    list.Add(enemy);
-                }
+                bossData = orderedBosses[bossesKilled];
             }
-            bossData = list[Random.Range(0, list.Count)];
+            else
+            {
+                List<EnemyData> list = new List<EnemyData>();
+                foreach (EnemyData enemy in ResourceManager.Instance.EnemyData)
+                {
+                    if (enemy.isBoss & enemy.ShowUpThisDay(currentDay))
+                    {
+                        list.Add(enemy);
+                    }
+                }
+
+                bossData = list[Random.Range(0, list.Count)];
+            }
             nextEncounter.Add(bossData);
             return;
         }
@@ -171,6 +201,8 @@ public class EnemyManager : Singleton<EnemyManager>
         int maxHealth = Mathf.RoundToInt(roundData.startMaxTotalHealth * scaleHealth);
         int attempts = 0;
         int maxAttempts = 20;
+        List<EnemyData> bestAttempt = null;
+        float bestDeviation = float.MaxValue;
 
         while (attempts < maxAttempts)
         {
@@ -188,11 +220,21 @@ public class EnemyManager : Singleton<EnemyManager>
             int target = (minHealth + maxHealth) / 2;
             float deviation = Mathf.Abs(totaScaledHealth - target) / (float)target;
 
+            if (deviation < bestDeviation)
+            {
+                bestDeviation = deviation;
+                bestAttempt = attemptedGuys;
+            }
+
             if (deviation <= amountOff)
             {
                 nextEncounter = attemptedGuys;
                 return;
             }
+        }
+        if (bestAttempt != null)
+        {
+            nextEncounter = bestAttempt;
         }
 
     }
@@ -207,20 +249,22 @@ public class EnemyManager : Singleton<EnemyManager>
             List<EnemyData> affordableGuys = new List<EnemyData>();
             foreach (EnemyData enemy in ResourceManager.Instance.EnemyData)
             {
-                if (!enemy.isBoss && enemy.ShowUpThisDay(currentDay) && enemy.GetScaledUpHealth(TotalMult) <= remainingHealth)
+                if (!enemy.ShowUpThisDay(currentDay) || (enemy.GetScaledUpHealth(TotalMult) > remainingHealth)) continue;
+                bool isNormalEnemy = !enemy.isBoss;
+
+                if (isNormalEnemy)
                     affordableGuys.Add(enemy);
             }
 
             if (affordableGuys.Count == 0)
             {
-                EnemyData cheapest = ResourceManager.Instance.EnemyData[0];
+                EnemyData cheapest = null;
                 foreach (EnemyData enemy in ResourceManager.Instance.EnemyData)
                 {
-                    if (!enemy.isBoss & enemy.ShowUpThisDay(currentDay))
-                    {
-                        if (cheapest == null || enemy.GetScaledUpHealth(TotalMult) < cheapest.GetScaledUpHealth(TotalMult)) 
-                            cheapest = enemy;
-                    }
+                    if (!enemy.ShowUpThisDay(currentDay)) continue;
+                    bool isNormalEnemy = !enemy.isBoss;
+                    if ((isNormalEnemy) && (cheapest == null || enemy.GetScaledUpHealth(TotalMult) < cheapest.GetScaledUpHealth(TotalMult)))
+                        cheapest = enemy;
                 }
                 if (cheapest != null) encGuy.Add(cheapest);
                 break;
@@ -276,7 +320,6 @@ public class EnemyManager : Singleton<EnemyManager>
     {
         // Generate list of enemies based on Round # specific data
         // send data to panel in Shop
-        // TODO: make functionality
         GameObject enemyDisplayHolder = GameObject.FindWithTag("EnemyDisplays");
         enemyDisplays.Clear();
 
@@ -300,6 +343,18 @@ public class EnemyManager : Singleton<EnemyManager>
         }
     }
 
+    /// <summary>
+    /// Helper to check if an enemy is currently in dying state (for item effects that trigger on enemy death, but before EnemyDefeatedEvent is published)
+    /// </summary>
+    /// <returns></returns>
+    public bool IsAnyEnemyDying()
+    {
+        foreach (GameObject enemy in enemies)
+        {
+            if (enemy != null && enemy.GetComponent<EnemyController>().GetHealth() <= 0) return true;
+        }
+        return false;
+    }
 }
 
 public struct MoneyEarnedEvent
@@ -307,10 +362,12 @@ public struct MoneyEarnedEvent
     public int coinAmount;
     // Reason being either Early Completion/Enemy Name
     public string reason;
+    public GameObject location;
 
-    public MoneyEarnedEvent(int _coinAmount, string _reason)
+    public MoneyEarnedEvent(int _coinAmount, string _reason, GameObject _loc)
     {
         coinAmount = _coinAmount;
         reason = _reason;
+        location = _loc;
     }
 }

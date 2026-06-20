@@ -1,10 +1,10 @@
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class InputManager : Singleton<InputManager>
 {
     public InputSystem_Actions inputActions;
+    private IMenuState stateToUnpause;
 
     public override void Awake()
     {
@@ -27,7 +27,11 @@ public class InputManager : Singleton<InputManager>
     private void OnPause(InputAction.CallbackContext ctx)
     {
         // If the game is already paused, we don't want to open the pause menu again or interfere with the current menu state.
-        if (PauseManager.Instance.IsPaused) return;
+        if (MenuManager.Instance.GetCurrentState() is PauseMenuState)
+        {
+            MenuManager.Instance.SwitchState(stateToUnpause);
+            return;
+        }
 
         // Check the current menu state to prevent opening the pause menu in inappropriate contexts (like already being in a menu).
         IMenuState currentState = MenuManager.Instance.GetCurrentState();
@@ -43,6 +47,7 @@ public class InputManager : Singleton<InputManager>
             Debug.Log("Already in a menu state that cant be paused, ignoring pause input.");
             return;
         }
+        stateToUnpause = currentState;
 
         MenuManager.Instance.SwitchState(new PauseMenuState());
     }

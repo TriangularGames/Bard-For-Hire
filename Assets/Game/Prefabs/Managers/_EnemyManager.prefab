@@ -50,21 +50,24 @@ MonoBehaviour:
   - Skeleton
   - Toddler
   daysTilBoss: 3
+  daysBeforePooling: 10
   isBossDay: 0
+  isBossGone: 0
   bossData: {fileID: 0}
   disabledItem: 0
   hasDisabled: 0
+  amountOff: 0.15
   DEFAULTRoundData:
     startMinTotalHealth: 20
     startMaxTotalHealth: 30
-    minIncrease: 8
-    maxIncrease: 10
+    dailyHealthMultiplier: 1.15
+    bossVictoryMultiplier: 1.25
     maxEnemies: 3
   roundData:
     startMinTotalHealth: 20
     startMaxTotalHealth: 30
-    minIncrease: 8
-    maxIncrease: 10
+    dailyHealthMultiplier: 1.15
+    bossVictoryMultiplier: 1.25
     maxEnemies: 3
   currentDay: 0
   spawnPoints: []

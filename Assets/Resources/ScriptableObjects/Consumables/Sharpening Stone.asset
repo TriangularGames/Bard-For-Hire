@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bed2d82b622b0b44aaa8876836cf34e1, type: 3}
   m_Name: Sharpening Stone
   m_EditorClassIdentifier: Assembly-CSharp::ConsumableData
-  ConsumableName: Sharpening Stone
+  ConsumableName: Sharpening Potion
   ConsumableDescription: Attacks deal 30% more damage this turn
   cost: 6
   Type: 2

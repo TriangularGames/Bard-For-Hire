@@ -1,15 +1,16 @@
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using System.Threading.Tasks;
 using UnityEngine.UI;
 
 public class ItemController : MonoBehaviour
 {
     [SerializeField] public ItemData itemData;
 
-    [SerializeField] private TMP_Text damageTxt;
-    [SerializeField] private TMP_Text playableText;
+    [SerializeField] protected Image icon;
+    [SerializeField] protected GameObject dmgBanner;
+    [SerializeField] protected TMP_Text damageTxt;
+    [SerializeField] protected GameObject playableBanner;
+    [SerializeField] protected TMP_Text playableText;
 
     public void Setup()
     {
@@ -18,56 +19,54 @@ public class ItemController : MonoBehaviour
         SetPlayableTxt();
     }
 
-    public async Task ShowDamageBonuses(List<UpgradeFightingManager.DamageBonus> bonuses, int baseDamage)
-    {
-        int baseD = baseDamage;
-        SetDamageTxtRaw(baseD);
-
-        foreach (var bonus in bonuses)
-        {
-            if (bonus.amount <= 0) continue;
-
-            await PauseExtensions.DelayRespectingPause(400);
-            damageTxt.text = ("Dmg ") + baseD + $"  <color=yellow>+ {bonus.amount} {bonus.source}</color>";
-            await PauseExtensions.DelayRespectingPause(700);
-            baseD += bonus.amount;
-            SetDamageTxtRaw(baseD);
-        }
-    }
-
-    private void SetDamageTxtRaw(int value)
-    {
-        damageTxt.text = ("Dmg ") + value.ToString();
-    }
-
     private void SetSprite()
     {
-        if (transform.childCount == 3)
-        {
-            transform.GetChild(0).GetComponent<Image>().sprite = itemData.icon;
-        }
-        else
-        {
-            transform.GetChild(1).GetComponent<Image>().sprite = itemData.icon;
-        }
-        
+        icon.sprite = itemData.icon;
     }
 
-    private void SetDamageTxt()
+    protected virtual void SetDamageTxt()
     {
-        if (itemData.Mult)
-        {
-            damageTxt.text = "x" + itemData.Damage.ToString();
-        }
-        else
-        {
-            damageTxt.text = "Dmg " + itemData.Damage.ToString();
-        }
-        
+        damageTxt.text = (itemData.Damage + itemData.bonusDamageStacks).ToString();
+    }
+
+    public void DisableText()
+    {
+        damageTxt.text = "";
+        playableText.text = "";
+        dmgBanner.SetActive(false);
+        playableBanner.SetActive(false);
+    }
+
+    public Image GetImage()
+    {
+        return icon;
+    }
+
+    public void FadeImage(int value)
+    {
+        ResetColor();
+        icon.color = new Color(icon.color.r, icon.color.g, icon.color.b, icon.color.a / (value * 2));
+    }
+
+    public void ResetColor()
+    {
+        icon.color = Color.white;
     }
 
     private void SetPlayableTxt()
     {
-        playableText.text = "Roll (" + itemData.Playable.ToString() + ")";
+        playableText.text = itemData.Playable.ToString();
+    }
+
+    public void HideDisplayText()
+    {
+        if (damageTxt != null)
+        {
+            damageTxt.gameObject.SetActive(false);
+        }
+        if (playableText != null)
+        {
+            playableText.gameObject.SetActive(false);
+        }
     }
 }

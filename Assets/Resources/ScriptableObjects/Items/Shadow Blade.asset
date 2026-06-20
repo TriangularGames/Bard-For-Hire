@@ -14,10 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Note
   ItemName: Shadow Blade
   ItemDescription: A light slashing blade
-  cost: 5
+  cost: 7
+  target: 1
   ItemType: 1
-  Rarity: 1
-  Damage: 3
+  Rarity: 2
+  weaponBonus: 0
+  bonusDamageStacks: 0
+  Damage: 4
   Mult: 0
-  Playable: 3
-  icon: {fileID: 21300000, guid: 8bf38f58fcdd56945858012a237f7cac, type: 3}
+  Playable: 4
+  icon: {fileID: 21300000, guid: 9246beba08ea67845b3f3896877aaa9c, type: 3}

@@ -27,12 +27,14 @@ public class OptionsMenuUI : MonoBehaviour
     [Tooltip("Dropdown for GameSpeed.")]
     [SerializeField] private TMP_Dropdown gamespeedDropdown;
     [SerializeField] private string[] gamespeedOptions;
+    [Tooltip("Button to Reset Tutorial (Allow Player to do Tutorial again)")]
+    [SerializeField] private Button resetTutorialButton;
     [Tooltip("Button to close the options menu.")]
     [SerializeField] private Button backButton;
     [Header("Other Components")]
     private Resolution[] resolutions;
     private string[] qualityOptions;
-    
+
 
     private void Awake()
     {
@@ -43,18 +45,35 @@ public class OptionsMenuUI : MonoBehaviour
     private void Start()
     {
         Debug.Log(Equals(OptionsManager.Instance, null) ? "OptionsManager instance is null in OptionsMenuUI Start" : "OptionsManager instance found in OptionsMenuUI Start");
+        UpdateUIWithCurrentSettings();
     }
 
     private void OnEnable()
     {
         Debug.Log("OptionsMenuUI enabled, updating UI with current settings.");
-        backButton.onClick.AddListener(() => AudioManager.Instance.Back());
         UpdateUIWithCurrentSettings();
+        backButton.onClick.AddListener(() => AudioManager.Instance.Back());
+        resetTutorialButton.onClick.AddListener(() => AudioManager.Instance.Confirm());
+
+        if (!OptionsManager.Instance.InGame)
+        {
+            resetTutorialButton.gameObject.SetActive(true);
+            resetTutorialButton.onClick.AddListener(() =>
+            {
+                OptionsManager.Instance.ResetTutorial();
+                resetTutorialButton.interactable = false;
+            });
+        }
+        else
+        {
+            resetTutorialButton.gameObject.SetActive(false);
+        }
     }
 
     private void OnDisable()
     {
         backButton.onClick.RemoveListener(() => AudioManager.Instance.Back());
+        resetTutorialButton.onClick.RemoveListener(() => AudioManager.Instance.Confirm());
     }
 
     /// <summary>
@@ -62,6 +81,8 @@ public class OptionsMenuUI : MonoBehaviour
     /// </summary>
     private void InitializeUIComponents()
     {
+        SetResetTutorialButton();
+
         // Back Button
         backButton.onClick.AddListener(() =>
         {
@@ -190,8 +211,12 @@ public class OptionsMenuUI : MonoBehaviour
         for (int i = 0; i < resolutions.Length; i++)
         {
             var resolution = resolutions[i];
-            var option = $"{resolution.width}x{resolution.height}";
-            options.Add(option);
+            // Check if resolution is 16:9
+            if (resolution.width % 16 == 0 && resolution.height % 9 == 0)
+            {
+                var option = $"{resolution.width}x{resolution.height}";
+                options.Add(option);
+            }
 
             if (resolution.width == Screen.currentResolution.width && resolution.height == Screen.currentResolution.height)
             {
@@ -222,5 +247,20 @@ public class OptionsMenuUI : MonoBehaviour
         gamespeedDropdown.AddOptions(gamespeedOptions.ToList());
         gamespeedDropdown.value = OptionsManager.Instance.GameSpeed;
         gamespeedDropdown.RefreshShownValue();
+    }
+
+    private void SetResetTutorialButton()
+    {
+        if (!OptionsManager.Instance.InGame)
+        {
+            if (PlayerPrefs.GetInt("TutorialComplete") == 1)
+            {
+                resetTutorialButton.interactable = true;
+            }
+            else
+            {
+                resetTutorialButton.interactable = false;
+            }
+        }
     }
 }

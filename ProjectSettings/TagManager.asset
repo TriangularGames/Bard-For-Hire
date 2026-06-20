@@ -15,6 +15,9 @@ TagManager:
   - SpawnPoints
   - EnemyDisplays
   - DmgTxtPool
+  - UpgradeLimit
+  - ConsumableLimit
+  - RollBanner
   layers:
   - Default
   - TransparentFX

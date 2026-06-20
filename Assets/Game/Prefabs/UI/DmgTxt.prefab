@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 8584384257033026325, guid: adf444f925b17d747b8a2d6353bcbf63, type: 2}
+  - {fileID: 3830408777688646808, guid: 3721f0de06460b3449b3bcbcb311af0a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -110,8 +110,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: -1
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: adf444f925b17d747b8a2d6353bcbf63, type: 2}
-  m_sharedMaterial: {fileID: 8584384257033026325, guid: adf444f925b17d747b8a2d6353bcbf63, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3721f0de06460b3449b3bcbcb311af0a, type: 2}
+  m_sharedMaterial: {fileID: 3830408777688646808, guid: 3721f0de06460b3449b3bcbcb311af0a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -195,8 +195,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 350d863d4cab5c0458eef09db791dbd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DestroyText
-  Offset: {x: 0.6, y: 1, z: 0}
-  Slide: {x: 0, y: 0.09, z: 0}
+  Offset: {x: 0.2, y: 0.5, z: -0.1}
+  Slide: {x: 0, y: 0.03, z: 0}
 --- !u!95 &3784163203264537929
 Animator:
   serializedVersion: 7

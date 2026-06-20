@@ -27,6 +27,11 @@ public class UpgradeController : MonoBehaviour
         nameTxt.color = color;
     }
 
+    public void RemoveText()
+    {
+        nameTxt.enabled = false;
+    }
+
     public void SetSelected(bool selected)
     {
         isSelected = selected;

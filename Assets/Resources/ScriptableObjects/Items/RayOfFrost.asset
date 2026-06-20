@@ -15,8 +15,11 @@ MonoBehaviour:
   ItemName: Ray of Frost
   ItemDescription: A beam of pure cold
   cost: 3
+  target: 1
   ItemType: 2
   Rarity: 0
+  weaponBonus: 0
+  bonusDamageStacks: 0
   Damage: 3
   Mult: 0
   Playable: 6

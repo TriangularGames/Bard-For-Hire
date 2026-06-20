@@ -1,56 +1,57 @@
-using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
+
 public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, IPointerExitHandler
 {
-    private Image selection;
-    public void SetImage(Sprite _selection) { selection.sprite = _selection; }
+    [SerializeField] private TMP_Text selectionNum;
+    [SerializeField] private GameObject icon;
+
     private bool isSelected = false;
+    public bool IsSelected => isSelected;
 
     private bool SelectionEnabled = true;
 
+    private ItemManager _itemManager;
+
     private void OnEnable()
     {
-        EventBus.Subscribe<ScoringStartedEvent>(DisableSelection);
-        EventBus.Subscribe<ScoringEndedEvent>(EnableSelection);
+        EventBus.Subscribe<RoundStartedEvent>(DisableSelection);
+        EventBus.Subscribe<RoundEndedEvent>(EnableSelection);
     }
 
     private void OnDisable()
     {
-        EventBus.Unsubscribe<ScoringStartedEvent>(DisableSelection);
-        EventBus.Unsubscribe<ScoringEndedEvent>(EnableSelection);
+        EventBus.Unsubscribe<RoundStartedEvent>(DisableSelection);
+        EventBus.Unsubscribe<RoundEndedEvent>(EnableSelection);
     }
 
-    private void EnableSelection(ScoringEndedEvent e)
+    private void EnableSelection(RoundEndedEvent e)
     {
         SelectionEnabled = true;
     }
 
-    private void DisableSelection(ScoringStartedEvent e)
+    private void DisableSelection(RoundStartedEvent e)
     {
         SelectionEnabled = false;
     }
 
-    private void Awake()
+    private void Start()
     {
-# if UNITY_EDITOR
-        Debug.Assert(selection = transform.GetChild(0).GetComponent<Image>(), "GameObject requires an Image component");
-#else
-        selection = transform.GetChild(0).GetComponent<Image>();
-#endif
-        selection.color = new Color(selection.color.r, selection.color.g, selection.color.b, 0f);
+        if (GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>())
+        {
+            _itemManager = GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>();
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (SelectionEnabled)
         {
-            //selection.color = Color.blue;
             if (!isSelected)
             {
-                selection.sprite = null;
-                selection.color = new Color(0f, 0f, 256f, 0.5f);
+                selectionNum.text = "";
+                icon.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             }
         }
     }
@@ -59,48 +60,18 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
     {
         if (SelectionEnabled)
         {
-            //destroy
-            if (ConsumableEffectManager.Instance.selectingItemToDestroy)
+            if (!isSelected && _itemManager.HasRoom())
             {
-                ConsumableEffectManager.Instance.DestroyItem(GetComponent<ItemController>().itemData);
-
-                Destroy(gameObject);
-
-                return;
-            }
-
-            // clonin
-            if (ConsumableEffectManager.Instance.selectingItemToClone)
-            {
-                ConsumableEffectManager.Instance.CloneItem(GetComponent<ItemController>().itemData);
-
-                return;
-            }
-
-            // polymorphin
-            if (ConsumableEffectManager.Instance.selectingItemToPolymorph)
-            {
-                ItemData newItem = ConsumableEffectManager.Instance.PolymorphItem(GetComponent<ItemController>().itemData);
-
-                GetComponent<ItemController>().itemData = newItem;
-
-                GetComponent<ItemController>().Setup();
-
-                return;
-            }
-
-            if (!isSelected && GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().HasRoom())
-            {
-                selection.color = new Color(1f, 1f, 1f, 1f);
-                GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().SelectItem(gameObject, selection);
+                _itemManager.SelectItem(gameObject);
+                icon.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
                 isSelected = true;
             }
             else
             {
-                selection.color = new Color(0f, 0f, 256f, 0.5f);
-                if (GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsSelected.Contains(gameObject))
+                if (_itemManager.ItemsSelected.Contains(gameObject))
                 {
-                    GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().DeselectItem(gameObject, selection);
+                    _itemManager.DeselectItem(gameObject, selectionNum);
+                    icon.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
                     isSelected = false;
                 }
             }
@@ -110,12 +81,19 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
     public void Deselect()
     {
         isSelected = false;
-        selection.color = new Color(1f, 1f, 1f, 0f);
-        if (GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().ItemsSelected.Contains(gameObject))
+        if (_itemManager.ItemsSelected.Contains(gameObject))
         {
-            GameObject.FindWithTag("ItemManager").GetComponent<ItemManager>().DeselectItem(gameObject, selection);
+            _itemManager.DeselectItem(gameObject, selectionNum);
+            icon.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+            selectionNum.text = "";
             isSelected = false;
         }
+    }
+
+    public void RemoveDisplay()
+    {
+        icon.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+        selectionNum.text = "";
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -124,9 +102,20 @@ public class Select : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler, 
         {
             if (!isSelected)
             {
-                selection.sprite = null;
-                selection.color = new Color(1f, 1f, 1f, 0f);
+                selectionNum.text = "";
+                icon.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
             }
+        }
+    }
+
+    public void ClearSelectionVisual()
+    {
+        isSelected = false;
+
+        ItemController item = GetComponent<ItemController>();
+        if (item != null)
+        {
+            item.HideDisplayText();
         }
     }
 }

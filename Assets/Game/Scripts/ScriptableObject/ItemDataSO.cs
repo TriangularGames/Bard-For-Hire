@@ -8,10 +8,15 @@ public class ItemData : ScriptableObject
     [SerializeField] public string ItemDescription;
     [Tooltip("The coin amount to purchase this item.")]
     [SerializeField] public int cost;
+    [SerializeField] public int target = 1;
 
     [Header("Item Descriptors")]
     [SerializeField] public ItemType ItemType;
     [SerializeField] public ObjectRarity Rarity;
+
+    [Header("Weapon Bonus")]
+    [SerializeField] public WeaponBonus weaponBonus = WeaponBonus.None;
+    [SerializeField] public int bonusDamageStacks = 0;
 
     [Header("Damage Value")]
     [SerializeField] public int Damage;

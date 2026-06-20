@@ -14,9 +14,9 @@ public class ConsumableShopSlot : ShopSlot
     {
         _data = item;
 
-        value.text = _data.cost.ToString();
+        value.text = "$" + _data.cost.ToString();
         icon.sprite = _data.icon;
-        icon.color = new Color(0.5f, 0.4f, 0.06f, 1f);
+        icon.color = Color.white;
         buy.gameObject.SetActive(true);
     }
 
@@ -28,7 +28,7 @@ public class ConsumableShopSlot : ShopSlot
 
     private void Update()
     {
-        if (_data != null && PlayerManager.Instance.GetCoinAmount() < _data.cost)
+        if (_data != null && (PlayerManager.Instance.GetCoinAmount() < _data.cost || PlayerManager.Instance.consumableInventory.Count == PlayerManager.Instance.MAXConsumables))
         {
             buy.interactable = false;
         }
@@ -38,24 +38,12 @@ public class ConsumableShopSlot : ShopSlot
         }
     }
 
-    public override void SelectSlot(bool select)
-    {
-        if (_data != null)
-        {
-            if (PlayerManager.Instance.GetCoinAmount() < _data.cost
-                || PlayerManager.Instance.consumableInventory.Count == PlayerManager.Instance.MAXConsumables)
-            {
-                buy.interactable = false;
-            }
-            base.SelectSlot(select);
-        }
-    }
-
     public override void Purchase()
     {
         // Subtract money from player
-        EventBus.Publish(new PurchaseEvent(int.Parse(value.text)));
+        EventBus.Publish(new PurchaseEvent(_data.cost));
         EventBus.Publish(new ConsumableBoughtEvent(_data));
+        AudioManager.Instance.PlayClip("Potion");
         _Purchased = true;
         ClearInfo();
     } 

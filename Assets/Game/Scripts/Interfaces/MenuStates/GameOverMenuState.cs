@@ -5,7 +5,7 @@ public class GameOverMenuState : IMenuState
     public void EnterState(MenuManager mm)
     {
         Debug.Log("Entering Game Over State");
-        EventBus.Publish(new ShowGameOverMenuEvent());
+        EventBus.Publish(new ShowGameOverMenuEvent(true, false));
     }
 
     public void ExitState(MenuManager mm)
