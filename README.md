@@ -1,2 +1,2 @@
-# Bard For Hire?????
-A roguelike dungeon questing adventure!
+# Impishous Darkness
+Impishous Darkness is a tabletop-style dungeon-crawling roguelike. Play as Persephone as you battle to defeat the Imp King and his many fearsome underlings to save the day. The roll of the die could mean your ultimate victory, or your ultimate defeat! With a multitude of weapons at your disposal, collect coins to spend to increase your likelihood of survival. Obtain Emblems to shape your plan of attack, or Potions to change the tide at a moments notice. Pick your loadout wisely, and show the Imp King who's the real boss in town!
