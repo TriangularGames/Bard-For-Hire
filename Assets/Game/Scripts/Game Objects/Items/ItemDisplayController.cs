@@ -36,17 +36,20 @@ public class ItemDisplayController : ItemController
 
         if (int.Parse(damageTxt.text) < 10)
         {
-            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 100, 0f);
+            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 100);
+            damageTxt.gameObject.SetActive(true);
         }
 
         if (int.Parse(damageTxt.text) >= 10)
         {
-            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(-13, 100, 0f);
+            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(-10, 100);
+            damageTxt.gameObject.SetActive(true);
         }
 
         if (int.Parse(damageTxt.text) >= 100)
         {
-            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(-30, 100, 0f);
+            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(-21, 100);
+            damageTxt.gameObject.SetActive(true);
         }
         if (_damageBonusAdded)
         {
@@ -61,17 +64,20 @@ public class ItemDisplayController : ItemController
 
         if (int.Parse(damageTxt.text) < 10)
         {
-            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 100, 0f);
+            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, 100);
+            damageTxt.gameObject.SetActive(true);
         }
 
         if (int.Parse(damageTxt.text) >= 10)
         {
-            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(-13, 100, 0f);
+            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(-10, 100);
+            damageTxt.gameObject.SetActive(true);
         }
 
         if (int.Parse(damageTxt.text) >= 100)
         {
-            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector3(-30, 100, 0f);
+            damageTxt.GetComponent<RectTransform>().anchoredPosition = new Vector2(-21, 100);
+            damageTxt.gameObject.SetActive(true);
         }
         if (_damageBonusAdded)
         {

@@ -24,6 +24,8 @@ public class VictoryHandler : MonoBehaviour
         // Code to show the Pause Menu
         ToggleVictoryMenuVisibility(true);
 
+        AudioManager.Instance.PlayClip("Victory");
+
         // Game is paused!
         Time.timeScale = 0;
     }

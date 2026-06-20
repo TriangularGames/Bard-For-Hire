@@ -25,11 +25,13 @@ public class GameOverHandler : MonoBehaviour
         ToggleGameOverMenuVisibility(true);
         if (eventData.GameOver)
         {
+            AudioManager.Instance.PlayClip("Lose");
             gameOverUI.SetGameOver();
         }
 
         if (eventData.GameWon)
         {
+            AudioManager.Instance.PlayClip("Victory");
             gameOverUI.SetGameWon();
         }
 

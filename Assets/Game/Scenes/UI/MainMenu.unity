@@ -3650,9 +3650,6 @@ MonoBehaviour:
   creditBtn: {fileID: 1715879692}
   creditWindow: {fileID: 1079974717}
   closeBtn: {fileID: 684944153}
-  tutorialPrompt: {fileID: 1539660514}
-  yesBtn: {fileID: 1156996629}
-  noBtn: {fileID: 1504543636}
 --- !u!1 &629836925
 GameObject:
   m_ObjectHideFlags: 0
