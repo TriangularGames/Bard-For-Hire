@@ -109,7 +109,21 @@ public class UpgradeFightingManager : MonoBehaviour
                     return;
                 }
                 EnemyManager.Instance.disabledItem = items[Random.Range(0, items.Count)];
+
                 disabledText.text = "Disabled " + EnemyManager.Instance.disabledItem.ToString();
+                if (EnemyManager.Instance.disabledItem.ToString() == "Magical")
+                {
+                    disabledText.color = Color.purple;
+                }
+                if (EnemyManager.Instance.disabledItem.ToString() == "Slashing")
+                {
+                    disabledText.color = Color.darkGreen;
+                }
+                if (EnemyManager.Instance.disabledItem.ToString() == "Piercing")
+                {
+                    disabledText.color = Color.darkCyan;
+                }
+
                 Debug.Log(EnemyManager.Instance.disabledItem.ToString());
                 EnemyManager.Instance.hasDisabled = true;
             }

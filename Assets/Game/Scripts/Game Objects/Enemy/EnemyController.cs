@@ -201,7 +201,6 @@ public class EnemyController : MonoBehaviour
                         break;
                 }
             }
-            //AudioManager.Instance.PlayClip("Hit");
 
             Weak = e.weakness;
             Resist = e.resistance;

@@ -223,7 +223,11 @@ public class ScoreManager : MonoBehaviour
     public void AttackEnemy(ItemData item, int damage)
     {
         if (EnemyManager.Instance.isBossDay && EnemyManager.Instance.hasDisabled
-            && EnemyManager.Instance.disabledItem == item.ItemType) return;
+            && EnemyManager.Instance.disabledItem == item.ItemType)
+        {
+            AudioManager.Instance.PlayClip("Resist");
+            return;
+        }
 
         switch (item.target)
         {

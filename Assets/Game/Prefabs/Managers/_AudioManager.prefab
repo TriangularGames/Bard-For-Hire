@@ -73,6 +73,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: dbd4ad8ff52610d4ab342cc6d3f1af3b, type: 3}
   - {fileID: 8300000, guid: 57808ddbbea515045b82e9979ae1812a, type: 3}
   - {fileID: 8300000, guid: de58dafafe858b5478ad0a69670e2aa6, type: 3}
+  - {fileID: 8300000, guid: 6e4a6cd95a8afad4cb88e9f039230ba9, type: 3}
   _ambienceClips: []
   _musicAudioSource: {fileID: 17557958345528308}
   _sfxAudioSource: {fileID: 4784535513818206028}
@@ -92,7 +93,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.06
   m_Pitch: 1
   Loop: 1
   Mute: 0
